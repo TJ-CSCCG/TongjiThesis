@@ -4,7 +4,7 @@
 
 Ganler only made little effort to make it compatible with latest XeLatex (May, 2021) environment on Overleaf.
 
-**NOTE: Please select `main.tex` as the main file and compile it with `XeLaTeX`.**
+**NOTE: Please select `main.tex` as the main file and compile it with `XeLaTeX` or `LuaLaTex`.**
 
 ## Compile it locally on Mac (on LaTeX-Workshop)
 
@@ -38,6 +38,8 @@ sudo  tlmgr install catchfile
 sudo tlmgr update --self --all
 ```
 
+### XeLaTeX
+
 Add the following attribute to your `setting.json`:
 
 ```json
@@ -65,6 +67,42 @@ Add the following attribute to your `setting.json`:
         ]
     }
 ]
+```
+
+### LuaLaTeX
+
+```shell
+# This important for 10.15+ Mac
+sudo tlmgr conf texmf OSFONTDIR /System/Library/AssetsV2/com_apple_MobileAsset_Font6/
+luaotfload-tool -vvv --update --force
+```
+
+`setting.json`
+
+```json
+"latex-workshop.latex.recipe.default": "lualatex-mac",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "lualatex",
+            "command": "lualatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "-pdf",
+                "%DOC%"
+            ]
+        },
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "lualatex-mac",
+            "tools": [
+                "lualatex",
+            ]
+        }
+    ],
 ```
 
 ---
