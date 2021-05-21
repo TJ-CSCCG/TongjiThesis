@@ -7,14 +7,13 @@
 \usepackage{cases}
 \usepackage{subfigure}
 \usepackage{enumerate}
+\usepackage{setspace}
 \usepackage{algorithmic}
 \usepackage{extarrows}
 \usepackage{latexsym}
 \usepackage{longtable}
-\usepackage{graphicx}
 \usepackage{color}
 \usepackage{etoolbox}
-\usepackage{amsfonts}
 \usepackage{caption}     %修改图片表格名称字体字号的宏包
 \usepackage{float}        %自己设置图片插入位置
 \usepackage{fancyhdr}     %设置页眉页脚的宏包
@@ -24,9 +23,7 @@
 \usepackage{xcolor} 
 \usepackage[colorlinks,linkcolor=black, citecolor=black, unicode={true}]{hyperref}
 \graphicspath{{figures/}} %%图片路径
-\usepackage[a4paper,top=3.2cm,bottom=3.8cm,left=3.3cm,right=1.8cm]{geometry}  %设置页边距
-
-
+\usepackage[a4paper,top=4cm,bottom=3.8cm,left=3.3cm,right=1.8cm]{geometry}  %设置页边距
 
 \usepackage{fancybox}                      %画边界线
 \fancyput*(-0.8cm,-4.3cm){$|$}%
@@ -75,15 +72,15 @@
 \makeatother
 \renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
 
-\newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
-\setlength{\cftbeforesecskip}{10pt}
+\setlength{\cftbeforesecskip}{15pt}
 \setlength{\cftbeforesubsecskip}{3pt}
 \setlength{\cftbeforesubsubsecskip}{0pt}
-\renewcommand{\cftsecfont}{\zihao{5}\heiti}
-\renewcommand{\cftsubsecfont}{\zihao{5}\heiti}
-\renewcommand{\cftsubsubsecfont}{\zihao{5}\heiti}
+\renewcommand{\contentsname}{\zihao{4}\heiti 目录}
+\renewcommand{\cftsecfont}{\heiti\zihao{5}}
+\renewcommand{\cftsubsecfont}{\heiti\zihao{5}}
+\renewcommand{\cftsubsubsecfont}{\heiti\zihao{5}}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsecdotsep}{\cftdotsep}
 \renewcommand{\cftsecpagefont}{\zihao{5}}

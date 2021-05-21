@@ -26,16 +26,22 @@
 
 %以下两段修改章节标题格式，参数含义见博客http://blog.sina.com.cn/s/blog_5e16f1770100lqn7.html
 \makeatletter
-\renewcommand\subsubsection{\@startsection{subsubsection}{2}{0em}%
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+	{-3.5ex \@plus -1ex \@minus -.2ex}%
+	{2.3ex \@plus.2ex}%
+	{\centering\heiti\zihao{4}}}
+\makeatother
+\makeatletter
+\renewcommand\subsubsection{\@startsection{subsubsection}{2}{2.5em}%
 	{2.3ex \@plus -1ex \@minus -.2ex}%
 	{2.3ex \@plus.2ex}%
-	{\normalfont\normalsize\bfseries}}
+	{\heiti\zihao{5}}}
 \makeatother
 \makeatletter
 \renewcommand\subsection{\@startsection{subsection}{2}{0em}%
 	{2.3ex \@plus -1ex \@minus -.2ex}%
 	{2.3ex \@plus.2ex}%
-	{\normalfont\normalsize\bfseries}}
+	{\heiti\zihao{5}}}
 \makeatother
 
 
