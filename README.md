@@ -3,9 +3,15 @@
 **NOTE**
 
 * Please select `main.tex` as the main file and compile it with `XeLaTeX` (suggested) or `LuaLaTex`.
-* Till May 26th, 2021, our "great"🙄 `1.tongji.edu` is not able to support uploading `.pdf` files (but only MS Word files). 
+* Till May 26th, 2021, our "great"🙄 `1.tongji.edu` is not able to support uploading `.pdf` files (but only MS Word files). But you may simply convert the generated PDF to `docx` using some online tools (e.g., [pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))
 
-## Use it on Overleaf
+## Use it on **Overleaf** NOW!
+
+**CLICK ME** 👉 [![](https://img.shields.io/badge/overleaf-tongjithesis-green.svg)](https://www.overleaf.com/latex/templates/tongji-undergrad-thesis/dfdvqsmpfcgk)
+
+Note that **the overleaf template might not be up-to-date** so it is suggested to create your own overleaf project manually (see the section below).
+
+## Use latest version on Overleaf
 
 - Download this repo `Code | Download ZIP`;
 - Open [Overleaf](https://www.overleaf.com/); 
@@ -98,3 +104,9 @@ We follow WTFPLv3.1 as our license.
 ## Credit
 
 Initial template provided by Yukuan HU, maintained/promoted by Ganler.
+
+## Thanks
+
+We learned a lot from the leading university open-source repositories:
+
+- https://github.com/sjtug/SJTUThesis (makefile)
