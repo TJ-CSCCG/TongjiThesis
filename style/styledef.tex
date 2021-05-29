@@ -88,21 +88,6 @@
 \renewcommand{\cftsubsecpagefont}{\zihao{5}}
 \renewcommand{\cftsubsubsecpagefont}{\zihao{5}}
 
-%设置定理定义等的格式，如果某项的编号是跟着章节的，在后面加[section]
-\theoremstyle{definition}
-\newtheorem{thm}{定理\hspace{0.05pt}}[section]
-\newtheorem{cor}{推论\hspace{0.05pt}}[section]
-\newtheorem{lem}{引理\hspace{0.05pt}}[section]
-\newtheorem{prop}{命题\hspace{0.05pt}}[section]
-\newtheorem{conj}{猜想\hspace{0.05pt}}
-\newtheorem{assume}{假设\hspace{0.05pt}}
-
-\theoremstyle{definition}
-\newtheorem{dfn}{定义\hspace{0.05pt}}[section]
-\newtheorem{exmp}{例\hspace{0.05pt}}[section]
-\newtheorem{rem}{注\hspace{0.05pt}}
-\newtheorem*{pf}{证明}
-
 %设置图表编号和章节相关联，参见http://blog.sina.com.cn/s/blog_5e16f1770100h6ts.html
 \usepackage[T1]{fontenc}
 %\usepackage[utf8]{inputenc}
@@ -112,17 +97,6 @@
 \numberwithin{table}{section}
 
 \newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
-
-\newcommand{\primal}{\mathrm{primal}}
-\newcommand{\dual}{\mathrm{dual}}
-\newcommand{\trace}{\mathrm{tr}}
-\newcommand{\vectorize}{\mathrm{vec}}
-\newcommand{\prox}{\mathrm{prox}}
-\newcommand{\mcL}{\mathcal{L}}
-\newcommand{\st}{\mathrm{s.t.}}
-\newcommand{\dom}{\mathrm{dom}}
-\newcommand{\diag}{\mathrm{diag}}
-\newcommand{\one}{\mathbf{1}}
 
 \sloppy
 \definecolor{lightgray}{gray}{0.5}
@@ -147,9 +121,6 @@
 	\end{center}
 }
 \makeatother
-
-\renewcommand{\algorithmicrequire}{\textbf{输入: }}
-\renewcommand{\algorithmicensure}{\textbf{输出: }}
 
 \fancypagestyle{mainstyle}
 {
@@ -193,7 +164,7 @@
 	{\centering\heiti\zihao{4}}}
 \makeatother
 \makeatletter
-\renewcommand\subsubsection{\@startsection{subsubsection}{2}{2.5em}%
+\renewcommand\subsubsection{\@startsection{subsubsection}{2}{2em}%
 	{2.3ex \@plus -1ex \@minus -.2ex}%
 	{2.3ex \@plus.2ex}%
 	{\heiti\zihao{5}}}
