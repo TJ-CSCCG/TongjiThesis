@@ -16,6 +16,8 @@
 \usepackage{color}
 \usepackage{etoolbox}
 \usepackage{caption}     %修改图片表格名称字体字号的宏包
+\DeclareCaptionLabelSeparator{twospace}{\ ~}
+\captionsetup{labelsep=twospace}
 \usepackage{float}        %自己设置图片插入位置
 \usepackage{fancyhdr}     %设置页眉页脚的宏包
 \setlength{\headheight}{43pt}
@@ -24,7 +26,7 @@
 \usepackage{xcolor} 
 \usepackage[colorlinks,linkcolor=black, citecolor=black, unicode={true}]{hyperref}
 \graphicspath{{figures/}} %%图片路径
-\usepackage[a4paper,top=4cm,bottom=3.8cm,left=3.3cm,right=1.8cm]{geometry}  %设置页边距
+\usepackage[a4paper,top=4cm,bottom=3cm,left=3.3cm,right=1.8cm]{geometry}  %设置页边距
 
 \usepackage{fancybox}                      %画边界线
 \fancyput*(-0.8cm,-4.3cm){$|$}%
@@ -61,6 +63,17 @@
 \fancyput*(-0.8cm,-22.9cm){$|$}%
 \fancyput*(-0.8cm,-23.5cm){$|$}%
 
+\floatstyle{plaintop}
+\restylefloat{table}
+
+\usepackage{listing}
+\floatstyle{plain}
+\restylefloat{listing}
+
+\usepackage{enumitem}
+\setlist[itemize]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
+\setlist[enumerate]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
+
 %设置目录格式(引文部分）
 \usepackage[titles,subfigure]{tocloft}
 \newcounter{algoline}
@@ -75,10 +88,10 @@
 
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
-\setlength{\cftbeforesecskip}{15pt}
+\setlength{\cftbeforesecskip}{5pt}
 \setlength{\cftbeforesubsecskip}{3pt}
 \setlength{\cftbeforesubsubsecskip}{0pt}
-\renewcommand{\contentsname}{\zihao{4}\heiti 目录}
+\renewcommand{\contentsname}{\zihao{4}\heiti 目~~录}
 \renewcommand{\cftsecfont}{\heiti\zihao{5}}
 \renewcommand{\cftsubsecfont}{\heiti\zihao{5}}
 \renewcommand{\cftsubsubsecfont}{\heiti\zihao{5}}
@@ -93,9 +106,7 @@
 
 \numberwithin{figure}{section}
 \numberwithin{table}{section}
-
-\floatstyle{plaintop}
-\restylefloat{table}
+\setlength{\baselineskip}{18pt}
 
 \newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
 
@@ -200,4 +211,8 @@
 {\def\@noitemerr
 	{\@latex@warning{Empty `thebibliography' environment}}%
 	\endlist}
+\makeatother
+
+\makeatletter
+\AtBeginDocument{\let\c@listing\c@figure}
 \makeatother
