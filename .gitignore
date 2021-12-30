@@ -1,4 +1,5 @@
 .DS_Store
 _out
 *.pdf
+!figures/tongji.pdf
 *.fls
