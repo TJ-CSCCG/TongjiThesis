@@ -1,5 +1,13 @@
 .DS_Store
 _out
-*.pdf
 !figures/tongji.pdf
+*.pdf
 *.fls
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.log
+*.out
+*.toc
+*.xdv
