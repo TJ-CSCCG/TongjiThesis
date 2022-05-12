@@ -75,7 +75,7 @@ make.bat help                 # read the manual
 
 ### LaTeXMK + XeLaTeX on LaTeX-Workshop
 
-Add the following attribute to your `setting.json`:
+Add the following attribute to your `settings.json`:
 
 ```json
 "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
