@@ -214,3 +214,69 @@
 \makeatletter
 \AtBeginDocument{\let\c@listing\c@figure}
 \makeatother
+
+
+% 设置封面信息盒子（information 环境）
+\RequirePackage{array}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\let\oldtabular\tabular
+\let\endoldtabular\endtabular
+\newenvironment{information}[1][h!]{
+	\renewcommand{\arraystretch}{1.5}
+	\setlength{\tabcolsep}{8pt}
+	\zihao{-3}\oldtabular[#1]
+	}{\renewcommand{\arraystretch}{1.2}\endoldtabular
+}
+\newcommand{\ulinecentered}[1]{\uline{\makebox[20em][c]{#1}}}
+
+
+% 加载包部分结束，此后开始定义内容 Layout
+\AtEndOfPackage{
+    \InputIfFileExists{style/tongjithesis.cfg}{}{}
+}
+
+% 论文基本信息配置
+\newcommand{\school}[1]{\def\tongjischool{#1}}
+\newcommand{\major}[1]{\def\tongjimajor{#1}}
+\newcommand{\student}[2]{\def\tongjiauthornumber{#1}\def\tongjiauthor{#2}}
+\newcommand{\thesistitle}[2]{\def\tongjithesistitle{#1}\def\tongjithesissubtitle{#2}}
+\newcommand{\thesisadvisor}[1]{\def\tongjithesisadvisor{#1}}
+\newcommand{\thesisdate}[3]{\def\tongjithesisyear{#1}\def\tongjithesismonth{#2}\def\tongjithesisday{#3}}
+\newcommand{\MakeFrontCover}{
+	\begin{titlepage}
+		\begin{center}
+			\thisfancyput(-0.75cm,-13cm){}
+			\vspace*{\fill}
+
+			\includegraphics[height=2.25cm]{figures/tongji.pdf}
+
+			\zihao{-2}\MakeUppercase{\textbf{\tongjiuniversityeng}}
+			\vskip 30pt
+
+			% 符合毕业设计模板（理工类），标题使用黑体小初
+			\zihao{-0}\heiti{毕业设计（论文）}
+			\vskip 80pt
+
+			% 符合毕业设计模板（理工类），此处使用黑体小二
+			\begin{information}{M{5em}M{22em}}
+				\zihao{-2}\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
+				\zihao{-2}\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
+				\zihao{-2}\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
+				\zihao{-2}\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
+				\zihao{-2}\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
+				\zihao{-2}\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
+				\zihao{-2}\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
+				\zihao{-2}\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
+			\end{information}
+
+			\vspace*{\fill}
+		\end{center}
+	\end{titlepage}
+}
+
+
+%%% custom information %%%
+\renewcommand{\maketitle}{%
+	\MakeFrontCover
+	\frontmatter
+}
