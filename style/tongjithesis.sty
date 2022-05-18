@@ -1,51 +1,98 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tongjithesis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 数学符号
 \usepackage{mathptmx}
 \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
-\usepackage{multirow}
-\usepackage{algorithm}
-\usepackage{cases}
-\usepackage{subfigure}
-\usepackage{enumerate}
-\usepackage{setspace}
-\usepackage{algorithmic}
-\usepackage{extarrows}
-\usepackage{latexsym}
-\usepackage{longtable}
-\usepackage{color}
-\usepackage{etoolbox}
-\usepackage{caption}     %修改图片表格名称字体字号的宏包
-\DeclareCaptionLabelSeparator{twospace}{\ ~}
-\captionsetup{labelsep=twospace}
-\usepackage{float}        %自己设置图片插入位置
-\usepackage{fancyhdr}     %设置页眉页脚的宏包
-%\setlength{\headheight}{43pt}
-\usepackage{graphicx}     %插入图片
-\usepackage{lastpage}     %引用最后一页
-\usepackage{xcolor}
-
-\floatstyle{plaintop}
-\restylefloat{table}
-
-\usepackage{listing}
-\floatstyle{plain}
-\restylefloat{listing}
+\theoremstyle{definition}
+\newtheorem{thm}{定理\hspace{0.05pt}}[section]
+\newtheorem{cor}{推论\hspace{0.05pt}}[section]
+\newtheorem{lem}{引理\hspace{0.05pt}}[section]
+\newtheorem{prop}{命题\hspace{0.05pt}}[section]
+\newtheorem{conj}{猜想\hspace{0.05pt}}
+\newtheorem{assume}{假设\hspace{0.05pt}}
+\newtheorem{dfn}{定义\hspace{0.05pt}}[section]
+\newtheorem{exmp}{例\hspace{0.05pt}}[section]
+\newtheorem{rem}{注\hspace{0.05pt}}
+\newtheorem*{pf}{证明}
 
 
-\setlength{\baselineskip}{18pt}
-
-%\newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
-
-\sloppy
-\definecolor{lightgray}{gray}{0.5}
-
-%以下为修改目录格式的正文内语句，正文内用@命令需用\makeatletter,\makeatother括起来
+% 公式
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
 \makeatletter
-\renewcommand{\numberline}[1]{%
-	\settowidth\@tempdimb{#1\hspace{0.5em}}%
-	\ifdim\@tempdima<\@tempdimb%
-	\@tempdima=\@tempdimb%
-	\fi%
-	\hb@xt@\@tempdima{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
+\@addtoreset{equation}{section}
 \makeatother
 
 
+% 伪代码
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{输入: }}
+\renewcommand{\algorithmicensure}{\textbf{输出: }}
+\makeatletter
+\renewenvironment{algorithm}
+{
+    \refstepcounter{algorithm}% New algorithm
+    \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+    \renewcommand{\caption}[2][\relax]{% 使用中文 caption
+        {\raggedright\textbf{算法~\thealgorithm} ##2\par}%
+        \ifx\relax##1\relax % #1 is \relax
+        \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+        \else % #1 is not \relax
+        \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+        \fi
+        \kern2pt\hrule\kern2pt
+    }
+}{\kern2pt\hrule\relax}% \@fs@post for \@fs@ruled
+\makeatother
+
+
+% 交叉引用
+\newcommand*{\secref}[1]{第~\ref{#1}~节}
+\newcommand*{\algoref}[1]{算法~\ref{#1}~}
+\renewcommand*{\eqref}[1]{公式（\ref{#1}）}
+\newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
+\newcommand*{\figref}[1]{\figurename~\ref{#1}~}
+\newcommand*{\listingref}[1]{\listingscaption~\ref{#1}~}
+
+
+% 代码块，盒子使用 tcolorbox 默认风格
+% BeforeBeginEnvironment 和 AfterEndEnvironment 在 etoolbox 中
+% see https://tex.stackexchange.com/questions/112559/box-around-minted-environment
+\usepackage[section]{minted}
+\renewcommand{\listingscaption}{代码}
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}}%
+\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+
+
+% caption 自定义
+\usepackage{caption}     %修改图片表格名称字体字号的宏包
+\DeclareCaptionLabelSeparator{twospace}{\ ~}
+\captionsetup{labelsep=twospace}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 与毕业设计模板（理工类）中定义规则无关的可选宏包
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 使存在跨行单元的表格中的各单元进行水平高度适配
+% see https://tex.stackexchange.com/questions/73283/how-to-use-multirow
+\usepackage{multirow}
+% 提供 cases 环境，方便书写方程组和分段函数
+\usepackage{cases}
+% 提供 subfigure 指令，允许在一个 figure 环境中插入多张 graphics
+\usepackage{subfigure}
+% 提供 spacing 环境以灵活改变环境内行间距，同时提供一系列有关 space 的指令
+% see https://github.com/rf-latex/setspace/blob/main/setspace.sty
+\usepackage{setspace}
+% 提供一系列长箭头命令（允许在箭头上下插入文本）
+% see https://mirrors.mit.edu/CTAN/macros/latex/contrib/extarrows/extarrows-test.pdf
+\usepackage{extarrows}
+% 提供 longtable 环境，允许使用跨页长表格
+\usepackage{longtable}
+\AtBeginEnvironment{longtable}{\zihao{-5}}
+% 使得可以跳转
 \usepackage[colorlinks,linkcolor=black, citecolor=black, unicode={true}]{hyperref}

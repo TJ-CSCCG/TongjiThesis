@@ -53,7 +53,7 @@
 
 
 % 设置有序列表与无序列表格式
-\RequirePackage{enumerate} % 下面用到了 enumerate
+\RequirePackage{enumerate} 						% 下面用到了 enumerate
 \RequirePackage{enumitem}
 \setlist[itemize]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
 \setlist[enumerate]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
@@ -61,8 +61,18 @@
 
 % 设置目录格式
 \RequirePackage[titles,subfigure]{tocloft}
+% 修改目录编号与文字的间距，默认为 1em，强制修改为 0.5em
+\makeatletter
+\renewcommand{\numberline}[1]{%
+	\settowidth\@tempdimb{#1\hspace{0.5em}}%
+	\hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
+\makeatother
+% 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
+\setlength{\cftsecindent}{0em} 					% 符合毕业设计模板（理工类）一级标题顶格要求
+\setlength{\cftsubsecindent}{1em} 				% 符合毕业设计模板（理工类）二级标题对齐一级标题文字要求
+\setlength{\cftsubsubsecindent}{4em}			% 符合毕业设计模板（理工类）三级标题对齐一级标题第四字要求
 \setlength{\cftbeforesecskip}{5pt}
 \setlength{\cftbeforesubsecskip}{3pt}
 \setlength{\cftbeforesubsubsecskip}{0pt}
@@ -84,33 +94,53 @@
 \counterwithin{table}{section}
 
 
+% 设置浮动体的 caption 位置
+\RequirePackage{float}
+\floatstyle{plaintop}       % 表格的 caption 在表格上方
+\restylefloat{table}
+\floatstyle{plain}
+\restylefloat{listing}      % listing 环境默认为 ruled，修改为 plain，将 caption 放在下方
+\sloppy
+
+
 % 有关字体的设置
-\RequirePackage[T1]{fontenc}	% 使得 ctexart 可对英文加粗
+% 五号 = 10.5 pt
+% 小四 = 12.0 pt
+% 四号 = 14.0 pt
+% 字号对应单倍行距大小 = 字号磅数 * 1.3（如小四对应单倍行距为 15.6 pt）
+\RequirePackage[T1]{fontenc}					% 使得 ctexart 可对英文加粗
 \newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
+% 表格内所有字体均为小五：\zihao{-5}
+% AtBeginEnvironment 在 etoolbox 里
+\RequirePackage{etoolbox}
+\AtBeginEnvironment{table}{\zihao{-5}}
+\AtBeginEnvironment{tabular}{\zihao{-5}}
+\AtBeginEnvironment{tabularx}{\zihao{-5}}
 
 
 % 设置摘要与目录页样式（如页眉、页脚等）
 \RequirePackage{fancyhdr}
 \fancypagestyle{firststyle}{
    \fancyhf{}
-   \pagenumbering{Roman}                    % 页数使用罗马数字
+   \pagenumbering{Roman}                    	% 页数使用罗马数字
    \fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
    \fancyhead[R]{\large 毕业设计（论文）~\\}
    \fancyfoot[C]{\large \thepage}
-   \renewcommand{\headrulewidth}{1.5pt}     % 页眉横线
+   \renewcommand{\headrulewidth}{1.5pt}     	% 页眉横线
    \renewcommand{\footrulewidth}{0pt}
 }
 
 
 % 设置正文页样式（如页眉、页脚等）
+\RequirePackage{lastpage}						% 标定最后一页，提供 LastPage
 \fancypagestyle{mainstyle}{
    \fancyhf{}
    \pagenumbering{arabic}
    \fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
    \fancyhead[R]{\large 毕业设计（论文）~\\}
    \fancyfoot[R]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}} %偶数页左侧(LE)，奇数页右侧(RO)标页码，oneside打印只用写RO
-   \renewcommand{\headrulewidth}{1.5pt}     % 页眉横线
-   \renewcommand{\footrulewidth}{1.5pt}     % 页脚横线
+   \renewcommand{\headrulewidth}{1.5pt}     	% 页眉横线
+   \renewcommand{\footrulewidth}{1.5pt}     	% 页脚横线
 }
 
 
