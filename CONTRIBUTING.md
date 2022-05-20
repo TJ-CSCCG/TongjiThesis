@@ -1,6 +1,6 @@
 # CONTRIBUTING
 
-Welcome to CONTRIBUTING.md. Since you find this page, I think you might want to make a contribution to our [tongji-undergrad-thesis](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)! Let's read these following parts and start contributing right now!
+Welcome to CONTRIBUTING.md. Since you find this page, you might want to make a contribution to our [tongji-undergrad-thesis](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)! Let's read these following parts and start contributing right now!
 
 ## Project
 
@@ -47,7 +47,7 @@ If a bug is confirmed, you can raise it in the [Issues](https://github.com/TJ-CS
 
 ### How to pull request?
 
-I recommend to follow this workflow step by step:
+We recommend to follow this workflow step by step:
 
 1. Fork this repository as upstream repository.
 2. Clone the repository forked from remote to local.
