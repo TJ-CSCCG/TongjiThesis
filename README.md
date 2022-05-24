@@ -1,24 +1,35 @@
-# Overleaf-Compatible Undergraduate Thesis Template (Tongji Univ.)
+# :page_facing_up: 同济大学本科生毕业设计论文模板（理工类）
 
-**NOTE**
+中文 | [English](README-EN.md)
 
-* Please select `main.tex` as the main file and compile it with `XeLaTeX` (suggested) or `LuaLaTex`.
-* Till May 26th, 2021, our "great"🙄 `1.tongji.edu` is not able to support uploading `.pdf` files (but only MS Word files). But you may simply convert the generated PDF to `docx` using some online tools (e.g., [pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))
-* But no worries, many students and [I](https://github.com/ganler) still graduated successfully using this template. So word with what you like!
+**注意**：
 
-## Use it on **Overleaf** NOW!
+* 直到 2021 年 5 月 26 日，我们伟大的 1 系统仍然无法支持上传 `.pdf` 格式文件。但是你可以通过一些 `pdf` 转 `docx` 工具，比如：[pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))。
 
-**CLICK ME** 👉 [![](https://img.shields.io/badge/overleaf-tongjithesis-green.svg)](https://www.overleaf.com/latex/templates/tongji-undergrad-thesis/dfdvqsmpfcgk)
+## 使用方法
 
-Note that **the overleaf template might not be up-to-date** so it is suggested to create your own overleaf project manually (see the section below).
+### 1. 直接在 **Overleaf** 上使用（Overleaf 模板）
 
-## Use latest version on Overleaf
+**点这里跳转至 Overleaf** 👉 [![svg of overleaf-tongjithesis](https://img.shields.io/badge/overleaf-tongjithesis-green.svg)](https://www.overleaf.com/latex/templates/tongji-undergrad-thesis/dfdvqsmpfcgk)
 
-- Download this repo `Code | Download ZIP`;
-- Open [Overleaf](https://www.overleaf.com/);
-- Click upload project and drag the `.zip` file into Overleaf panel;
+**但请注意！上方的 Overleaf 模板并未及时更新**。因此建议想要使用最新模板的同学们在 Overleaf 上创建自己的项目，具体操作请看[该小节](#2-在-overleaf-上使用最新版本)。
 
-## Compile it locally on Mac/Linux/Windows
+> **注意！** 请检查 Overleaf 项目中对 **编译器** 与 **主入口** 的配置：
+>
+> * 将 `main.tex` 设为主入口，而非项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
+> * 推荐将 `XeLaTeX` 设置为编译器，本项目不支持某些编译器（如 `pdfLaTeX`）。
+
+### 2. 在 **Overleaf** 上使用最新版本
+
+* 通过本仓库主页项目文件列表上方的 “Code | Download ZIP” 下载本仓库；
+* 打开 [Overleaf](https://www.overleaf.com/)；
+* 通过拖拽下载的 `zip` 文件上传至 Overleaf。
+
+### 3. 在 Mac / Linux 上使用
+
+#### i. 使用 tlmgr
+
+通过 [此处](https://tug.org/texlive/acquire.html) 下载 TeXLive，并使用 `tlmgr` 下载宏包：
 
 ```shell
 # Install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
@@ -42,17 +53,19 @@ sudo tlmgr install ctex
 sudo tlmgr install texcount
 sudo tlmgr install needspace
 sudo tlmgr install xecjk
-sudo  tlmgr install subfigure
-sudo  tlmgr install cases
-sudo  tlmgr install algorithms
-sudo  tlmgr install multirow
+sudo tlmgr install subfigure
+sudo tlmgr install cases
+sudo tlmgr install algorithms
+sudo tlmgr install multirow
 
 sudo tlmgr update --self --all
 ```
 
-### Makefile
+#### ii. 通过 Makefile 构建项目
 
-Credit: https://github.com/sjtug/SJTUThesis
+> 感谢 [SJTUThesis](https://github.com/sjtug/SJTUThesis) 项目的 Makefile 文件。
+
+你可以通过下列指令完成对应操作：
 
 ```shell
 make all                      # compile main.pdf
@@ -61,22 +74,34 @@ make cleanall                 # rm all intermediate files (including .pdf)
 make wordcount                # wordcount
 ```
 
-### Batchfile
+### 4. 在 Windows 上使用
 
-Credit: https://github.com/sjtug/SJTUThesis
+#### i. 安装 TeXLive
 
-```shell
-make.bat                      # the same to "make.bat thesis"
-make.bat thesis               # compile main.pdf
-make.bat clean                # clean all work files by latexmk -c
-make.bat cleanall             # clean all work files and main.pdf by latexmk -C
-make.bat wordcount            # wordcount
-make.bat help                 # read the manual
+通过 [此处](https://www.tug.org/texlive/acquire-netinstall.html) 下载 `install-tl-windows.exe`。
+
+#### ii. 通过 Batchfile 构建项目
+
+> 感谢 [SJTUThesis](https://github.com/sjtug/SJTUThesis) 项目的 Compile.bat 文件。
+
+你可以通过下列指令完成对应操作：
+
+```bat
+.\make.bat                      # the same to "make.bat thesis"
+.\make.bat thesis               # compile main.pdf
+.\make.bat clean                # clean all work files by latexmk -c
+.\make.bat cleanall             # clean all work files and main.pdf by latexmk -C
+.\make.bat wordcount            # wordcount
+.\make.bat help                 # read the manual
 ```
 
-### LaTeXMK + XeLaTeX on LaTeX-Workshop
+### 5. 在 VSCode 上使用
 
-Add the following attribute to your `settings.json`:
+#### i. 配置 VSCode
+
+在插件市场中安装 LaTeX Workshop 插件，此后下载该项目，并在该项目根目录打开。（LaTeX Workshop 只是一个插件，仍需要下载对应平台下的 `TeXLive`）
+
+**注意**：下列配置已被项目中 `.vscode/settings.json` 包含。正常情况下，启动 LaTeX Workshop 插件时会自动装载配置。（`.vscode/settings.json` 中的配置会覆盖全局配置文件 `settings.json` 中对应选项，因此不必修改全局配置文件）
 
 ```json
 "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
@@ -106,27 +131,48 @@ Add the following attribute to your `settings.json`:
 ]
 ```
 
-## Call for contribution
+#### ii. 通过 Workshop 提供的功能编译项目
 
-- Create a `.sty` file regarding the project.
+* 点击左侧边栏中带有 TEX 图标的 LaTeX 按钮；
+* 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
 
----
+## 如何为该项目贡献代码？
 
-## LICENSE
+* 首先，还请查看 [项目贡献指南](CONTRIBUTING.md) 了解该项目如何使用 `git` 与 `GitHub` 协作。
+* 此后，还请查看 [项目期望](ROADMAP.md) 了解该项目希望完成的工作。
+* 最后，fork [该仓库](https://github.com/TJ-CSCCG/tongji-undergrad-thesis) 到你所属的账户之下，开始你的贡献。
 
-We follow WTFPLv3.1 as our license.
+## 开源协议
 
-## Credit
+该项目使用 **“你想干啥就干啥” 协议**（WTFPLv3.1）。
 
-Initial template provided by Yukuan HU, maintained/promoted by Ganler.
+```text
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENCE
+                         Version 3.1, July 2019
+                     https://ph.dtf.wtf/u/wtfplv31
 
-## Thanks
+by Sam Hocevar <sam@hocevar.net>
+   theiostream <matoe@matoe.co.cc>
+   dtf         <wtfpl@dtf.wtf>
 
-We learned a lot from the leading university open-source repositories:
+              DO WHAT THE FUCK YOU WANT TO PUBLIC LICENCE
+    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
-- https://github.com/sjtug/SJTUThesis (makefile & batchfile)
+0. You just DO WHAT THE FUCK YOU WANT TO.
+```
 
-## Contact
+## 有关突出贡献的说明
+
+* 该项目起源于 [YukuanHU](https://github.com/YukuanHu) 的本科毕业设计论文，论文于 2019.05.24 上传；
+* 2021.05.09 起，[Ganler](https://github.com/ganler) 以上述项目为基础，增强其功能（项目结构与平台适配）并开始维护新项目。
+
+## 致谢
+
+我们从顶尖高校的优秀开源项目中学到了很多：
+
+* https://github.com/sjtug/SJTUThesis (makefile & batchfile)
+
+## 联系方式
 
 ```python
 # Python

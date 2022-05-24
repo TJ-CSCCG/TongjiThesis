@@ -43,10 +43,10 @@ It is sincerely appreciated to make a contribution to VIS of Tongji University!
 
 "Literate programming" is a essential concept of LaTeX, which means source should be readable like natural language. \*.dtx (Documented LaTeX) is designed to solve this problem by creating a combination with source and documentation.
 
-\*.dtx and \*.ins files are used to unzip / install. They include how to define \*.cls, \*.bst file and user guide. Know more [here](https://texfaq.org/FAQ-dtx). [pdf on tug.org](https://tug.org/TUGboat/tb29-2/tb92pakin.pdf) is also very helpful, when it comes to \*.dtx details.
+\*.dtx and \*.ins files are used to unzip / install. They include \*.cls, \*.bst file definition and user guide. Know more [here](https://texfaq.org/FAQ-dtx). [pdf on tug.org](https://tug.org/TUGboat/tb29-2/tb92pakin.pdf) is also very helpful, when it comes to \*.dtx details.
 
 Writing a \*.dtx file might be a choice which need to be considered carefully; \*.cls or \*.dtx, this is a question.
 
 ### 6. remove "undergrad" from "tongji-undergrad-thesis"
 
-Unification of bachelor, master and doctor is a huge work and it has a long way to go. (Perhaps, unified thesis template would be created independently, rather than being a continous part of this project.)
+Unification of bachelor, master and doctor is a huge work and it has a long way to go. (Perhaps, unified thesis template would be created independently in the future, rather than being a continous part of this project. But we would be still delighted to embrace it)

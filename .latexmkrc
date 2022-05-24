@@ -3,3 +3,6 @@
 
 ensure_path("TEXINPUTS", "style");
 ensure_path("BIBINPUTS", "bib");
+
+# about latexmk -c
+$clean_ext = 'bbl glo gls gz hd loa run.xml thm xdv';
