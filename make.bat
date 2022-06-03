@@ -54,7 +54,7 @@ goto :EOF
 
 :thesis
 	echo Compile . . .
-	latexmk -xelatex -quiet -file-line-error -halt-on-error -interaction=nonstopmode %THESIS% 2>nul
+	latexmk -xelatex -synctex=1 -quiet -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape %THESIS% 2>nul
 goto :EOF
 
 :clean
