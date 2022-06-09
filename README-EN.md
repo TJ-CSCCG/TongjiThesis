@@ -5,6 +5,7 @@ English | [中文](README.md)
 **NOTE**:
 
 * Till May 26th, 2021, our "great"🙄 `1.tongji.edu` is not able to support uploading `.pdf` files (but only MS Word files). But you may simply convert the generated PDF to `docx` using some online tools (e.g., [pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))
+* But no worries, many students and [I](https://github.com/ganler) still graduated successfully using this template. So word with what you like!
 
 ## Use it on **Overleaf** NOW!
 

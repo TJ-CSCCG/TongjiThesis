@@ -2,7 +2,8 @@
 
 中文 | [English](README-EN.md)
 
-> **注意**：使用该模板你会获得 **pdf** 文件作为输出。但在毕业设计过程中可能存在需要提交 docx 等格式文件的场合，这时你可以使用一些 **pdf 转 docx 工具**，比如：[pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))。
+> * **注意**：使用该模板你会获得 **pdf** 文件作为输出。但在毕业设计过程中可能存在需要提交 docx 等格式文件的场合，这时你可以使用一些 **pdf 转 docx 工具**，比如：[pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))。
+> * 你 **不需要担心** “抛弃 1 系统的 docx 模板而选用本 LaTeX 模板是否会受到影响”，毕竟使用该模板的我们（[2017-ganler](https://github.com/ganler), [2018-skyleaworlder](https://github.com/skyleaworlder)）都没有因格式问题而被勒令重新排版论文。
 
 ## 使用方法
 
