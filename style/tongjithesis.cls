@@ -231,6 +231,7 @@
 	\zihao{-3}\oldtabular[#1]
 	}{\renewcommand{\arraystretch}{1.2}\endoldtabular
 }
+\RequirePackage{ulem}
 \newcommand{\ulinecentered}[1]{\uline{\makebox[20em][c]{#1}}}
 
 
@@ -247,7 +248,10 @@
 \newcommand{\thesistitleeng}[2]{\def\tongjithesistitleeng{#1}\def\tongjithesissubtitleeng{#2}}
 \newcommand{\thesisadvisor}[1]{\def\tongjithesisadvisor{#1}}
 \newcommand{\thesisdate}[3]{\def\tongjithesisyear{#1}\def\tongjithesismonth{#2}\def\tongjithesisday{#3}}
-\newcommand{\MakeFrontCover}{
+
+
+% 设置封面
+\newcommand{\MakeCover}[0]{
 	\begin{titlepage}
 		\begin{center}
 			\thisfancyput(-0.75cm,-13cm){}
@@ -327,11 +331,4 @@
 		\textbf{Key words:\quad}#2
 	}
 	\par
-}
-
-
-%%% custom information %%%
-\renewcommand{\maketitle}{%
-	\MakeFrontCover
-	\frontmatter
 }
