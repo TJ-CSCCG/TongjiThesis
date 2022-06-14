@@ -28,10 +28,11 @@
 
 #### i. 使用 tlmgr
 
-通过 [此处](https://tug.org/texlive/acquire.html) 下载 TeXLive，并使用 `tlmgr` 下载宏包：
+下载 TeXLive，并使用 `tlmgr` 下载宏包：
 
 ```shell
-# Install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
+# The following commands aims at installing packages upon TeXLive without any packages.
+# You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
 sudo tlmgr install adjustbox algorithm \
@@ -118,6 +119,12 @@ make wordcount                # wordcount
 * 点击左侧边栏中带有 TEX 图标的 LaTeX 按钮；
 * 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
 
+### 6. 在 GitHub Actions 中编译
+
+项目以 `.github/workflows/*.yaml` 配置了 GitHub Actions，push 代码到 fork 仓库或 template-generated 仓库均可触发测试。可通过 commit 对应的 workflow run 中的 `Summary | Artifacts` 获得多平台构建产物。
+
+（通过勾选 `Settings | Actions | General | Allow all actions and reusable workflows` 打开 GitHub Actions）
+
 ## 如何为该项目贡献代码？
 
 还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
@@ -151,6 +158,7 @@ by Sam Hocevar <sam@hocevar.net>
 我们从顶尖高校的优秀开源项目中学到了很多：
 
 * [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile
+* [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows
 
 ## 联系方式
 
