@@ -19,7 +19,7 @@ env:
   TL_PACKAGES: adjustbox algorithmicx algorithms caption cases chngcntr collectbox ctex enumitem environ extarrows fancybox fancyhdr float lastpage latexmk multirow needspace rsfs setspace subfigure tcolorbox texcount texliveonfly titling tocloft trimspaces ucs xcolor xecjk zhnumber gbt7714 natbib chinese-jfm catchfile fancyvrb framed fvextra ifplatform lineno minted pdftexcmds upquote xstring txfonts times biber biblatex bibtex dvips gsftopk
 
 jobs:
-  build-ubuntu:
+  build-linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,12 +31,12 @@ jobs:
         uses: xu-cheng/texlive-action/full@v1
         with:
           run: |
-            latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
+            latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape -jobname=linux${{ matrix.compiler }} main
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
           name: document linux output
-          path: main.pdf
+          path: linux${{ matrix.compiler }}.pdf
 
   build-macos:
     runs-on: macos-latest
@@ -65,12 +65,12 @@ jobs:
           tlmgr path add
       - name: compile LaTeX document
         run: |
-          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
+          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape -jobname=macos${{ matrix.compiler }} main
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
           name: document macos output
-          path: main.pdf
+          path: macos${{ matrix.compiler }}.pdf
 
   build-windows:
     runs-on: windows-latest
@@ -100,9 +100,9 @@ jobs:
       - name: compile LaTeX document
         run: |
           ${{ env.SET_PATH }}
-          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
+          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape -jobname=windows${{ matrix.compiler }} main
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
-          name: document macos output
-          path: main.pdf
+          name: document windows output
+          path: windows${{ matrix.compiler }}.pdf
