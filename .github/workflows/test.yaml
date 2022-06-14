@@ -1,11 +1,11 @@
 on:
   push:
     branches:
-      - main
+      - master
       - fix-ci
   pull_request:
     branches:
-      - main
+      - master
 
 name: test
 
