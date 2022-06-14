@@ -71,3 +71,37 @@ jobs:
         with:
           name: document macos output
           path: main.pdf
+
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler: [-xelatex, -lualatex]
+    env:
+      SET_PATH: ${env:PATH} = "${{ github.workspace }}\tmp\texlive\bin\win32;" + ${env:PATH}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install Python for minted
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: pip install Pygments for minted
+        run: pip install Pygments
+      - name: install TeXLive
+        run: |
+          ${{ env.SET_PATH }}
+          Invoke-WebRequest -Uri https://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl.zip -OutFile install-tl.zip
+          Expand-Archive install-tl.zip -DestinationPath .
+          Set-Location install-tl-*
+          .\install-tl-windows --no-gui --profile ..\.github\ci\texlive-win.profile
+          tlmgr install ${{ env.TL_PACKAGES }}
+          tlmgr update --self --all --no-auto-install --repository=https://mirrors.rit.edu/CTAN/systems/texlive/tlnet/
+      - name: compile LaTeX document
+        run: |
+          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
+      - name: upload pdf
+        uses: actions/upload-artifact@v2
+        with:
+          name: document macos output
+          path: main.pdf
