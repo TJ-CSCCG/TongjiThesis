@@ -9,33 +9,65 @@ on:
 
 name: test
 
+env:
+  # gbt7714 natbib: gbt7714 needed
+  # chinese-jfm: lualatex needed
+  # catchfile fancyvrb framed fvextra ifplatform lineno minted pdftexcmds upquote xstring: minted needed
+  # biber biblatex bibtex: for executable bibtex
+  # txfonts: mathptmx is obsoleted; times: times is obsoleted but utmb8a.pfb is needed
+  # dvips: for 8r.enc, OS X needed; gsftopk: command needed when xdv -> pdf
+  TL_PACKAGES: adjustbox algorithmicx algorithms caption cases chngcntr collectbox ctex enumitem environ extarrows fancybox fancyhdr float lastpage latexmk multirow needspace rsfs setspace subfigure tcolorbox texcount texliveonfly titling tocloft trimspaces ucs xcolor xecjk zhnumber gbt7714 natbib chinese-jfm catchfile fancyvrb framed fvextra ifplatform lineno minted pdftexcmds upquote xstring txfonts times biber biblatex bibtex dvips gsftopk
+
 jobs:
-  build-xelatex:
+  build-ubuntu:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [-xelatex, -lualatex]
     steps:
       - name: checkout
         uses: actions/checkout@v2
       - name: compile LaTeX document
         uses: xu-cheng/texlive-action/full@v1
         with:
-          run: "latexmk -xelatex -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main"
+          run: |
+            latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
-          name: document output
+          name: document linux output
           path: main.pdf
 
-  build-lualatex:
-    runs-on: ubuntu-latest
+  build-macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        compiler: [-xelatex, -lualatex]
+    env:
+      SET_PATH: export PATH=/tmp/texlive/bin/universal-darwin:/usr/texbin:$PATH
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: compile LaTeX document
-        uses: xu-cheng/texlive-action/full@v1
+      - name: install Python for minted
+        uses: actions/setup-python@v4
         with:
-          run: "latexmk -lualatex -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main"
+          python-version: '3.9'
+      - name: pip install Pygments for minted
+        run: pip install Pygments
+      - name: install TeXLive
+        run: |
+          ${{ env.SET_PATH }}
+          curl -O https://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz
+          tar -xzf install-tl-unx.tar.gz
+          cd install-tl-20* && ./install-tl --profile ../.github/ci/texlive.profile
+          tlmgr install ${{ env.TL_PACKAGES }}
+          tlmgr update --self --all --no-auto-install --repository=https://mirrors.rit.edu/CTAN/systems/texlive/tlnet/
+          tlmgr path add
+      - name: compile LaTeX document
+        run: |
+          latexmk ${{ matrix.compiler }} -interaction=nonstopmode -file-line-error -halt-on-error -shell-escape main
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
-          name: document output
+          name: document macos output
           path: main.pdf

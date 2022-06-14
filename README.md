@@ -34,28 +34,11 @@
 # Install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install texliveonfly
-sudo tlmgr install latexmk
-sudo tlmgr install adjustbox
-sudo tlmgr install tcolorbox
-sudo tlmgr install collectbox
-sudo tlmgr install ucs
-sudo tlmgr install environ
-sudo tlmgr install titling
-sudo tlmgr install enumitem
-sudo tlmgr install rsfs
-sudo tlmgr install tocloft
-sudo tlmgr install xcolor
-sudo tlmgr install trimspaces
-sudo tlmgr install zhnumber
-sudo tlmgr install ctex
-sudo tlmgr install texcount
-sudo tlmgr install needspace
-sudo tlmgr install xecjk
-sudo tlmgr install subfigure
-sudo tlmgr install cases
-sudo tlmgr install algorithms
-sudo tlmgr install multirow
+sudo tlmgr install adjustbox algorithm \
+    cases caption chngcntr collectbox ctex enumerate enumitem environ extarrows fancybox fancyhdr \
+    lastpage latexmk longtable mathptmx minted multirow needspace rsfs setspace subfigure \
+    tcolorbox texcount texliveonfly tikz titling \
+    tocloft trimspaces ucs verbatim xcolor xecjk zhnumber
 
 sudo tlmgr update --self --all
 ```

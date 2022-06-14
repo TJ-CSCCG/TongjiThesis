@@ -3,11 +3,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % 数学符号
-% mathptmx 定义了 Adobe Times Roman 字体，
-% 同时提供了字体应用在数学环境中的支持
-% see https://ctan.org/pkg/mathptmx?lang=en
-\usepackage{mathptmx}
+% 使用更现代的 newtx
+% see https://tex.stackexchange.com/questions/56876/times-new-roman-fonts-and-maths-without-mathptmx
 \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{txfonts}
 \theoremstyle{definition}
 \newtheorem{thm}{定理\hspace{0.05pt}}[section]
 \newtheorem{cor}{推论\hspace{0.05pt}}[section]
