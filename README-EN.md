@@ -27,31 +27,15 @@ Note that **the overleaf template might not be up-to-date** so it is suggested t
 ## Compile it locally on Mac/Linux/Windows
 
 ```shell
-# Install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
+# The following commands aims at installing packages upon TeXLive without any packages.
+# You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install texliveonfly
-sudo tlmgr install latexmk
-sudo tlmgr install adjustbox
-sudo tlmgr install tcolorbox
-sudo tlmgr install collectbox
-sudo tlmgr install ucs
-sudo tlmgr install environ
-sudo tlmgr install titling
-sudo tlmgr install enumitem
-sudo tlmgr install rsfs
-sudo tlmgr install tocloft
-sudo tlmgr install xcolor
-sudo tlmgr install trimspaces
-sudo tlmgr install zhnumber
-sudo tlmgr install ctex
-sudo tlmgr install texcount
-sudo tlmgr install needspace
-sudo tlmgr install xecjk
-sudo tlmgr install subfigure
-sudo tlmgr install cases
-sudo tlmgr install algorithms
-sudo tlmgr install multirow
+sudo tlmgr install adjustbox algorithm \
+    cases caption chngcntr collectbox ctex enumerate enumitem environ extarrows fancybox fancyhdr \
+    lastpage latexmk longtable mathptmx minted multirow needspace rsfs setspace subfigure \
+    tcolorbox texcount texliveonfly tikz titling \
+    tocloft trimspaces ucs verbatim xcolor xecjk zhnumber
 
 sudo tlmgr update --self --all
 ```
@@ -143,7 +127,8 @@ Initial template provided by [YukuanHU](https://github.com/YukuanHu), maintained
 
 We learned a lot from the leading university open-source repositories:
 
-* https://github.com/sjtug/SJTUThesis (makefile & batchfile)
+* [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile
+* [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows
 
 ## Contact
 

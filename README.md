@@ -28,34 +28,18 @@
 
 #### i. 使用 tlmgr
 
-通过 [此处](https://tug.org/texlive/acquire.html) 下载 TeXLive，并使用 `tlmgr` 下载宏包：
+下载 TeXLive，并使用 `tlmgr` 下载宏包：
 
 ```shell
-# Install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
+# The following commands aims at installing packages upon TeXLive without any packages.
+# You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install texliveonfly
-sudo tlmgr install latexmk
-sudo tlmgr install adjustbox
-sudo tlmgr install tcolorbox
-sudo tlmgr install collectbox
-sudo tlmgr install ucs
-sudo tlmgr install environ
-sudo tlmgr install titling
-sudo tlmgr install enumitem
-sudo tlmgr install rsfs
-sudo tlmgr install tocloft
-sudo tlmgr install xcolor
-sudo tlmgr install trimspaces
-sudo tlmgr install zhnumber
-sudo tlmgr install ctex
-sudo tlmgr install texcount
-sudo tlmgr install needspace
-sudo tlmgr install xecjk
-sudo tlmgr install subfigure
-sudo tlmgr install cases
-sudo tlmgr install algorithms
-sudo tlmgr install multirow
+sudo tlmgr install adjustbox algorithm \
+    cases caption chngcntr collectbox ctex enumerate enumitem environ extarrows fancybox fancyhdr \
+    lastpage latexmk longtable mathptmx minted multirow needspace rsfs setspace subfigure \
+    tcolorbox texcount texliveonfly tikz titling \
+    tocloft trimspaces ucs verbatim xcolor xecjk zhnumber
 
 sudo tlmgr update --self --all
 ```
@@ -135,6 +119,12 @@ make wordcount                # wordcount
 * 点击左侧边栏中带有 TEX 图标的 LaTeX 按钮；
 * 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
 
+### 6. 在 GitHub Actions 中编译
+
+项目以 `.github/workflows/*.yaml` 配置了 GitHub Actions，push 代码到 fork 仓库或 template-generated 仓库均可触发测试。可通过 commit 对应的 workflow run 中的 `Summary | Artifacts` 获得多平台构建产物。
+
+（通过勾选 `Settings | Actions | General | Allow all actions and reusable workflows` 打开 GitHub Actions）
+
 ## 如何为该项目贡献代码？
 
 还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
@@ -168,6 +158,7 @@ by Sam Hocevar <sam@hocevar.net>
 我们从顶尖高校的优秀开源项目中学到了很多：
 
 * [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile
+* [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows
 
 ## 联系方式
 
