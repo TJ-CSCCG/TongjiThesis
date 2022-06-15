@@ -125,6 +125,10 @@ make wordcount                # wordcount
 
 （通过勾选 `Settings | Actions | General | Allow all actions and reusable workflows` 打开 GitHub Actions）
 
+### 7. 在 Docker 中使用
+
+详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
+
 ## 如何为该项目贡献代码？
 
 还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
