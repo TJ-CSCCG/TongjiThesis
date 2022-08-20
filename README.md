@@ -168,5 +168,8 @@ by Sam Hocevar <sam@hocevar.net>
 
 ```python
 # Python
-f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois')
+[
+    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
+    'jgli22@$.edu.cn'.replace('$', 'm.fudan')
+]
 ```

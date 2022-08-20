@@ -134,5 +134,8 @@ We learned a lot from the leading university open-source repositories:
 
 ```python
 # Python
-f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois')
+[
+    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
+    'jgli22@$.edu.cn'.replace('$', 'm.fudan')
+]
 ```
