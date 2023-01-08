@@ -7,6 +7,21 @@ English | [中文](README.md)
 * Till May 26th, 2021, our "great"🙄 `1.tongji.edu` is not able to support uploading `.pdf` files (but only MS Word files). But you may simply convert the generated PDF to `docx` using some online tools (e.g., [pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))
 * But no worries, many students and [I](https://github.com/ganler) still graduated successfully using this template. So word with what you like!
 
+## Example
+
+> Full output is available in [Template Compile Product (full version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21) or pdf download links of "Assets" in [Release](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases).
+
+The following are "cover", "chinese abstract", "contents", "section", "reference" and "thanks" page.
+
+<p align="center">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0002.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0004.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0011.jpg" width="30%">
+</p>
+
 ## Use it on **Overleaf** NOW!
 
 **CLICK ME** 👉 [![svg of overleaf-tongjithesis](https://img.shields.io/badge/overleaf-tongjithesis-green.svg)](https://www.overleaf.com/latex/templates/tongji-undergrad-thesis/dfdvqsmpfcgk)
@@ -123,7 +138,7 @@ by Sam Hocevar <sam@hocevar.net>
 
 ## Credit
 
-Initial template provided by [YukuanHU](https://github.com/YukuanHu), maintained/promoted by [Ganler](https://github.com/ganler).
+Initial template provided by [YukuanHU](https://github.com/YukuanHu), maintained/promoted by [ganler](https://github.com/ganler).
 
 ## Thanks
 

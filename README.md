@@ -5,6 +5,21 @@
 > * **注意**：使用该模板你会获得 **pdf** 文件作为输出。但在毕业设计过程中可能存在需要提交 docx 等格式文件的场合，这时你可以使用一些 **pdf 转 docx 工具**，比如：[pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word))。
 > * 你 **不需要担心** “抛弃 1 系统的 docx 模板而选用本 LaTeX 模板是否会受到影响”，毕竟使用该模板的我们（[2017-ganler](https://github.com/ganler), [2018-skyleaworlder](https://github.com/skyleaworlder)）都没有因格式问题而被勒令重新排版论文。
 
+## 样例展示
+
+> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21) 或 [Release 页](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) 中 "Assets" 下的 pdf 下载链接。
+
+以下依次展示 “封面”、“中文摘要”、“目录”、“主要内容”、“参考文献” 与 “谢辞”。
+
+<p align="center">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0002.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0004.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0011.jpg" width="30%">
+</p>
+
 ## 使用方法
 
 ### 1. 直接在 **Overleaf** 上使用（Overleaf 模板）
@@ -157,7 +172,7 @@ by Sam Hocevar <sam@hocevar.net>
 ## 有关突出贡献的说明
 
 * 该项目起源于 [YukuanHU](https://github.com/YukuanHu) 的本科毕业设计论文，论文于 2019.05.24 上传；
-* 2021.05.09 起，[Ganler](https://github.com/ganler) 以上述项目为基础，增强其功能（项目结构与平台适配）并开始维护新项目。
+* 2021.05.09 起，[ganler](https://github.com/ganler) 以上述项目为基础，增强其功能（项目结构与平台适配）并开始维护新项目。
 
 ## 致谢
 
