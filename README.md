@@ -22,18 +22,19 @@
 
 ## 使用方法
 
-### 1. 直接在 **Overleaf** 上使用（Overleaf 模板）
+### 1. 通过 **Overleaf** 模板直接使用
 
-**点这里跳转至 Overleaf** 👉 [![svg of overleaf-tongjithesis](https://img.shields.io/badge/overleaf-tongjithesis-green.svg)](https://www.overleaf.com/latex/templates/tongji-undergrad-thesis/dfdvqsmpfcgk)
+您可以通过以下链接访问我们的Overleaf模板并使用：[![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
-**但请注意！上方的 Overleaf 模板并未及时更新**。因此建议想要使用最新模板的同学们在 Overleaf 上创建自己的项目，具体操作请看[该小节](#2-在-overleaf-上使用最新版本)。
+请注意，该 Overleaf 模板已经及时更新。我们鼓励您直接使用该模板来编写您的本科毕业论文，也可以将该模板导入到自己的 Overleaf 项目中进行使用。具体操作方法请参考本文档下一节。
 
-> **注意！** 请检查 Overleaf 项目中对 **编译器** 与 **主入口** 的配置：
->
-> * 将 `main.tex` 设为主入口，而非项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
-> * 推荐将 `XeLaTeX` 设置为编译器，本项目不支持某些编译器（如 `pdfLaTeX`）。
+> **注意！** 在使用Overleaf模板时，请务必检查编译器和主入口的设置：
+> 
+> * 将 `main.tex` 文件设为主入口文件，而不是项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
+> * 推荐使用 `XeLaTeX` 和 `LuaLaTeX` 编译器，本模板不支持某些编译器（如 `pdfLaTeX`）。
 
-### 2. 在 **Overleaf** 上使用最新版本
+
+### 2. 在 **Overleaf** 上导入本仓库
 
 * 通过本仓库主页项目文件列表上方的 “Code | Download ZIP” 下载本仓库；
 * 打开 [Overleaf](https://www.overleaf.com/)；
@@ -173,6 +174,11 @@ by Sam Hocevar <sam@hocevar.net>
 
 * 该项目起源于 [YukuanHU](https://github.com/YukuanHu) 的本科毕业设计论文，论文于 2019.05.24 上传；
 * 2021.05.09 起，[ganler](https://github.com/ganler) 以上述项目为基础，增强其功能（项目结构与平台适配）并开始维护新项目。
+* 2022.05.12 起，[skyleaworlder](https://github.com/skyleaworlder) 开始贡献本项目，并将其整合进 [TJ-CSCCG](http://github.com/TJ-CSCCG)，并持续对该项目进行更新和改进，目前已经成为一个完善的本科毕业论文模板。
+
+我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
+
+在使用本模板时，如果您觉得本项目对您的毕业设计或论文有所帮助，我们希望您可以在您的致谢部分感谢并致以敬意。
 
 ## 致谢
 
@@ -187,6 +193,7 @@ by Sam Hocevar <sam@hocevar.net>
 # Python
 [
     f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    'jgli22@$.edu.cn'.replace('$', 'm.fudan')
+    'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
+    'rizhonglin@!.edu.cn'.replace('!', 'tongji')
 ]
 ```
