@@ -1,5 +1,14 @@
 \documentclass{tongjithesis}
 \usepackage{tongjithesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 若你想要用句点（．）替换句号（。）
+% 可以打开下面的注释
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \catcode`\。=\active
+% \newcommand{。}{\ifmmode\text{．}\else ．\fi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 默认使用 Adobe Times Roman
 % 如果你想使用 Times New Roman
@@ -15,26 +24,27 @@
 \pagestyle{firststyle}
 \input{sections/00_abstract.tex}
 
-\newpage
+\clearpage
 \tableofcontents   %放置目录
-\newpage
+\clearpage
 
 \pagestyle{mainstyle}
-\input{sections/01_introduction}
-\newpage
-\input{sections/02_preliminaries}
-\newpage
-\input{sections/03_algo}
-\newpage
-\input{sections/04_eval}
-\newpage
+\input{sections/01_intro}
+\clearpage
+\input{sections/02_math}
+\clearpage
+\input{sections/03_reference}
+\clearpage
+\input{sections/04_float}
+\clearpage
 \input{sections/05_conclusion}
-\newpage
+\clearpage
+
 
 \addcontentsline{toc}{section}{参考文献}
 \bibliography{note}
 
-\newpage
+\clearpage
 \input{sections/thanks}
 
 \end{document}
