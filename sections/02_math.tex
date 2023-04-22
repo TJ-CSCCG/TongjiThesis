@@ -1,18 +1,19 @@
 \section{数学}\label{sec:math}
 
-在\cref{sec:math}中，我们展示各种数学符号和环境的使用。
+在本节（\cref{sec:math}）中，我们展示各种数学符号和环境的使用。
 
 \subsection{数字和单位}
 
-\subsubsection{数字格式化}
+\subsubsection*{数字格式化}
 
 数字可以使用 \verb|\num{}| 命令进行格式化，例如：
 
 \begin{itemize}
 \item \num{12345272.42146}：显示长数字。
-\item \num{9+-3i}：显示复数。
-\item \num{.9e54}：显示科学计数法。
-\item \num{9.624 x 8.18 x 1.745}：显示乘积表达式。
+% \item \num{9+-3i}：显示复数。
+% \item \complexnum{1+-2i}：For TeXLive 2021, siunitx >= 3.0
+% \item \num{9.624 x 8.18 x 1.745}：显示乘积表达式。
+% \item \numproduct{1.654 x 2.34 x 3.430}：For TeXLive 2021, siunitx >= 3.0
 \item \num{1.234567e8}：以科学计数法显示数字。
 \item \num{-19.7}：显示负号。
 \item \num{3.2d-5}：显示数字和指数，使用小写的 d 来指示指数。
@@ -20,7 +21,7 @@
 \item \num[parse-numbers=false]{\$19,456.82}：显示一个货币金额，并将其解释为一个字符串，而不是数字。
 \end{itemize}
 
-\subsubsection{单位格式化}
+\subsubsection*{单位格式化}
 
 单位可以使用 \verb|\si{}| 命令进行格式化，例如：
 
@@ -35,7 +36,7 @@
 \item \SI{12}{\degree}：显示一个角度值，单位为度。
 \end{itemize}
 
-\subsubsection{数字和单位组合}
+\subsubsection*{数字和单位组合}
 
 数字和单位可以组合起来使用，例如：
 
@@ -45,7 +46,7 @@
 \item \SI{2.3}{\mega\joule\per\kelvin}：显示物理量的值和单位。
 \end{itemize}
 
-\subsubsection{数字和单位列表}
+\subsubsection*{数字和单位列表}
 
 数字和单位列表可以使用以下命令进行格式化：
 
@@ -55,7 +56,7 @@
 \item \SIlist{0.53;0.74;0.99}{\milli\metre}：显示带有单位的数字列表，其中数字之间用分号隔开。
 \end{itemize}
 
-\subsubsection{数字和单位范围}
+\subsubsection*{数字和单位范围}
 
 数字和单位范围可以使用以下命令进行格式化：
 

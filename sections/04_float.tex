@@ -1,5 +1,11 @@
 \section{浮动体}\label{sec:float}
 
+在本节（\cref{sec:float}）中，我们将介绍浮动体的概念、分类及其在论文中的使用。浮动体包括图片、表格和算法等，它们的共同特点是可以自由浮动在页面中，不会影响正文的排版。
+
+浮动体可以通过插入代码或使用专门的宏包来实现，常用的宏包有 \pkg{graphicx}、\pkg{float} 和 \pkg{algorithm} 等。在插入浮动体时，需要注意设置浮动体的位置和大小，以保证排版效果。
+
+浮动体的正确使用可以提高论文的可读性和美观程度，但也需要注意不要过度使用或使其影响正文的连贯性。
+
 \subsection{插图}
 
 在 \TeX{} 中，插图功能是通过特定编译程序提供的机制实现的。不同的编译程序支持不同的图形格式。通常，图形都放置在浮动环境中。浮动的意思是，最终排版的图形位置不一定与源文件中的位置对应，这也是新手在使用 \LaTeX{} 时可能会遇到的问题。如果需要强制固定浮动图形的位置，请使用 \pkg{float} 宏包，并使用 \texttt{[H]} 参数。
@@ -259,7 +265,7 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 \end{minted}
 
-\subsection*{\texttt{\textbackslash{}clearpage} 与 \texttt{\textbackslash{}newpage}}
+\subsection{\texttt{\textbackslash{}clearpage} 与 \texttt{\textbackslash{}newpage}}
 
 在 \LaTeX\ 中，使用 \verb|\newpage| 命令可以在当前位置开始新的一页。而使用 \verb|\clearpage| 命令不仅可以开始新的一页，还可以将未处理的浮动体（例如图表等）全部输出，确保当前页面上的所有浮动体都已经处理完毕。
 
