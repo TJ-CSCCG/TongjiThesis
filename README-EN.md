@@ -41,7 +41,26 @@ Please note that the Overleaf template is updated in a timely manner. We encoura
 
 ### 3. Using on Mac / Linux
 
-#### i. Use tlmgr
+#### i. Install Python
+
+- For Mac: Python comes pre-installed on most Macs. If you don't already have it, you can download and install it from the official website: https://www.python.org/downloads/mac-osx/
+- For Linux: Install Python by typing the following command in Terminal:
+```shell
+sudo apt-get install python3
+```
+
+After installing Python, you need to set the environment variable ``PATH`` and add the path to Python to it. This will allow you to call the `minted` macro package correctly in LaTeX.
+
+#### ii. Install `pygmentize` using `pip`
+
+Enter the following command in the terminal:
+```shell
+pip install Pygments
+```
+
+Note: If you encounter permissions problems during the installation process, you can run the above command from a command prompt with administrator privileges.
+
+#### iii. Use tlmgr
 
 Download TeXLive and use `tlmgr` to download packages:
 
@@ -50,16 +69,18 @@ Download TeXLive and use `tlmgr` to download packages:
 # You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install adjustbox algorithm \
-    cases caption chngcntr collectbox ctex enumerate enumitem environ extarrows fancybox fancyhdr \
-    lastpage latexmk longtable mathptmx minted multirow needspace rsfs setspace subfigure \
-    tcolorbox texcount texliveonfly tikz titling \
-    tocloft trimspaces ucs verbatim xcolor xecjk zhnumber
+sudo tlmgr install adjustbox algorithmicx algorithms biber biblatex bibtex booktabs \ 
+    caption cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips \ 
+    enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra \ 
+    gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno \ 
+    minted multirow mwe natbib needspace nth pdftexcmds rsfs setspace siunitx subfig \
+    tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft \ 
+    trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
 
 sudo tlmgr update --self --all
 ```
 
-#### ii. Build the project through Makefile
+#### iv. Build the project through Makefile
 
 Thanks to the Makefile file of the [SJTUThesis](https://github.com/sjtug/SJTUThesis) project, you can build the project through Makefile:
 
@@ -73,11 +94,28 @@ make wordcount                # wordcount
 
 ### 4. Using on Windows
 
-#### i. Install TeXLive
+#### i. Install Python
+
+1. Download the Python installer: Download the Python installer from the [Python official website](https://www.python.org/downloads/windows/) (note: the downloaded version needs to match your operating system version and bit number).
+
+2. Run the Python installer: Double-click the downloaded installer and follow the prompts to install it. During installation, remember to check the `Add Python 3.x to PATH` option so that Python can be used from the command line.
+
+#### ii. Install `pygmentize` using `pip`
+
+Enter the following command in the terminal:
+```shell
+pip install Pygments
+```
+
+Note: If you encounter permissions problems during the installation process, you can run the above command from a command prompt with administrator privileges.
+
+Translated with www.DeepL.com/Translator (free version)
+
+#### iii. Install TeXLive
 
 Download `install-tl-windows.exe` from [here](https://www.tug.org/texlive/acquire-netinstall.html).
 
-#### ii. Build the project through Batchfile
+#### iv. Build the project through Batchfile
 
 > Thanks to the Compile.bat file of the [SJTUThesis](https://github.com/sjtug/SJTUThesis) project.
 
