@@ -24,11 +24,11 @@
 
 ### 1. 通过 **Overleaf** 模板直接使用
 
-您可以通过以下链接访问我们的Overleaf模板并使用：[![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
+您可以通过以下链接访问我们的 Overleaf 模板并使用：[![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
 请注意，该 Overleaf 模板已经及时更新。我们鼓励您直接使用该模板来编写您的本科毕业论文，也可以将该模板导入到自己的 Overleaf 项目中进行使用。具体操作方法请参考本文档下一节。
 
-> **注意！** 在使用Overleaf模板时，请务必检查编译器和主入口的设置：
+> **注意！** 在使用 Overleaf 模板时，请务必检查编译器和主入口的设置：
 > 
 > * 将 `main.tex` 文件设为主入口文件，而不是项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
 > * 推荐使用 `XeLaTeX` 和 `LuaLaTeX` 编译器，本模板不支持某些编译器（如 `pdfLaTeX`）。
@@ -42,7 +42,26 @@
 
 ### 3. 在 Mac / Linux 上使用
 
-#### i. 使用 tlmgr
+#### i. 安装 Python
+
+- 对于 Mac：大多数 Mac 上已经预装了 Python。如果你还没有安装，可以从官网下载安装：https://www.python.org/downloads/mac-osx/
+- 对于 Linux：在终端中输入以下命令来安装 Python：
+```shell
+sudo apt-get install python3
+```
+
+当安装完 Python 后，你需要设置环境变量 `PATH`，将 Python 的路径添加进去。这样才能在 LaTeX 中正确调用 `minted` 宏包。
+
+#### ii. 使用 `pip` 安装 `pygmentize`
+
+在终端中输入以下命令：
+```shell
+pip install Pygments
+```
+
+注意：如果你在安装过程中遇到了权限问题，可以在命令提示符中使用管理员权限运行以上命令。
+
+#### iii. 使用 tlmgr
 
 下载 TeXLive，并使用 `tlmgr` 下载宏包：
 
@@ -51,16 +70,18 @@
 # You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install adjustbox algorithm \
-    cases caption chngcntr collectbox ctex enumerate enumitem environ extarrows fancybox fancyhdr \
-    lastpage latexmk longtable mathptmx minted multirow needspace rsfs setspace subfigure \
-    tcolorbox texcount texliveonfly tikz titling \
-    tocloft trimspaces ucs verbatim xcolor xecjk zhnumber
+sudo tlmgr install adjustbox algorithmicx algorithms biber biblatex bibtex booktabs \ 
+    caption cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips \ 
+    enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra \ 
+    gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno \ 
+    minted multirow mwe natbib needspace nth pdftexcmds rsfs setspace siunitx subfig \
+    tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft \ 
+    trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
 
 sudo tlmgr update --self --all
 ```
 
-#### ii. 通过 Makefile 构建项目
+#### iv. 通过 Makefile 构建项目
 
 > 感谢 [SJTUThesis](https://github.com/sjtug/SJTUThesis) 项目的 Makefile 文件。
 
@@ -76,11 +97,27 @@ make wordcount                # wordcount
 
 ### 4. 在 Windows 上使用
 
-#### i. 安装 TeXLive
+
+#### i. 安装 Python
+
+1. 下载 Python 安装程序：在 [Python 官网](https://www.python.org/downloads/windows/) 上下载 Python 的安装程序（注意：下载的版本需要与你的操作系统版本和位数相匹配）。
+
+2. 运行 Python 安装程序：双击下载的安装程序并按照提示进行安装。在安装过程中，记得勾选 `Add Python 3.x to PATH` 选项，这样 Python 才能在命令行中使用。
+
+#### ii. 使用 `pip` 安装 `pygmentize`
+
+在终端中输入以下命令：
+```shell
+pip install Pygments
+```
+
+注意：如果你在安装过程中遇到了权限问题，可以在命令提示符中使用管理员权限运行以上命令。
+
+#### iii. 安装 TeXLive
 
 通过 [此处](https://www.tug.org/texlive/acquire-netinstall.html) 下载 `install-tl-windows.exe`。
 
-#### ii. 通过 Batchfile 构建项目
+#### iv. 通过 Batchfile 构建项目
 
 > 感谢 [SJTUThesis](https://github.com/sjtug/SJTUThesis) 项目的 Compile.bat 文件。
 
