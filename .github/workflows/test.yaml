@@ -33,6 +33,10 @@ jobs:
           run: |
             make ENGINE=${{ matrix.compiler }} all
             mv main.pdf linux${{ matrix.compiler }}.pdf
+      - name: check compile
+        if: ${{ failure() }}
+        run: |
+          cat main.log
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
@@ -68,6 +72,10 @@ jobs:
         run: |
           make ENGINE=${{ matrix.compiler }} all
           mv main.pdf macos${{ matrix.compiler }}.pdf
+      - name: check compile
+        if: ${{ failure() }}
+        run: |
+          cat main.log
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
