@@ -16,7 +16,7 @@ env:
   # biber biblatex bibtex: for executable bibtex
   # txfonts: mathptmx is obsoleted; times: times is obsoleted but utmb8a.pfb is needed
   # dvips: for 8r.enc, OS X needed; gsftopk: command needed when xdv -> pdf
-  TL_PACKAGES: adjustbox algpseudocodex algorithmicx algorithms babel biblatex biber booktabs caption cases catchfile chngcntr chinese-jfm cleveref collectbox ctex dvips engrec enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra gbt7714 hologo ifplatform lastpage latexmk lineno minted multirow natbib needspace pdftexcmds rsfs setspace siunitx subfigure threeparttable threeparttablex tikz times titling tocloft trimspaces txfonts uc xcolor xecjk xstring zhnumber
+  TL_PACKAGES: adjustbox algorithmicx algorithms biber biblatex bibtex booktabs caption cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno minted multirow mwe natbib needspace nth pdftexcmds rsfs setspace siunitx subfig tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
 
 jobs:
   build-linux:
@@ -33,6 +33,10 @@ jobs:
           run: |
             make ENGINE=${{ matrix.compiler }} all
             mv main.pdf linux${{ matrix.compiler }}.pdf
+      - name: check compile
+        if: ${{ failure() }}
+        run: |
+          cat main.log
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
@@ -68,6 +72,10 @@ jobs:
         run: |
           make ENGINE=${{ matrix.compiler }} all
           mv main.pdf macos${{ matrix.compiler }}.pdf
+      - name: check compile
+        if: ${{ failure() }}
+        run: |
+          cat main.log
       - name: upload pdf
         uses: actions/upload-artifact@v2
         with:
