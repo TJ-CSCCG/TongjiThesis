@@ -109,8 +109,6 @@ pip install Pygments
 
 Note: If you encounter permissions problems during the installation process, you can run the above command from a command prompt with administrator privileges.
 
-Translated with www.DeepL.com/Translator (free version)
-
 #### iii. Install TeXLive
 
 Download `install-tl-windows.exe` from [here](https://www.tug.org/texlive/acquire-netinstall.html).
