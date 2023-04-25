@@ -12,11 +12,11 @@
 \newtheorem{cor}{推论\hspace{0.05pt}}[section]
 \newtheorem{lem}{引理\hspace{0.05pt}}[section]
 \newtheorem{prop}{命题\hspace{0.05pt}}[section]
-\newtheorem{conj}{猜想\hspace{0.05pt}}
-\newtheorem{assume}{假设\hspace{0.05pt}}
+\newtheorem{conj}{猜想\hspace{0.05pt}}[section]
+\newtheorem{assume}{假设\hspace{0.05pt}}[section]
 \newtheorem{dfn}{定义\hspace{0.05pt}}[section]
 \newtheorem{exmp}{例\hspace{0.05pt}}[section]
-\newtheorem{rem}{注\hspace{0.05pt}}
+\newtheorem{rem}{注\hspace{0.05pt}}[section]
 \newtheorem*{pf}{证明}
 
 \usepackage{upgreek}
@@ -64,13 +64,13 @@
 \makeatother
 
 
-% % 交叉引用
-% \newcommand*{\secref}[1]{第~\ref{#1}~节}
-% \newcommand*{\algoref}[1]{算法~\ref{#1}~}
-% \renewcommand*{\eqref}[1]{公式（\ref{#1}）}
-% \newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
-% \newcommand*{\figref}[1]{\figurename~\ref{#1}~}
-% \newcommand*{\listingref}[1]{\listingscaption~\ref{#1}~}
+% 交叉引用
+\newcommand*{\secref}[1]{第~\ref{#1}~节}
+\newcommand*{\algoref}[1]{算法~\ref{#1}~}
+\renewcommand*{\eqref}[1]{公式（\ref{#1}）}
+\newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
+\newcommand*{\figref}[1]{\figurename~\ref{#1}~}
+\newcommand*{\listingref}[1]{\listingscaption~\ref{#1}~}
 
 
 % 代码块，盒子使用 tcolorbox 默认风格
@@ -80,15 +80,21 @@
 \renewcommand{\listingscaption}{代码}
 \usepackage{tcolorbox}
 \usepackage{etoolbox}
-\BeforeBeginEnvironment{minted}{\begin{tcolorbox}}%
-\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+% \BeforeBeginEnvironment{minted}{\begin{tcolorbox}}%
+% \AfterEndEnvironment{minted}{\end{tcolorbox}}%
+\definecolor{bg}{rgb}{0.96,0.96,0.96}
+\setminted{linenos,
+           bgcolor=bg,
+           fontsize=\small,
+           breaklines,
+           mathescape}
 
 
 % caption 自定义
-\usepackage{caption}     %修改图片表格名称字体字号的宏包
+\usepackage[font=small]{caption}
+\DeclareCaptionFont{9pt}{\fontsize{9pt}{10.8pt}\selectfont}
 \DeclareCaptionLabelSeparator{twospace}{\ ~}
-\captionsetup{labelsep=twospace}
-
+\captionsetup{labelsep=twospace,font=9pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 与毕业设计模板（理工类）中定义规则无关的可选宏包
@@ -119,6 +125,7 @@
 \usepackage{threeparttable}
 % 附带脚注的长表格
 \usepackage{threeparttablex}
+\AtBeginEnvironment{tablenotes}{\zihao{-5}}
 % 提供画图宏包
 \usepackage{tikz}
 % 提供 verbatim 环境，minted 中不支持纯文本，可以使用该环境创建无格式文本块
@@ -150,6 +157,7 @@
 \crefname{pf}{证明}{证明}
 \crefname{proof}{证明}{证明}
 \crefname{algorithm}{算法}{算法}
+\crefname{listing}{代码}{代码}
 
 
 % 一些文档中用到的 logo

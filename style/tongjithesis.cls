@@ -53,7 +53,7 @@
 
 
 % 设置有序列表与无序列表格式
-\RequirePackage{enumerate} 						% 下面用到了 enumerate
+\RequirePackage{enumerate} % 下面用到了 enumerate
 \RequirePackage{enumitem}
 \setlist[itemize]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
 \setlist[enumerate]{labelindent=2em,leftmargin=*,itemsep=0pt,parsep=0pt}
@@ -70,9 +70,9 @@
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
-\setlength{\cftsecindent}{0em} 					% 符合毕业设计模板（理工类）一级标题顶格要求
-\setlength{\cftsubsecindent}{1em} 				% 符合毕业设计模板（理工类）二级标题对齐一级标题文字要求
-\setlength{\cftsubsubsecindent}{4em}			% 符合毕业设计模板（理工类）三级标题对齐一级标题第四字要求
+\setlength{\cftsecindent}{0em} % 符合毕业设计模板（理工类）一级标题顶格要求
+\setlength{\cftsubsecindent}{1em} % 符合毕业设计模板（理工类）二级标题对齐一级标题文字要求
+\setlength{\cftsubsubsecindent}{4em} % 符合毕业设计模板（理工类）三级标题对齐一级标题第四字要求
 \setlength{\cftbeforesecskip}{5pt}
 \setlength{\cftbeforesubsecskip}{3pt}
 \setlength{\cftbeforesubsubsecskip}{0pt}
@@ -151,36 +151,48 @@
 
 % 设置正文页内章节标题格式
 \ctexset{
-	section={									% 一级标题
-		format={\centering\heiti\zihao{4}},		% 四号黑体居中
-		aftername={\quad},						% 序号与题名间空 4 格
-		beforeskip={.5\baselineskip},			% 段前 0.5 行
-		afterskip={.5\baselineskip},			% 段后 0.5 行
-	},
-	subsection={								% 二级标题
-		format={\heiti\zihao{5}},				% 五号黑体
-		aftername={\space},						% 序号与题名间空 1 格
-		beforeskip={.5\baselineskip},			% 段前 0.5 行
-		afterskip={.5\baselineskip},			% 段后 0.5 行
-	},
-	subsubsection={								% 三级标题
-		format={\heiti\zihao{5}},				% 五号黑体
-		aftername={\space},						% 序号与题名间空 1 格
-		beforeskip={.5\baselineskip},			% 段前 0.5 行
-		afterskip={.5\baselineskip},			% 段后 0.5 行
-		indent={2em},							% 缩进 2 个汉字符
-	},
-	paragraph={									% 四级标题
-		format={\heiti\zihao{5}},				% 五号黑体
-		numbering=true,
-		number={\Alph{paragraph}},				% 使用大写字母作为四级标题
-		aftername={.\space},					% 序号后带点
-		beforeskip={0pt},						% 段前 0 行
-		afterskip={0pt},						% 段后 0 行
-		indent={2em},							% 缩进 2 个汉字符
-	}
+    section={% 一级标题
+        format={\centering\heiti\zihao{4}}, % 格式：四号黑体居中
+        aftername={\quad}, % 序号与题名间空 4 格
+        beforeskip={.5\baselineskip}, % 段前 0.5 行
+        afterskip={.5\baselineskip}, % 段后 0.5 行
+    },
+    subsection={% 二级标题
+        format={\heiti\zihao{5}}, % 格式：五号黑体
+        aftername={\space}, % 序号与题名间空 1 格
+        beforeskip={.5\baselineskip}, % 段前 0.5 行
+        afterskip={.5\baselineskip}, % 段后 0.5 行
+    },
+    subsubsection={% 三级标题
+        format={\heiti\zihao{5}}, % 格式：五号黑体
+        aftername={\space}, % 序号与题名间空 1 格
+        beforeskip={.5\baselineskip}, % 段前 0.5 行
+        afterskip={.5\baselineskip}, % 段后 0.5 行
+        indent={2em}, % 缩进 2 个汉字符
+    },
+    paragraph={% 四级标题
+        format={\heiti\zihao{5}}, % 格式：五号黑体
+        numbering=true, % 启用编号
+        number={\Alph{paragraph}}, % 编号格式：使用大写字母作为四级标题
+        aftername={.\space}, % 序号后带点和一个空格
+        beforeskip={0pt}, % 段前 0 行
+        afterskip={0pt}, % 段后 0 行
+        indent={2em}, % 缩进 2 个汉字符
+        aftertitle={\par}, % 标题后添加一个空行
+    },
+    subparagraph={% 五级标题
+        format={\heiti\zihao{5}}, % 格式：五号黑体
+        numbering=true, % 启用编号
+        number={\alph{subparagraph}}, % 编号格式：使用小写字母作为五级标题
+        aftername={.\space}, % 序号后带点和一个空格
+        beforeskip={0pt}, % 段前 0 行
+        afterskip={0pt}, % 段后 0 行
+        indent={2em}, % 缩进 2 个汉字符
+        aftertitle={\par}, % 标题后添加一个空行
+    }
 }
 
+\setcounter{secnumdepth}{5}
 
 % 设置参考文献格式
 % 注：正文使用 “\@” 指令时，需要使用 \makeatletter 以及 \makeatother 包裹起来

@@ -144,6 +144,9 @@ Armadillo & frozen & 8.99 & 50 & 7.99 & 40 & 6.99 & 30\tnote{b} & 1094.50 \\ \bo
 \end{threeparttable}
 \end{table}
 
+为了编写更复杂的表格，我们可以使用 \href{https://www.tablesgenerator.com/}{Tables Generator} 来生成 \LaTeX{} 代码。该工具可以方便地设置表格的列数、行数、内容、格式、颜色等属性，支持常用的表格类型和样式，并且可以实时生成 \LaTeX{} 代码和预览效果，避免手动编写 \LaTeX{} 代码时出错。
+
+
 如某个表需要转页接排，可以用 \pkg{longtable} 实现。接排时表题省略，表头应重复书
 写，并在右上方写“续表 X”，如\cref{tab:performance}。
 
@@ -227,6 +230,8 @@ EP.A.2 & 123.81 & 0.002 & 0.010 & 0.003 & 0.074 & 1834 \\
   \end{longtable}
 \end{ThreePartTable}
 
+
+
 \subsection{算法环境}
 
 算法环境可以使用 \pkg{algorithms} 宏包或者较新的 \pkg{algorithm2e} 实现。
@@ -252,10 +257,27 @@ EP.A.2 & 123.81 & 0.002 & 0.010 & 0.003 & 0.074 & 1834 \\
 
 虽然我们可以在论文中加入算法，但是并不推荐添加过多的代码。如果确实需要在论文中添加代码，建议采用 \pkg{minted} 宏包，该宏包可以提供代码高亮的功能，使得代码更加易于阅读。
 
-\cref{algo:algorithm}的Python代码如下所示。
+为了让代码可以在论文中正确地排版，我们使用了 \pkg{listings} 宏包来包装 \pkg{minted}。具体来说，我们在 \texttt{listing} 环境中嵌套了 \texttt{minted} 环境来展示代码，并使用 \texttt{caption} 命令来添加代码标题。代码的标签和交叉引用可以使用 \texttt{label} 和 \texttt{cref} 命令来实现。
 
+\cref{algo:algorithm}的Python代码如\cref{lst:fibonacci} 所示。
+
+
+
+\begin{listing}[htbp]
 \begin{minted}{python}
-def fibonacci(n):
+def fibonacci(n: int) -> int:
+    """
+    Calculates the nth Fibonacci number.
+
+    Args:
+        n (int): Index of the desired Fibonacci number. Must be non-negative.
+
+    Returns:
+        int: The nth Fibonacci number.
+
+    Raises:
+        ValueError: If the input is negative.
+    """
     if n < 0:
         raise ValueError("Negative arguments are not supported")
     if n == 0:
@@ -264,6 +286,8 @@ def fibonacci(n):
         return 1
     return fibonacci(n - 1) + fibonacci(n - 2)
 \end{minted}
+\caption{计算斐波那契数列的Python实现}\label{lst:fibonacci}
+\end{listing}
 
 \subsection{\texttt{\textbackslash{}clearpage} 与 \texttt{\textbackslash{}newpage}}
 
