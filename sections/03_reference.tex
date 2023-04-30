@@ -8,17 +8,17 @@
 
 在正文中，可使用 \verb|\cite| 命令引用参考文献。例如：
 
-\begin{verbatim}
+\begin{Verbatim}
 这是一个引用示例 \cite{knuth1984texbook}。
-\end{verbatim}
+\end{Verbatim}
 
 其中，\verb|knuth1984texbook| 是参考文献的键值，即参考文献文件中每个条目的唯一标识符。引用命令会自动在文中插入相应文献序号，并在文末的参考文献列表中显示相应文献条目。
 
 如果需要同时标注多个参考文献，可使用逗号分隔键值。例如：
 
-\begin{verbatim}
+\begin{Verbatim}
 这是一个引用示例 \cite{knuth1984texbook, lamport1994latex}。
-\end{verbatim}
+\end{Verbatim}
 
 使用 \verb|\cite{key1,key2,key3...}| 可在正文中产生“上标引用的参考文献”，如 \cite{harrypotter,deeplearning,internet}。以下是引用示例：普通图书\cite{harrypotter,crackingthecodinginterview}，论文集、会议录\cite{icml}，科技报告\cite{internet,google}，学位论文\cite{quantumcomputing,neuralnetworks}，专利文献\cite{siri,tesla}，专著中析出的文献\cite{machinelearning}，期刊中析出的文献\cite{artificialintelligence,wikipedia}，报纸中析出的文献\cite{trump}，电子文献\cite{stanford,crackingthecodinginterview}。请注意，本模板所用的所有文献均为ChatGPT生成的。我们不保证这些文献的真实性。
 
@@ -34,9 +34,9 @@
 
 例如，在文本中需要添加脚注时，可以在需要添加脚注的单词或句子后面使用 \verb|\footnote| 命令，如下所示：
 
-\begin{verbatim}
+\begin{Verbatim}
 脚注是一种在文本底部添加注释或补充说明的方式。\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}
-\end{verbatim}
+\end{Verbatim}
 
 其中，花括号中的文本就是脚注的内容。编译文档后，脚注会出现在页面底部，并自动标上数字，如下所示：
 
@@ -52,25 +52,25 @@
 
 例如，在文档中的某个章节中添加一个标签：
 
-\begin{verbatim}
+\begin{Verbatim}
 \section{引言}
 \label{sec:intro}
 这是一段引言。
-\end{verbatim}
+\end{Verbatim}
 
 然后，在文档的其他位置使用 \verb|\ref| 命令来引用这个标签：
 
-\begin{verbatim}
+\begin{Verbatim}
 请参见第 \ref{sec:intro} 章节。
-\end{verbatim}
+\end{Verbatim}
 
 这样，就可以在文档中产生“请参见第 X 章节”的效果，其中 X 为标签所在章节的编号。
 
 类似地，使用 \verb|\pageref| 命令可以引用页面编号。例如：
 
-\begin{verbatim}
+\begin{Verbatim}
 请参见第 \pageref{sec:intro} 页。
-\end{verbatim}
+\end{Verbatim}
 
 这样，就可以在文档中产生“请参见第 X 页”的效果，其中 X 为标签所在页码的编号。
 
@@ -80,30 +80,30 @@
 
 在文档中为需要引用的对象添加标签，例如：
 
-\begin{verbatim}
+\begin{Verbatim}
 \section{引言}
 \label{sec:intro}
 这是一段引言。
-\end{verbatim}
+\end{Verbatim}
 
 接下来，在文档的其他位置使用 \verb|\cref| 命令引用这个标签：
-\begin{verbatim}
+\begin{Verbatim}
 请参见\cref{sec:intro}。
-\end{verbatim}
+\end{Verbatim}
 这样，就可以在文档中产生“请参见章节 X”的效果，其中 X 为标签所在章节的编号。\pkg{cleveref} 宏包会自动根据标签所在对象的类型生成正确的引用词汇。
 
 需要注意的是，如果需要修改引用词汇，可以在导言区添加如下代码：
 
-\begin{verbatim}
+\begin{Verbatim}
 \crefname{对象类型}{引用词汇}{引用词汇复数形式}
 \Crefname{对象类型}{引用词汇}{引用词汇复数形式}
-\end{verbatim}
+\end{Verbatim}
 
 例如，可以使用以下代码将“定理”引用词汇修改为“命题”：
-\begin{verbatim}
+\begin{Verbatim}
 \crefname{theorem}{命题}{命题}
 \Crefname{theorem}{命题}{命题}
-\end{verbatim}
+\end{Verbatim}
 这样，使用 \verb|\cref| 命令引用定理对象时，就会自动生成“请参见命题 X”的效果。
 
 总之，交叉引用是撰写文档时非常有用的功能，可以方便读者查找相关内容。在使用交叉引用时，可以选择使用 \verb|\ref| 命令手动指定引用词汇，也可以使用 \verb|\cref| 命令自动根据对象类型生成引用词汇。同时，\pkg{cleveref} 宏包可以帮助用户自动设置正确的引用词汇，提高文档的可读性。
