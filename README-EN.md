@@ -188,6 +188,42 @@ The project has been configured with GitHub Actions in `.github/workflows/*.yaml
 
 See [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env) for detailed instructions.
 
+## Use more complete Adobe fonts (optional)
+
+### Style modification
+
+In order to use the more complete Adobe fonts from the font library, you need to make the following modifications:
+
+Find the following code snippet on line 10 of `style/tongjithesis.cls`:
+
+```latex
+\LoadClass[UTF8,a4paper,fontset=fandol]{ctexart}
+```
+
+and modify it to:
+
+```latex
+\LoadClass[UTF8,a4paper,fontset=adobe]{ctexart}
+```
+
+With this modification, LaTeX will use the Adobe font set to render the document.
+
+### Font installation
+
+The steps to install fonts are as follows:
+
+1. In our repository root directory, we have attached four font files from Adobe (`AdobeFangsongStd-Regular.otf`, `AdobeKaitiStd-Regular.otf`, `AdobeHeitiStd-Regular.otf`, `AdobeSongStd-Light.otf`). If you use our template directly on Overleaf, you don't need to install it, but it should be noted that the compilation speed may be slightly slower. Therefore, we recommend that you compile locally.
+2. If you use LaTeX on Windows, macOS or Linux, you need to install these four font files manually. Once installed, you are ready to compile.
+
+Note the support for the following compilation methods:
+
+* If you are using Overleaf, only compiling with LuaLaTeX is supported.
+* If you compile locally on Windows, macOS or Linux, you can choose to use XeLaTeX or LuaLaTeX.
+
+You can see the specific effect in Section 1.2.1 "Testing Rare Words" of the template document.
+
+With the steps above, you will be able to use Adobe font sets and render documents correctly.
+
 ## How to contribute to this project?
 
 Please refer to [How to pull request](CONTRIBUTING.md/#how-to-pull-request).

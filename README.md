@@ -192,6 +192,43 @@ pip install Pygments
 
 详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
 
+## 使用字库更完整的 Adobe 字体（可选）
+
+### 样式修改
+
+为了使用字库更完全的 Adobe 字体，您需要进行以下修改：
+
+在 `style/tongjithesis.cls` 的第 10 行找到如下代码段：
+
+```latex
+\LoadClass[UTF8,a4paper,fontset=fandol]{ctexart}
+```
+
+并将其修改为：
+
+```latex
+\LoadClass[UTF8,a4paper,fontset=adobe]{ctexart}
+```
+
+这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。
+
+### 字体安装
+
+字体安装的步骤如下：
+
+1. 在我们的仓库根目录中，我们已经附上了 Adobe 的四个字体文件。如果您在 Overleaf 上直接使用我们的模板，您无需进行安装，但需要注意的是编译速度可能会稍慢。因此，我们建议您在本地进行编译。
+2. 如果您在 Windows、macOS 或 Linux 上使用 LaTeX，您需要手动安装这四个字体文件。安装完成后，您就可以进行编译了。
+
+请注意以下编译方式的支持情况：
+
+* 如果您在 Overleaf 上使用，只支持使用 LuaLaTeX 进行编译。
+* 如果您在 Windows、macOS 或 Linux 上进行本地编译，您可以选择使用 XeLaTeX 或 LuaLaTeX。
+
+您可以在模板文档的 1.2.1 小节 “测试生僻字” 中查看具体效果。
+
+通过以上步骤，您将能够使用 Adobe 字体集并正确渲染文档。
+
+
 ## 如何为该项目贡献代码？
 
 还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
