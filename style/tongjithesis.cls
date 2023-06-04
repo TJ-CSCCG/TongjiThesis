@@ -133,106 +133,77 @@
 % 设置摘要与目录页样式（如页眉、页脚等）
 \RequirePackage{fancyhdr}
 \fancypagestyle{firststyle}{
-   \fancyhf{}
-   \pagenumbering{Roman}                    	% 页数使用罗马数字
-   \fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-   \fancyhead[R]{\large 毕业设计（论文）~\\}
-   \fancyfoot[C]{\large \thepage}
-   \renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
-   \renewcommand{\footrulewidth}{0pt}
+	\fancyhf{}
+	\pagenumbering{Roman}                    	% 页数使用罗马数字
+	\fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
+	\fancyhead[R]{\large 毕业设计（论文）~\\}
+	\fancyfoot[C]{\large \thepage}
+	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
+	\renewcommand{\footrulewidth}{0pt}
 }
 
 
 % 设置正文页样式（如页眉、页脚等）
 \RequirePackage{lastpage}						% 标定最后一页，提供 LastPage
 \fancypagestyle{mainstyle}{
-   \fancyhf{}
-   \pagenumbering{arabic}
-   \fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-   \fancyhead[R]{\large 毕业设计（论文）~\\}
-   \fancyfoot[R]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}} %偶数页左侧(LE)，奇数页右侧(RO)标页码，oneside打印只用写RO
-   \renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
-   \renewcommand{\footrulewidth}{1.8pt}     	% 页脚横线
+	\fancyhf{}
+	\pagenumbering{arabic}
+	\fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
+	\fancyhead[R]{\large 毕业设计（论文）~\\}
+	\fancyfoot[R]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}} %偶数页左侧(LE)，奇数页右侧(RO)标页码，oneside打印只用写RO
+	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
+	\renewcommand{\footrulewidth}{1.8pt}     	% 页脚横线
 }
 
 
 % 设置正文页内章节标题格式
 \ctexset{
-    section={% 一级标题
-        format={\centering\heiti\zihao{4}}, % 格式：四号黑体居中
-        aftername={\quad}, % 序号与题名间空 4 格
-        beforeskip={.5\baselineskip}, % 段前 0.5 行
-        afterskip={.5\baselineskip}, % 段后 0.5 行
-    },
-    subsection={% 二级标题
-        format={\heiti\zihao{5}}, % 格式：五号黑体
-        aftername={\space}, % 序号与题名间空 1 格
-        beforeskip={.5\baselineskip}, % 段前 0.5 行
-        afterskip={.5\baselineskip}, % 段后 0.5 行
-    },
-    subsubsection={% 三级标题
-        format={\heiti\zihao{5}}, % 格式：五号黑体
-        aftername={\space}, % 序号与题名间空 1 格
-        beforeskip={.5\baselineskip}, % 段前 0.5 行
-        afterskip={.5\baselineskip}, % 段后 0.5 行
-        indent={2em}, % 缩进 2 个汉字符
-    },
-    paragraph={% 四级标题
-        format={\heiti\zihao{5}}, % 格式：五号黑体
-        numbering=true, % 启用编号
-        number={\Alph{paragraph}}, % 编号格式：使用大写字母作为四级标题
-        aftername={.\space}, % 序号后带点和一个空格
-        beforeskip={0pt}, % 段前 0 行
-        afterskip={0pt}, % 段后 0 行
-        indent={2em}, % 缩进 2 个汉字符
-        aftertitle={\par}, % 标题后添加一个空行
-    },
-    subparagraph={% 五级标题
-        format={\heiti\zihao{5}}, % 格式：五号黑体
-        numbering=true, % 启用编号
-        number={\alph{subparagraph}}, % 编号格式：使用小写字母作为五级标题
-        aftername={.\space}, % 序号后带点和一个空格
-        beforeskip={0pt}, % 段前 0 行
-        afterskip={0pt}, % 段后 0 行
-        indent={2em}, % 缩进 2 个汉字符
-        aftertitle={\par}, % 标题后添加一个空行
-    }
+	section={% 一级标题
+	  format={\centering\heiti\zihao{4}}, % 格式：四号黑体居中
+	  aftername={\quad}, % 序号与题名间空 4 格
+	  beforeskip={.5\baselineskip}, % 段前 0.5 行
+	  afterskip={.5\baselineskip}, % 段后 0.5 行
+	 },
+	subsection={% 二级标题
+			format={\heiti\zihao{5}}, % 格式：五号黑体
+			aftername={\space}, % 序号与题名间空 1 格
+			beforeskip={.5\baselineskip}, % 段前 0.5 行
+			afterskip={.5\baselineskip}, % 段后 0.5 行
+		},
+	subsubsection={% 三级标题
+			format={\heiti\zihao{5}}, % 格式：五号黑体
+			aftername={\space}, % 序号与题名间空 1 格
+			beforeskip={.5\baselineskip}, % 段前 0.5 行
+			afterskip={.5\baselineskip}, % 段后 0.5 行
+			indent={2em}, % 缩进 2 个汉字符
+		},
+	paragraph={% 四级标题
+			format={\heiti\zihao{5}}, % 格式：五号黑体
+			numbering=true, % 启用编号
+			number={\Alph{paragraph}}, % 编号格式：使用大写字母作为四级标题
+			aftername={.\space}, % 序号后带点和一个空格
+			beforeskip={0pt}, % 段前 0 行
+			afterskip={0pt}, % 段后 0 行
+			indent={2em}, % 缩进 2 个汉字符
+			aftertitle={\par}, % 标题后添加一个空行
+		},
+	subparagraph={% 五级标题
+			format={\heiti\zihao{5}}, % 格式：五号黑体
+			numbering=true, % 启用编号
+			number={\alph{subparagraph}}, % 编号格式：使用小写字母作为五级标题
+			aftername={.\space}, % 序号后带点和一个空格
+			beforeskip={0pt}, % 段前 0 行
+			afterskip={0pt}, % 段后 0 行
+			indent={2em}, % 缩进 2 个汉字符
+			aftertitle={\par}, % 标题后添加一个空行
+		}
 }
 
 \setcounter{secnumdepth}{5}
 
 % 设置参考文献格式
-% 注：正文使用 “\@” 指令时，需要使用 \makeatletter 以及 \makeatother 包裹起来
-% 注：如果不引入该 Package，则不会引入 thebibliography 环境，也就无法 renew 该环境
-% see https://tex.stackexchange.com/questions/275597/non-indentation-of-the-second-line-of-bibliograpy
-\RequirePackage{gbt7714}
-\makeatletter
-\renewenvironment{thebibliography}[1]{
-	\section*{\refname}%
-	\setbox2\hbox{\@biblabel{#1}}
-	\@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}%
-	\begin{enumerate}[
-		itemindent=0pt, % 为满足参考文献顶格书写的要求
-		leftmargin=0pt,
-		label={
-			\@biblabel{\@arabic\c@enumiv} % 使用阿拉伯数字自然编号
-			\setbox2\hbox{\@biblabel{\@arabic\c@enumiv}}
-			\hspace{\labelwidth}
-			\hspace{-\wd2}
-		},
-		labelwidth=\wd2
-	]
-	\usecounter{enumiv}%
-	\sloppy
-	\clubpenalty4000
-	\@clubpenalty \clubpenalty
-	\widowpenalty4000%
-	\sfcode`\.\@m}
-	{\def\@noitemerr
-	{\@latex@warning{Empty `thebibliography' environment}}%
-	\end{enumerate}}
-\makeatother
-
+\RequirePackage[backend=biber,style=gb7714-2015]{biblatex}
+\addbibresource{bib/note.bib}
 
 \makeatletter
 \AtBeginDocument{\let\c@listing\c@figure}
@@ -248,7 +219,7 @@
 	\renewcommand{\arraystretch}{1.5}
 	\setlength{\tabcolsep}{8pt}
 	\zihao{-3}\oldtabular[#1]
-	}{\renewcommand{\arraystretch}{1.2}\endoldtabular
+}{\renewcommand{\arraystretch}{1.2}\endoldtabular
 }
 \RequirePackage{ulem}
 \newcommand{\ulinecentered}[1]{\uline{\makebox[20em][c]{#1}}}
@@ -256,7 +227,7 @@
 
 % 加载包部分结束，此后开始定义内容 Layout
 \AtEndOfPackage{
-    \InputIfFileExists{style/tongjithesis.cfg}{}{}
+	\InputIfFileExists{style/tongjithesis.cfg}{}{}
 }
 
 % 论文基本信息配置
@@ -322,8 +293,8 @@
 
 	\vskip 5mm
 	\noindent{\songti\zihao{5}{
-		\textbf{关键词：}#2
-	}}~\\
+			\textbf{关键词：}#2
+		}}~\\
 }
 
 

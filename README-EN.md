@@ -69,7 +69,7 @@ Download TeXLive and use `tlmgr` to download packages:
 # You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
 sudo tlmgr update --self
 
-sudo tlmgr install adjustbox algorithmicx algorithms biber biblatex bibtex booktabs \ 
+sudo tlmgr install adjustbox algorithmicx algorithms biber biblatex biblatex-gb7714-2015 bibtex booktabs \ 
     caption carlisle cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips \ 
     enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra \ 
     gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno \ 

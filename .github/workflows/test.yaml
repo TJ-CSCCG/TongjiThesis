@@ -16,7 +16,7 @@ env:
   # biber biblatex bibtex: for executable bibtex
   # txfonts: mathptmx is obsoleted; times: times is obsoleted but utmb8a.pfb is needed
   # dvips: for 8r.enc, OS X needed; gsftopk: command needed when xdv -> pdf
-  TL_PACKAGES: adjustbox algorithmicx algorithms biber biblatex bibtex booktabs caption carlisle cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno minted multirow mwe natbib needspace newtx nth oberdiek pdftexcmds realscripts rsfs setspace siunitx subfig tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
+  TL_PACKAGES: adjustbox algorithmicx algorithms biber biblatex biblatex-gb7714-2015 bibtex booktabs caption carlisle cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno minted multirow mwe natbib needspace newtx nth oberdiek pdftexcmds realscripts rsfs setspace siunitx subfig tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
 
 jobs:
   build-linux:
@@ -56,7 +56,7 @@ jobs:
       - name: install Python for minted
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: pip install Pygments for minted
         run: pip install Pygments
       - name: install TeXLive
@@ -95,7 +95,7 @@ jobs:
       - name: install Python for minted
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: pip install Pygments for minted
         run: pip install Pygments
       - name: install TeXLive

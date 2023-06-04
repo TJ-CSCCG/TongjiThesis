@@ -8,7 +8,7 @@
 \usepackage{ifthen}
 \newboolean{useTimesNewRoman}
 \setboolean{useTimesNewRoman}{false} % Set to false if you don't want to use Times New Roman 
-                                     % or if you want to use the default math font (Latin Modern) for math symbols
+% or if you want to use the default math font (Latin Modern) for math symbols
 \ifthenelse{\boolean{useTimesNewRoman}}{%
   \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}%
   \usepackage{fontspec}%
@@ -56,21 +56,21 @@
 \makeatletter
 \renewenvironment{algorithm}
 {
-    \vskip 20pt
-    \refstepcounter{algorithm}% New algorithm
-    \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
-    \renewcommand{\caption}[2][\relax]{% 使用中文 caption
-        {\raggedright\textbf{算法~\thealgorithm} ##2\par}%
-        \ifx\relax##1\relax % #1 is \relax
-        \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
-        \else % #1 is not \relax
-        \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
-        \fi
-        \kern2pt\hrule\kern2pt
-    }
+  \vskip 20pt
+  \refstepcounter{algorithm}% New algorithm
+  \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+  \renewcommand{\caption}[2][\relax]{% 使用中文 caption
+    {\raggedright\textbf{算法~\thealgorithm} ##2\par}%
+    \ifx\relax##1\relax % #1 is \relax
+      \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+    \else % #1 is not \relax
+      \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+    \fi
+    \kern2pt\hrule\kern2pt
+  }
 }{
-    \kern2pt\hrule\relax
-    \vskip 20pt
+  \kern2pt\hrule\relax
+  \vskip 20pt
 }% \@fs@post for \@fs@ruled
 \makeatother
 
@@ -95,10 +95,10 @@
 % \AfterEndEnvironment{minted}{\end{tcolorbox}}%
 \definecolor{bg}{rgb}{0.96,0.96,0.96}
 \setminted{linenos,
-           bgcolor=bg,
-           fontsize=\small,
-           breaklines,
-           mathescape}
+  bgcolor=bg,
+  fontsize=\small,
+  breaklines,
+  mathescape}
 
 
 % caption 自定义
@@ -142,7 +142,12 @@
 % 提供 verbatim 环境，minted 中不支持纯文本，可以使用该环境创建无格式文本块
 \usepackage{verbatim}
 % 使得可以跳转
-\usepackage[colorlinks,linkcolor=black, citecolor=black, unicode={true}]{hyperref}
+\usepackage[colorlinks,
+  linkcolor=black,
+  citecolor=black,
+  anchorcolor=black,
+  urlcolor=black,
+  unicode=true]{hyperref}
 
 \usepackage{cleveref} % 导入 cleveref 宏包
 % 为各种环境定义引用名称

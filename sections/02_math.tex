@@ -11,9 +11,9 @@
 \begin{itemize}
   \item \num{12345272.42146}：显示长数字。
   \item \num{9+-3i}：显示复数。
-  % \item \complexnum{1+-2i}  % For TeXLive 2021, siunitx >= 3.0
+        % \item \complexnum{1+-2i}  % For TeXLive 2021, siunitx >= 3.0
   \item \num{9.624 x 8.18 x 1.745}：显示乘积表达式。
-  % \item \numproduct{1.654 x 2.34 x 3.430}  % For TeXLive 2021, siunitx >= 3.0
+        % \item \numproduct{1.654 x 2.34 x 3.430}  % For TeXLive 2021, siunitx >= 3.0
   \item \num{1.234567e8}：以科学计数法显示数字。
   \item \num{-19.7}：显示负号。
   \item \num{3.2d-5}：显示数字和指数，使用小写的 d 来指示指数。
@@ -98,7 +98,7 @@
   =    & H(X_2,X_3)-H(X_3)-H(X_2|X_3) \nonumber \\
   =    & I(X_2;X_3)-I(X_2;X_3|X_1) \nonumber    \\
   =    & I(X_2;X_3,X_1) \nonumber               \\
-  \geq & 0                                      
+  \geq & 0
 \end{align}
 
 如果在等号处转行难以实现，也可在 $+$、$-$、$\times$、$\div$ 运算符号处转行，转行时运算符号仅书写于转行式前，不重复书写。
@@ -109,7 +109,7 @@
   f^{ij} f^{k} \left[2\nabla_{i}R_{jk}- \nabla_{k} R_{ij} \right] \vphantom{\sum_{i<j}} \right) \\
   - 3H^{2}\left[1+\frac{\dot{\phi}}{2H^2}\right] - \frac{\dot{\phi}^{2}}{2} - \frac{k}{a^{2}}\phi^{2} - \frac{1}{2}\left(\frac{\partial\phi}{\partial t}\right)^{2} + \frac{a^2}{2}\left(\frac{\partial\phi}{\partial x}\right)^{2}
   + \frac{1}{4}\lambda\phi^{4} + \frac{\beta}{3}\phi^{3} \\
-  -\frac{1}{2}\mu^{2}\phi^{2}(\ln{\phi^{2}} - c) 
+  -\frac{1}{2}\mu^{2}\phi^{2}(\ln{\phi^{2}} - c)
   + \frac{e^{2}}{2}\left(\frac{\partial A_{\mu}}{\partial t}\right)^{2} - \frac{e^{2}}{2}\left(\frac{\partial A_{\mu}}{\partial x}\right)^{2}
   - e^{2}\phi^{2}A_{\mu}A^{\mu} + \frac{1}{4}F_{\mu\nu}F^{\mu\nu}.
 \end{multline}
@@ -138,7 +138,7 @@
   我们可以使用平均数不小于几何平均数这个不等式来证明。具体地，我们有：
   \begin{align*}
     \sqrt{ab}              & \leq \frac{a+b}{2} \\
-    \Rightarrow 2\sqrt{ab} & \leq a+b           
+    \Rightarrow 2\sqrt{ab} & \leq a+b
   \end{align*}
   因此，$a+b \geq 2\sqrt{ab}$，定理成立。
 \end{proof}
@@ -156,7 +156,7 @@
          & = f(c)                                     \\
          & > \frac{f(b)-f(a)}{b-a} \cdot (c-a)        \\
          & = f(a) - \frac{f(b)-f(a)}{b-a} \cdot (b-a) \\
-         & = g(b)                                     
+         & = g(b)
   \end{align*}
   因此，$g(a)$ 和 $g(b)$ 异号，定理得证。
 \end{proof}
@@ -204,10 +204,10 @@
 \begin{proof}
   设 $n$ 是任意正整数，则存在一个双射 $f: \left\{1,2,\dots,n\right\} \rightarrow \left\{n,n-1,\dots,1\right\}$，即将 $\left\{1,2,\dots,n\right\}$ 中的元素按照相反的顺序重新编号，使得 $f(i) = n-i+1$。因此，我们有：
   \begin{align*}
-    \sum_{i=1}^n i & = 1 + 2 + \cdots + (n-1) + n \\           
-                   & = f(1) + f(2) + \cdots + f(n-1) + f(n) \\ 
-                   & = (n+1) \cdot \frac{n}{2} \\              
-                   & = \frac{n(n+1)}{2}                       
+    \sum_{i=1}^n i & = 1 + 2 + \cdots + (n-1) + n           \\
+                   & = f(1) + f(2) + \cdots + f(n-1) + f(n) \\
+                   & = (n+1) \cdot \frac{n}{2}              \\
+                   & = \frac{n(n+1)}{2}
   \end{align*}
   因此，定理成立。
 \end{proof}

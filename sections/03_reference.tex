@@ -4,23 +4,50 @@
 
 \subsection{参考文献的引用}
 
-在学术论文或科技报告中，通常需要引用相关文献以支持观点或论证。为了方便读者查阅，我们需要在论文中标注参考文献。在 \LaTeX\ 中，可使用 \verb|\cite| 命令引用参考文献。参考文献的外观应符合国标 GB/T 7714，可使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包来控制输出样式。
+在学术论文或科技报告中，通常需要引用相关文献以支持观点或论证。为了方便读者查阅，我们需要在论文中标注参考文献。在 \LaTeX\ 中，可使用 \verb|\cite| 命令引用参考文献。参考文献的外观应符合国标 GB/T 7714，可使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包来控制输出样式。\textbf{关于各类文献的标准格式和 \BibLaTeX\ 的使用方法，请参考 \pkg{biblatex-gb7714-2015} 样式包文档的第 4.3 节。}
 
 在正文中，可使用 \verb|\cite| 命令引用参考文献。例如：
 
 \begin{Verbatim}
-这是一个引用示例 \cite{knuth1984texbook}。
+这是一个引用示例 \cite{book1}。
 \end{Verbatim}
 
-其中，\verb|knuth1984texbook| 是参考文献的键值，即参考文献文件中每个条目的唯一标识符。引用命令会自动在文中插入相应文献序号，并在文末的参考文献列表中显示相应文献条目。
+其中，\verb|book1| 是参考文献的键值，即参考文献文件中每个条目的唯一标识符。引用命令会自动在文中插入相应文献序号，并在文末的参考文献列表中显示相应文献条目。
 
 如果需要同时标注多个参考文献，可使用逗号分隔键值。例如：
 
 \begin{Verbatim}
-这是一个引用示例 \cite{knuth1984texbook, lamport1994latex}。
+这是一个引用示例 \cite{book1,online1}。
 \end{Verbatim}
 
-使用 \verb|\cite{key1,key2,key3...}| 可在正文中产生“上标引用的参考文献”，如 \cite{harrypotter,deeplearning,internet}。以下是引用示例：普通图书\cite{harrypotter,crackingthecodinginterview}，论文集、会议录\cite{icml}，科技报告\cite{internet,google}，学位论文\cite{quantumcomputing,neuralnetworks}，专利文献\cite{siri,tesla}，专著中析出的文献\cite{machinelearning}，期刊中析出的文献\cite{artificialintelligence,wikipedia}，报纸中析出的文献\cite{trump}，电子文献\cite{stanford,crackingthecodinginterview}。请注意，本模板所用的所有文献均为ChatGPT生成的。我们不保证这些文献的真实性。
+请注意，本模板所用的所有文献均为ChatGPT生成的。我们不保证这些文献的真实性。
+
+使用 \verb|\cite{key1,key2,key3...}| 命令可在正文中产生带有括号的上标引用的参考文献，如\cite{book1,online1,article1}。以下是使用 \verb|\cite| 命令的引用示例：
+\begin{itemize}
+  \item 普通图书\cite{book1,book2}
+  \item 论文集、会议录\cite{conf1,conf2}
+  \item 科技报告\cite{techreport1,techreport2}
+  \item 学位论文\cite{thesis1,thesis2,thesis3}
+  \item 专利文献\cite{patent1,patent2}
+  \item 专著中析出的文献\cite{inbook1,inbook2}
+  \item 期刊中析出的文献\cite{qin2021,article1,article2}
+  \item 报纸中析出的文献\cite{newspaper1,newspaper2}
+  \item 电子文献\cite{online1,online2,online3}
+\end{itemize}
+
+使用 \verb|\parencite{key1,key2,key3...}| 命令可以在正文中产生带有括号的引用参考文献。下面是使用 \verb|\parencite| 命令的引用示例：
+\begin{itemize}
+  \item 普通图书\parencite{book1,book2}
+  \item 论文集、会议录\parencite{conf1,conf2}
+  \item 科技报告\parencite{techreport1,techreport2}
+  \item 学位论文\parencite{thesis1,thesis2,thesis3}
+  \item 专利文献\parencite{patent1,patent2}
+  \item 专著中析出的文献\parencite{inbook1,inbook2}
+  \item 期刊中析出的文献\parencite{qin2021,article1,article2}
+  \item 报纸中析出的文献\parencite{newspaper1,newspaper2}
+  \item 电子文献\parencite{online1,online2,online3}
+\end{itemize}
+
 
 可使用 \verb|\nocite{key1,key2,key3...}| 将参考文献条目加入文献表中，但不在正文中引用。使用 \verb|\nocite{*}| 可将参考文献数据库中的所有条目加入文献表中。
 

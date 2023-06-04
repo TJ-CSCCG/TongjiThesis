@@ -7,10 +7,12 @@ _out
 *.fls
 *.aux
 *.bbl
+*.bcf
 *.blg
 *.fdb_latexmk
 *.log
 *.out
+*.run.xml
 *.toc
 *.xdv
 *.synctex.gz
