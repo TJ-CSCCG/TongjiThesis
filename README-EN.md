@@ -188,6 +188,10 @@ The project has been configured with GitHub Actions in `.github/workflows/*.yaml
 
 See [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env) for detailed instructions.
 
+## Use double-sided printing version (optional)
+
+If you need to use the two-sided printing version, please change `\documentclass[oneside]{tongjithesis}` to `\documentclass[twoside]{tongjithesis}` in line 1 of `main.tex`.
+
 ## Use more complete Adobe fonts (optional)
 
 ### Style modification

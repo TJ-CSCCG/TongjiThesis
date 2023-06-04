@@ -192,6 +192,10 @@ pip install Pygments
 
 详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
 
+## 使用双面打印版（可选）
+
+如果您需要使用双面打印版，请在 `main.tex` 中将第 1 行的 `\documentclass[oneside]{tongjithesis}` 修改为 `\documentclass[twoside]{tongjithesis}`。
+
 ## 使用字库更完整的 Adobe 字体（可选）
 
 ### 样式修改

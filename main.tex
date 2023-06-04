@@ -1,4 +1,4 @@
-\documentclass{tongjithesis}
+\documentclass[oneside]{tongjithesis}
 \usepackage{tongjithesis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,12 +23,34 @@
 
 \input{sections/frontcover.tex}
 
+\makeatletter
+\@ifclasswith{tongjithesis}{twoside}{%
+\cleardoublepage
+}{%
+\clearpage
+}
+\makeatother
+
 \pagestyle{firststyle}
 \input{sections/00_abstract.tex}
 
+\makeatletter
+\@ifclasswith{tongjithesis}{twoside}{%
+\cleardoublepage
+}{%
 \clearpage
+}
+\makeatother
+
 \tableofcontents   %放置目录
+
+\makeatletter
+\@ifclasswith{tongjithesis}{twoside}{%
+\cleardoublepage
+}{%
 \clearpage
+}
+\makeatother
 
 \pagestyle{mainstyle}
 \input{sections/01_intro}

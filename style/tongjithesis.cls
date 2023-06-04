@@ -22,8 +22,54 @@
 \RequirePackage[a4paper,top=4.2cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
 
 
+% 重新定义 \cleardoublepage 命令
+\let\origdoublepage\cleardoublepage
+\newcommand{\clearemptydoublepage}{
+	\clearpage
+	{\pagestyle{empty}\origdoublepage}
+}
+\let\cleardoublepage\clearemptydoublepage
+
+
 % 画边界线
 \RequirePackage{fancybox}
+
+\makeatletter
+\@ifclasswith{tongjithesis}{twoside}{%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-5.5cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-8.5cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-10.3cm){装}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-10.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-11.5cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-13.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-13.9cm){订}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-14.5cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-17.5cm){线}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-20.5cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.1cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.7cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.3cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.9cm){$|$}%
+\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-23.5cm){$|$}%
+}{%
 \fancyput*(-0.8cm,-4.3cm){$|$}%
 \fancyput*(-0.8cm,-4.9cm){$|$}%
 \fancyput*(-0.8cm,-5.5cm){$|$}%
@@ -57,7 +103,8 @@
 \fancyput*(-0.8cm,-22.3cm){$|$}%
 \fancyput*(-0.8cm,-22.9cm){$|$}%
 \fancyput*(-0.8cm,-23.5cm){$|$}%
-
+}
+\makeatother
 
 % 设置有序列表与无序列表格式
 \RequirePackage{enumerate} % 下面用到了 enumerate
@@ -135,8 +182,8 @@
 \fancypagestyle{firststyle}{
 	\fancyhf{}
 	\pagenumbering{Roman}                    	% 页数使用罗马数字
-	\fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-	\fancyhead[R]{\large 毕业设计（论文）~\\}
+\fancyhead[LO,RE]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
+\fancyhead[RO,LE]{\large 毕业设计（论文）~\\}
 	\fancyfoot[C]{\large \thepage}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
 	\renewcommand{\footrulewidth}{0pt}
@@ -148,9 +195,10 @@
 \fancypagestyle{mainstyle}{
 	\fancyhf{}
 	\pagenumbering{arabic}
-	\fancyhead[L]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-	\fancyhead[R]{\large 毕业设计（论文）~\\}
-	\fancyfoot[R]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}} %偶数页左侧(LE)，奇数页右侧(RO)标页码，oneside打印只用写RO
+\fancyhead[LO,RE]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
+\fancyhead[RO,LE]{\large 毕业设计（论文）~\\}
+\fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
+\fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
 	\renewcommand{\footrulewidth}{1.8pt}     	% 页脚横线
 }
