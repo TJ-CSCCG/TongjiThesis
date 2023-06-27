@@ -9,12 +9,33 @@
 % 该类提供包括但不限于 \heiti \zihao 等指令
 \LoadClass[UTF8,a4paper,fontset=fandol]{ctexart}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \LoadClass[UTF8,a4paper,fontset=adobe]{ctexart}
 % 若需要使用包含所有 GBK 字符的 Adobe 字体，可使用如上命令
 % 需要完成 README.md 中提到的字体安装步骤
 % Overleaf 上使用该命令时编译速度会变慢很多，建议本地编译
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 若你想要用句点（．）替换句号（。）
+% 可以打开下面的注释
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \catcode`\。=\active
+% \newcommand{。}{\ifmmode\text{．}\else ．\fi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 在 Windows 上使用时：
+% 若你想避免将 Python 加入环境变量，可以在此手动指定 Python 环境
+% 打开下面的注释，并替换尖括号 <> 中的路径
+% e.g. {<X:/your/path/to/python>/python.exe} -> {C:/software/Anaconda3/envs/latex/python.exe}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \newcommand{\myPython}{<X:/your/path/to/python>/python.exe}
+% \renewcommand{\MintedPygmentize}{\myPython\space -m pygments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 % 设置页边距
@@ -370,3 +391,13 @@
 	}
 	\par
 }
+
+\makeatletter
+\def\clearchapterpage{%
+  \@ifclasswith{tongjithesis}{twoside}{%
+    \cleardoublepage % 如果使用双面模式的 tongjithesis 文档类，使用 \cleardoublepage 清除页面
+  }{%
+    \clearpage % 否则，使用 \clearpage 清除页面
+  }
+}
+\makeatother

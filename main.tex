@@ -1,56 +1,17 @@
-\documentclass[oneside]{tongjithesis}
+\documentclass[oneside]{tongjithesis} % 双面模式请将 oneside 改为 twoside
 \usepackage{tongjithesis}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 若你想要用句点（．）替换句号（。）
-% 可以打开下面的注释
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \catcode`\。=\active
-% \newcommand{。}{\ifmmode\text{．}\else ．\fi}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 在Windows上使用时：
-% 若你想避免将 Python 加入环境变量，可以在此手动指定python环境
-% 打开下面的注释，并替换尖括号<>中的路径
-% e.g. {<X:/your/path/to/python>/python.exe} -> {C:/software/Anaconda3/envs/latex/python.exe}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \newcommand{\myPython}{<X:/your/path/to/python>/python.exe}
-% \renewcommand{\MintedPygmentize}{\myPython\space -m pygments}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
 \input{sections/frontcover.tex}
-
-\makeatletter
-\@ifclasswith{tongjithesis}{twoside}{%
-\cleardoublepage
-}{%
-\clearpage
-}
-\makeatother
+\clearchapterpage
 
 \pagestyle{firststyle}
 \input{sections/00_abstract.tex}
 
-\makeatletter
-\@ifclasswith{tongjithesis}{twoside}{%
-\cleardoublepage
-}{%
 \clearpage
-}
-\makeatother
-
 \tableofcontents   %放置目录
-
-\makeatletter
-\@ifclasswith{tongjithesis}{twoside}{%
-\cleardoublepage
-}{%
-\clearpage
-}
-\makeatother
+\clearchapterpage
 
 \pagestyle{mainstyle}
 \input{sections/01_intro}
