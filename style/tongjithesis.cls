@@ -203,8 +203,8 @@
 \fancypagestyle{firststyle}{
 	\fancyhf{}
 	\pagenumbering{Roman}                    	% 页数使用罗马数字
-\fancyhead[LO,RE]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-\fancyhead[RO,LE]{\large 毕业设计（论文）~\\}
+\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
+\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
 	\fancyfoot[C]{\large \thepage}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
 	\renewcommand{\footrulewidth}{0pt}
@@ -216,8 +216,8 @@
 \fancypagestyle{mainstyle}{
 	\fancyhf{}
 	\pagenumbering{arabic}
-\fancyhead[LO,RE]{\qquad \includegraphics[height=1.14cm]{figures/tongji.pdf}}   %页眉左侧插入同济大学logo
-\fancyhead[RO,LE]{\large 毕业设计（论文）~\\}
+\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
+\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
 \fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
 \fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
@@ -369,7 +369,7 @@
 
 % 设置英文摘要页
 \newcommand{\MakeAbstractEng}[2]{
-	\newpage
+	\clearpage
 	\begin{center}\heiti\xiaoer
 		\ \\
 		\textbf{\tongjithesistitleeng}
