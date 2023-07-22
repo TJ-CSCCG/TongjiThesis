@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Tongji University Undergraduate Thesis Template (STEM)"
+authors:
+  - family-names: ganler
+  - family-names: Hu
+    given-names: Yukuan
+  - family-names: skyleaworlder
+  - family-names: tobiasforest
+url: https://github.com/TJ-CSCCG/tongji-undergrad-thesis
+version: 1.0.2
+date-released: 2023-06-21
