@@ -40,7 +40,7 @@
 
 % 设置页边距
 \setlength{\headheight}{43pt}
-\RequirePackage[a4paper,top=4.2cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+\RequirePackage[a4paper,top=2.3cm,bottom=1cm,left=3.17cm,right=3.17cm]{geometry}
 
 
 % 重新定义 \cleardoublepage 命令
@@ -54,78 +54,6 @@
 
 % 画边界线
 \RequirePackage{fancybox}
-
-\makeatletter
-\@ifclasswith{tongjithesis}{twoside}{%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-5.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-8.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-10.3cm){装}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-10.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-11.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-13.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-13.9cm){订}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-14.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-17.5cm){线}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-20.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-23.5cm){$|$}%
-}{%
-\fancyput*(-0.8cm,-4.3cm){$|$}%
-\fancyput*(-0.8cm,-4.9cm){$|$}%
-\fancyput*(-0.8cm,-5.5cm){$|$}%
-\fancyput*(-0.8cm,-6.1cm){$|$}%
-\fancyput*(-0.8cm,-6.7cm){$|$}%
-\fancyput*(-0.8cm,-7.3cm){$|$}%
-\fancyput*(-0.8cm,-7.9cm){$|$}%
-\fancyput*(-0.8cm,-8.5cm){$|$}%
-\fancyput*(-0.8cm,-9.1cm){$|$}%
-\fancyput*(-0.8cm,-9.7cm){$|$}%
-\fancyput*(-1.0cm,-10.3cm){装}%
-\fancyput*(-0.8cm,-10.9cm){$|$}%
-\fancyput*(-0.8cm,-11.5cm){$|$}%
-\fancyput*(-0.8cm,-12.1cm){$|$}%
-\fancyput*(-0.8cm,-12.7cm){$|$}%
-\fancyput*(-0.8cm,-13.3cm){$|$}%
-\fancyput*(-1.0cm,-13.9cm){订}%
-\fancyput*(-0.8cm,-14.5cm){$|$}%
-\fancyput*(-0.8cm,-15.1cm){$|$}%
-\fancyput*(-0.8cm,-15.7cm){$|$}%
-\fancyput*(-0.8cm,-16.3cm){$|$}%
-\fancyput*(-0.8cm,-16.9cm){$|$}%
-\fancyput*(-1.0cm,-17.5cm){线}%
-\fancyput*(-0.8cm,-18.1cm){$|$}%
-\fancyput*(-0.8cm,-18.7cm){$|$}%
-\fancyput*(-0.8cm,-19.3cm){$|$}%
-\fancyput*(-0.8cm,-19.9cm){$|$}%
-\fancyput*(-0.8cm,-20.5cm){$|$}%
-\fancyput*(-0.8cm,-21.1cm){$|$}%
-\fancyput*(-0.8cm,-21.7cm){$|$}%
-\fancyput*(-0.8cm,-22.3cm){$|$}%
-\fancyput*(-0.8cm,-22.9cm){$|$}%
-\fancyput*(-0.8cm,-23.5cm){$|$}%
-}
-\makeatother
 
 % 设置有序列表与无序列表格式
 \RequirePackage{enumerate} % 下面用到了 enumerate
@@ -198,38 +126,12 @@
 \AtBeginEnvironment{tabularx}{\zihao{-5}}
 
 
-% 设置摘要与目录页样式（如页眉、页脚等）
-\RequirePackage{fancyhdr}
-\fancypagestyle{firststyle}{
-	\fancyhf{}
-	\pagenumbering{Roman}                    	% 页数使用罗马数字
-\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
-\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
-	\fancyfoot[C]{\large \thepage}
-	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
-	\renewcommand{\footrulewidth}{0pt}
-}
-
-
-% 设置正文页样式（如页眉、页脚等）
-\RequirePackage{lastpage}						% 标定最后一页，提供 LastPage
-\fancypagestyle{mainstyle}{
-	\fancyhf{}
-	\pagenumbering{arabic}
-\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
-\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
-\fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
-\fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
-	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
-	\renewcommand{\footrulewidth}{1.8pt}     	% 页脚横线
-}
-
-
 % 设置正文页内章节标题格式
 \ctexset{
 	section={% 一级标题
-	  format={\centering\heiti\zihao{4}}, % 格式：四号黑体居中
-	  aftername={\quad}, % 序号与题名间空 4 格
+	  format={\heiti\zihao{4}}, % 格式：四号黑体居中
+	  aftername={{、}\space}, % 序号与题名间空 4 格
+	  number= {\chinese{section}},
 	  beforeskip={.5\baselineskip}, % 段前 0.5 行
 	  afterskip={.5\baselineskip}, % 段后 0.5 行
 	 },
@@ -272,9 +174,9 @@
 
 % 设置参考文献格式
 \RequirePackage[
-    backend=biber,
-    style=gb7714-2015,
-    natbib=true,
+	backend=biber,
+	style=gb7714-2015,
+	natbib=true,
 ]{biblatex}
 \addbibresource{bib/note.bib}
 
@@ -296,6 +198,7 @@
 }
 \RequirePackage{ulem}
 \newcommand{\ulinecentered}[1]{\uline{\makebox[20em][c]{#1}}}
+\newcommand{\ulinecenteredwidth}[2]{\uline{\makebox[#2][c]{#1}}}
 
 
 % 加载包部分结束，此后开始定义内容 Layout
@@ -317,91 +220,34 @@
 \newcommand{\MakeCover}[0]{
 	\begin{titlepage}
 		\begin{center}
-			\thisfancyput(-0.75cm,-13cm){}
-			\vspace*{\fill}
 
-			\includegraphics[height=2.25cm]{figures/tongji.pdf}
+			\vspace*{60pt}
 
-			\zihao{-2}\MakeUppercase{\textbf{\tongjiuniversityeng}}
-			\vskip 30pt
+			\includegraphics[height=1.7cm]{figures/tongji.pdf}
 
-			% 符合毕业设计模板（理工类），标题使用黑体小初
-			\zihao{-0}\heiti{本科毕业设计（论文）}
-			\vskip 60pt
+			\vspace{-20pt}
+			\zihao{-0}\heiti{毕业设计(论文)开题报告}
 
+			\vspace{10pt}
+			\zihao{3}\heiti{（适用于工科类、理科类专业）}
+
+			\vspace{80pt}
 			% 符合毕业设计模板（理工类），此处使用黑体小二
-			\begin{information}{M{5em}M{22em}}
-				\zihao{-2}\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
-				\zihao{-2}\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
-				\zihao{-2}\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
-				\zihao{-2}\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
-				\zihao{-2}\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
-				\zihao{-2}\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
-				\zihao{-2}\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
-				\zihao{-2}\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
+			\begin{information}{M{5em}M{8em}M{5em}M{5em}}
+				\zihao{-2}\heiti{课题名称} & \multicolumn{3}{l}{\ulinecentered{\tongjithesistitle}} \\
+				\zihao{-2}\heiti{副\enskip{}标\enskip{}题} & \multicolumn{3}{l}{\ulinecentered{\tongjithesissubtitle}} \\
+				\zihao{-2}\heiti{学\quad{}\quad{}院} & \multicolumn{3}{l}{\ulinecentered{\tongjischool}} \\
+				\zihao{-2}\heiti{专\quad{}\quad{}业} & \multicolumn{3}{l}{\ulinecentered{\tongjimajor}} \\
+				\zihao{-2}\heiti{学生姓名} & \ulinecenteredwidth{\tongjiauthor}{8em} & \zihao{-2}\heiti{学\quad{}\quad{}号} & \ulinecenteredwidth{\tongjiauthornumber}{5em} \\
 			\end{information}
 
-			\vspace*{\fill}
+			\vfill
+			\begin{information}{cccccc}
+				 \ulinecenteredwidth{\tongjithesisyear{}}{3em} & 年 & \ulinecenteredwidth{\tongjithesismonth{}}{2em} & 月 & \ulinecenteredwidth{\tongjithesisday{}}{2em} &日 
+			\end{information}
+
+			\vspace{60pt}
+
 		\end{center}
 	\end{titlepage}
 }
-
-
-% 设置中文摘要页
-\newcommand{\MakeAbstract}[2]{
-	\begin{center}\bf\heiti\xiaoer
-		\ \\
-		\tongjithesistitle
-	\end{center}
-	\vspace{1pt}
-	\begin{center}\heiti\zihao{4}
-		摘要
-	\end{center}
-	\vspace{-0.5em}
-
-	\begin{spacing}{1.5}
-		\heiti\songti{#1}
-		\par
-	\end{spacing}
-
-	\vskip 5mm
-	\noindent{\songti\zihao{5}{
-			\textbf{关键词：}#2
-		}}~\\
-}
-
-
-% 设置英文摘要页
-\newcommand{\MakeAbstractEng}[2]{
-	\clearpage
-	\begin{center}\heiti\xiaoer
-		\ \\
-		\textbf{\tongjithesistitleeng}
-	\end{center}
-	\vspace{1pt}
-	\begin{center}\heiti\zihao{4}
-		\textbf{ABSTRACT}
-	\end{center}
-	\vspace{-0.5em}
-
-	\begin{spacing}{1.5}
-		#1
-		\par
-	\end{spacing}
-
-	\vskip 13.65pt % 小五字体单倍行距 13.65pt
-	\noindent{\heiti\zihao{5}
-		\textbf{Key words:\quad}#2
-	}
-	\par
-}
-
-\makeatletter
-\def\clearchapterpage{%
-  \@ifclasswith{tongjithesis}{twoside}{%
-    \cleardoublepage % 如果使用双面模式的 tongjithesis 文档类，使用 \cleardoublepage 清除页面
-  }{%
-    \clearpage % 否则，使用 \clearpage 清除页面
-  }
-}
-\makeatother

@@ -4,30 +4,17 @@
 \begin{document}
 
 \input{sections/frontcover.tex}
-\clearchapterpage
-
-\pagestyle{firststyle}
-\input{sections/00_abstract.tex}
-
-\clearpage
-\tableofcontents   %放置目录
-\clearchapterpage
-
-\pagestyle{mainstyle}
-\input{sections/01_intro}
-\clearpage
-\input{sections/02_math}
-\clearpage
-\input{sections/03_reference}
-\clearpage
-\input{sections/04_float}
-\clearpage
-\input{sections/05_conclusion}
 \clearpage
 
-\printbibliography[heading=bibintoc,title=参考文献]
-
+\pagestyle{empty}
+\input{sections/01}
 \clearpage
-\input{sections/thanks}
+\input{sections/02}
+\clearpage
+
+\nocite{*}
+\printbibliography[heading=bibnumbered,title=毕业设计（论文）的主要参考文献]
+\clearpage
+\input{sections/04}
 
 \end{document}
