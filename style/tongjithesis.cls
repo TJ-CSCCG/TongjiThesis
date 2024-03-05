@@ -271,7 +271,10 @@
 \setcounter{secnumdepth}{5}
 
 % 设置参考文献格式
-\RequirePackage[backend=biber,style=gb7714-2015]{biblatex}
+\RequirePackage[
+    backend=biber,
+    style=gb7714-2015,
+]{biblatex}
 \addbibresource{bib/note.bib}
 
 \makeatletter
