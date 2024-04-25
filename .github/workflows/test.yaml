@@ -58,7 +58,7 @@ jobs:
       - name: install Python for minted
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.11"
       - name: pip install Pygments for minted
         run: pip install Pygments
       - name: install TeXLive
@@ -97,7 +97,7 @@ jobs:
       - name: install Python for minted
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.11"
       - name: pip install Pygments for minted
         run: pip install Pygments
       - name: install TeXLive

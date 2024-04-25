@@ -272,9 +272,9 @@
 
 % 设置参考文献格式
 \RequirePackage[
-    backend=biber,
-    style=gb7714-2015,
-    natbib=true,
+	backend=biber,
+	style=gb7714-2015,
+	natbib=true,
 ]{biblatex}
 \addbibresource{bib/note.bib}
 
@@ -294,8 +294,22 @@
 	\zihao{-3}\oldtabular[#1]
 }{\renewcommand{\arraystretch}{1.2}\endoldtabular
 }
-\RequirePackage{ulem}
-\newcommand{\ulinecentered}[1]{\uline{\makebox[20em][c]{#1}}}
+
+\RequirePackage{ulem,calc}
+\newlength{\covertextwidth}
+\newlength{\covermaxwidth}
+
+\newcommand{\ulinecentered}[1]{
+	\setlength{\covertextwidth}{\widthof{#1}}
+	\setlength{\covermaxwidth}{20em} % Set the maximum width you allow
+	\ifthenelse{\lengthtest{\covertextwidth > \covermaxwidth}}{
+		% Calculate scale factor and scale down text if too wide
+		\pgfmathsetmacro{\scalefactor}{\covermaxwidth/\covertextwidth}
+		\uline{\makebox[\covermaxwidth][c]{\scalebox{\scalefactor}[1]{#1}}}
+	}{
+		\uline{\makebox[\covermaxwidth][c]{#1}} % Use normal text if within the limit
+	}
+}
 
 
 % 加载包部分结束，此后开始定义内容 Layout
@@ -398,10 +412,10 @@
 
 \makeatletter
 \def\clearchapterpage{%
-  \@ifclasswith{tongjithesis}{twoside}{%
-    \cleardoublepage % 如果使用双面模式的 tongjithesis 文档类，使用 \cleardoublepage 清除页面
-  }{%
-    \clearpage % 否则，使用 \clearpage 清除页面
-  }
+	\@ifclasswith{tongjithesis}{twoside}{%
+		\cleardoublepage % 如果使用双面模式的 tongjithesis 文档类，使用 \cleardoublepage 清除页面
+	}{%
+		\clearpage % 否则，使用 \clearpage 清除页面
+	}
 }
 \makeatother
