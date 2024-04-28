@@ -2,12 +2,10 @@
 
 English | [中文](README.md)
 
-> * **Note**: By using this template, you will obtain a **pdf** file as output. However, during the process of undergraduate thesis, there may be situations where you need to submit files in docx or other formats. In such cases, you can use some **pdf to docx conversion tools**, such as: [pdf2go.pdf-to-word](https://www.pdf2go.com/pdf-to-word)).
-> * You do **not need to worry** about whether abandoning the docx template of the 1 system and choosing this LaTeX template will be affected by formatting issues. After all, those of us who use this template ([2017-ganler](https://github.com/ganler), [2018-skyleaworlder](https://github.com/skyleaworlder)) have not been required to reformat our papers due to formatting issues.
-
 ## Sample Display
 
-> The complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the pdf download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+> [!NOTE]
+> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the pdf download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
 
 The following displays the "Cover", "Abstract in Chinese", "Table of Contents", "Main Content", "References" and "Acknowledgements" in order.
 
@@ -22,211 +20,140 @@ The following displays the "Cover", "Abstract in Chinese", "Table of Contents", 
 
 ## Usage
 
-### 1. Directly use via **Overleaf** template
+### Online Use
 
-You can access our Overleaf template and use it directly through the following link: [![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
+#### Using Directly via Overleaf Template
 
-Please note that the Overleaf template is updated in a timely manner. We encourage you to use the template directly to write your undergraduate thesis and also to import the template into your own Overleaf project for use. Please refer to the next section of this document for specific instructions.
+You can access and use our Overleaf template through the following link: [![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
-> **Note!** When using the Overleaf template, be sure to check the compiler and main entry settings:
-> 
-> * Set the `main.tex` file as the main entry file, not other `.tex` files in the project (especially `tongjithesis.cls` or `tongjithesis.sty`);
-> * It is recommended to use `XeLaTeX` and `LuaLaTeX` compilers. This template does not support some compilers (such as `pdfLaTeX`).
+> [!IMPORTANT]
+> When using the Overleaf template, please check the compiler and main entry settings:
+>
+> - Set `main.tex` as the main entry file, instead of other `.tex` files in the project (especially `tongjithesis.cls` or `tongjithesis.sty`);
+> - It is recommended to use the `XeLaTeX` or `LuaLaTeX` compilers, as some compilers (such as `pdfLaTeX`) are not supported by this template.
 
-### 2. Import this repository on **Overleaf**
+#### Importing This Repository on Overleaf
 
-* Download this repository via "Code | Download ZIP" above the project file list on this repository's main page;
-* Open [Overleaf](https://www.overleaf.com/);
-* Upload the downloaded `zip` file to Overleaf by dragging and dropping it.
+- Download this repository via `Code | Download ZIP` at the top of the repository home page file list;
+- Open [Overleaf](https://www.overleaf.com/);
+- Upload the downloaded `zip` file to Overleaf by dragging and dropping.
 
-### 3. Using on Mac / Linux
+#### Compiling in GitHub Actions
 
-#### i. Install Python
+The project is configured with GitHub Actions in `.github/workflows/*.yaml`. Pushing code to a fork repository or a template-generated repository will trigger tests. You can obtain build artifacts for multiple platforms from the `Summary | Artifacts` section of the workflow run associated with the commit.
 
-- For Mac: Python comes pre-installed on most Macs. If you don't already have it, you can download and install it from the official website: https://www.python.org/downloads/mac-osx/
-- For Linux: Install Python by typing the following command in Terminal:
-```shell
-sudo apt-get install python3
+(Enable GitHub Actions by checking `Settings | Actions | General | Allow all actions and reusable workflows`)
+
+### Local Use
+
+#### Installing $\TeX$ Distribution
+
+We recommend installing TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
+
+#### Supporting Code Highlighting
+
+This template supports code highlighting by incorporating the `minted` package. The `minted` package requires Python support, so you need to install Python and use `pip` to install `Pygments`. Afterwards, add the Python path with `Pygments` installed to the environment variable `PATH`, or configure as follows to ensure $\LaTeX$ can correctly invoke the `minted` package.
+
+<details><summary>Don't want to add this Python path to the environment variable `PATH`?</summary>
+
+You can add a redirect to the Python path of the `minted` package in the `main.tex` file:
+
+```latex
+\renewcommand{\MintedPython}{/path/to/your/python}
 ```
 
-After installing Python, you need to set the environment variable ``PATH`` and add the path to Python to it. This will allow you to call the `minted` macro package correctly in LaTeX.
+</details>
 
-#### ii. Install `pygmentize` using `pip`
+If you do not need code highlighting, please comment out the related content in the `minted` package.
 
-Enter the following command in the terminal:
-```shell
-pip install Pygments
-```
+#### Building the Project
 
-Note: If you encounter permissions problems during the installation process, you can run the above command from a command prompt with administrator privileges.
+Due to the complex file structure of this template, we do not recommend using commands like `latexmk` that come with TeX Live for compilation.
 
-#### iii. Use tlmgr
+We recommend building the project using the command line. Furthermore, we also support building the project in a complete UI environment using the LaTeX Workshop plugin in VS Code.
 
-Download TeXLive and use `tlmgr` to download packages:
+##### Command Line
 
-```shell
-# The following commands aims at installing packages upon TeXLive without any packages.
-# You can also install BasicTex: https://mirrors.chevalier.io/CTAN/systems/mac/mactex/mactex-basictex-20210325.pkg
-sudo tlmgr update --self
-
-sudo tlmgr install adjustbox algorithmicx algorithms biber biblatex biblatex-gb7714-2015 bibtex booktabs \ 
-    caption carlisle cases catchfile chinese-jfm chngcntr cleveref collectbox ctex dvips \ 
-    enumitem environ extarrows fancybox fancyhdr fancyvrb float framed fvextra \ 
-    gbt7714 gsftopk helvetic hologo ifplatform lastpage latexmk lineno \ 
-    minted multirow mwe natbib needspace newtx nth oberdiek pdftexcmds realscripts rsfs setspace siunitx subfig \
-    tcolorbox texcount texliveonfly threeparttable threeparttablex times titling tocloft \ 
-    trimspaces txfonts ucs upquote was xcolor xecjk xstring zhnumber
-
-sudo tlmgr update --self --all
-```
-
-#### iv. Build the project through Makefile
-
-Thanks to the Makefile file of the [SJTUThesis](https://github.com/sjtug/SJTUThesis) project, you can build the project through Makefile:
+###### Makefile (Linux/macOS)
 
 ```shell
-make all                      # compile main.pdf
-make ENGINE=$ENGINE all       # use $ENGINE(where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-make clean                    # rm intermediate files
-make cleanall                 # rm all intermediate files (including .pdf)
-make wordcount                # wordcount
+make all                # compile main.pdf
+make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+make clean              # remove intermediate files
+make cleanall           # remove all intermediate files (including .pdf)
+make wordcount          # word count
 ```
 
-### 4. Using on Windows
-
-#### i. Install Python
-
-1. Download the Python installer: Download the Python installer from the [Python official website](https://www.python.org/downloads/windows/) (note: the downloaded version needs to match your operating system version and bit number).
-
-2. Run the Python installer: Double-click the downloaded installer and follow the prompts to install it. During installation, remember to check the `Add Python 3.x to PATH` option so that Python can be used from the command line.
-
-#### ii. Install `pygments` using `pip`
-
-Enter the following command in the terminal:
-```shell
-pip install Pygments
-```
-
-Note: If you encounter permissions problems during the installation process, you can run the above command from a command prompt with administrator privileges.
-
-Note: If you are concerned about the potential environmental contamination risks of adding a specific version of Python to your environment paths and wish to use a Python environment manager application, proceed as follows:
-- Create a new Python environment and install the `pygments` module.
-- Follow the comments in `main.tex` which specify the environment path directly in the file.
-
-#### iii. Install TeXLive
-
-Download `install-tl-windows.exe` from [here](https://www.tug.org/texlive/acquire-netinstall.html).
-
-Note: A data pack of about 8GB will be downloaded during the installation process, please be patient.
-
-#### iv. Build the project through Batchfile
-
-> Thanks to the Compile.bat file of the [SJTUThesis](https://github.com/sjtug/SJTUThesis) project.
-
-You can complete the corresponding operation with the following command:
+###### Batchfile (Windows)
 
 ```bat
-.\make.bat                      # the same to "make.bat thesis"
-.\make.bat thesis               # compile main.pdf
-.\make.bat thesis $ENGINE       # use $ENGINE(where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-.\make.bat clean                # clean all work files by latexmk -c
-.\make.bat cleanall             # clean all work files and main.pdf by latexmk -C
-.\make.bat wordcount            # wordcount
-.\make.bat help                 # read the manual
+.\make.bat                # the same to "make.bat thesis"
+.\make.bat thesis         # compile main.pdf
+.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+.\make.bat clean          # clean all work files by latexmk -c
+.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat wordcount      # wordcount
+.\make.bat help           # read the manual
 ```
 
-At this point, you are ready to write your paper with LaTex. If you prefer to operate in a full UI environment rather than the command line, please continue with the following.
+##### Using VS Code and LaTeX Workshop Plugin
 
-### 5. Using on VSCode
+###### Configuring VS Code
 
-#### i. Configure VSCode
+Install the LaTeX Workshop plugin in VS Code, and then open the root directory of this project.
 
-Install the LaTeX Workshop extension in the VSCode marketplace, then download this project and open it in the root directory. (LaTeX Workshop is just an extension, you still need to download the corresponding `TeXLive` for your platform)
+###### Compile Project Using Workshop Features
 
-> **Note**: The following configurations are already included in the project's `.vscode/settings.json` file. Normally, when you start the LaTeX Workshop extension, it will automatically load the configuration. (The configuration in `.vscode/settings.json` will override the corresponding options in the global configuration file `settings.json`, so you do not need to modify the global configuration file.)
+Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
 
-```json
-"latex-workshop.latex.recipe.default": "latexmk (xelatex)",
-"latex-workshop.latex.tools": [
-    {
-        "name": "xelatexmk",
-        "command": "latexmk",
-        "args": [
-            "-xelatex",
-            "-synctex=1",
-            "-quiet",
-            "-interaction=nonstopmode",
-            "-file-line-error",
-            "-halt-on-error",
-            "-shell-escape",
-            "%DOC%"
-        ]
-    }
-],
-"latex-workshop.latex.recipes": [
-    {
-        "name": "latexmk (xelatex)",
-        "tools": [
-            "xelatexmk"
-        ]
-    }
-]
+- Select the `main.tex` file;
+- Click the button with the $\TeX$ icon on the left sidebar;
+- Click `Recipe: latexmk (xelatex)` from the `Build LaTeX project` list to compile the `.pdf` file.
+
+Alternatively, the LaTeX Workshop plugin will automatically compile the file when you save it.
+
+##### Using in Docker
+
+For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
+
+### Other Features
+
+#### Double-Sided Printing
+
+If you need to use double-sided printing, simply change the first line in `main.tex` from
+
+```latex
+\documentclass[oneside]{tongjithesis}
 ```
 
-#### ii. Compile the project using Workshop features
+to
 
-* Click the LaTeX button with the TEX icon on the left sidebar.
-* Click `Recipe: latexmk (xelatex)` in the `Build LaTeX project` list to compile the `.pdf` file.
+```latex
+\documentclass[twoside]{tongjithesis}
+```
 
-### 6. Compile on GitHub Actions
+to enable it.
 
-The project has been configured with GitHub Actions in `.github/workflows/*.yaml`, which can be triggered by pushing code to a forked repository or template-generated repository. Multi-platform build artifacts can be obtained through `Summary | Artifacts` in the corresponding workflow run of the commit.
+#### Rendering Rare Characters
 
-(Open GitHub Actions by checking `Settings | Actions | General | Allow all actions and reusable workflows`)
-
-### 7. Using Docker
-
-See [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env) for detailed instructions.
-
-## Use double-sided printing version (optional)
-
-If you need to use the two-sided printing version, please change `\documentclass[oneside]{tongjithesis}` to `\documentclass[twoside]{tongjithesis}` in line 1 of `main.tex`.
-
-## Use more complete Adobe fonts (optional)
-
-### Style modification
-
-In order to use the more complete Adobe fonts from the font library, you need to make the following modifications:
-
-Find the following code snippet on line 10 of `style/tongjithesis.cls`:
+Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then change the line in `style/tongjithesis.cls` from
 
 ```latex
 \LoadClass[UTF8,a4paper,fontset=fandol]{ctexart}
 ```
 
-and modify it to:
+to
 
 ```latex
 \LoadClass[UTF8,a4paper,fontset=adobe]{ctexart}
 ```
 
-With this modification, LaTeX will use the Adobe font set to render the document.
+This modification will switch the rendering in the document to use the Adobe font set, enhancing support for rare characters.
 
-### Font installation
-
-The steps to install fonts are as follows:
-
-1. In our repository root directory, we have attached four font files from Adobe (`AdobeFangsongStd-Regular.otf`, `AdobeKaitiStd-Regular.otf`, `AdobeHeitiStd-Regular.otf`, `AdobeSongStd-Light.otf`). If you use our template directly on Overleaf, you don't need to install it, but it should be noted that the compilation speed may be slightly slower. Therefore, we recommend that you compile locally.
-2. If you use LaTeX on Windows, macOS or Linux, you need to install these four font files manually. Once installed, you are ready to compile.
-
-Note the support for the following compilation methods:
-
-* If you are using Overleaf, only compiling with LuaLaTeX is supported.
-* If you compile locally on Windows, macOS or Linux, you can choose to use XeLaTeX or LuaLaTeX.
-
-You can see the specific effect in Section 1.2.1 "Testing Rare Words" of the template document.
-
-With the steps above, you will be able to use Adobe font sets and render documents correctly.
+> [!WARNING]
+> Placing Adobe font files in the project's root directory and specifying the font path in `main.tex` is not always effective. Therefore, we recommend installing the Adobe fonts into the system font directory.
+>
+> Tests show that placing Adobe font files in the root directory of an Overleaf project and using LuaLaTeX for compilation works, but this method may slow down the compilation process.
 
 ## How to contribute to this project?
 
@@ -256,30 +183,31 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 %   https://github.com/TJ-CSCCG/tongji-undergrad-thesis
 ```
 
-## Notes on outstanding contributions
+## Project History
 
-* This project originated from [YukuanHU](https://github.com/YukuanHu)'s undergraduate thesis, which was uploaded on May 24, 2019.
-* Since May 9, 2021, [ganler](https://github.com/ganler) has been maintaining a new project based on the above project, with enhanced functionality (project structure and platform adaptation).
-* Starting on May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to this project and integrated it into [TJ-CSCCG](http://github.com/TJ-CSCCG). They have continued to update and improve this project, and it has now become a well-established template for undergraduate theses.
+- This project originated from [YukuanHU](https://github.com/YukuanHu)'s undergraduate thesis, which was uploaded on May 24, 2019.
+- Starting May 9, 2021, [ganler](https://github.com/ganler) enhanced the functionalities (project structure and platform compatibility) based on the original project and began maintaining it.
+- As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](http://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
+- From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 
-We are very grateful for the contributions of these contributors, whose work has provided convenience and help to many students.
+We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
 
-If you find this project helpful for your undergraduate thesis or dissertation, we hope you can acknowledge and express your gratitude in your acknowledgements.
+If you find this template helpful for your thesis or dissertation, we hope you will acknowledge and honor these contributors in your acknowledgements section.
 
 ## Acknowledgements
 
-We have learned a lot from the excellent open source projects of top universities:
+We have learned a lot from excellent open-source projects from top universities:
 
-* [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile
-* [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows
+- [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile contributions.
+- [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows enhancements.
 
-## Contact us
+## Contact Information
 
 ```python
 # Python
 [
     f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
-    'rizhonglin@!.edu.cn'.replace('!', 'tongji')
+    f'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
+    f'rizhong.lin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
 ]
 ```
