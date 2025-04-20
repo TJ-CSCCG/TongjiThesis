@@ -89,37 +89,43 @@ goto :help
     echo Counting words in %THESIS%.tex...
     set found=0
     setlocal enabledelayedexpansion
-
-    findstr "\\documentclass\[[^\[]*en" %THESIS%.tex >nul 2>&1
-    if %ERRORLEVEL% EQU 0 (
-        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -char-only 2^>nul') do (
-            if !found! equ 1 (
-                echo 英文字符数 (Latin characters)       :%%i
-                goto :count_total
-            )
-            echo %%i | findstr "total" >nul && set found=1
-        )
-    ) else (
-        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -ch-only 2^>nul') do (
-            if !found! equ 1 (
-                echo 纯中文字数 (Chinese characters)    :%%i
-                goto :count_total
-            )
-            echo %%i | findstr "total" >nul && set found=1
-        )
+    if not exist %THESIS%.tex (
+        echo Error: %THESIS%.tex does not exist.
+        exit /b 1
     )
 
-:count_total
+    findstr "\\documentclass\[[^\[]*en" %THESIS%.tex > nul
+    if %errorlevel% equ 0 (
+        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -char-only  2^>nul') do (
+            if !found! equ 1 (
+                echo 英文字符数 Latin characters:!%%i!
+                goto :total
+            )
+            echo %%i | findstr "total" > nul && set found=1
+        )
+    ) else (
+        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -ch-only  2^>nul') do (
+            if !found! equ 1 (
+                echo 纯中文字数 Chinese characters:!%%i!
+                goto :total
+            )
+            echo %%i | findstr "total" > nul && set found=1
+        )
+    )
+    goto :total
+
+:total
     set found=0
     for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -chinese 2^>nul') do (
         if !found! equ 1 (
-            echo 总字数 (Total characters)        :%%i
-            endlocal
+            echo 总字数 Total characters:!%%i!
             goto :EOF
         )
-        echo %%i | findstr "total" >nul && set found=1
+        echo %%i | findstr "total" > nul && set found=1
     )
-    endlocal
+    if !found! neq 1 (
+        echo Warning: Could not determine word count.
+    )
     goto :EOF
 
 :clean
