@@ -428,7 +428,8 @@ jobs:
         run: |
           # Create source archive with complete repository (excluding build artifacts and .git)
           # Note: Keep figures/tongji.pdf as it's required for template compilation
-          tar -czf "tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" \
+          # Create archives in parent directory to avoid circular dependency
+          tar -czf "../tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" \
             --exclude='.git' \
             --exclude='main.pdf' \
             --exclude='*.aux' \
@@ -447,39 +448,51 @@ jobs:
             --exclude='*.pyg' \
             --exclude='ctan/' \
             --exclude='_out/' \
-            --exclude='tongjithesis-source-*.tar.gz' \
-            --exclude='tongjithesis-source-*.zip' \
-            --exclude='tongjithesis-ctan-*.tar.gz' \
-            --exclude='tongjithesis-ctan-*.zip' \
             . || {
             echo "Error: Failed to create source tar.gz archive"
             exit 1
           }
 
-          zip -r "tongjithesis-source-v${PACKAGE_VERSION}.zip" . \
-            -x '.git/*' \
-            -x 'main.pdf' \
-            -x '*.aux' \
-            -x '*.log' \
-            -x '*.out' \
-            -x '*.toc' \
-            -x '*.bbl' \
-            -x '*.bcf' \
-            -x '*.blg' \
-            -x '*.fls' \
-            -x '*.fdb_latexmk' \
-            -x '*.run.xml' \
-            -x '*.synctex.gz' \
-            -x '*.xdv' \
-            -x '_minted*/*' \
-            -x '*.pyg' \
-            -x 'ctan/*' \
-            -x '_out/*' \
-            -x 'tongjithesis-source-*.tar.gz' \
-            -x 'tongjithesis-source-*.zip' \
-            -x 'tongjithesis-ctan-*.tar.gz' \
-            -x 'tongjithesis-ctan-*.zip' || {
+          cd .. || {
+            echo "Error: Failed to change to parent directory for zip creation"
+            exit 1
+          }
+
+          zip -r "tongjithesis-source-v${PACKAGE_VERSION}.zip" "$(basename "$GITHUB_WORKSPACE")" \
+            -x "$(basename "$GITHUB_WORKSPACE")/.git/*" \
+            -x "$(basename "$GITHUB_WORKSPACE")/main.pdf" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.aux" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.log" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.out" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.toc" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.bbl" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.bcf" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.blg" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.fls" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.fdb_latexmk" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.run.xml" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.synctex.gz" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.xdv" \
+            -x "$(basename "$GITHUB_WORKSPACE")/_minted*/*" \
+            -x "$(basename "$GITHUB_WORKSPACE")/*.pyg" \
+            -x "$(basename "$GITHUB_WORKSPACE")/ctan/*" \
+            -x "$(basename "$GITHUB_WORKSPACE")/_out/*" || {
             echo "Error: Failed to create source zip archive"
+            exit 1
+          }
+
+          cd "$GITHUB_WORKSPACE" || {
+            echo "Error: Failed to return to workspace directory"
+            exit 1
+          }
+
+          # Move archives back to workspace
+          mv "../tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" . || {
+            echo "Error: Failed to move tar.gz archive back"
+            exit 1
+          }
+          mv "../tongjithesis-source-v${PACKAGE_VERSION}.zip" . || {
+            echo "Error: Failed to move zip archive back"
             exit 1
           }
 
