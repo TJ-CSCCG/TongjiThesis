@@ -1,9 +1,0 @@
-README.md                     # Package description and usage information
-tongjithesis.dtx              # Source and documentation file
-tongjithesis.ins              # Installation script
-tongjithesis.cls              # LaTeX class file (generated from .dtx)
-tongjithesis.cfg              # Configuration file (generated from .dtx)
-example/                      # Example directory
-  example.tex                 # Example thesis document
-  figures/                    # Figures directory
-    tongji.pdf               # Tongji University logo for example

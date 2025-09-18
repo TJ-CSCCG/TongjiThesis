@@ -13,6 +13,11 @@ on:
 
 name: test
 
+# Limit concurrency to prevent resource conflicts
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   # Packages needed for the thesis compilation
   TL_PACKAGES: |
@@ -92,6 +97,7 @@ env:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       matrix:
         compiler: [-xelatex, -lualatex]
@@ -103,9 +109,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: 'pip'
 
       - name: Install Pygments for minted
-        run: pip install Pygments
+        run: pip install Pygments==2.17.2
 
       - name: Install TeX Live
         uses: tex-live/setup-texlive-action@v3
@@ -127,11 +134,13 @@ jobs:
       - name: Upload pdf
         uses: actions/upload-artifact@v4
         with:
-          name: document linux output ${{ matrix.compiler }}
+          name: document-linux-${{ matrix.compiler }}
           path: linux${{ matrix.compiler }}.pdf
+          retention-days: 30
 
   build-macos:
     runs-on: macos-latest
+    timeout-minutes: 45
     strategy:
       matrix:
         compiler: [-xelatex, -lualatex]
@@ -143,9 +152,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: 'pip'
 
       - name: Install Pygments for minted
-        run: pip install Pygments
+        run: pip install Pygments==2.17.2
 
       - name: Install TeX Live
         uses: tex-live/setup-texlive-action@v3
@@ -167,11 +177,13 @@ jobs:
       - name: Upload pdf
         uses: actions/upload-artifact@v4
         with:
-          name: document macos output ${{ matrix.compiler }}
+          name: document-macos-${{ matrix.compiler }}
           path: macos${{ matrix.compiler }}.pdf
+          retention-days: 30
 
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 45
     strategy:
       matrix:
         compiler: [-xelatex, -lualatex]
@@ -183,9 +195,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: 'pip'
 
       - name: Install Pygments for minted
-        run: pip install Pygments
+        run: pip install Pygments==2.17.2
 
       - name: Install TeX Live
         uses: tex-live/setup-texlive-action@v3
@@ -207,5 +220,26 @@ jobs:
       - name: Upload pdf
         uses: actions/upload-artifact@v4
         with:
-          name: document windows output ${{ matrix.compiler }}
+          name: document-windows-${{ matrix.compiler }}
           path: windows${{ matrix.compiler }}.pdf
+          retention-days: 30
+
+  # Summary job to check all builds completed successfully
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: [build-linux, build-macos, build-windows]
+    if: always()
+    steps:
+      - name: Check all builds succeeded
+        run: |
+          echo "Linux build status: ${{ needs.build-linux.result }}"
+          echo "macOS build status: ${{ needs.build-macos.result }}"
+          echo "Windows build status: ${{ needs.build-windows.result }}"
+
+          if [[ "${{ needs.build-linux.result }}" != "success" ||
+                "${{ needs.build-macos.result }}" != "success" ||
+                "${{ needs.build-windows.result }}" != "success" ]]; then
+            echo "One or more builds failed"
+            exit 1
+          fi
+          echo "All builds completed successfully"

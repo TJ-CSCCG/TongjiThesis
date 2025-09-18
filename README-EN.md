@@ -86,9 +86,10 @@ This template provides the following document class options, which can be config
 This template provides two code highlighting solutions:
 
 1. **`minted` package** (Python-based): Provides advanced syntax highlighting features, requires Python environment.
+
    - Enable by setting `minted=true` (default) in `main.tex`
    - Requires installation of Python and Pygments library (`pip install pygments`)
-   - You need to add Python to the system `PATH` environment variable, 
+   - You need to add Python to the system `PATH` environment variable,
      - or specify the Python path in `main.tex` (see below)
    - Requires `-shell-escape` parameter during compilation (this template has added)
 
