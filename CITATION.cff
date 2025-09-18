@@ -6,7 +6,9 @@ authors:
   - family-names: Hu
     given-names: Yukuan
   - family-names: skyleaworlder
-  - family-names: tobiasforest
+  - family-names: Lin
+    given-names: Rizhong
+    orcid: https://orcid.org/0009-0000-1468-6734
 url: https://github.com/TJ-CSCCG/tongji-undergrad-thesis
-version: 1.0.2
-date-released: 2023-06-21
+version: 1.1.0
+date-released: 2025-09-18

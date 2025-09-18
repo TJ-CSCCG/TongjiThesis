@@ -1,8 +1,8 @@
-name: Generate CTAN Package
+name: Create Release
 
-# Prevent concurrent CTAN package generation
+# Prevent concurrent release generation
 concurrency:
-  group: ctan-package
+  group: release
   cancel-in-progress: false
 
 on:
@@ -11,14 +11,14 @@ on:
     paths:
       - "style/**"
       - "figures/**"
-      - ".github/workflows/ctan-package.yml"
+      - ".github/workflows/release.yml"
       - "package.json"
   pull_request:
     branches: [master, dev]
     paths:
       - "style/**"
       - "figures/**"
-      - ".github/workflows/ctan-package.yml"
+      - ".github/workflows/release.yml"
       - "package.json"
   workflow_dispatch: # Allow manual triggering
 
@@ -32,6 +32,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  # Fetch full history for proper tag checking
+
+      - name: Install required tools
+        run: |
+          # Ensure jq is available for JSON parsing
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "Installing jq..."
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
+          # Verify installation
+          jq --version
+          gh --version
 
       - name: Extract package metadata
         id: package-metadata
@@ -49,6 +62,9 @@ jobs:
               echo "PACKAGE_EMAIL=$PACKAGE_EMAIL"
               echo "PACKAGE_DATE=$PACKAGE_DATE"
             } >> $GITHUB_ENV
+
+            # Also set as step output for GitHub Actions context
+            echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           else
             # Default values if package.json doesn't exist
             PACKAGE_VERSION="1.1.0"
@@ -62,16 +78,19 @@ jobs:
               echo "PACKAGE_EMAIL=$PACKAGE_EMAIL"
               echo "PACKAGE_DATE=$PACKAGE_DATE"
             } >> $GITHUB_ENV
+
+            # Also set as step output for GitHub Actions context
+            echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           fi
           # Extract year for copyright statements
           echo "CURRENT_YEAR=$(date +%Y)" >> $GITHUB_ENV
 
           # Print for debugging
-          echo "Package version: $PACKAGE_VERSION"
-          echo "Package author: $PACKAGE_AUTHOR"
-          echo "Package email: $PACKAGE_EMAIL"
-          echo "Package date: $PACKAGE_DATE"
-          echo "Current year: $CURRENT_YEAR"
+          echo "Package version: ${PACKAGE_VERSION}"
+          echo "Package author: ${PACKAGE_AUTHOR}"
+          echo "Package email: ${PACKAGE_EMAIL}"
+          echo "Package date: ${PACKAGE_DATE}"
+          echo "Current year: ${CURRENT_YEAR}"
 
       - name: Set up directories
         run: |
@@ -122,7 +141,7 @@ jobs:
 
           This work has the LPPL maintenance status "maintained".
 
-          The Current Maintainer of this work is $PACKAGE_AUTHOR.
+          The Current Maintainer of this work is ${PACKAGE_AUTHOR}.
 
           This work consists of the files:
           - tongjithesis.cls (main class file)
@@ -219,7 +238,7 @@ jobs:
 
           ## Maintainer
 
-          Current Maintainer: $PACKAGE_AUTHOR
+          Current Maintainer: ${PACKAGE_AUTHOR}
 
           ## Acknowledgements
 
@@ -396,26 +415,137 @@ jobs:
             echo "Error: PACKAGE_EMAIL is not set"
             exit 1
           fi
+          if [ -z "$CURRENT_YEAR" ]; then
+            echo "Error: CURRENT_YEAR is not set"
+            exit 1
+          fi
           echo "All environment variables validated successfully"
-          echo "Package version: $PACKAGE_VERSION"
-          echo "Package author: $PACKAGE_AUTHOR"
-          echo "Package email: $PACKAGE_EMAIL"
+          echo "Package version: ${PACKAGE_VERSION}"
+          echo "Package author: ${PACKAGE_AUTHOR}"
+          echo "Package email: ${PACKAGE_EMAIL}"
+
+      - name: Create source code archive
+        run: |
+          # Create source archive with complete repository (excluding build artifacts and .git)
+          # Note: Keep figures/tongji.pdf as it's required for template compilation
+          tar -czf "tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" \
+            --exclude='.git' \
+            --exclude='main.pdf' \
+            --exclude='*.aux' \
+            --exclude='*.log' \
+            --exclude='*.out' \
+            --exclude='*.toc' \
+            --exclude='*.bbl' \
+            --exclude='*.bcf' \
+            --exclude='*.blg' \
+            --exclude='*.fls' \
+            --exclude='*.fdb_latexmk' \
+            --exclude='*.run.xml' \
+            --exclude='*.synctex.gz' \
+            --exclude='*.xdv' \
+            --exclude='_minted*' \
+            --exclude='*.pyg' \
+            --exclude='ctan/' \
+            --exclude='_out/' \
+            --exclude='tongjithesis-source-*.tar.gz' \
+            --exclude='tongjithesis-source-*.zip' \
+            --exclude='tongjithesis-ctan-*.tar.gz' \
+            --exclude='tongjithesis-ctan-*.zip' \
+            . || {
+            echo "Error: Failed to create source tar.gz archive"
+            exit 1
+          }
+
+          zip -r "tongjithesis-source-v${PACKAGE_VERSION}.zip" . \
+            -x '.git/*' \
+            -x 'main.pdf' \
+            -x '*.aux' \
+            -x '*.log' \
+            -x '*.out' \
+            -x '*.toc' \
+            -x '*.bbl' \
+            -x '*.bcf' \
+            -x '*.blg' \
+            -x '*.fls' \
+            -x '*.fdb_latexmk' \
+            -x '*.run.xml' \
+            -x '*.synctex.gz' \
+            -x '*.xdv' \
+            -x '_minted*/*' \
+            -x '*.pyg' \
+            -x 'ctan/*' \
+            -x '_out/*' \
+            -x 'tongjithesis-source-*.tar.gz' \
+            -x 'tongjithesis-source-*.zip' \
+            -x 'tongjithesis-ctan-*.tar.gz' \
+            -x 'tongjithesis-ctan-*.zip' || {
+            echo "Error: Failed to create source zip archive"
+            exit 1
+          }
+
+          echo "Source code archives created:"
+          ls -la tongjithesis-source-*.tar.gz tongjithesis-source-*.zip
 
       - name: Create CTAN package archive
         run: |
           cd ctan
-          tar -czf "tongjithesis-v${PACKAGE_VERSION}.tar.gz" tongjithesis/
-          zip -r "tongjithesis-v${PACKAGE_VERSION}.zip" tongjithesis/
+          tar -czf "tongjithesis-ctan-v${PACKAGE_VERSION}.tar.gz" tongjithesis/ || {
+            echo "Error: Failed to create CTAN tar.gz archive"
+            exit 1
+          }
+          zip -r "tongjithesis-ctan-v${PACKAGE_VERSION}.zip" tongjithesis/ || {
+            echo "Error: Failed to create CTAN zip archive"
+            exit 1
+          }
           echo "CTAN package archives created:"
           ls -la *.tar.gz *.zip
 
-      - name: Upload CTAN package artifacts
+      - name: Validate created archives
+        run: |
+          echo "🔍 Validating created archives..."
+
+          # Validate CTAN archives
+          cd ctan || {
+            echo "Error: Failed to change to ctan directory"
+            exit 1
+          }
+          echo "📦 Checking CTAN tar.gz archive:"
+          tar -tzf "tongjithesis-ctan-v${PACKAGE_VERSION}.tar.gz" | head -10
+
+          echo "📦 Checking CTAN zip archive:"
+          unzip -l "tongjithesis-ctan-v${PACKAGE_VERSION}.zip" | head -15
+
+          cd .. || {
+            echo "Error: Failed to change back to parent directory"
+            exit 1
+          }
+
+          # Validate source archives
+          echo "📂 Checking source tar.gz archive:"
+          tar -tzf "tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" | grep -E "(main\.tex|style/|figures/tongji\.pdf|README\.md)" || echo "⚠️  Expected files not found in source archive"
+
+          echo "📂 Checking source zip archive:"
+          unzip -l "tongjithesis-source-v${PACKAGE_VERSION}.zip" | grep -E "(main\.tex|style/|figures/tongji\.pdf|README\.md)" || echo "⚠️  Expected files not found in source archive"
+
+          # Validate source archive excludes build artifacts
+          echo "🚫 Checking source archives exclude build artifacts:"
+          if tar -tzf "tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" | grep -E "\.(aux|log|out|toc|bbl)$"; then
+            echo "⚠️  Warning: Build artifacts found in source archive"
+          else
+            echo "✅ No build artifacts found in source archive"
+          fi
+
+          echo "✅ Archive validation completed"
+
+      - name: Upload package artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ctan-package-v${{ env.PACKAGE_VERSION }}
+          name: release-packages-v${{ env.PACKAGE_VERSION }}
           path: |
-            ctan/tongjithesis-v${{ env.PACKAGE_VERSION }}.tar.gz
-            ctan/tongjithesis-v${{ env.PACKAGE_VERSION }}.zip
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
+            tongjithesis-source-v${{ env.PACKAGE_VERSION }}.tar.gz
+            tongjithesis-source-v${{ env.PACKAGE_VERSION }}.zip
             ctan/tongjithesis/
           retention-days: 90
 
@@ -433,9 +563,12 @@ jobs:
 
           # Update main.tex to remove the .sty import if needed (only if pattern exists)
           if grep -q '\\usepackage{tongjithesis}' main.tex; then
-            sed -i 's/\\usepackage{tongjithesis}/% \\usepackage{tongjithesis} % No longer needed as functionality is integrated in the .cls file/' main.tex || {
+            # Use portable sed with backup file
+            sed -i.bak 's/\\usepackage{tongjithesis}/% \\usepackage{tongjithesis} % No longer needed as functionality is integrated in the .cls file/' main.tex || {
               echo "Warning: Failed to update main.tex, but continuing..."
             }
+            # Remove backup file
+            rm -f main.tex.bak
           else
             echo "No \\usepackage{tongjithesis} found in main.tex, skipping sed replacement"
           fi
@@ -456,19 +589,145 @@ jobs:
             exit 1
           }
 
+          # Pull latest changes before pushing to avoid conflicts
+          CURRENT_BRANCH="${GITHUB_REF_NAME:-master}"
+          git pull --rebase origin "$CURRENT_BRANCH" || {
+            echo "Warning: Failed to pull latest changes from $CURRENT_BRANCH, attempting push anyway..."
+          }
+
           git push || {
             echo "Error: Failed to push changes"
             exit 1
           }
 
+      - name: Download compiled PDFs from test workflow (only on manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          # Set up cleanup trap
+          cleanup() {
+            echo "🧹 Cleaning up temporary files..."
+            rm -rf temp-* compiled-pdfs/.temp* 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          echo "Attempting to download compiled PDFs from latest test workflow run..."
+
+          # Set workflow filename as variable for easy maintenance
+          TEST_WORKFLOW="test.yaml"
+
+          # Get the latest successful test workflow run with better error handling and timeout
+          if command -v timeout >/dev/null 2>&1; then
+            WORKFLOW_RUN_ID=$(timeout 60 gh run list --workflow="$TEST_WORKFLOW" --status=success --limit=1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          else
+            WORKFLOW_RUN_ID=$(gh run list --workflow="$TEST_WORKFLOW" --status=success --limit=1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          fi
+
+          if [ -z "$WORKFLOW_RUN_ID" ] || [ "$WORKFLOW_RUN_ID" = "null" ]; then
+            echo "⚠️  No successful test workflow run found. PDFs will not be included in release."
+            echo "💡 Consider running the test workflow first to generate compiled examples."
+            echo "   You can do this by going to Actions → test → Run workflow"
+
+            # Create empty directory to prevent file matching errors
+            mkdir -p compiled-pdfs
+            touch compiled-pdfs/.gitkeep
+          else
+            echo "✅ Found test workflow run: $WORKFLOW_RUN_ID"
+
+            # Download all PDF artifacts from the test run
+            mkdir -p compiled-pdfs
+
+            # Try to download the consolidated PDF artifact first
+            if gh run download "$WORKFLOW_RUN_ID" --name all-compiled-documents --dir compiled-pdfs 2>/dev/null; then
+              echo "✅ Downloaded consolidated PDF artifact"
+
+              # Rename PDFs with example- prefix for clarity, avoiding double-prefixing
+              cd compiled-pdfs || {
+                echo "Error: Failed to change to compiled-pdfs directory"
+                exit 1
+              }
+              for pdf in *.pdf; do
+                if [ -f "$pdf" ] && [[ "$pdf" != example-* ]]; then
+                  mv "$pdf" "example-$pdf"
+                  echo "  Renamed: $pdf → example-$pdf"
+                fi
+              done
+              cd .. || {
+                echo "Error: Failed to change back from compiled-pdfs directory"
+                exit 1
+              }
+            else
+              echo "ℹ️  Consolidated PDF artifact not found, trying individual artifacts..."
+
+              # Download individual artifacts if consolidated one doesn't exist
+              PDF_COUNT=0
+              for artifact in document-linux-xelatex document-linux-lualatex document-macos-xelatex document-macos-lualatex document-windows-xelatex document-windows-lualatex; do
+                if gh run download "$WORKFLOW_RUN_ID" --name "$artifact" --dir "temp-$artifact" 2>/dev/null; then
+                  echo "✅ Downloaded $artifact"
+
+                  # Move and rename PDFs to compiled-pdfs directory
+                  for pdf in "temp-$artifact"/*.pdf; do
+                    if [ -f "$pdf" ]; then
+                      filename=$(basename "$pdf")
+                      # Only add example- prefix if not already present
+                      if [[ "$filename" != example-* ]]; then
+                        new_name="example-$filename"
+                      else
+                        new_name="$filename"
+                      fi
+                      mv "$pdf" "compiled-pdfs/$new_name"
+                      echo "  Added: $new_name"
+                      PDF_COUNT=$((PDF_COUNT + 1))
+                    fi
+                  done
+
+                  # Clean up temporary directory
+                  rm -rf "temp-$artifact"
+                else
+                  echo "⚠️  Could not download $artifact"
+                fi
+              done
+
+              echo "📄 Downloaded $PDF_COUNT PDF files"
+            fi
+
+            echo "📂 Available compiled PDFs:"
+            ls -la compiled-pdfs/ 2>/dev/null || echo "   (No PDFs downloaded)"
+
+            # Validate downloaded PDFs
+            echo "🔍 Validating downloaded PDF files:"
+            if command -v file >/dev/null 2>&1; then
+              for pdf in compiled-pdfs/*.pdf; do
+                if [ -f "$pdf" ]; then
+                  if file "$pdf" | grep -q "PDF"; then
+                    echo "  ✅ $(basename "$pdf") - Valid PDF"
+                  else
+                    echo "  ⚠️  $(basename "$pdf") - Invalid or corrupted PDF"
+                  fi
+                fi
+              done
+            else
+              echo "  ⚠️  'file' command not available, skipping PDF validation"
+              for pdf in compiled-pdfs/*.pdf; do
+                if [ -f "$pdf" ]; then
+                  echo "  📄 $(basename "$pdf") - Present (validation skipped)"
+                fi
+              done
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check if release exists (only on manual dispatch)
         if: github.event_name == 'workflow_dispatch'
         id: check_release
         run: |
-          # Check if release already exists
-          if gh release view "v${PACKAGE_VERSION}" > /dev/null 2>&1; then
+          # Check if tag already exists
+          if git rev-parse "v${PACKAGE_VERSION}" >/dev/null 2>&1; then
+            echo "⚠️  Tag v${PACKAGE_VERSION} already exists locally"
             echo "release_exists=true" >> $GITHUB_OUTPUT
-            echo "Release v${PACKAGE_VERSION} already exists"
+          elif (command -v timeout >/dev/null 2>&1 && timeout 30 gh release view "v${PACKAGE_VERSION}" > /dev/null 2>&1) || (! command -v timeout >/dev/null 2>&1 && gh release view "v${PACKAGE_VERSION}" > /dev/null 2>&1); then
+            echo "release_exists=true" >> $GITHUB_OUTPUT
+            echo "Release v${PACKAGE_VERSION} already exists on GitHub"
           else
             echo "release_exists=false" >> $GITHUB_OUTPUT
             echo "Release v${PACKAGE_VERSION} does not exist, will create new release"
@@ -476,8 +735,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Skip release creation (already exists)
+        if: github.event_name == 'workflow_dispatch' && steps.check_release.outputs.release_exists == 'true'
+        run: |
+          echo "⚠️  Release v${PACKAGE_VERSION} already exists!"
+          echo "   If you want to update the release, please:"
+          echo "   1. Delete the existing release from GitHub"
+          echo "   2. Re-run this workflow"
+          echo ""
+          echo "   Or manually upload the artifacts to the existing release."
+
       - name: Create GitHub Release (only on manual dispatch)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && steps.check_release.outputs.release_exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
@@ -485,19 +754,30 @@ jobs:
           body: |
             ## TongjiThesis LaTeX Class v${{ env.PACKAGE_VERSION }}
 
-            This release contains the CTAN-ready package for the Tongji University undergraduate thesis template.
+            [📝 EDIT THIS SECTION: Add your custom release notes, changelog, and acknowledgments here]
 
-            ### 📦 CTAN Package Contents
-            - `tongjithesis.cls` - Main LaTeX class file
-            - `tongjithesis.cfg` - Configuration file
-            - `LICENSE` - License information
-            - `README.md` - Documentation and usage guide
-            - `example/` - Complete working example
+            This release contains multiple download options for the Tongji University undergraduate thesis template.
 
-            ### 🚀 Installation
-            1. Download the `.tar.gz` or `.zip` file below
-            2. Extract and copy `tongjithesis.cls` and `tongjithesis.cfg` to your project directory
-            3. Or install to your local texmf tree for system-wide access
+            ### 📦 Download Options
+
+            **CTAN Package** (for LaTeX package distribution):
+            - `tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz` - CTAN submission format
+            - `tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip` - CTAN alternative format
+
+            **Complete Source Code** (for end users):
+            - `tongjithesis-source-v${{ env.PACKAGE_VERSION }}.tar.gz` - Full repository with examples
+            - `tongjithesis-source-v${{ env.PACKAGE_VERSION }}.zip` - Full repository with examples
+
+            **Compiled Examples** (preview final output):
+            - `example-linux-xelatex.pdf` / `example-linux-lualatex.pdf`
+            - `example-macos-xelatex.pdf` / `example-macos-lualatex.pdf`
+            - `example-windows-xelatex.pdf` / `example-windows-lualatex.pdf`
+
+            ### 🚀 Quick Start
+
+            **For Students**: Download the source archive → extract → edit `main.tex` → compile
+            **For LaTeX Admins**: Use CTAN archives for package installation
+            **For Preview**: View the compiled PDF examples to see the final output
 
             ### 📋 Requirements
             - XeLaTeX or LuaLaTeX engine
@@ -508,12 +788,21 @@ jobs:
             - [GitHub Repository](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)
             - [Overleaf Template](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
+            ### 📝 Changelog
+            [📝 EDIT THIS SECTION: Add details about what's new, changed, or fixed in this release]
+
+            ### 🙏 Acknowledgments
+            [📝 EDIT THIS SECTION: Add thanks to contributors, bug reporters, etc.]
+
             ---
-            This release was automatically generated by GitHub Actions.
+            **Note**: This is a draft release. Edit the above sections and publish when ready.
           files: |
-            ctan/tongjithesis-v${{ env.PACKAGE_VERSION }}.tar.gz
-            ctan/tongjithesis-v${{ env.PACKAGE_VERSION }}.zip
-          draft: false
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
+            tongjithesis-source-v${{ env.PACKAGE_VERSION }}.tar.gz
+            tongjithesis-source-v${{ env.PACKAGE_VERSION }}.zip
+            compiled-pdfs/example-*.pdf
+          draft: true
           prerelease: false
-          fail_on_unmatched_files: true
+          fail_on_unmatched_files: false
           make_latest: true
