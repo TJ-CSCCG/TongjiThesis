@@ -190,7 +190,7 @@ jobs:
       - name: Install TeX Live
         uses: teatimeguest/setup-texlive-action@v3
         with:
-          version: 2023
+          version: 2025
           packages: ${{ env.TL_PACKAGES }}
           update-all-packages: true
 
