@@ -97,10 +97,10 @@ jobs:
         compiler: [-xelatex, -lualatex]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Python for minted
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -108,9 +108,9 @@ jobs:
         run: pip install Pygments
 
       - name: Install TeX Live
-        uses: teatimeguest/setup-texlive-action@v3
+        uses: tex-live/setup-texlive-action@v3
         with:
-          version: 2023
+          version: 2025
           packages: ${{ env.TL_PACKAGES }}
           update-all-packages: true
 
@@ -137,10 +137,10 @@ jobs:
         compiler: [-xelatex, -lualatex]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Python for minted
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -148,9 +148,9 @@ jobs:
         run: pip install Pygments
 
       - name: Install TeX Live
-        uses: teatimeguest/setup-texlive-action@v3
+        uses: tex-live/setup-texlive-action@v3
         with:
-          version: 2023
+          version: 2025
           packages: ${{ env.TL_PACKAGES }}
           update-all-packages: true
 
@@ -177,10 +177,10 @@ jobs:
         compiler: [-xelatex, -lualatex]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Python for minted
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -188,7 +188,7 @@ jobs:
         run: pip install Pygments
 
       - name: Install TeX Live
-        uses: teatimeguest/setup-texlive-action@v3
+        uses: tex-live/setup-texlive-action@v3
         with:
           version: 2025
           packages: ${{ env.TL_PACKAGES }}
