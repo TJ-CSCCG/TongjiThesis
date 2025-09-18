@@ -23,7 +23,7 @@ on:
   workflow_dispatch: # Allow manual triggering
 
 jobs:
-  build-ctan-package:
+  create-release:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -63,8 +63,6 @@ jobs:
               echo "PACKAGE_DATE=$PACKAGE_DATE"
             } >> $GITHUB_ENV
 
-            # Also set as step output for GitHub Actions context
-            echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           else
             # Default values if package.json doesn't exist
             PACKAGE_VERSION="1.1.0"
@@ -79,8 +77,6 @@ jobs:
               echo "PACKAGE_DATE=$PACKAGE_DATE"
             } >> $GITHUB_ENV
 
-            # Also set as step output for GitHub Actions context
-            echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           fi
           # Extract year for copyright statements
           echo "CURRENT_YEAR=$(date +%Y)" >> $GITHUB_ENV
@@ -112,15 +108,12 @@ jobs:
           fi
           echo "All required source files validated successfully"
 
-      - name: Create class file
+      - name: Copy class and configuration files
         run: |
           cp style/tongjithesis.cls ctan/tongjithesis/ || {
             echo "Error: Failed to copy tongjithesis.cls"
             exit 1
           }
-
-      - name: Create configuration file
-        run: |
           cp style/tongjithesis.cfg ctan/tongjithesis/ || {
             echo "Error: Failed to copy tongjithesis.cfg"
             exit 1
@@ -230,7 +223,7 @@ jobs:
 
           ## Documentation
 
-          For detailed documentation, please refer to the user guide (tongjithesis-guide.pdf).
+          For detailed documentation, please refer to the README.md file and example files included in this package.
 
           ## License
 
@@ -562,56 +555,6 @@ jobs:
             ctan/tongjithesis/
           retention-days: 90
 
-      - name: Commit changes (only on manual dispatch)
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
-          # Copy the consolidated class file back to the main project
-          cp ctan/tongjithesis/tongjithesis.cls style/ || {
-            echo "Error: Failed to copy consolidated class file"
-            exit 1
-          }
-
-          # Update main.tex to remove the .sty import if needed (only if pattern exists)
-          if grep -q '\\usepackage{tongjithesis}' main.tex; then
-            # Use portable sed with backup file
-            sed -i.bak 's/\\usepackage{tongjithesis}/% \\usepackage{tongjithesis} % No longer needed as functionality is integrated in the .cls file/' main.tex || {
-              echo "Warning: Failed to update main.tex, but continuing..."
-            }
-            # Remove backup file
-            rm -f main.tex.bak
-          else
-            echo "No \\usepackage{tongjithesis} found in main.tex, skipping sed replacement"
-          fi
-
-          # Check if there are any changes to commit
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git add style/tongjithesis.cls main.tex || {
-            echo "Error: Failed to add files to git"
-            exit 1
-          }
-
-          git commit -m "release: v$PACKAGE_VERSION update consolidated class file" || {
-            echo "Error: Failed to commit changes"
-            exit 1
-          }
-
-          # Pull latest changes before pushing to avoid conflicts
-          CURRENT_BRANCH="${GITHUB_REF_NAME:-master}"
-          git pull --rebase origin "$CURRENT_BRANCH" || {
-            echo "Warning: Failed to pull latest changes from $CURRENT_BRANCH, attempting push anyway..."
-          }
-
-          git push || {
-            echo "Error: Failed to push changes"
-            exit 1
-          }
 
       - name: Download compiled PDFs from test workflow (only on manual dispatch)
         if: github.event_name == 'workflow_dispatch'
