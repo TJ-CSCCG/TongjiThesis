@@ -142,10 +142,7 @@ make wordcount          # wordcount
 
 ###### 配置 VS Code
 
-在 VS Code 中安装 LaTeX Workshop 插件，然后打开本项目根目录。
-
-> [!IMPORTANT]
-> 请确保在 VS Code 中**直接打开 `tongji-undergrad-thesis` 文件夹**，而不是打开其上层文件夹。否则 `.vscode/settings.json` 配置文件无法生效，LaTeX Workshop 插件将不会显示 `latexmk (xelatex)` 的 Recipe。
+在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
 
 ###### 通过 Workshop 提供的功能编译项目
 
