@@ -145,6 +145,9 @@ make wordcount          # word count
 
 Install the LaTeX Workshop plugin in VS Code, and then open the root directory of this project.
 
+> [!IMPORTANT]
+> Make sure to **open the `tongji-undergrad-thesis` folder directly** in VS Code, rather than opening a parent folder. Otherwise, the `.vscode/settings.json` configuration file will not take effect, and the LaTeX Workshop plugin will not display the `latexmk (xelatex)` Recipe.
+
 ###### Compile Project Using Workshop Features
 
 Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
