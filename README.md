@@ -66,6 +66,10 @@
 
 ### 本地使用
 
+#### 安装 TeX 发行版
+
+我们建议参照[官方快速安装指南](https://tug.org/texlive/quickinstall.html)安装 TeX Live（Windows、Linux）或 MacTeX（macOS）。
+
 #### 文档类选项
 
 本模板提供以下文档类选项，可以在 `main.tex` 中进行配置：
@@ -101,6 +105,24 @@
 
 </details>
 
+<details><summary><b>渲染生僻字</b></summary>
+
+由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
+
+```latex
+\documentclass[
+  oneside,
+  fontset=adobe,
+  % 其他选项...
+]{tongjithesis}
+```
+
+这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。
+
+**注意**：将 Adobe 字体文件放置在项目根目录下并在 `main.tex` 中指定字体路径的方式并不总是有效。因此，我们建议您将 Adobe 字体文件安装到系统字体目录中。经测试，在 Overleaf 项目的根目录下放置 Adobe 字体文件，并只在使用 LuaLaTeX 编译的方式是有效的，但这种方式可能会导致编译速度变慢。
+
+</details>
+
 #### 代码高亮选项
 
 本模板提供两种代码高亮解决方案：
@@ -129,6 +151,8 @@
 </details>
 
 #### 构建项目
+
+我们推荐使用命令行构建项目，也支持通过 VS Code 的 LaTeX Workshop 插件构建。
 
 ##### 通过命令行
 
@@ -171,24 +195,6 @@ make wordcount          # wordcount
 <details><summary><b>在 Docker 中使用</b></summary>
 
 详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
-
-</details>
-
-<details><summary><b>渲染生僻字</b></summary>
-
-由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
-
-```latex
-\documentclass[
-  oneside,
-  fontset=adobe,
-  % 其他选项...
-]{tongjithesis}
-```
-
-这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。
-
-**注意**：将 Adobe 字体文件放置在项目根目录下并在 `main.tex` 中指定字体路径的方式并不总是有效。因此，我们建议您将 Adobe 字体文件安装到系统字体目录中。经测试，在 Overleaf 项目的根目录下放置 Adobe 字体文件，并只在使用 LuaLaTeX 编译的方式是有效的，但这种方式可能会导致编译速度变慢。
 
 </details>
 

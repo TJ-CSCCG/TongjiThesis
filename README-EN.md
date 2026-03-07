@@ -66,6 +66,10 @@ The project is configured with GitHub Actions in `.github/workflows/*.yaml`. Pus
 
 ### Local Use
 
+#### Installing TeX Distribution
+
+We recommend installing TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
+
 #### Document Class Options
 
 This template provides the following document class options, which can be configured in `main.tex`:
@@ -101,6 +105,24 @@ This template provides the following document class options, which can be config
 
 </details>
 
+<details><summary><b>Rendering Rare Characters</b></summary>
+
+Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
+
+```latex
+\documentclass[
+  oneside,
+  fontset=adobe,
+  % other options...
+]{tongjithesis}
+```
+
+This modification will switch the rendering in the document to use the Adobe font set, enhancing support for rare characters.
+
+**Note**: Placing Adobe font files in the project's root directory and specifying the font path in `main.tex` is not always effective. Therefore, we recommend installing the Adobe fonts into the system font directory. Tests show that placing Adobe font files in the root directory of an Overleaf project and using LuaLaTeX for compilation works, but this method may slow down the compilation process.
+
+</details>
+
 #### Code Highlighting Options
 
 This template provides two code highlighting solutions:
@@ -129,6 +151,8 @@ You can add a redirection to the Python path of the `minted` package in the `mai
 </details>
 
 #### Building the Project
+
+We recommend building the project via the command line. Alternatively, you can use the VS Code LaTeX Workshop plugin.
 
 ##### Command Line
 
@@ -171,24 +195,6 @@ Alternatively, the LaTeX Workshop plugin will automatically compile the file whe
 <details><summary><b>Using in Docker</b></summary>
 
 For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
-
-</details>
-
-<details><summary><b>Rendering Rare Characters</b></summary>
-
-Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
-
-```latex
-\documentclass[
-  oneside,
-  fontset=adobe,
-  % other options...
-]{tongjithesis}
-```
-
-This modification will switch the rendering in the document to use the Adobe font set, enhancing support for rare characters.
-
-**Note**: Placing Adobe font files in the project's root directory and specifying the font path in `main.tex` is not always effective. Therefore, we recommend installing the Adobe fonts into the system font directory. Tests show that placing Adobe font files in the root directory of an Overleaf project and using LuaLaTeX for compilation works, but this method may slow down the compilation process.
 
 </details>
 
