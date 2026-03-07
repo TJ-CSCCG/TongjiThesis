@@ -1,22 +1,42 @@
-# :page_facing_up: 同济大学本科生毕业设计论文模板（理工类）
+<p align="center">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+</p>
 
-中文 | [English](README-EN.md)
+<p align="center">
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/tongji-undergrad-thesis?label=Release" alt="Release"></a>
+  <a href="https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
+  <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/tongji-undergrad-thesis?style=flat" alt="Stars"></a>
+</p>
 
-## 样例展示
+<p align="center">
+  中文 | <a href="README-EN.md">English</a>
+</p>
 
-> [!NOTE]
-> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) 中 "Assets" 下的 pdf 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
-
-以下依次展示 "封面"、"中文摘要"、"目录"、"主要内容"、"参考文献" 与 "谢辞"。
+符合同济大学本科毕业设计论文官方格式要求的 LaTeX 模板。支持 XeLaTeX / LuaLaTeX 编译，提供 `minted` 和 `listings` 两种代码高亮方案，兼容 `biblatex` 和 `bibtex` 两种引用方式。在 Linux、macOS、Windows 三平台 CI 持续测试。
 
 <p align="center">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0002.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0004.jpg" width="30%">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0011.jpg" width="30%">
 </p>
+
+> [!NOTE]
+> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) 中 "Assets" 下的 PDF 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
+
+---
+
+## 快速开始
+
+| 方式               | 说明                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Overleaf**       | 通过 [Overleaf 模板链接](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn) 直接使用，零配置 |
+| **本地编译**       | 安装 [TeX Live 2026+](https://tug.org/texlive/quickinstall.html)，克隆仓库，运行 `make`                                                          |
+| **GitHub Actions** | Fork 本仓库，push 即可触发自动编译，在 Artifacts 中下载 PDF                                                                                      |
+
+> [!TIP]
+> 本模板的 CI 基于 **TeX Live 2026** 进行测试。如果您在本地编译时遇到难以解释的编译错误，请首先检查并升级您的 TeX Live 至 2026 版本。旧版 TeX Live 中的宏包版本可能与本模板不兼容。
 
 ## 使用方法
 
@@ -24,7 +44,7 @@
 
 #### 通过 Overleaf 模板直接使用
 
-您可以通过以下链接访问我们的 Overleaf 模板并使用：[![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
+您可以通过 [Overleaf 模板链接](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn) 直接使用本模板。
 
 > [!IMPORTANT]
 > 在使用 Overleaf 模板时，请检查编译器和主入口的设置：
@@ -46,9 +66,59 @@
 
 ### 本地使用
 
-#### 安装 $\TeX$ 发行版
+#### 安装 TeX 发行版
 
 我们建议参照[官方快速安装指南](https://tug.org/texlive/quickinstall.html)安装 TeX Live（Windows、Linux）或 MacTeX（macOS）。
+
+#### 构建项目
+
+我们推荐使用命令行构建项目，也支持通过 VS Code 的 LaTeX Workshop 插件构建。
+
+##### 通过命令行
+
+###### Makefile (Linux/macOS)
+
+```shell
+make all                # compile main.pdf
+make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+make clean              # rm intermediate files
+make cleanall           # rm all intermediate files (including .pdf)
+make wordcount          # wordcount
+```
+
+###### Batchfile (Windows)
+
+```bat
+.\make.bat                # the same to "make.bat thesis"
+.\make.bat thesis         # compile main.pdf
+.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+.\make.bat clean          # clean all work files by latexmk -c
+.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat wordcount      # wordcount
+.\make.bat help           # read the manual
+```
+
+<details><summary><b>通过 VS Code 及 LaTeX Workshop 插件</b></summary>
+
+在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
+
+因为我们已经在 `.vscode/settings.json` 中配置了 LaTeX Workshop 插件，所以您只需要：
+
+- 选中 `main.tex` 文件；
+- 点击左侧边栏中带有 $\TeX$ 图标的按钮；
+- 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
+
+或者，LaTeX Workshop 插件会在您保存文件时自动编译。
+
+</details>
+
+<details><summary><b>在 Docker 中使用</b></summary>
+
+详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
+
+</details>
+
+### 模板配置
 
 #### 文档类选项
 
@@ -63,6 +133,8 @@
   minted=true,       % 是否使用 minted 包进行代码高亮，默认为 true
 ]{tongjithesis}
 ```
+
+<details><summary><b>各选项详细说明</b></summary>
 
 ##### 单双面打印选项
 
@@ -81,7 +153,27 @@
 - `fullwidthstop=false`：保持中文句号"。"不变（默认）
 - `fullwidthstop=true`：将中文句号"。"替换为西文句号"．"
 
-##### 代码高亮选项
+</details>
+
+<details><summary><b>渲染生僻字</b></summary>
+
+由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
+
+```latex
+\documentclass[
+  oneside,
+  fontset=adobe,
+  % 其他选项...
+]{tongjithesis}
+```
+
+这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。
+
+**注意**：将 Adobe 字体文件放置在项目根目录下并在 `main.tex` 中指定字体路径的方式并不总是有效。因此，我们建议您将 Adobe 字体文件安装到系统字体目录中。经测试，在 Overleaf 项目的根目录下放置 Adobe 字体文件，并只在使用 LuaLaTeX 编译的方式是有效的，但这种方式可能会导致编译速度变慢。
+
+</details>
+
+#### 代码高亮选项
 
 本模板提供两种代码高亮解决方案：
 
@@ -98,7 +190,7 @@
 
 如果您不希望安装 Python 或遇到 `minted` 相关错误，可以在 `main.tex` 中将 `minted=true` 修改为 `minted=false`。使用 `minted=false` 时，模板将自动使用 `listings` 包处理所有代码，无需其他配置。
 
-<details><summary>使用 `minted` 但不想将 Python 添加到环境变量 `PATH` 中？</summary>
+<details><summary>使用 <code>minted</code> 但不想将 Python 添加到环境变量 <code>PATH</code> 中？</summary>
 
 可以在 `main.tex` 文件中添加重定向 `minted` 宏包的 Python 路径：
 
@@ -108,104 +200,13 @@
 
 </details>
 
-#### 构建项目
-
-因为本模版的文件结构较为复杂，我们不推荐直接使用 TeX Live 自带的 `latexmk` 等命令进行编译。
-
-我们推荐使用命令行构建项目。进一步地，我们也支持通过 VS Code 的 LaTeX Workshop 插件，在一个完整的 UI 环境中构建项目。
-
-##### 通过命令行
-
-###### Makefile (Linux/macOS)
-
-```shell
-make all                # compile main.pdf
-make ENGINE=$ENGINE all # use $ENGINE(where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-make clean              # rm intermediate files
-make cleanall           # rm all intermediate files (including .pdf)
-make wordcount          # wordcount
-```
-
-###### Batchfile (Windows)
-
-```bat
-.\make.bat                # the same to "make.bat thesis"
-.\make.bat thesis         # compile main.pdf
-.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-.\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
-.\make.bat wordcount      # wordcount
-.\make.bat help           # read the manual
-```
-
-##### 通过 VS Code 及 LaTeX Workshop 插件
-
-###### 配置 VS Code
-
-在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
-
-###### 通过 Workshop 提供的功能编译项目
-
-因为我们已经在 `.vscode/settings.json` 中配置了 LaTeX Workshop 插件，所以您只需要：
-
-- 选中 `main.tex` 文件；
-- 点击左侧边栏中带有 $\TeX$ 图标的按钮；
-- 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
-
-或者，LaTeX Workshop 插件会在您保存文件时自动编译。
-
-##### 在 Docker 中使用
-
-详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
-
-### 其他功能
-
-#### 渲染生僻字
-
-由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
-
-```latex
-\documentclass[
-  oneside,
-  fontset=adobe,
-  % 其他选项...
-]{tongjithesis}
-```
-
-这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。您可以在模板文档的 1.2.1 小节 "测试生僻字" 中查看具体效果。
-
-> [!WARNING]
-> 将 Adobe 字体文件放置在项目根目录下并在 `main.tex` 中指定字体路径的方式并不总是有效。因此，我们建议您将 Adobe 字体文件安装到系统字体目录中。
->
-> 经测试，在 Overleaf 项目的根目录下放置 Adobe 字体文件，并只在使用 LuaLaTeX 编译的方式是有效的，但这种方式可能会导致编译速度变慢。
-
 ## 如何为该项目贡献代码？
 
-还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
+详见[贡献指南](CONTRIBUTING.md#提交-pull-request)。
 
 ## 开源协议
 
-该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。
-
-```text
-%% tongji-undergrad-thesis
-%% Copyright 2022-2025 TJ-CSCCG
-%
-% This work may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.3
-% of this license or (at your option) any later version.
-% The latest version of this license is in
-%   http://www.latex-project.org/lppl.txt
-% and version 1.3 or later is part of all distributions of LaTeX
-% version 2003/12/01 or later.
-%
-% This work has the LPPL maintenance status "maintained".
-%
-% This Current Maintainer of this work is R. Lin.
-%
-% This work consists of all the *.tex, *.cls, *.cfg, and *.sty files in
-%   https://github.com/TJ-CSCCG/tongji-undergrad-thesis
-```
+该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。详见 [LICENSE](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/blob/master/LICENSE) 文件。
 
 ## 项目历史
 

@@ -1,21 +1,22 @@
 ---
-name: Feature 建议
-about: 通过该 Issue 模板反馈向 tongji-undergrad-thesis 提供需要新增的 feature 的具体信息
+name: Feature 建议 | Feature Request
+about: 提出新功能或改进建议 | Suggest a new feature or improvement
 labels: 'type/feature'
 ---
 
-### 新增特性类型
+## 功能类型 | Feature Type
 
-<!--点选下方的特性类型-->
+<!--在对应类型上打勾 | Check the relevant type-->
 
-* [ ] 构建相关（如需要提供新的构建方法，现有构建方式需要迭代重构等）
-* [ ] 模板功能相关（如需要模板提供其他实用功能，适配新的模板样式等）
-* [ ] 文档相关（如更好展现该模板使用方法的想法）
+- [ ] 构建相关 | Build (新的构建方式、流程改进等)
+- [ ] 模板功能相关 | Template (新增功能、适配新样式等)
+- [ ] 文档相关 | Documentation (改进使用说明等)
 
-### 特性描述
+## 功能描述 | Description
 
-<!--在这里描述新增特性本身及其重要性。如果可能的话，还希望能够描述新增特性的实现方案-->
+<!--描述你期望的功能及其重要性，如有实现思路也请一并说明-->
+<!--Describe the feature and its importance. Include implementation ideas if any-->
 
-### 其他信息
+## 其他信息 | Additional Context
 
-<!--这里用于写有关于上述特性的其他想法-->
+<!--其他与该建议相关的信息 | Any other relevant information-->
