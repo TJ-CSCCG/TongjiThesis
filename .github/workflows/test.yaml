@@ -4,18 +4,15 @@ on:
       - master
       - proposal
       - dev
-      - fix/**
   pull_request:
-    branches:
-      - master
-      - proposal
-      - dev
+  workflow_dispatch:
 
 name: test
 
-# Limit concurrency to prevent resource conflicts
+# On push use the branch ref; on PR use the PR number.
+# This avoids duplicate runs: a push to a PR branch cancels the push-triggered run.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
