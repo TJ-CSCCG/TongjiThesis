@@ -1,22 +1,42 @@
-# :page_facing_up: Tongji University Undergraduate Thesis Template (STEM)
-
-English | [中文](README.md)
-
-## Sample Display
-
-> [!NOTE]
-> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the pdf download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
-
-The following displays the "Cover", "Abstract in Chinese", "Table of Contents", "Main Content", "References" and "Acknowledgements" in order.
+<p align="center">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+</p>
 
 <p align="center">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0002.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0004.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0011.jpg" width="30%">
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/tongji-undergrad-thesis?label=Release" alt="Release"></a>
+  <a href="https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
+  <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
+  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/tongji-undergrad-thesis?style=flat" alt="Stars"></a>
 </p>
+
+<p align="center">
+  English | <a href="README.md">中文</a>
+</p>
+
+A LaTeX template that conforms to the official formatting requirements for Tongji University undergraduate theses. Supports XeLaTeX / LuaLaTeX compilation, offers both `minted` and `listings` for code highlighting, and is compatible with both `biblatex` and `bibtex` citation backends. Continuously tested on Linux, macOS, and Windows via CI.
+
+<p align="center">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+</p>
+
+> [!NOTE]
+> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+
+---
+
+## Quick Start
+
+| Method             | Description                                                                                                                                              |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Overleaf**       | Use the [Overleaf template](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn) directly — zero setup |
+| **Local**          | Install [TeX Live 2026+](https://tug.org/texlive/quickinstall.html), clone the repo, run `make`                                                          |
+| **GitHub Actions** | Fork this repo, push to trigger CI, download PDFs from Artifacts                                                                                         |
+
+> [!TIP]
+> This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please first check and upgrade your TeX Live installation to 2026. Older TeX Live versions may ship package versions that are incompatible with this template.
 
 ## Usage
 
@@ -24,7 +44,7 @@ The following displays the "Cover", "Abstract in Chinese", "Table of Contents", 
 
 #### Using Directly via Overleaf Template
 
-You can access and use our Overleaf template through the following link: [![svg of overleaf-tongjithesis](https://img.shields.io/badge/Overleaf-TJ--CSCCG%2Ftongji--undergrad--thesis-green)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
+You can use this template directly via the [Overleaf template link](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn).
 
 > [!IMPORTANT]
 > When using the Overleaf template, please check the compiler and main entry settings:
@@ -46,74 +66,13 @@ The project is configured with GitHub Actions in `.github/workflows/*.yaml`. Pus
 
 ### Local Use
 
-#### Installing $\TeX$ Distribution
+#### Installing TeX Distribution
 
 We recommend installing TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
 
-#### Document Class Options
-
-This template provides the following document class options, which can be configured in `main.tex`:
-
-```latex
-\documentclass[
-  oneside,           % One-sided printing (default), use twoside for double-sided printing
-  fullwidthstop=false, % Whether to replace Chinese period "。" with Western-style period "．", default is false
-  fontset=fandol,    % Font set to use, default is fandol
-  times=false,       % Whether to use Times New Roman font, default is false
-  minted=true,       % Whether to use the minted package for code highlighting, default is true
-]{tongjithesis}
-```
-
-##### Single/Double-Sided Printing Options
-
-- `oneside`: Single-sided printing (default)
-- `twoside`: Double-sided printing, adjusts page margins and binding line
-
-##### Font Options
-
-- `fontset=fandol`: Use Fandol font set (default)
-- `fontset=adobe`: Use Adobe font set (requires Adobe fonts installation)
-- `times=false`: Use default math font (default)
-- `times=true`: Use Times New Roman font
-
-##### Chinese Punctuation Options
-
-- `fullwidthstop=false`: Keep Chinese period "。" unchanged (default)
-- `fullwidthstop=true`: Replace Chinese period "。" with Western-style period "．"
-
-##### Code Highlighting Options
-
-This template provides two code highlighting solutions:
-
-1. **`minted` package** (Python-based): Provides advanced syntax highlighting features, requires Python environment.
-
-   - Enable by setting `minted=true` (default) in `main.tex`
-   - Requires installation of Python and Pygments library (`pip install pygments`)
-   - You need to add Python to the system `PATH` environment variable,
-     - or specify the Python path in `main.tex` (see below)
-   - Requires `-shell-escape` parameter during compilation (this template has added)
-
-2. **`listings` package** (pure LaTeX): Does not depend on external programs, can be used in any environment.
-   - Enable by setting `minted=false` in `main.tex`
-   - No additional program installation required
-
-If you do not want to install Python or encounter `minted`-related errors, you can change `minted=true` to `minted=false` in `main.tex`. When using `minted=false`, the template will automatically use the `listings` package to process all code, without requiring additional configuration.
-
-<details><summary>Using `minted` but don't want to add Python to the `PATH` environment variable?</summary>
-
-You can add a redirection to the Python path of the `minted` package in the `main.tex` file:
-
-```latex
-\renewcommand{\MintedPython}{/path/to/your/python}
-```
-
-</details>
-
 #### Building the Project
 
-Due to the complex file structure of this template, we do not recommend using commands like `latexmk` that come with TeX Live for compilation.
-
-We recommend building the project using the command line. Furthermore, we also support building the project in a complete UI environment using the LaTeX Workshop plugin in VS Code.
+We recommend building the project via the command line. Alternatively, you can use the VS Code LaTeX Workshop plugin.
 
 ##### Command Line
 
@@ -139,13 +98,9 @@ make wordcount          # word count
 .\make.bat help           # read the manual
 ```
 
-##### Using VS Code and LaTeX Workshop Plugin
-
-###### Configuring VS Code
+<details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
 
 Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `tongji-undergrad-thesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
-
-###### Compile Project Using Workshop Features
 
 Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
 
@@ -155,13 +110,52 @@ Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, y
 
 Alternatively, the LaTeX Workshop plugin will automatically compile the file when you save it.
 
-##### Using in Docker
+</details>
+
+<details><summary><b>Using in Docker</b></summary>
 
 For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
 
-### Other Features
+</details>
 
-#### Rendering Rare Characters
+### Template Configuration
+
+#### Document Class Options
+
+This template provides the following document class options, which can be configured in `main.tex`:
+
+```latex
+\documentclass[
+  oneside,           % One-sided printing (default), use twoside for double-sided printing
+  fullwidthstop=false, % Whether to replace Chinese period "。" with Western-style period "．", default is false
+  fontset=fandol,    % Font set to use, default is fandol
+  times=false,       % Whether to use Times New Roman font, default is false
+  minted=true,       % Whether to use the minted package for code highlighting, default is true
+]{tongjithesis}
+```
+
+<details><summary><b>Detailed option descriptions</b></summary>
+
+##### Single/Double-Sided Printing Options
+
+- `oneside`: Single-sided printing (default)
+- `twoside`: Double-sided printing, adjusts page margins and binding line
+
+##### Font Options
+
+- `fontset=fandol`: Use Fandol font set (default)
+- `fontset=adobe`: Use Adobe font set (requires Adobe fonts installation)
+- `times=false`: Use default math font (default)
+- `times=true`: Use Times New Roman font
+
+##### Chinese Punctuation Options
+
+- `fullwidthstop=false`: Keep Chinese period "。" unchanged (default)
+- `fullwidthstop=true`: Replace Chinese period "。" with Western-style period "．"
+
+</details>
+
+<details><summary><b>Rendering Rare Characters</b></summary>
 
 Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
 
@@ -175,38 +169,44 @@ Due to the default use of the Fandol font in this template, support for rare cha
 
 This modification will switch the rendering in the document to use the Adobe font set, enhancing support for rare characters.
 
-> [!WARNING]
-> Placing Adobe font files in the project's root directory and specifying the font path in `main.tex` is not always effective. Therefore, we recommend installing the Adobe fonts into the system font directory.
->
-> Tests show that placing Adobe font files in the root directory of an Overleaf project and using LuaLaTeX for compilation works, but this method may slow down the compilation process.
+**Note**: Placing Adobe font files in the project's root directory and specifying the font path in `main.tex` is not always effective. Therefore, we recommend installing the Adobe fonts into the system font directory. Tests show that placing Adobe font files in the root directory of an Overleaf project and using LuaLaTeX for compilation works, but this method may slow down the compilation process.
+
+</details>
+
+#### Code Highlighting Options
+
+This template provides two code highlighting solutions:
+
+1. **`minted` package** (Python-based): Provides advanced syntax highlighting features, requires Python environment.
+   - Enable by setting `minted=true` (default) in `main.tex`
+   - Requires installation of Python and Pygments library (`pip install pygments`)
+   - You need to add Python to the system `PATH` environment variable,
+     - or specify the Python path in `main.tex` (see below)
+   - Requires `-shell-escape` parameter during compilation (this template has added)
+
+2. **`listings` package** (pure LaTeX): Does not depend on external programs, can be used in any environment.
+   - Enable by setting `minted=false` in `main.tex`
+   - No additional program installation required
+
+If you do not want to install Python or encounter `minted`-related errors, you can change `minted=true` to `minted=false` in `main.tex`. When using `minted=false`, the template will automatically use the `listings` package to process all code, without requiring additional configuration.
+
+<details><summary>Using <code>minted</code> but don't want to add Python to the <code>PATH</code> environment variable?</summary>
+
+You can add a redirection to the Python path of the `minted` package in the `main.tex` file:
+
+```latex
+\renewcommand{\MintedPython}{/path/to/your/python}
+```
+
+</details>
 
 ## How to contribute to this project?
 
-Please refer to [How to pull request](CONTRIBUTING.md/#how-to-pull-request).
+Please refer to the [Contributing Guide](CONTRIBUTING.md#提交-pull-request).
 
 ## Open Source License
 
-This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/).
-
-```text
-%% tongji-undergrad-thesis
-%% Copyright 2022-2025 TJ-CSCCG
-%
-% This work may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.3
-% of this license or (at your option) any later version.
-% The latest version of this license is in
-%   http://www.latex-project.org/lppl.txt
-% and version 1.3 or later is part of all distributions of LaTeX
-% version 2003/12/01 or later.
-%
-% This work has the LPPL maintenance status "maintained".
-%
-% This Current Maintainer of this work is R. Lin.
-%
-% This work consists of all the *.tex, *.cls, *.cfg, and *.sty files in
-%   https://github.com/TJ-CSCCG/tongji-undergrad-thesis
-```
+This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/blob/master/LICENSE) file for details.
 
 ## Project History
 

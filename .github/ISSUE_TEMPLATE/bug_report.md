@@ -1,47 +1,37 @@
 ---
-name: Bug 反馈
-about: 通过该 Issue 模板反馈使用 tongji-undergrad-thesis 时的 bug
+name: Bug 反馈 | Bug Report
+about: 反馈使用模板时遇到的 bug | Report a bug
 labels: 'type/bug'
 ---
 
-### 使用平台详情
+## 使用环境 | Environment
 
-<!--在你所使用的平台上打勾，或填写你使用的平台-->
+<!--在你所使用的平台上打勾 | Check the platform you are using-->
 
-* [ ] 线上：Overleaf
-* [ ] 本地：MacOS
-* [ ] 本地：Windows
-* [ ] 本地：各种 Linux 发行版
-* [ ] 不，我使用的是 _________
+- [ ] Overleaf
+- [ ] macOS
+- [ ] Windows
+- [ ] Linux
+- [ ] 其他 | Other：______
 
-<!--此外，建议你在下方详细描述你所使用的工具，如编辑器与编译器类型等等-->
+<!--请补充编译器类型（XeLaTeX / LuaLaTeX）及 TeX Live 版本-->
+<!--Please specify compiler type (XeLaTeX / LuaLaTeX) and TeX Live version-->
 
-### 编译日志
+## 问题描述 | Description
 
-<!--在下方贴出编译时输出的错误日志-->
+<!--描述你遇到的问题 | Describe the issue-->
 
-<details><summary><b>报错内容</b> <i>[点击打开]</i></summary>
-<div>
+## 编译日志 | Compilation Log
+
+<details><summary>报错内容 | Error log</summary>
 
 ```log
-# Paste your log here:
+<!-- 粘贴编译日志 | Paste your log here -->
 ```
 
-</div>
 </details>
 
-### 文件结构
+## 其他信息 | Additional Context
 
-<!--如果你修改了项目文件结构（例如：将 bib 文件从 bib 目录移出），还请在下方给出当前目录树。如果没有修改的话，还请删除本小节-->
-
-```log
-
-```
-
-### 问题描述
-
-<!--在下方填写你认为可能存在的问题。如果可以的话，还希望你能够给出你的建议和修改意见-->
-
-### 其他信息
-
-<!--这里用于写有关于上述 bug 的其他信息-->
+<!--如有修改项目文件结构或其他相关信息，请在此补充-->
+<!--Any other relevant information, e.g. modified file structure-->

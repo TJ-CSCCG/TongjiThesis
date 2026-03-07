@@ -4,18 +4,25 @@ on:
       - master
       - proposal
       - dev
-      - fix-ci
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - 'docs/**'
   pull_request:
-    branches:
-      - master
-      - proposal
-      - dev
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - 'docs/**'
+  workflow_dispatch:
 
 name: test
 
-# Limit concurrency to prevent resource conflicts
+# On push use the branch ref; on PR use the PR number.
+# This avoids duplicate runs: a push to a PR branch cancels the push-triggered run.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
@@ -95,15 +102,18 @@ env:
     zhnumber
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
+  # Cross-platform build: default options (minted=true, biblatex)
+  build:
     strategy:
+      fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         compiler: [-xelatex, -lualatex]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install Python for minted
         uses: actions/setup-python@v6
@@ -114,128 +124,135 @@ jobs:
         run: pip install Pygments
 
       - name: Install TeX Live
+        id: setup-tl
         uses: tex-live/setup-texlive-action@v3
         with:
-          version: 2025
+          version: 2026
           packages: ${{ env.TL_PACKAGES }}
-          update-all-packages: true
+        env:
+          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
-      - name: Compile LaTeX document
+      - name: Compile LaTeX document (Unix)
+        if: runner.os != 'Windows'
         run: |
           make ENGINE=${{ matrix.compiler }} all
-          mv main.pdf linux${{ matrix.compiler }}.pdf
 
-      - name: Check compile
-        if: ${{ failure() }}
-        run: |
-          cat main.log
-
-      - name: Upload pdf
-        uses: actions/upload-artifact@v4
-        with:
-          name: document-linux-${{ matrix.compiler }}
-          path: linux${{ matrix.compiler }}.pdf
-          retention-days: 30
-
-  build-macos:
-    runs-on: macos-latest
-    timeout-minutes: 45
-    strategy:
-      matrix:
-        compiler: [-xelatex, -lualatex]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Install Python for minted
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-
-      - name: Install Pygments for minted
-        run: pip install Pygments
-
-      - name: Install TeX Live
-        uses: tex-live/setup-texlive-action@v3
-        with:
-          version: 2025
-          packages: ${{ env.TL_PACKAGES }}
-          update-all-packages: true
-
-      - name: Compile LaTeX document
-        run: |
-          make ENGINE=${{ matrix.compiler }} all
-          mv main.pdf macos${{ matrix.compiler }}.pdf
-
-      - name: Check compile
-        if: ${{ failure() }}
-        run: |
-          cat main.log
-
-      - name: Upload pdf
-        uses: actions/upload-artifact@v4
-        with:
-          name: document-macos-${{ matrix.compiler }}
-          path: macos${{ matrix.compiler }}.pdf
-          retention-days: 30
-
-  build-windows:
-    runs-on: windows-latest
-    timeout-minutes: 45
-    strategy:
-      matrix:
-        compiler: [-xelatex, -lualatex]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Install Python for minted
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-
-      - name: Install Pygments for minted
-        run: pip install Pygments
-
-      - name: Install TeX Live
-        uses: tex-live/setup-texlive-action@v3
-        with:
-          version: 2025
-          packages: ${{ env.TL_PACKAGES }}
-          update-all-packages: true
-
-      - name: Compile LaTeX document
+      - name: Compile LaTeX document (Windows)
+        if: runner.os == 'Windows'
         run: |
           .\make.bat thesis ${{ matrix.compiler }}
-          mv main.pdf windows${{ matrix.compiler }}.pdf
 
-      - name: Check compile
-        if: ${{ failure() }}
-        run: |
-          cat main.log
+      - name: Show log on failure (Unix)
+        if: failure() && runner.os != 'Windows'
+        run: cat main.log
 
-      - name: Upload pdf
-        uses: actions/upload-artifact@v4
+      - name: Show log on failure (Windows)
+        if: failure() && runner.os == 'Windows'
+        run: Get-Content main.log
+
+      - name: Rename PDF
+        if: success()
+        run: mv main.pdf ${{ runner.os }}${{ matrix.compiler }}.pdf
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v7
         with:
-          name: document-windows-${{ matrix.compiler }}
-          path: windows${{ matrix.compiler }}.pdf
+          name: document-${{ runner.os }}-${{ matrix.compiler }}
+          path: ${{ runner.os }}${{ matrix.compiler }}.pdf
+          retention-days: 30
+
+  # Option variants: test minted=false and bibtex (Linux-only, xelatex-only)
+  build-variants:
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [minted-false, bibtex]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Python for minted
+        if: matrix.variant != 'minted-false'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Pygments for minted
+        if: matrix.variant != 'minted-false'
+        run: pip install Pygments
+
+      - name: Install TeX Live
+        id: setup-tl
+        uses: tex-live/setup-texlive-action@v3
+        with:
+          version: 2026
+          packages: ${{ env.TL_PACKAGES }}
+        env:
+          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
+
+      - name: Configure minted=false variant
+        if: matrix.variant == 'minted-false'
+        run: |
+          sed -i 's/minted=true/minted=false/' main.tex
+
+      - name: Configure bibtex variant
+        if: matrix.variant == 'bibtex'
+        run: |
+          # Comment out biblatex setup
+          sed -i 's/^\\usepackage\[$/% \\usepackage[/' main.tex
+          sed -i 's/^  backend=biber,/% backend=biber,/' main.tex
+          sed -i 's/^  style=gb7714-2015,/% style=gb7714-2015,/' main.tex
+          sed -i 's/^  natbib=true,/% natbib=true,/' main.tex
+          sed -i 's/^]{biblatex}/% ]{biblatex}/' main.tex
+          sed -i 's/^\\addbibresource/% \\addbibresource/' main.tex
+          sed -i 's/^\\printbibliography/% \\printbibliography/' main.tex
+
+          # Uncomment bibtex setup
+          sed -i 's/^% \\usepackage\[sort&compress\]{gbt7714}/\\usepackage[sort\&compress]{gbt7714}/' main.tex
+          sed -i 's/^% \\bibliographystyle{gbt7714-numerical}/\\bibliographystyle{gbt7714-numerical}/' main.tex
+          sed -i 's/^% \\setlength{\\bibsep}{3pt}/\\setlength{\\bibsep}{3pt}/' main.tex
+          sed -i 's/^% \\addcontentsline{toc}{section}{参考文献}/\\addcontentsline{toc}{section}{参考文献}/' main.tex
+          sed -i 's/^% \\bibliography{bib\/note.bib}/\\bibliography{bib\/note.bib}/' main.tex
+
+      - name: Show main.tex diff
+        run: git diff main.tex
+
+      - name: Compile LaTeX document
+        run: |
+          make ENGINE=-xelatex all
+
+      - name: Show log on failure
+        if: failure()
+        run: cat main.log
+
+      - name: Rename PDF
+        if: success()
+        run: mv main.pdf linux-xelatex-${{ matrix.variant }}.pdf
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: document-variant-${{ matrix.variant }}
+          path: linux-xelatex-${{ matrix.variant }}.pdf
           retention-days: 30
 
   # Summary job to check all builds completed successfully
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build-linux, build-macos, build-windows]
+    needs: [build, build-variants]
     if: always()
     steps:
       - name: Check all builds succeeded
         run: |
-          echo "Linux build status: ${{ needs.build-linux.result }}"
-          echo "macOS build status: ${{ needs.build-macos.result }}"
-          echo "Windows build status: ${{ needs.build-windows.result }}"
+          echo "Cross-platform build status: ${{ needs.build.result }}"
+          echo "Variant build status: ${{ needs.build-variants.result }}"
 
-          if [[ "${{ needs.build-linux.result }}" != "success" ||
-                "${{ needs.build-macos.result }}" != "success" ||
-                "${{ needs.build-windows.result }}" != "success" ]]; then
+          if [[ "${{ needs.build.result }}" != "success" ||
+                "${{ needs.build-variants.result }}" != "success" ]]; then
             echo "One or more builds failed"
             exit 1
           fi
@@ -244,11 +261,11 @@ jobs:
   # Collect all compiled PDFs into a single artifact
   collect-pdfs:
     runs-on: ubuntu-latest
-    needs: test-summary
-    if: needs.test-summary.result == 'success'
+    needs: [build, build-variants]
+    if: always() && !cancelled()
     steps:
       - name: Download all PDF artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: document-*
           merge-multiple: true
@@ -259,7 +276,7 @@ jobs:
           ls -la *.pdf
 
       - name: Upload consolidated PDFs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: all-compiled-documents
           path: "*.pdf"

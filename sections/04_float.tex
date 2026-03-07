@@ -14,8 +14,8 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.5\textwidth]{example-image}
-  \caption{这是一个示例图形}
+  \includegraphics[width=0.5\textwidth]{figures/tongjithesis.png}
+  \caption{TongjiThesis 项目标志}
   \label{fig:example}
 \end{figure}
 
@@ -302,6 +302,9 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
 
+\paragraph{关于跨页代码段的说明}
+需要注意的是，\pkg{listings} 包\textbf{不支持跨页显示的代码段}。当代码块较长需要跨页时，\pkg{listings} 可能会与页眉页脚产生冲突，导致排版混乱（如页眉、页脚或装订线区域出现代码内容）。如果确实需要展示较长的跨页代码，请使用 \pkg{minted} 包（设置 \texttt{minted=true}）。不过，一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
+
 \subsubsection{\pkg{minted} 包增强功能}
 
 当设置 \texttt{minted=true} 时（默认），可以使用 \pkg{minted} 包提供的增强高亮功能。\pkg{minted} 基于 Python 的 Pygments 库，支持超过 500 种编程语言，并提供更精确的语法解析和更丰富的高亮效果：
@@ -353,6 +356,7 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
   \item \textbf{短代码段}：直接使用 \pkg{listings}，它在所有环境都可用。
   \item \textbf{重要复杂代码}：使用条件判断，针对不同环境提供两种实现。
   \item \textbf{行内代码}：使用通用的 \verb|\verb| 命令，或根据环境条件选择。
+  \item \textbf{跨页代码}：\pkg{listings} 不支持跨页代码段，请使用 \pkg{minted}。但学术论文中应尽量避免大段代码，建议精简为关键片段。
 \end{enumerate}
 
 以下是一个展示兼容性处理的示例：

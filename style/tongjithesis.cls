@@ -2,7 +2,7 @@
 % tongjithesis -- Tongji University Undergraduate Thesis Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tongjithesis}[2025/09/18 v1.1.0 Tongji University Undergraduate Thesis Class]
+\ProvidesClass{tongjithesis}[2026/03/07 v1.1.1 Tongji University Undergraduate Thesis Class]
 
 %% tongji-undergrad-thesis
 %% Copyright 2023-2025 TJ-CSCCG

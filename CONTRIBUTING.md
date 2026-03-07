@@ -1,30 +1,28 @@
-# CONTRIBUTING
+# 贡献指南 | Contributing
 
-## Contents
+## 仓库结构 | Repository Structure
 
-* source files: as a template repository, "source files" are ".cls", ".sty" and some related files with other extension names.
-* doc files: including all ".tex" files and even "main.tex", which show how to use "source files".
-* config files: These files make our development and use of templates more standardized (e.g. .gitignore, .latexmkrc, .editorconfig).
+- **源文件**：`.cls`、`.sty` 等定义模板的文件。
+- **文档文件**：`.tex` 文件（包括 `main.tex`），用于展示模板的使用方法。
+- **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
 
-## How to contribute
+## 如何贡献 | How to Contribute
 
-### How to ask for help?
+### 寻求帮助 | Asking for Help
 
-Providing conditions where people ask for help and solve problems is also part of the community. We hope to provide technique support in [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions). Read [this discussion](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/6) and get started.
+我们通过 [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions) 提供技术支持，详见[此帖](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/6)。
 
-It has to be **NOTICED** that: **DO NOT CONTACT WITH ANY CONTRIBUTOR THROUGH IM**!
+**请勿通过即时通讯工具直接联系贡献者。**
 
-### How to report a bug?
+### 反馈 Bug | Reporting a Bug
 
-You can raise a bug in the [Issues](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/issues) if a bug is confirmed.
+如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/issues) 模板提交反馈。
 
-### How to pull a request?
+### 提交 Pull Request
 
-We recommend following this workflow step by step:
-
-1. Fork this repository as the upstream repository.
-2. Clone the repository forked from remote to local.
-3. Create a new local branch as a work branch.
-4. Commit some changes to the work branch.
-5. Push the new local branch to remote with commits.
-6. Pull a request from the new remote branch to any branch of the upstream repository.
+1. Fork 本仓库。
+2. 将 Fork 后的仓库克隆到本地。
+3. 创建一个新分支进行修改。
+4. 提交更改到新分支。
+5. 将分支推送到你的 Fork 仓库。
+6. 从你的分支向本仓库发起 Pull Request。
