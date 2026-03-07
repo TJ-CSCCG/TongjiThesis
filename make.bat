@@ -24,7 +24,7 @@ if not "%~2"=="" (
 )
 
 REM LaTeXmk options
-set LATEXMK_OPT=-quiet -file-line-error -halt-on-error -interaction=nonstopmode -shell-escape -synctex=1 -recorder %ENGINE%
+set LATEXMK_OPT=-quiet -file-line-error -halt-on-error -interaction=nonstopmode -shell-escape -synctex=1 -recorder -usepretex="\listfiles" %ENGINE%
 
 REM LaTeXmk options for preview continuous mode
 set LATEXMK_OPT_PVC=%LATEXMK_OPT% -pvc

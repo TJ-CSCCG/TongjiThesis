@@ -1,4 +1,5 @@
 .DS_Store
+.env
 _out
 !figures/tongji.pdf
 

@@ -145,7 +145,7 @@ This template provides the following document class options, which can be config
 
 - `fontset=fandol`: Use Fandol font set (default)
 - `fontset=adobe`: Use Adobe font set (requires Adobe fonts installation)
-- `times=false`: Use default math font (default)
+- `times=false`: Use `newtx` package fonts (default)
 - `times=true`: Use Times New Roman font
 
 ##### Chinese Punctuation Options
@@ -212,7 +212,7 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 
 - This project originated from [YukuanHU](https://github.com/YukuanHu)'s undergraduate thesis, which was uploaded on May 24, 2019.
 - Starting May 9, 2021, [ganler](https://github.com/ganler) enhanced the functionalities (project structure and platform compatibility) based on the original project and began maintaining it.
-- As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](http://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
+- As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
 - From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 - April 2025 update, implemented key-value based class options, supporting more flexible configuration.
 

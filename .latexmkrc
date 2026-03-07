@@ -34,5 +34,6 @@ $clean_full_ext = '';
 ###################
 $max_repeat = 5;
 
-# Force directory creation if needed
-system('mkdir sections figures style bib');
+# Ensure required directories exist
+use File::Path qw(make_path);
+make_path('sections', 'figures', 'style', 'bib');

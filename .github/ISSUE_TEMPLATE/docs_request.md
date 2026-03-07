@@ -6,7 +6,7 @@ labels: 'type/docs'
 
 ## 文档不足之处 | Area
 
-<!--在对应部分打勾 | Check the relevant area-->
+在对应部分打勾 | Check the relevant area:
 
 - [ ] Overleaf 使用相关 | Overleaf usage
 - [ ] 本地编译相关 | Local compilation (配置、依赖等)
@@ -15,9 +15,10 @@ labels: 'type/docs'
 
 ## 期望内容 | Expected Content
 
-<!--描述你期望的文档内容或改进方向-->
-<!--Describe the documentation content or improvements you expect-->
+描述你期望的文档内容或改进方向。
+Describe the documentation content or improvements you expect.
 
 ## 其他信息 | Additional Context
 
-<!--其他与该建议相关的信息 | Any other relevant information-->
+其他与该建议相关的信息。
+Any other relevant information.

@@ -1,6 +1,6 @@
 ## 概要 | Summary
 
-<!--请简要描述本 PR 所做的工作 | Brief description of the changes-->
+请简要描述本 PR 所做的工作 | Brief description of the changes:
 
 -
 
@@ -12,8 +12,10 @@
 
 ## 关联 Issue | Related Issues
 
-<!--使用 "Closes #id" 关联相关 Issue，没有则留空-->
+使用 "Closes #id" 关联相关 Issue，没有则留空。
+Use "Closes #id" to link related issues, or leave empty.
 
 ## 截图 | Screenshots
 
-<!--如涉及模板输出变化，请附上编译产物截图，没有则删除本节-->
+如涉及模板输出变化，请附上编译产物截图，没有则删除本节。
+If the template output changes, attach compiled PDF screenshots. Otherwise delete this section.

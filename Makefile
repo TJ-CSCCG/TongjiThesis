@@ -69,7 +69,10 @@ endif
 # Targets
 ###################
 
-.PHONY: all pvc view wordcount clean cleanall help FORCE_MAKE
+.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE
+
+# Legacy alias
+thesis: all
 
 # Default target
 all: $(THESIS).pdf

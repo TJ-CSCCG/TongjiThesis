@@ -62,7 +62,6 @@
 % Typography and text formatting
 \RequirePackage[T1]{fontenc}
 \RequirePackage{setspace}
-\RequirePackage{enumerate}
 \RequirePackage[inline]{enumitem}
 \RequirePackage{circledsteps}
 \RequirePackage{ulem}
@@ -73,7 +72,7 @@
 \RequirePackage{graphicx}
 
 % Table of contents
-\RequirePackage[titles,subfigure]{tocloft}
+\RequirePackage[titles]{tocloft}
 
 % Mathematics
 \RequirePackage{amsmath,amsthm,amsfonts,amssymb,amscd}
@@ -503,14 +502,12 @@
 \makeatletter
 \iftongjithesis@minted
   % For minted package
-  \renewcommand{\listingscaption}{代码}
   \crefname{listing}{代码}{代码}
   \Crefname{listing}{代码}{代码}
 \fi
 \makeatother
 
 % For listings package
-\renewcommand{\lstlistingname}{代码}
 \crefname{lstlisting}{代码}{代码}
 \Crefname{lstlisting}{代码}{代码}
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}}
@@ -688,7 +685,7 @@
   \catcode`\。=\active
   \newcommand{。}{\ifmmode\text{．}\else ．\fi}
 \fi
-\makeatletter
+\makeatother
 
 % 加载用户配置文件
 \AtEndOfPackage{
