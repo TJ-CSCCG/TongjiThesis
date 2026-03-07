@@ -70,6 +70,56 @@
 
 我们建议参照[官方快速安装指南](https://tug.org/texlive/quickinstall.html)安装 TeX Live（Windows、Linux）或 MacTeX（macOS）。
 
+#### 构建项目
+
+我们推荐使用命令行构建项目，也支持通过 VS Code 的 LaTeX Workshop 插件构建。
+
+##### 通过命令行
+
+###### Makefile (Linux/macOS)
+
+```shell
+make all                # compile main.pdf
+make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+make clean              # rm intermediate files
+make cleanall           # rm all intermediate files (including .pdf)
+make wordcount          # wordcount
+```
+
+###### Batchfile (Windows)
+
+```bat
+.\make.bat                # the same to "make.bat thesis"
+.\make.bat thesis         # compile main.pdf
+.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+.\make.bat clean          # clean all work files by latexmk -c
+.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat wordcount      # wordcount
+.\make.bat help           # read the manual
+```
+
+<details><summary><b>通过 VS Code 及 LaTeX Workshop 插件</b></summary>
+
+在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
+
+因为我们已经在 `.vscode/settings.json` 中配置了 LaTeX Workshop 插件，所以您只需要：
+
+- 选中 `main.tex` 文件；
+- 点击左侧边栏中带有 $\TeX$ 图标的按钮；
+- 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
+
+或者，LaTeX Workshop 插件会在您保存文件时自动编译。
+
+</details>
+
+<details><summary><b>在 Docker 中使用</b></summary>
+
+详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
+
+</details>
+
+### 模板配置
+
 #### 文档类选项
 
 本模板提供以下文档类选项，可以在 `main.tex` 中进行配置：
@@ -150,57 +200,9 @@
 
 </details>
 
-#### 构建项目
-
-我们推荐使用命令行构建项目，也支持通过 VS Code 的 LaTeX Workshop 插件构建。
-
-##### 通过命令行
-
-###### Makefile (Linux/macOS)
-
-```shell
-make all                # compile main.pdf
-make ENGINE=$ENGINE all # use $ENGINE(where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-make clean              # rm intermediate files
-make cleanall           # rm all intermediate files (including .pdf)
-make wordcount          # wordcount
-```
-
-###### Batchfile (Windows)
-
-```bat
-.\make.bat                # the same to "make.bat thesis"
-.\make.bat thesis         # compile main.pdf
-.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-.\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
-.\make.bat wordcount      # wordcount
-.\make.bat help           # read the manual
-```
-
-<details><summary><b>通过 VS Code 及 LaTeX Workshop 插件</b></summary>
-
-在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
-
-因为我们已经在 `.vscode/settings.json` 中配置了 LaTeX Workshop 插件，所以您只需要：
-
-- 选中 `main.tex` 文件；
-- 点击左侧边栏中带有 $\TeX$ 图标的按钮；
-- 点击 `Build LaTeX project` 列表中的 `Recipe: latexmk (xelatex)` 编译 `.pdf` 文件。
-
-或者，LaTeX Workshop 插件会在您保存文件时自动编译。
-
-</details>
-
-<details><summary><b>在 Docker 中使用</b></summary>
-
-详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
-
-</details>
-
 ## 如何为该项目贡献代码？
 
-还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
+详见[贡献指南](CONTRIBUTING.md#提交-pull-request)。
 
 ## 开源协议
 

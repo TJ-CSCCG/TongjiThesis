@@ -1,25 +1,23 @@
 ---
-name: Docs 反馈
-about: 通过该 Issue 模板反馈目前 tongji-undergrad-thesis 文档的不足之处
+name: Docs 反馈 | Documentation Feedback
+about: 反馈文档的不足或改进建议 | Suggest documentation improvements
 labels: 'type/docs'
 ---
 
-### 文档不足之处
+## 文档不足之处 | Area
 
-<!--在你认为存在缺陷的部分打勾-->
+<!--在对应部分打勾 | Check the relevant area-->
 
-* 平台相关
-  * [ ] 在线平台：Overleaf
-  * [ ] 本地：MacOS / Windows / 各种 Linux 发行版
-* 使用过程
-  * [ ] 模版编译（编译配置、依赖安装等）
-  * [ ] 最佳实践（LaTeX 基础知识、模版使用教学、工作流等）
-* [ ] 不，我需要其他文档：_________
+- [ ] Overleaf 使用相关 | Overleaf usage
+- [ ] 本地编译相关 | Local compilation (配置、依赖等)
+- [ ] 模板使用教学 | Usage guide (LaTeX 基础、最佳实践等)
+- [ ] 其他 | Other：______
 
-### 对文档的期望
+## 期望内容 | Expected Content
 
-<!--如果可以的话，还希望你能够在下方提供你期望中的文档大纲-->
+<!--描述你期望的文档内容或改进方向-->
+<!--Describe the documentation content or improvements you expect-->
 
-### 其他信息
+## 其他信息 | Additional Context
 
-<!--这里用于写有关于上述 docs 的其他信息-->
+<!--其他与该建议相关的信息 | Any other relevant information-->

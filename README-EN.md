@@ -70,6 +70,56 @@ The project is configured with GitHub Actions in `.github/workflows/*.yaml`. Pus
 
 We recommend installing TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
 
+#### Building the Project
+
+We recommend building the project via the command line. Alternatively, you can use the VS Code LaTeX Workshop plugin.
+
+##### Command Line
+
+###### Makefile (Linux/macOS)
+
+```shell
+make all                # compile main.pdf
+make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+make clean              # remove intermediate files
+make cleanall           # remove all intermediate files (including .pdf)
+make wordcount          # word count
+```
+
+###### Batchfile (Windows)
+
+```bat
+.\make.bat                # the same to "make.bat thesis"
+.\make.bat thesis         # compile main.pdf
+.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
+.\make.bat clean          # clean all work files by latexmk -c
+.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat wordcount      # wordcount
+.\make.bat help           # read the manual
+```
+
+<details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
+
+Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `tongji-undergrad-thesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
+
+Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
+
+- Select the `main.tex` file;
+- Click the button with the $\TeX$ icon on the left sidebar;
+- Click `Recipe: latexmk (xelatex)` from the `Build LaTeX project` list to compile the `.pdf` file.
+
+Alternatively, the LaTeX Workshop plugin will automatically compile the file when you save it.
+
+</details>
+
+<details><summary><b>Using in Docker</b></summary>
+
+For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
+
+</details>
+
+### Template Configuration
+
 #### Document Class Options
 
 This template provides the following document class options, which can be configured in `main.tex`:
@@ -150,57 +200,9 @@ You can add a redirection to the Python path of the `minted` package in the `mai
 
 </details>
 
-#### Building the Project
-
-We recommend building the project via the command line. Alternatively, you can use the VS Code LaTeX Workshop plugin.
-
-##### Command Line
-
-###### Makefile (Linux/macOS)
-
-```shell
-make all                # compile main.pdf
-make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-make clean              # remove intermediate files
-make cleanall           # remove all intermediate files (including .pdf)
-make wordcount          # word count
-```
-
-###### Batchfile (Windows)
-
-```bat
-.\make.bat                # the same to "make.bat thesis"
-.\make.bat thesis         # compile main.pdf
-.\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
-.\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
-.\make.bat wordcount      # wordcount
-.\make.bat help           # read the manual
-```
-
-<details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
-
-Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `tongji-undergrad-thesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
-
-Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
-
-- Select the `main.tex` file;
-- Click the button with the $\TeX$ icon on the left sidebar;
-- Click `Recipe: latexmk (xelatex)` from the `Build LaTeX project` list to compile the `.pdf` file.
-
-Alternatively, the LaTeX Workshop plugin will automatically compile the file when you save it.
-
-</details>
-
-<details><summary><b>Using in Docker</b></summary>
-
-For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
-
-</details>
-
 ## How to contribute to this project?
 
-Please refer to [How to pull request](CONTRIBUTING.md/#how-to-pull-request).
+Please refer to the [Contributing Guide](CONTRIBUTING.md#提交-pull-request).
 
 ## Open Source License
 
