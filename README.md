@@ -186,7 +186,7 @@ make wordcount          # wordcount
 ]{tongjithesis}
 ```
 
-这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。您可以在模板文档的 1.2.1 小节 "测试生僻字" 中查看具体效果。
+这样修改后，LaTeX 将使用 Adobe 字体集来渲染文档。
 
 **注意**：将 Adobe 字体文件放置在项目根目录下并在 `main.tex` 中指定字体路径的方式并不总是有效。因此，我们建议您将 Adobe 字体文件安装到系统字体目录中。经测试，在 Overleaf 项目的根目录下放置 Adobe 字体文件，并只在使用 LuaLaTeX 编译的方式是有效的，但这种方式可能会导致编译速度变慢。
 
