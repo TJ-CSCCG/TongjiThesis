@@ -414,12 +414,6 @@ jobs:
               --repo "$GITHUB_REPOSITORY" \
               --name all-compiled-documents \
               --dir compiled-pdfs 2>/dev/null; then
-            # Prefix with example- for clarity in release assets
-            cd compiled-pdfs
-            for pdf in *.pdf; do
-              [ -f "$pdf" ] && [[ "$pdf" != example-* ]] && mv "$pdf" "example-$pdf"
-            done
-            cd ..
             echo "Downloaded PDFs:"
             ls -la compiled-pdfs/*.pdf
           else
@@ -474,7 +468,7 @@ jobs:
             ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
             tongjithesis-source-v${{ env.PACKAGE_VERSION }}.tar.gz
             tongjithesis-source-v${{ env.PACKAGE_VERSION }}.zip
-            compiled-pdfs/example-*.pdf
+            compiled-pdfs/tongjithesis-*.pdf
           draft: true
           prerelease: false
           fail_on_unmatched_files: false
