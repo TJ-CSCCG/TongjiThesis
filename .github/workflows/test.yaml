@@ -152,14 +152,18 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv main.pdf ${{ runner.os }}${{ matrix.compiler }}.pdf
+        shell: bash
+        run: |
+          OS=$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')
+          COMPILER=$(echo "${{ matrix.compiler }}" | sed 's/^-//')
+          mv main.pdf "tongjithesis-${OS}-${COMPILER}.pdf"
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-${{ runner.os }}-${{ matrix.compiler }}
-          path: ${{ runner.os }}${{ matrix.compiler }}.pdf
+          path: tongjithesis-*.pdf
           retention-days: 30
 
   # Option variants: test minted=false and bibtex (Linux-only, xelatex-only)
@@ -230,14 +234,14 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv main.pdf linux-xelatex-${{ matrix.variant }}.pdf
+        run: mv main.pdf tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-variant-${{ matrix.variant }}
-          path: linux-xelatex-${{ matrix.variant }}.pdf
+          path: tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
           retention-days: 30
 
   # Summary job to check all builds completed successfully
