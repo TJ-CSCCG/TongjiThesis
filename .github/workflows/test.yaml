@@ -4,7 +4,7 @@ on:
       - master
       - proposal
       - dev
-      - fix-ci
+      - fix/**
   pull_request:
     branches:
       - master
@@ -125,7 +125,6 @@ jobs:
         env:
           SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
-
       - name: Compile LaTeX document (Unix)
         if: runner.os != 'Windows'
         run: |
@@ -136,15 +135,20 @@ jobs:
         run: |
           .\make.bat thesis ${{ matrix.compiler }}
 
-      - name: Show log on failure
-        if: failure()
+      - name: Show log on failure (Unix)
+        if: failure() && runner.os != 'Windows'
         run: cat main.log
 
-      - name: Rename and upload PDF
-        run: |
-          mv main.pdf ${{ runner.os }}${{ matrix.compiler }}.pdf
+      - name: Show log on failure (Windows)
+        if: failure() && runner.os == 'Windows'
+        run: Get-Content main.log
+
+      - name: Rename PDF
+        if: success()
+        run: mv main.pdf ${{ runner.os }}${{ matrix.compiler }}.pdf
 
       - name: Upload PDF
+        if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-${{ runner.os }}-${{ matrix.compiler }}
@@ -182,7 +186,6 @@ jobs:
         env:
           SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
-
       - name: Configure minted=false variant
         if: matrix.variant == 'minted-false'
         run: |
@@ -218,11 +221,12 @@ jobs:
         if: failure()
         run: cat main.log
 
-      - name: Rename and upload PDF
-        run: |
-          mv main.pdf linux-xelatex-${{ matrix.variant }}.pdf
+      - name: Rename PDF
+        if: success()
+        run: mv main.pdf linux-xelatex-${{ matrix.variant }}.pdf
 
       - name: Upload PDF
+        if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-variant-${{ matrix.variant }}
@@ -250,8 +254,8 @@ jobs:
   # Collect all compiled PDFs into a single artifact
   collect-pdfs:
     runs-on: ubuntu-latest
-    needs: test-summary
-    if: needs.test-summary.result == 'success'
+    needs: [build, build-variants]
+    if: always() && !cancelled()
     steps:
       - name: Download all PDF artifacts
         uses: actions/download-artifact@v8
