@@ -4,31 +4,10 @@
   fontset=fandol,
   times=false,
   minted=true,
+  biblatex=true,
 ]{tongjithesis}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 引用文献的设置：请选择以下两种方式之一（A或B）
-% Citation setup: Please choose ONE method (A or B)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% A. 使用 biblatex（推荐，功能更强大）
-% A. Using biblatex (recommended, more powerful)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[
-  backend=biber,      % 使用biber作为后端处理引擎
-  style=gb7714-2015,  % 使用符合GB/T 7714-2015标准的引用样式
-  natbib=true,        % 兼容natbib命令
-]{biblatex}
-\addbibresource{bib/note.bib} % 指定参考文献数据库文件
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% B. 使用 bibtex 配合 gbt7714 宏包（传统方式）
-% B. Using bibtex with gbt7714 package (traditional method)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \usepackage[sort&compress]{gbt7714}  % 加载gbt7714宏包，支持排序和压缩引用编号
-% \bibliographystyle{gbt7714-numerical} % 设置符合GB/T 7714标准的数字式引用样式
-% \setlength{\bibsep}{3pt} % 设置参考文献条目之间的间距
+\tjbibresource{bib/note.bib}
 
 \begin{document}
 
@@ -39,34 +18,20 @@
 \input{sections/00_abstract}
 
 \clearpage
-\tableofcontents   % 放置目录
+\tableofcontents
 \cleardoublepage
 
 \pagestyle{mainstyle}
 \input{sections/01_intro}
-\clearpage
 \input{sections/02_math}
-\clearpage
 \input{sections/03_reference}
-\clearpage
 \input{sections/04_float}
-\clearpage
 \input{sections/05_conclusion}
-\clearpage
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 参考文献列表生成（选择与上方相同的选项A或B）
-% Reference list generation (choose the same option A or B as above)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makereferences
 
-% A. 如果使用biblatex，取消下面一行的注释
-% A. If using biblatex, uncomment the line below
-\printbibliography[heading=bibintoc,title=参考文献]
-
-% B. 如果使用bibtex，取消下面的注释
-% B. If using bibtex, uncomment the lines below
-% \addcontentsline{toc}{section}{参考文献}  % 将参考文献项加入目录
-% \bibliography{bib/note.bib}  % 指定参考文献数据库文件
+\appendix
+\input{sections/appendix}
 
 \clearpage
 \input{sections/ack}

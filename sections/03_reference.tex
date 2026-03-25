@@ -1,15 +1,23 @@
-\section{引用}\label{sec:reference}
+\section{引用与注释}\label{sec:reference}
 
-在本节（\cref{sec:reference}）中，我们将探讨如何在 \LaTeX\ 中进行参考文献引用和交叉引用，以便于读者查阅文献和方便地引用文档中的其他部分。
+本节介绍参考文献引用、脚注和交叉引用的使用方法。
 
-\subsection{参考文献的引用}
+\subsection{参考文献引用}
 
 在学术论文或科技报告中，通常需要引用相关文献以支持观点或论证。为了方便读者查阅，我们需要在论文中标注参考文献。在 \LaTeX\ 中，可使用 \verb|\cite| 命令引用参考文献。参考文献的外观应符合国标 GB/T 7714，本模板提供两种方式：
 \begin{enumerate}
     \item 使用 \BibTeX{} 配合 \pkg{gbt7714} 宏包
     \item 使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包
 \end{enumerate}
-两种方式都能实现符合国标的参考文献格式。
+两种方式都能实现符合国标的参考文献格式。可通过文档类选项 \texttt{biblatex=true}（默认）或 \texttt{biblatex=false} 进行切换。无论选择哪种方式，均使用 \cs{tjbibresource} 命令在导言区指定参考文献数据库文件，使用 \cs{makereferences} 命令在正文中输出参考文献列表：
+
+\begin{verbatim}
+\tjbibresource{bib/references.bib}  % 导言区指定 .bib 文件
+...
+\makereferences                     % 正文中输出参考文献
+\end{verbatim}
+
+如需指定多个 \texttt{.bib} 文件，可用逗号分隔：\verb|\tjbibresource{file1.bib,file2.bib}|。
 
 在正文中，可使用 \verb|\cite| 命令引用参考文献。例如：
 

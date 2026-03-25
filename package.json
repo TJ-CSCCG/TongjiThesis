@@ -1,9 +1,9 @@
 {
   "name": "tongji-undergrad-thesis",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "LaTeX template for Tongji University undergraduate thesis",
-  "author": "R. Lin",
-  "email": "rizhonglin@gmail.com",
+  "author": "TJ-CSCCG",
+  "email": "TJ_CSCCG@163.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/TJ-CSCCG/tongji-undergrad-thesis"

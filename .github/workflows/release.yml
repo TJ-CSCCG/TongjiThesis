@@ -40,8 +40,8 @@ jobs:
       - name: Extract package metadata
         id: metadata
         run: |
-          VERSION=$(jq -r '.version // "1.1.0"' package.json)
-          AUTHOR=$(jq -r '.author // "R. Lin"' package.json)
+          VERSION=$(jq -r '.version // "1.1.2"' package.json)
+          AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)
           YEAR=$(date +%Y)
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -311,11 +311,11 @@ jobs:
           # Create archives in /tmp to avoid "file changed as we read it"
           tar -czf "/tmp/tongjithesis-source-v${PACKAGE_VERSION}.tar.gz" $TAR_EXCLUDES .
 
-          # Build zip exclude flags
-          ZIP_EXCLUDES=""
-          for e in "${EXCLUDES[@]}"; do ZIP_EXCLUDES="$ZIP_EXCLUDES -x './$e' -x './$e/*'"; done
+          # Build zip exclude flags as array
+          ZIP_EXCLUDES=()
+          for e in "${EXCLUDES[@]}"; do ZIP_EXCLUDES+=(-x "./$e" -x "./$e/*"); done
 
-          eval zip -r "/tmp/tongjithesis-source-v${PACKAGE_VERSION}.zip" . $ZIP_EXCLUDES
+          zip -r "/tmp/tongjithesis-source-v${PACKAGE_VERSION}.zip" . "${ZIP_EXCLUDES[@]}"
 
           # Move back to workspace
           mv /tmp/tongjithesis-source-v${PACKAGE_VERSION}.* .

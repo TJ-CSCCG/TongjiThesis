@@ -131,7 +131,10 @@ make wordcount          # wordcount
   fontset=fandol,    % 使用的字体集，默认为 fandol
   times=false,       % 是否使用 Times New Roman 字体，默认为 false
   minted=true,       % 是否使用 minted 包进行代码高亮，默认为 true
+  biblatex=true,     % 是否使用 biblatex 管理参考文献，默认为 true
 ]{tongjithesis}
+
+\tjbibresource{bib/note.bib}  % 指定参考文献数据库文件（支持多文件，逗号分隔）
 ```
 
 <details><summary><b>各选项详细说明</b></summary>
@@ -152,6 +155,13 @@ make wordcount          # wordcount
 
 - `fullwidthstop=false`：保持中文句号"。"不变（默认）
 - `fullwidthstop=true`：将中文句号"。"替换为西文句号"．"
+
+##### 参考文献选项
+
+- `biblatex=true`：使用 `biblatex`（biber 后端）管理参考文献（默认）
+- `biblatex=false`：使用 `bibtex` 配合 `gbt7714` 宏包管理参考文献
+
+使用 `\tjbibresource{file1.bib,file2.bib}` 指定参考文献数据库文件，使用 `\makereferences` 输出参考文献列表。
 
 </details>
 
