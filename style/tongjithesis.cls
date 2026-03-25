@@ -38,6 +38,8 @@
 \DeclareBoolOption[false]{times}
 % Define minted option (default is true)
 \DeclareBoolOption[true]{minted}
+% Define biblatex option (default is true)
+\DeclareBoolOption[true]{biblatex}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexart}}
 \ProcessKeyvalOptions*
@@ -203,6 +205,48 @@
 % Caption customization
 \DeclareCaptionLabelSeparator{twospace}{\ ~}
 \RequirePackage[font=small,labelsep=twospace]{caption}
+
+% ==========================================
+% Bibliography Configuration
+% ==========================================
+\makeatletter
+\iftongjithesis@biblatex
+  \RequirePackage[
+    backend=biber,
+    style=gb7714-2015,
+    natbib=true,
+  ]{biblatex}
+\else
+  \RequirePackage[sort&compress]{gbt7714}
+  \bibliographystyle{gbt7714-numerical}
+  \setlength{\bibsep}{3pt}
+\fi
+
+% \tjbibresource{file1,file2,...} — register bib files (preamble only)
+\newcommand{\tj@bibfiles}{}
+\iftongjithesis@biblatex
+  \newcommand{\tjbibresource}[1]{%
+    \def\do##1{\addbibresource{##1}}%
+    \docsvlist{#1}%
+  }
+\else
+  \newcommand{\tjbibresource}[1]{%
+    \def\tj@bibfiles{#1}%
+  }
+\fi
+
+% \makereferences — output bibliography section
+\iftongjithesis@biblatex
+  \newcommand{\makereferences}{%
+    \printbibliography[heading=bibintoc,title=参考文献]%
+  }
+\else
+  \newcommand{\makereferences}{%
+    \addcontentsline{toc}{section}{参考文献}%
+    \bibliography{\tj@bibfiles}%
+  }
+\fi
+\makeatother
 
 % ==========================================
 % General Configurations

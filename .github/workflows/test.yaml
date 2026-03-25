@@ -105,7 +105,7 @@ env:
     zhnumber
 
 jobs:
-  # Cross-platform build: default options (minted=true, biblatex)
+  # Cross-platform build: default options (minted=true, biblatex=true)
   build:
     strategy:
       fail-fast: false
@@ -174,7 +174,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [minted-false, bibtex]
+        include:
+          - variant: minted-false
+            pygments: false
+          - variant: bibtex
+            pygments: true
+          - variant: minimal
+            pygments: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -182,13 +188,13 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install Python for minted
-        if: matrix.variant != 'minted-false'
+        if: matrix.pygments
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
       - name: Install Pygments for minted
-        if: matrix.variant != 'minted-false'
+        if: matrix.pygments
         run: pip install Pygments
 
       - name: Install TeX Live
@@ -208,21 +214,13 @@ jobs:
       - name: Configure bibtex variant
         if: matrix.variant == 'bibtex'
         run: |
-          # Comment out biblatex setup
-          sed -i 's/^\\usepackage\[$/% \\usepackage[/' main.tex
-          sed -i 's/^  backend=biber,/% backend=biber,/' main.tex
-          sed -i 's/^  style=gb7714-2015,/% style=gb7714-2015,/' main.tex
-          sed -i 's/^  natbib=true,/% natbib=true,/' main.tex
-          sed -i 's/^]{biblatex}/% ]{biblatex}/' main.tex
-          sed -i 's/^\\addbibresource/% \\addbibresource/' main.tex
-          sed -i 's/^\\printbibliography/% \\printbibliography/' main.tex
+          sed -i 's/biblatex=true/biblatex=false/' main.tex
 
-          # Uncomment bibtex setup
-          sed -i 's/^% \\usepackage\[sort&compress\]{gbt7714}/\\usepackage[sort\&compress]{gbt7714}/' main.tex
-          sed -i 's/^% \\bibliographystyle{gbt7714-numerical}/\\bibliographystyle{gbt7714-numerical}/' main.tex
-          sed -i 's/^% \\setlength{\\bibsep}{3pt}/\\setlength{\\bibsep}{3pt}/' main.tex
-          sed -i 's/^% \\addcontentsline{toc}{section}{参考文献}/\\addcontentsline{toc}{section}{参考文献}/' main.tex
-          sed -i 's/^% \\bibliography{bib\/note.bib}/\\bibliography{bib\/note.bib}/' main.tex
+      - name: Configure minimal variant (no minted, no biblatex)
+        if: matrix.variant == 'minimal'
+        run: |
+          sed -i 's/minted=true/minted=false/' main.tex
+          sed -i 's/biblatex=true/biblatex=false/' main.tex
 
       - name: Show main.tex diff
         run: git diff main.tex

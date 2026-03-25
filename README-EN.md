@@ -131,7 +131,10 @@ This template provides the following document class options, which can be config
   fontset=fandol,    % Font set to use, default is fandol
   times=false,       % Whether to use Times New Roman font, default is false
   minted=true,       % Whether to use the minted package for code highlighting, default is true
+  biblatex=true,     % Whether to use biblatex for bibliography management, default is true
 ]{tongjithesis}
+
+\tjbibresource{bib/note.bib}  % Specify bib files (supports multiple, comma-separated)
 ```
 
 <details><summary><b>Detailed option descriptions</b></summary>
@@ -152,6 +155,13 @@ This template provides the following document class options, which can be config
 
 - `fullwidthstop=false`: Keep Chinese period "。" unchanged (default)
 - `fullwidthstop=true`: Replace Chinese period "。" with Western-style period "．"
+
+##### Bibliography Options
+
+- `biblatex=true`: Use `biblatex` (biber backend) for bibliography management (default)
+- `biblatex=false`: Use `bibtex` with `gbt7714` package for bibliography management
+
+Use `\tjbibresource{file1.bib,file2.bib}` to specify bib files, and `\makereferences` to output the bibliography.
 
 </details>
 
