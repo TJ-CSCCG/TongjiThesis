@@ -13,6 +13,8 @@ on:
       - "figures/**"
       - ".github/workflows/release.yml"
       - "package.json"
+    tags:
+      - "v*"  # Also trigger on version tags (paths filter ignored for tags)
   pull_request:
     branches: [master, dev]
     paths:
