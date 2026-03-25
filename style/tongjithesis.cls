@@ -288,53 +288,64 @@
 \tjbindinglinetrue
 
 % Helper macro: draw binding line column at a given x position
-% fancyput reference point is 1in (2.54cm) from page edges.
-% x=-0.8cm → 2.54-0.8 = 1.74cm from left; y=-N → 27.16-N cm from bottom.
+% Coordinates empirically matched to the official Tongji thesis template.
+% eso-pic \AtPageLowerLeft origin: (0,0) at bottom-left of A4 page.
+% y_from_bottom = 26.8 - N, where N is the original fancyput offset.
+% Positions pixel-measured from official template (毕业设计(论文)模板(理工类)-可编辑版.pdf)
+% 42 marks at 0.48cm intervals, spanning 6.1–24.4cm from top (23.6–5.3cm from bottom)
+% 装 at 12.3cm from top (17.4cm from bottom), 订 at 15.2cm (14.5cm), 线 at 18.1cm (11.6cm)
 \newcommand{\tj@bindingcolumn}[1]{%
-  \put(\LenToUnit{#1},\LenToUnit{22.86cm}){\usebox{\tjbindpipe}}%  y=-4.3
-  \put(\LenToUnit{#1},\LenToUnit{22.26cm}){\usebox{\tjbindpipe}}%  y=-4.9
-  \put(\LenToUnit{#1},\LenToUnit{21.66cm}){\usebox{\tjbindpipe}}%  y=-5.5
-  \put(\LenToUnit{#1},\LenToUnit{21.06cm}){\usebox{\tjbindpipe}}%  y=-6.1
-  \put(\LenToUnit{#1},\LenToUnit{20.46cm}){\usebox{\tjbindpipe}}%  y=-6.7
-  \put(\LenToUnit{#1},\LenToUnit{19.86cm}){\usebox{\tjbindpipe}}%  y=-7.3
-  \put(\LenToUnit{#1},\LenToUnit{19.26cm}){\usebox{\tjbindpipe}}%  y=-7.9
-  \put(\LenToUnit{#1},\LenToUnit{18.66cm}){\usebox{\tjbindpipe}}%  y=-8.5
-  \put(\LenToUnit{#1},\LenToUnit{18.06cm}){\usebox{\tjbindpipe}}%  y=-9.1
-  \put(\LenToUnit{#1},\LenToUnit{17.46cm}){\usebox{\tjbindpipe}}%  y=-9.7
-  \put(\LenToUnit{#1},\LenToUnit{16.86cm}){\usebox{\tjbindZ}}%     y=-10.3
-  \put(\LenToUnit{#1},\LenToUnit{16.26cm}){\usebox{\tjbindpipe}}%  y=-10.9
-  \put(\LenToUnit{#1},\LenToUnit{15.66cm}){\usebox{\tjbindpipe}}%  y=-11.5
-  \put(\LenToUnit{#1},\LenToUnit{15.06cm}){\usebox{\tjbindpipe}}%  y=-12.1
-  \put(\LenToUnit{#1},\LenToUnit{14.46cm}){\usebox{\tjbindpipe}}%  y=-12.7
-  \put(\LenToUnit{#1},\LenToUnit{13.86cm}){\usebox{\tjbindpipe}}%  y=-13.3
-  \put(\LenToUnit{#1},\LenToUnit{13.26cm}){\usebox{\tjbindD}}%     y=-13.9
-  \put(\LenToUnit{#1},\LenToUnit{12.66cm}){\usebox{\tjbindpipe}}%  y=-14.5
-  \put(\LenToUnit{#1},\LenToUnit{12.06cm}){\usebox{\tjbindpipe}}%  y=-15.1
-  \put(\LenToUnit{#1},\LenToUnit{11.46cm}){\usebox{\tjbindpipe}}%  y=-15.7
-  \put(\LenToUnit{#1},\LenToUnit{10.86cm}){\usebox{\tjbindpipe}}%  y=-16.3
-  \put(\LenToUnit{#1},\LenToUnit{10.26cm}){\usebox{\tjbindpipe}}%  y=-16.9
-  \put(\LenToUnit{#1},\LenToUnit{9.66cm}){\usebox{\tjbindX}}%      y=-17.5
-  \put(\LenToUnit{#1},\LenToUnit{9.06cm}){\usebox{\tjbindpipe}}%   y=-18.1
-  \put(\LenToUnit{#1},\LenToUnit{8.46cm}){\usebox{\tjbindpipe}}%   y=-18.7
-  \put(\LenToUnit{#1},\LenToUnit{7.86cm}){\usebox{\tjbindpipe}}%   y=-19.3
-  \put(\LenToUnit{#1},\LenToUnit{7.26cm}){\usebox{\tjbindpipe}}%   y=-19.9
-  \put(\LenToUnit{#1},\LenToUnit{6.66cm}){\usebox{\tjbindpipe}}%   y=-20.5
-  \put(\LenToUnit{#1},\LenToUnit{6.06cm}){\usebox{\tjbindpipe}}%   y=-21.1
-  \put(\LenToUnit{#1},\LenToUnit{5.46cm}){\usebox{\tjbindpipe}}%   y=-21.7
-  \put(\LenToUnit{#1},\LenToUnit{4.86cm}){\usebox{\tjbindpipe}}%   y=-22.3
-  \put(\LenToUnit{#1},\LenToUnit{4.26cm}){\usebox{\tjbindpipe}}%   y=-22.9
-  \put(\LenToUnit{#1},\LenToUnit{3.66cm}){\usebox{\tjbindpipe}}%   y=-23.5
+  \put(\LenToUnit{#1},\LenToUnit{23.60cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{23.12cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{22.65cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{22.16cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{21.68cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{21.20cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{20.72cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{20.24cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{19.76cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{19.29cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{18.80cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{18.32cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{17.84cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{17.37cm}){\usebox{\tjbindZ}}%
+  \put(\LenToUnit{#1},\LenToUnit{16.88cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{16.40cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{15.92cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{15.44cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{14.96cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{14.50cm}){\usebox{\tjbindD}}%
+  \put(\LenToUnit{#1},\LenToUnit{14.00cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{13.52cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{13.04cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{12.56cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{12.07cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{11.60cm}){\usebox{\tjbindX}}%
+  \put(\LenToUnit{#1},\LenToUnit{11.12cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{10.63cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{10.15cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{9.68cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{9.20cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{8.71cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{8.24cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{7.76cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{7.27cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{6.79cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{6.32cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{5.84cm}){\usebox{\tjbindpipe}}%
+  \put(\LenToUnit{#1},\LenToUnit{5.35cm}){\usebox{\tjbindpipe}}%
 }
 
-% Twoside even page: binding on right side at 21 - 1.74 = 19.26cm
+% Oneside: x=1.7cm from left edge (measured from official template, adjusted for box width)
+% Twoside even page: binding on right side at 21 - 1.7 = 19.3cm
 \@ifclasswith{tongjithesis}{twoside}{%
   \AddToShipoutPictureBG{%
     \iftjbindingline
       \AtPageLowerLeft{%
         \ifodd\value{page}%
-          \tj@bindingcolumn{1.74cm}%
+          \tj@bindingcolumn{1.7cm}%
         \else
-          \tj@bindingcolumn{19.26cm}%
+          \tj@bindingcolumn{19.3cm}%
         \fi
       }%
     \fi
@@ -343,7 +354,7 @@
   \AddToShipoutPictureBG{%
     \iftjbindingline
       \AtPageLowerLeft{%
-        \tj@bindingcolumn{1.74cm}%
+        \tj@bindingcolumn{1.7cm}%
       }%
     \fi
   }%
