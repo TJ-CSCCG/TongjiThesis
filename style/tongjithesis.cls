@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tongjithesis -- Tongji University Undergraduate Thesis Template
+% tongjithesis -- Tongji University Thesis Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tongjithesis}[2026/03/25 v1.1.2 Tongji University Undergraduate Thesis Class]
+\ProvidesClass{tongjithesis}[2026/03/25 v1.2.0 Tongji University Thesis Class]
 
 %% tongji-undergrad-thesis
 %% Copyright 2023-2026 TJ-CSCCG
@@ -40,16 +40,27 @@
 \DeclareBoolOption[true]{minted}
 % Define biblatex option (default is true)
 \DeclareBoolOption[true]{biblatex}
+% Define degree option: bachelor (default), master, doctor
+\DeclareStringOption[bachelor]{degree}
 
-\DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexart}}
+\DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
+
+% Validate type option and set boolean flags
+\RequirePackage{etoolbox}
+\newif\iftongjithesis@bachelor
+\expandafter\ifstrequal\expandafter{\tongjithesis@degree}{bachelor}{%
+  \tongjithesis@bachelortrue
+}{%
+  \ClassWarning{tongjithesis}{type=\tongjithesis@degree\space is reserved for future use. Falling back to bachelor format}%
+  \tongjithesis@bachelortrue
+}
 
 % ==========================================
 % Class Loading
 % ==========================================
-% 加载 ctexart 类，有关该类简单说明，see https://www.overleaf.com/learn/latex/Chinese
-% 该类提供包括但不限于 \heiti \zihao 等指令
-\LoadClass[UTF8,a4paper,zihao=5]{ctexart}
+% 加载 ctexbook 类
+\LoadClass[UTF8,a4paper,zihao=5]{ctexbook}
 
 % ==========================================
 % Formatting Constants (官方模板规范)
@@ -64,15 +75,18 @@
 \newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
 \newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
 \newcommand{\tjlinespread}{1.5}               % 全文行距倍数（≈18磅 at 五号字）
-% Header text
+% Header and cover text
 \newcommand{\tjheadertext}{毕业设计（论文）}
+\makeatletter
+\newcommand{\tj@covertype}{本科毕业设计（论文）}
+\makeatother
 
 % ==========================================
 % Required Packages
 % ==========================================
 % Page layout
 \setlength{\headheight}{43pt}
-\RequirePackage[a4paper,top=4.2cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+\RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{eso-pic}
@@ -84,9 +98,8 @@
 \RequirePackage{circledsteps}
 \RequirePackage{ulem}
 \RequirePackage{calc}
-\RequirePackage{etoolbox}
+\RequirePackage{ifthen}
 \RequirePackage{hologo}
-\RequirePackage[super,negative]{nth}
 \RequirePackage{graphicx}
 
 % Table of contents
@@ -110,13 +123,10 @@
 \RequirePackage{multirow}
 \RequirePackage{array}
 \RequirePackage{booktabs}
-\RequirePackage{dcolumn}
 \RequirePackage{longtable}
 \RequirePackage{threeparttable}
 \RequirePackage{threeparttablex}
 \RequirePackage{subcaption}
-\RequirePackage{cases}
-\RequirePackage{extarrows}
 
 % Algorithms and code listings
 \RequirePackage{algorithm}
@@ -158,7 +168,7 @@
 % Conditionally load minted package (optional)
 \makeatletter
 \iftongjithesis@minted
-  \RequirePackage[section]{minted}
+  \RequirePackage[chapter]{minted}
   \setminted{linenos,
     bgcolor=bg,
     fontsize=\small,
@@ -166,7 +176,7 @@
     mathescape,
     escapeinside=||}
   \renewcommand{\listingscaption}{代码}
-  
+
   % When using minted, DO NOT redefine the listing environment
   % It's already defined by the minted package
 \else
@@ -176,14 +186,14 @@
   }{%
     \end{figure}%
   }
-  
+
   % Define a fake minted environment that forwards to listings
   \newenvironment{minted}[2][]{%
     \begin{lstlisting}[language=#2,#1]%
   }{%
     \end{lstlisting}%
   }
-  
+
   % Define inputminted command
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
 \fi
@@ -251,14 +261,14 @@
   }
 \fi
 
-% \makereferences — output bibliography section
+% \makereferences — output bibliography chapter
 \iftongjithesis@biblatex
   \newcommand{\makereferences}{%
     \printbibliography[heading=bibintoc,title=参考文献]%
   }
 \else
   \newcommand{\makereferences}{%
-    \addcontentsline{toc}{section}{参考文献}%
+    \addcontentsline{toc}{chapter}{参考文献}%
     \bibliography{\tj@bibfiles}%
   }
 \fi
@@ -306,10 +316,6 @@
 % Helper macro: draw binding line column at a given x position
 % Coordinates empirically matched to the official Tongji thesis template.
 % eso-pic \AtPageLowerLeft origin: (0,0) at bottom-left of A4 page.
-% y_from_bottom = 26.8 - N, where N is the original fancyput offset.
-% Positions pixel-measured from official template (毕业设计(论文)模板(理工类)-可编辑版.pdf)
-% 42 marks at 0.48cm intervals, spanning 6.1–24.4cm from top (23.6–5.3cm from bottom)
-% 装 at 12.3cm from top (17.4cm from bottom), 订 at 15.2cm (14.5cm), 线 at 18.1cm (11.6cm)
 \newcommand{\tj@bindingcolumn}[1]{%
   \put(\LenToUnit{#1},\LenToUnit{23.60cm}){\usebox{\tjbindpipe}}%
   \put(\LenToUnit{#1},\LenToUnit{23.12cm}){\usebox{\tjbindpipe}}%
@@ -352,8 +358,8 @@
   \put(\LenToUnit{#1},\LenToUnit{5.35cm}){\usebox{\tjbindpipe}}%
 }
 
-% Oneside: x=1.5cm from left edge
-% Twoside even page: binding on right side at 21 - 1.5 = 19.5cm
+% Oneside: x=1.6cm from left edge
+% Twoside even page: binding on right side at 21 - 1.6 = 19.4cm
 \@ifclasswith{tongjithesis}{twoside}{%
   \AddToShipoutPictureBG{%
     \iftjbindingline
@@ -380,25 +386,41 @@
 % 设置摘要与目录页样式（如页眉、页脚等）
 \fancypagestyle{firststyle}{
 	\fancyhf{}
-	\pagenumbering{Roman}                    	% 页数使用罗马数字
-	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
+	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
 	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
 	\fancyfoot[C]{\large \thepage}
-	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
+	\renewcommand{\headrulewidth}{1.8pt}
 	\renewcommand{\footrulewidth}{0pt}
 }
 
 % 设置正文页样式（如页眉、页脚等）
 \fancypagestyle{mainstyle}{
 	\fancyhf{}
-	\pagenumbering{arabic}
-	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
+	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
 	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
 	\fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
 	\fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
-	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
-	\renewcommand{\footrulewidth}{1.8pt}     	% 页脚横线
+	\renewcommand{\headrulewidth}{1.8pt}
+	\renewcommand{\footrulewidth}{1.8pt}
 }
+
+% 自动设置前言和正文的页面样式
+% ctexbook 的 \chapter 会将首页设为 plain 样式，需要重定义 plain 以匹配当前样式
+\makeatletter
+\let\tj@origfrontmatter\frontmatter
+\renewcommand{\frontmatter}{%
+  \tj@origfrontmatter
+  \pagenumbering{Roman}%
+  \pagestyle{firststyle}%
+  \fancypagestyle{plain}{\pagestyle{firststyle}}%
+}
+\let\tj@origmainmatter\mainmatter
+\renewcommand{\mainmatter}{%
+  \tj@origmainmatter
+  \pagestyle{mainstyle}%
+  \fancypagestyle{plain}{\pagestyle{mainstyle}}%
+}
+\makeatother
 
 % ==========================================
 % Typography and Font Settings
@@ -440,21 +462,23 @@
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
-\setlength{\cftsecindent}{0em} % 符合毕业设计模板（理工类）一级标题顶格要求
-\setlength{\cftsubsecindent}{1em} % 符合毕业设计模板（理工类）二级标题对齐一级标题文字要求
-\setlength{\cftsubsubsecindent}{4em} % 符合毕业设计模板（理工类）三级标题对齐一级标题第四字要求
+\setlength{\cftchapindent}{0em}
+\setlength{\cftsecindent}{1em}
+\setlength{\cftsubsecindent}{4em}
+\setlength{\cftbeforechapskip}{0pt}
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
-\setlength{\cftbeforesubsubsecskip}{0pt}
 \renewcommand{\contentsname}{\tjfontheading\heiti\textmd{目\hspace{0.5em}录}}
+\renewcommand{\cftchapfont}{\songti\tjfontbody}
 \renewcommand{\cftsecfont}{\songti\tjfontbody}
 \renewcommand{\cftsubsecfont}{\songti\tjfontbody}
-\renewcommand{\cftsubsubsecfont}{\songti\tjfontbody}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+\renewcommand{\cftchapdotsep}{\cftdotsep}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsecdotsep}{\cftdotsep}
+\renewcommand{\cftchappagefont}{\tjfontbody}
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
-\renewcommand{\cftsubsubsecpagefont}{\tjfontbody}
 
 % 目录使用单倍行距（官方模板要求）
 \apptocmd{\tableofcontents}{}{}{}% ensure command exists
@@ -462,60 +486,63 @@
 \apptocmd{\tableofcontents}{\end{spacing}}{}{}
 
 % ==========================================
-% Section/Chapter Numbering
+% Chapter/Section Numbering and Formatting
 % ==========================================
 
 % 设置图表编号和章节相关联
 \RequirePackage{chngcntr}
-\counterwithin{figure}{section}
-\counterwithin{table}{section}
-\AtBeginDocument{\counterwithin{lstlisting}{section}}
-% \counterwithin{listing}{section}
-\counterwithin{equation}{section}
-\counterwithin{algorithm}{section}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+\AtBeginDocument{\counterwithin{lstlisting}{chapter}}
+\counterwithin{equation}{chapter}
+\counterwithin{algorithm}{chapter}
 
 % 设置正文页内章节标题格式
 \ctexset{
-	section={% 一级标题
-	  format={\centering\heiti\tjfontheading}, % 格式：四号黑体居中
-	  aftername={\quad}, % 序号与题名间空 4 格
-	  break={\clearpage}, % 每章另起一页
-	  beforeskip={1\baselineskip}, % 换页后空一行 + 段前 0.5 行
-	  afterskip={\tjskipaftersec}, % 段后 0.5 行
-	 },
-	subsection={% 二级标题
-			format={\heiti\tjfontbody}, % 格式：五号黑体
-			aftername={\space}, % 序号与题名间空 1 格
-			beforeskip={\tjskipbeforesec}, % 段前 0.5 行
-			afterskip={\tjskipaftersec}, % 段后 0.5 行
-		},
-	subsubsection={% 三级标题
-			format={\heiti\tjfontbody}, % 格式：五号黑体
-			aftername={\space}, % 序号与题名间空 1 格
-			beforeskip={\tjskipbeforesec}, % 段前 0.5 行
-			afterskip={\tjskipaftersec}, % 段后 0.5 行
-			indent={2em}, % 缩进 2 个汉字符
-		},
-	paragraph={% 四级标题
-			format={\heiti\tjfontbody}, % 格式：五号黑体
-			numbering=true, % 启用编号
-			number={\Alph{paragraph}}, % 编号格式：使用大写字母作为四级标题
-			aftername={.\space}, % 序号后带点和一个空格
-			beforeskip={0pt}, % 段前 0 行
-			afterskip={0pt}, % 段后 0 行
-			indent={2em}, % 缩进 2 个汉字符
-			aftertitle={\par}, % 标题后添加一个空行
-		},
-	subparagraph={% 五级标题
-			format={\heiti\tjfontbody}, % 格式：五号黑体
-			numbering=true, % 启用编号
-			number={\alph{subparagraph}}, % 编号格式：使用小写字母作为五级标题
-			aftername={.\space}, % 序号后带点和一个空格
-			beforeskip={0pt}, % 段前 0 行
-			afterskip={0pt}, % 段后 0 行
-			indent={2em}, % 缩进 2 个汉字符
-			aftertitle={\par}, % 标题后添加一个空行
-		}
+  chapter={%
+    format={\centering\heiti\tjfontheading},
+    nameformat={},
+    name={},
+    number={\arabic{chapter}},
+    aftername={\quad},
+    break={\clearpage},
+    beforeskip={-16pt},
+    afterskip={\tjskipaftersec},
+  },
+  section={%
+    format={\heiti\tjfontbody},
+    aftername={\space},
+    beforeskip={\tjskipbeforesec},
+    afterskip={\tjskipaftersec},
+  },
+  subsection={%
+    format={\heiti\tjfontbody},
+    aftername={\space},
+    beforeskip={\tjskipbeforesec},
+    afterskip={\tjskipaftersec},
+    indent={2em},
+  },
+  subsubsection={%
+    format={\heiti\tjfontbody},
+    numbering=true,
+    number={\Alph{subsubsection}},
+    aftername={.\space},
+    beforeskip={0pt},
+    afterskip={0pt},
+    indent={2em},
+    aftertitle={\par},
+  },
+  paragraph={%
+    format={\heiti\tjfontbody},
+    numbering=true,
+    number={\alph{paragraph}},
+    aftername={.\space},
+    beforeskip={0pt},
+    afterskip={0pt},
+    indent={2em},
+    aftertitle={\par},
+  },
+  appendix/name={},
 }
 
 \setcounter{secnumdepth}{5}
@@ -532,12 +559,12 @@
 % ==========================================
 
 % 设置浮动体的 caption 位置
-\floatstyle{plaintop}       % 表格的 caption 在表格上方，这里仅设置了 table 环境，longtable 环境默认 plaintop
+\floatstyle{plaintop}       % 表格的 caption 在表格上方
 \restylefloat{table}
 \floatstyle{plain}
 \makeatletter
 \iftongjithesis@minted
-  \restylefloat{listing}    % listing 环境默认为 ruled，修改为 plain，将 caption 放在下方
+  \restylefloat{listing}    % listing 环境默认为 ruled，修改为 plain
 \fi
 \makeatother
 \sloppy
@@ -547,15 +574,15 @@
 % ==========================================
 
 \theoremstyle{definition}
-\newtheorem{thm}{定理\hspace{0.05pt}}[section]
-\newtheorem{cor}{推论\hspace{0.05pt}}[section]
-\newtheorem{lem}{引理\hspace{0.05pt}}[section]
-\newtheorem{prop}{命题\hspace{0.05pt}}[section]
-\newtheorem{conj}{猜想\hspace{0.05pt}}[section]
-\newtheorem{assume}{假设\hspace{0.05pt}}[section]
-\newtheorem{dfn}{定义\hspace{0.05pt}}[section]
-\newtheorem{exmp}{例\hspace{0.05pt}}[section]
-\newtheorem{rem}{注\hspace{0.05pt}}[section]
+\newtheorem{thm}{定理\hspace{0.05pt}}[chapter]
+\newtheorem{cor}{推论\hspace{0.05pt}}[chapter]
+\newtheorem{lem}{引理\hspace{0.05pt}}[chapter]
+\newtheorem{prop}{命题\hspace{0.05pt}}[chapter]
+\newtheorem{conj}{猜想\hspace{0.05pt}}[chapter]
+\newtheorem{assume}{假设\hspace{0.05pt}}[chapter]
+\newtheorem{dfn}{定义\hspace{0.05pt}}[chapter]
+\newtheorem{exmp}{例\hspace{0.05pt}}[chapter]
+\newtheorem{rem}{注\hspace{0.05pt}}[chapter]
 \newtheorem*{pf}{证明}
 
 % Math commands
@@ -599,6 +626,7 @@
 % ==========================================
 
 % 交叉引用
+\newcommand*{\chapref}[1]{第~\ref{#1}~章}
 \newcommand*{\secref}[1]{第~\ref{#1}~节}
 \newcommand*{\algoref}[1]{算法~\ref{#1}~}
 \renewcommand*{\eqref}[1]{公式（\ref{#1}）}
@@ -623,11 +651,11 @@
 \crefname{equation}{式}{式}
 \crefname{figure}{图}{图}
 \crefname{table}{表}{表}
-\crefname{section}{章节}{章节}
+\crefname{chapter}{章}{章}
+\crefname{section}{节}{节}
 \crefname{subsection}{小节}{小节}
 \crefname{subsubsection}{子小节}{子小节}
 \crefname{paragraph}{段落}{段落}
-\crefname{subparagraph}{子段落}{子段落}
 \crefname{FancyVerbLine}{行}{行}
 \crefname{theorem}{定理}{定理}
 \crefname{thm}{定理}{定理}
@@ -701,6 +729,7 @@
 \newcommand{\thesisdate}[3]{\def\tongjithesisyear{#1}\def\tongjithesismonth{#2}\def\tongjithesisday{#3}}
 
 % 设置封面
+\makeatletter
 \newcommand{\MakeCover}[0]{
 	\begin{titlepage}
 		\begin{center}
@@ -712,11 +741,9 @@
 			\tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
 			\vskip 30pt
 
-			% 符合毕业设计模板（理工类），标题使用黑体小初
-			\zihao{-0}\heiti{本科毕业设计（论文）}
+			\zihao{-0}\heiti{\tj@covertype}
 			\vskip 60pt
 
-			% 符合毕业设计模板（理工类），此处使用黑体小二
 			\begin{information}{M{5em}M{22em}}
 				\tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
 				\tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
@@ -733,6 +760,7 @@
 	\end{titlepage}
 	\global\tjbindinglinetrue
 }
+\makeatother
 
 % 设置中文摘要页
 \newcommand{\MakeAbstract}[2]{

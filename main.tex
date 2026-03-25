@@ -1,5 +1,6 @@
 \documentclass[
   oneside,
+  degree=bachelor,
   fullwidthstop=false,
   fontset=fandol,
   times=false,
@@ -14,14 +15,14 @@
 \input{sections/frontcover}
 \cleardoublepage
 
-\pagestyle{firststyle}
+\frontmatter
 \input{sections/00_abstract}
 
 \clearpage
 \tableofcontents
 \cleardoublepage
 
-\pagestyle{mainstyle}
+\mainmatter
 \input{sections/01_intro}
 \input{sections/02_math}
 \input{sections/03_reference}
@@ -33,7 +34,7 @@
 \appendix
 \input{sections/appendix}
 
-\clearpage
+\backmatter
 \input{sections/ack}
 
 \end{document}

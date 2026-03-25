@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="550">
 </p>
 
 <p align="center">
@@ -19,11 +19,22 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 <p align="center">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0027.jpg" width="30%">
 </p>
 
 > [!NOTE]
 > A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+
+## Key Features
+
+- Based on `ctexbook`, supports `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` structure
+- Dual compiler support: `XeLaTeX` and `LuaLaTeX`
+- Dual bibliography backends: `biblatex` (default) and `bibtex`, unified via `\makereferences`
+- Dual code highlighting: `minted` (default) and `listings`
+- `longlisting` environment for cross-page code blocks
+- Single-sided / double-sided printing with automatic binding line
+- Key-value document class options for flexible configuration
+- Continuous CI testing on Linux, macOS, and Windows
 
 ---
 
@@ -49,7 +60,7 @@ You can use this template directly via the [Overleaf template link](https://www.
 > [!IMPORTANT]
 > When using the Overleaf template, please check the compiler and main entry settings:
 >
-> - Set `main.tex` as the main entry file, instead of other `.tex` files in the project (especially `tongjithesis.cls` or `tongjithesis.sty`);
+> - Set `main.tex` as the main entry file, instead of other files in the project (such as `tongjithesis.cls`);
 > - It is recommended to use the `XeLaTeX` or `LuaLaTeX` compilers, as some compilers (such as `pdfLaTeX`) are not supported by this template.
 
 #### Importing This Repository on Overleaf
@@ -127,6 +138,7 @@ This template provides the following document class options, which can be config
 ```latex
 \documentclass[
   oneside,           % One-sided printing (default), use twoside for double-sided printing
+  degree=bachelor,   % Degree type: bachelor (default), master/doctor reserved
   fullwidthstop=false, % Whether to replace Chinese period "。" with Western-style period "．", default is false
   fontset=fandol,    % Font set to use, default is fandol
   times=false,       % Whether to use Times New Roman font, default is false
@@ -225,6 +237,7 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 - As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
 - From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 - April 2025 update, implemented key-value based class options, supporting more flexible configuration.
+- March 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026.
 
 We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
 
@@ -239,11 +252,4 @@ We have learned a lot from excellent open-source projects from top universities:
 
 ## Contact Information
 
-```python
-# Python
-[
-    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    f'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
-    f'rizhong.lin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
-][-1]
-```
+For questions, please use [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions).

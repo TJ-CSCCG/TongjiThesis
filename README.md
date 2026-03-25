@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="550">
 </p>
 
 <p align="center">
@@ -19,11 +19,22 @@
 <p align="center">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
     <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0027.jpg" width="30%">
 </p>
 
 > [!NOTE]
 > 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) 中 "Assets" 下的 PDF 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
+
+## 主要特性
+
+- 基于 `ctexbook` 文档类，支持 `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` 结构
+- 支持 `XeLaTeX` 和 `LuaLaTeX` 双编译器
+- 支持 `biblatex`（默认）和 `bibtex` 双引用后端，通过 `\makereferences` 统一输出
+- 支持 `minted`（默认）和 `listings` 双代码高亮方案
+- 提供 `longlisting` 环境，支持跨页代码块
+- 支持单面 / 双面打印，双面模式自动添加装订线
+- 键值对文档类选项，配置灵活
+- Linux / macOS / Windows 三平台 CI 持续测试
 
 ---
 
@@ -49,7 +60,7 @@
 > [!IMPORTANT]
 > 在使用 Overleaf 模板时，请检查编译器和主入口的设置：
 >
-> - 将 `main.tex` 文件设为主入口文件，而不是项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
+> - 将 `main.tex` 文件设为主入口文件，而不是项目中的其他文件（如 `tongjithesis.cls`）；
 > - 推荐使用 `XeLaTeX` 和 `LuaLaTeX` 编译器，本模板不支持某些编译器（如 `pdfLaTeX`）。
 
 #### 在 Overleaf 上导入本仓库
@@ -127,6 +138,7 @@ make wordcount          # wordcount
 ```latex
 \documentclass[
   oneside,           % 单面打印（默认），使用 twoside 可启用双面打印
+  degree=bachelor,   % 学位类型：bachelor（默认），master/doctor 留作扩展
   fullwidthstop=false, % 是否将中文句号"。"替换为西文句号"．"，默认为false
   fontset=fandol,    % 使用的字体集，默认为 fandol
   times=false,       % 是否使用 Times New Roman 字体，默认为 false
@@ -225,6 +237,7 @@ make wordcount          # wordcount
 - 2022.05.12 起，[skyleaworlder](https://github.com/skyleaworlder) 开始贡献本项目，并将其整合进 [TJ-CSCCG](https://github.com/TJ-CSCCG)，并持续对该项目进行更新和改进，目前已经成为一个完善的本科毕业论文模板。
 - 2023.04 起，[RizhongLin](https://github.com/RizhongLin) 开始贡献本项目，并负责项目的维护和更新。
 - 2025.04 更新，实现基于键值对的类选项，支持更灵活的配置。
+- 2026.03 更新，迁移至 `ctexbook` 基类，新增 `biblatex`/`bibtex` 双后端、`longlisting` 跨页代码环境、`\makereferences` 统一参考文献输出，CI 升级至 TeX Live 2026。
 
 我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
 
@@ -239,11 +252,4 @@ make wordcount          # wordcount
 
 ## 联系方式
 
-```python
-# Python
-[
-    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    f'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
-    f'rizhong.lin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
-][-1]
-```
+如有问题，请通过 [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions) 提问。

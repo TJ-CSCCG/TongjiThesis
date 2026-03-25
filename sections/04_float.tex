@@ -1,27 +1,27 @@
-\section{图表与代码}\label{sec:float}
+\chapter{图表与代码}\label{sec:float}
 
-本节介绍插图、表格、算法和代码等浮动体的使用方法。浮动体可以自由浮动在页面中，\LaTeX{} 会自动选择合适的位置进行排版。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
+本章介绍插图、表格、算法和代码等浮动体的使用方法。浮动体可以自由浮动在页面中，\LaTeX{} 会自动选择合适的位置进行排版。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
 
-\subsection{插图}
+\section{插图}
 
 在 \TeX{} 中，插图功能是通过特定编译程序提供的机制实现的。不同的编译程序支持不同的图形格式。通常，图形都放置在浮动环境中。浮动的意思是，最终排版的图形位置不一定与源文件中的位置对应，这也是新手在使用 \LaTeX{} 时可能会遇到的问题。如果需要强制固定浮动图形的位置，请使用 \pkg{float} 宏包，并使用 \texttt{[H]} 参数。
 
-\subsubsection{单个图形}
+\subsection{单个图形}
 
 要插入单个图形，可以使用 \verb|\includegraphics| 命令，并在其参数中指定图像文件名和一些选项。例如：
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.5\textwidth]{figures/tongjithesis.png}
+  \includegraphics[width=0.7\textwidth]{figures/tongjithesis.pdf}
   \caption{TongjiThesis 项目标志}
   \label{fig:example}
 \end{figure}
 
-这段代码会在浮动体中插入一个名为 \verb|figures/tongjithesis.png| 的图形，并将其居中显示。图形下方会有一个标题，同时为该图形标上标签，以便于交叉引用。
+这段代码会在浮动体中插入一个名为 \verb|figures/tongjithesis.pdf| 的图形，并将其居中显示。图形下方会有一个标题，同时为该图形标上标签，以便于交叉引用。
 
 需要注意的是，在使用 \verb|\includegraphics| 命令时，应该将图像文件放在与主文档相同的目录中，或者在参数中指定文件的完整路径。
 
-\subsubsection{多个图形}
+\subsection{多个图形}
 
 如果需要在同一浮动体中插入多个图形，可以使用 \verb|\subfigure| 命令或 \pkg{subcaption} 宏包。这些方法可以按照一定的排列方式组合多个图形，并分别为每个子图形添加标题和标签。
 例如，可以使用 \verb|\subfigure| 命令插入两个水平并列的子图，如\cref{fig:example-subfig-1} 所示。这两个子图共用一个图形计数器，没有各自的子图题。
@@ -89,9 +89,9 @@
 总之，在使用 \LaTeX{} 插图时，应该注意浮动体的特性，尽量使用 \pkg{float} 宏包进行浮动体的控制，避免出现排版问题。同时，也应该熟悉插图命令的使用方法，以便于插入单个或多个图形，并设置适当的标题和标签。
 
 
-\subsection{表格}
+\section{表格}
 
-\subsubsection{基本表格}
+\subsection{基本表格}
 
 编排表格时应简单明了、表达一致，内容明晰易懂，表文呼应，内容一致。表题应置于表格上方。
 
@@ -113,7 +113,7 @@
   \end{tabular}
 \end{table}
 
-\subsubsection{复杂表格}
+\subsection{复杂表格}
 
 我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。可以用
 \pkg{threeparttable} 实现带有脚注的表格，如\cref{tab:bigtable}。
@@ -227,7 +227,7 @@
 
 
 
-\subsection{算法}
+\section{算法}
 
 算法环境可以使用 \pkg{algorithms} 宏包或者较新的 \pkg{algorithm2e} 实现。
 \cref{algo:algorithm} 是一个使用 \pkg{algorithms} 的例子。关于排版算法环境
@@ -248,13 +248,13 @@
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{代码}
+\section{代码}
 
-\subsubsection{代码高亮方式}
+\subsection{代码高亮方式}
 
 本模板提供 \pkg{listings} 和 \pkg{minted} 两种代码高亮方案，可通过文档类选项 \texttt{minted=true}（默认）或 \texttt{minted=false} 切换。\pkg{listings} 是 \LaTeX{} 原生的代码显示包，始终可用，无需外部依赖；\pkg{minted} 基于 Python Pygments，提供更精确的语法解析和更丰富的高亮效果，但需要安装 Python 和 Pygments（\texttt{pip install pygments}），编译时需添加 \texttt{-shell-escape} 参数。若环境受限，可设置 \texttt{minted=false} 回退至 \pkg{listings}。
 
-\subsubsection{代码块示例}
+\subsection{代码块示例}
 
 \pkg{listings} 包是 \LaTeX{} 最常用的代码高亮工具，无论 \texttt{minted} 选项如何设置，它始终可用。以下是一个基本示例：
 
@@ -276,7 +276,7 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
 
-\paragraph{关于跨页代码段的说明}
+\subsubsection{关于跨页代码段的说明}
 \pkg{listings} 和 \pkg{minted} 均支持跨页显示代码段。一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
 
 本模板提供了 \texttt{longlisting} 环境，用于排版需要跨页显示并带有标题的代码块。与浮动体代码环境不同，\texttt{longlisting} 不会浮动，可以自然跨越多页。在环境内部放置代码块，并用 \cs{caption} 添加标题即可。以下为示例：
@@ -490,7 +490,7 @@ if __name__ == "__main__":
 \makeatother
 （与普通文本 \verb|print("Hello")| 对比）。
 
-\subsection{分页控制}
+\section{分页控制}
 
 在\LaTeX{}排版系统中，\verb|\newpage| 和 \verb|\clearpage| 命令都能强制开始新页面，但它们有着重要区别。\verb|\newpage| 仅创建新页面，而 \verb|\clearpage| 还会处理所有待处理的浮动体，确保它们在新页面前被正确放置。
 

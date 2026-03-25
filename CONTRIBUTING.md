@@ -2,7 +2,7 @@
 
 ## 仓库结构 | Repository Structure
 
-- **源文件**：`.cls`、`.sty` 等定义模板的文件。
+- **源文件**：`.cls`、`.cfg` 等定义模板的文件。
 - **文档文件**：`.tex` 文件（包括 `main.tex`），用于展示模板的使用方法。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
 
