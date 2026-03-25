@@ -4,6 +4,9 @@ on:
       - master
       - proposal
       - dev
+      - 'feat/**'
+      - 'fix/**'
+      - 'refactor/**'
     paths-ignore:
       - '*.md'
       - 'LICENSE'
@@ -50,7 +53,7 @@ env:
     enumitem
     environ
     extarrows
-    fancybox
+    eso-pic
     fancyhdr
     fancyvrb
     float

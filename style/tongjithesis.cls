@@ -5,7 +5,7 @@
 \ProvidesClass{tongjithesis}[2026/03/07 v1.1.1 Tongji University Undergraduate Thesis Class]
 
 %% tongji-undergrad-thesis
-%% Copyright 2023-2025 TJ-CSCCG
+%% Copyright 2023-2026 TJ-CSCCG
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -57,7 +57,7 @@
 \RequirePackage[a4paper,top=4.2cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
-\RequirePackage{fancybox}
+\RequirePackage{eso-pic}
 
 % Typography and text formatting
 \RequirePackage[T1]{fontenc}
@@ -108,23 +108,30 @@
 % Always load listings package first (mandatory)
 \RequirePackage{listings}
 \definecolor{bg}{rgb}{0.96,0.96,0.96}
-\definecolor{commentcolor}{rgb}{0.0,0.6,0.0}
-\definecolor{stringcolor}{rgb}{0.58,0.0,0.82}
-\definecolor{keywordcolor}{rgb}{0.0,0.0,0.8}
+\definecolor{commentcolor}{rgb}{0.24,0.48,0.48}
+\definecolor{stringcolor}{rgb}{0.73,0.13,0.13}
+\definecolor{keywordcolor}{rgb}{0.0,0.502,0.0}
 \lstset{
-  frame=single,
   backgroundcolor=\color{bg},
-  basicstyle=\small\ttfamily,
+  basicstyle=\small\ttfamily\linespread{1.0}\selectfont,
   keywordstyle=\color{keywordcolor}\bfseries,
   commentstyle=\color{commentcolor}\itshape,
   stringstyle=\color{stringcolor},
   numbers=left,
-  numberstyle=\tiny,
+  numberstyle=\small\color{gray},
+  numbersep=12pt,
+  xleftmargin=2.5em,
+  framexleftmargin=2.5em,
+  frame=single,
+  rulecolor=\color{bg},
+  framesep=2mm,
+  aboveskip=\baselineskip,
+  belowskip=\smallskipamount,
   breaklines=true,
   showstringspaces=false,
   captionpos=b,
-  xleftmargin=2em,
   tabsize=4,
+  mathescape=true,
   escapeinside=||
 }
 \renewcommand{\lstlistingname}{代码}
@@ -161,6 +168,13 @@
   
   % Define inputminted command
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
+\fi
+
+% Non-float listing environment for cross-page code with captions
+\iftongjithesis@minted
+  \newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
+\else
+  \newenvironment{longlisting}{\captionsetup{type=lstlisting}}{\medskip}
 \fi
 \makeatother
 
@@ -209,76 +223,86 @@
 }
 \let\cleardoublepage\clearemptydoublepage
 
-% 画边界线
+% 画边界线（使用 eso-pic + savebox，避免 fancyput 与 listings 的跨页冲突）
+% Pre-render binding line content into saved boxes, all centered in 1em width
+\newlength{\bindwidth}
+\setlength{\bindwidth}{1em}
+\newsavebox{\tjbindpipe}
+\newsavebox{\tjbindZ}
+\newsavebox{\tjbindD}
+\newsavebox{\tjbindX}
+\AtBeginDocument{%
+  \sbox{\tjbindpipe}{\makebox[\bindwidth][c]{$|$}}%
+  \sbox{\tjbindZ}{\makebox[\bindwidth][c]{装}}%
+  \sbox{\tjbindD}{\makebox[\bindwidth][c]{订}}%
+  \sbox{\tjbindX}{\makebox[\bindwidth][c]{线}}%
+}
+
+% Flag to suppress binding line on cover page
 \makeatletter
+\newif\iftjbindingline
+\tjbindinglinetrue
+
+% Helper macro: draw binding line column at a given x position
+% fancyput reference point is 1in (2.54cm) from page edges.
+% x=-0.8cm → 2.54-0.8 = 1.74cm from left; y=-N → 27.16-N cm from bottom.
+\newcommand{\tj@bindingcolumn}[1]{%
+  \put(\LenToUnit{#1},\LenToUnit{22.86cm}){\usebox{\tjbindpipe}}%  y=-4.3
+  \put(\LenToUnit{#1},\LenToUnit{22.26cm}){\usebox{\tjbindpipe}}%  y=-4.9
+  \put(\LenToUnit{#1},\LenToUnit{21.66cm}){\usebox{\tjbindpipe}}%  y=-5.5
+  \put(\LenToUnit{#1},\LenToUnit{21.06cm}){\usebox{\tjbindpipe}}%  y=-6.1
+  \put(\LenToUnit{#1},\LenToUnit{20.46cm}){\usebox{\tjbindpipe}}%  y=-6.7
+  \put(\LenToUnit{#1},\LenToUnit{19.86cm}){\usebox{\tjbindpipe}}%  y=-7.3
+  \put(\LenToUnit{#1},\LenToUnit{19.26cm}){\usebox{\tjbindpipe}}%  y=-7.9
+  \put(\LenToUnit{#1},\LenToUnit{18.66cm}){\usebox{\tjbindpipe}}%  y=-8.5
+  \put(\LenToUnit{#1},\LenToUnit{18.06cm}){\usebox{\tjbindpipe}}%  y=-9.1
+  \put(\LenToUnit{#1},\LenToUnit{17.46cm}){\usebox{\tjbindpipe}}%  y=-9.7
+  \put(\LenToUnit{#1},\LenToUnit{16.86cm}){\usebox{\tjbindZ}}%     y=-10.3
+  \put(\LenToUnit{#1},\LenToUnit{16.26cm}){\usebox{\tjbindpipe}}%  y=-10.9
+  \put(\LenToUnit{#1},\LenToUnit{15.66cm}){\usebox{\tjbindpipe}}%  y=-11.5
+  \put(\LenToUnit{#1},\LenToUnit{15.06cm}){\usebox{\tjbindpipe}}%  y=-12.1
+  \put(\LenToUnit{#1},\LenToUnit{14.46cm}){\usebox{\tjbindpipe}}%  y=-12.7
+  \put(\LenToUnit{#1},\LenToUnit{13.86cm}){\usebox{\tjbindpipe}}%  y=-13.3
+  \put(\LenToUnit{#1},\LenToUnit{13.26cm}){\usebox{\tjbindD}}%     y=-13.9
+  \put(\LenToUnit{#1},\LenToUnit{12.66cm}){\usebox{\tjbindpipe}}%  y=-14.5
+  \put(\LenToUnit{#1},\LenToUnit{12.06cm}){\usebox{\tjbindpipe}}%  y=-15.1
+  \put(\LenToUnit{#1},\LenToUnit{11.46cm}){\usebox{\tjbindpipe}}%  y=-15.7
+  \put(\LenToUnit{#1},\LenToUnit{10.86cm}){\usebox{\tjbindpipe}}%  y=-16.3
+  \put(\LenToUnit{#1},\LenToUnit{10.26cm}){\usebox{\tjbindpipe}}%  y=-16.9
+  \put(\LenToUnit{#1},\LenToUnit{9.66cm}){\usebox{\tjbindX}}%      y=-17.5
+  \put(\LenToUnit{#1},\LenToUnit{9.06cm}){\usebox{\tjbindpipe}}%   y=-18.1
+  \put(\LenToUnit{#1},\LenToUnit{8.46cm}){\usebox{\tjbindpipe}}%   y=-18.7
+  \put(\LenToUnit{#1},\LenToUnit{7.86cm}){\usebox{\tjbindpipe}}%   y=-19.3
+  \put(\LenToUnit{#1},\LenToUnit{7.26cm}){\usebox{\tjbindpipe}}%   y=-19.9
+  \put(\LenToUnit{#1},\LenToUnit{6.66cm}){\usebox{\tjbindpipe}}%   y=-20.5
+  \put(\LenToUnit{#1},\LenToUnit{6.06cm}){\usebox{\tjbindpipe}}%   y=-21.1
+  \put(\LenToUnit{#1},\LenToUnit{5.46cm}){\usebox{\tjbindpipe}}%   y=-21.7
+  \put(\LenToUnit{#1},\LenToUnit{4.86cm}){\usebox{\tjbindpipe}}%   y=-22.3
+  \put(\LenToUnit{#1},\LenToUnit{4.26cm}){\usebox{\tjbindpipe}}%   y=-22.9
+  \put(\LenToUnit{#1},\LenToUnit{3.66cm}){\usebox{\tjbindpipe}}%   y=-23.5
+}
+
+% Twoside even page: binding on right side at 21 - 1.74 = 19.26cm
 \@ifclasswith{tongjithesis}{twoside}{%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-4.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-5.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-6.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-7.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-8.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-9.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-10.3cm){装}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-10.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-11.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-12.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-13.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-13.9cm){订}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-14.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-15.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-16.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -1.0cm\else 16.5cm\fi,-17.5cm){线}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-18.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-19.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-20.5cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.1cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-21.7cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.3cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-22.9cm){$|$}%
-\fancyput*(\ifodd\value{page} -0.8cm\else 16.7cm\fi,-23.5cm){$|$}%
+  \AddToShipoutPictureBG{%
+    \iftjbindingline
+      \AtPageLowerLeft{%
+        \ifodd\value{page}%
+          \tj@bindingcolumn{1.74cm}%
+        \else
+          \tj@bindingcolumn{19.26cm}%
+        \fi
+      }%
+    \fi
+  }%
 }{%
-\fancyput*(-0.8cm,-4.3cm){$|$}%
-\fancyput*(-0.8cm,-4.9cm){$|$}%
-\fancyput*(-0.8cm,-5.5cm){$|$}%
-\fancyput*(-0.8cm,-6.1cm){$|$}%
-\fancyput*(-0.8cm,-6.7cm){$|$}%
-\fancyput*(-0.8cm,-7.3cm){$|$}%
-\fancyput*(-0.8cm,-7.9cm){$|$}%
-\fancyput*(-0.8cm,-8.5cm){$|$}%
-\fancyput*(-0.8cm,-9.1cm){$|$}%
-\fancyput*(-0.8cm,-9.7cm){$|$}%
-\fancyput*(-1.0cm,-10.3cm){装}%
-\fancyput*(-0.8cm,-10.9cm){$|$}%
-\fancyput*(-0.8cm,-11.5cm){$|$}%
-\fancyput*(-0.8cm,-12.1cm){$|$}%
-\fancyput*(-0.8cm,-12.7cm){$|$}%
-\fancyput*(-0.8cm,-13.3cm){$|$}%
-\fancyput*(-1.0cm,-13.9cm){订}%
-\fancyput*(-0.8cm,-14.5cm){$|$}%
-\fancyput*(-0.8cm,-15.1cm){$|$}%
-\fancyput*(-0.8cm,-15.7cm){$|$}%
-\fancyput*(-0.8cm,-16.3cm){$|$}%
-\fancyput*(-0.8cm,-16.9cm){$|$}%
-\fancyput*(-1.0cm,-17.5cm){线}%
-\fancyput*(-0.8cm,-18.1cm){$|$}%
-\fancyput*(-0.8cm,-18.7cm){$|$}%
-\fancyput*(-0.8cm,-19.3cm){$|$}%
-\fancyput*(-0.8cm,-19.9cm){$|$}%
-\fancyput*(-0.8cm,-20.5cm){$|$}%
-\fancyput*(-0.8cm,-21.1cm){$|$}%
-\fancyput*(-0.8cm,-21.7cm){$|$}%
-\fancyput*(-0.8cm,-22.3cm){$|$}%
-\fancyput*(-0.8cm,-22.9cm){$|$}%
-\fancyput*(-0.8cm,-23.5cm){$|$}%
+  \AddToShipoutPictureBG{%
+    \iftjbindingline
+      \AtPageLowerLeft{%
+        \tj@bindingcolumn{1.74cm}%
+      }%
+    \fi
+  }%
 }
 \makeatother
 
@@ -420,7 +444,9 @@
 \setcounter{secnumdepth}{5}
 
 \makeatletter
-\AtBeginDocument{\let\c@listing\c@figure}
+\iftongjithesis@minted
+  \AtBeginDocument{\let\c@listing\c@figure}
+\fi
 \AtBeginDocument{\let\c@lstlisting\c@figure}
 \makeatother
 
@@ -432,7 +458,11 @@
 \floatstyle{plaintop}       % 表格的 caption 在表格上方，这里仅设置了 table 环境，longtable 环境默认 plaintop
 \restylefloat{table}
 \floatstyle{plain}
-\restylefloat{listing}      % listing 环境默认为 ruled，修改为 plain，将 caption 放在下方
+\makeatletter
+\iftongjithesis@minted
+  \restylefloat{listing}    % listing 环境默认为 ruled，修改为 plain，将 caption 放在下方
+\fi
+\makeatother
 \sloppy
 
 % ==========================================
@@ -597,7 +627,7 @@
 \newcommand{\MakeCover}[0]{
 	\begin{titlepage}
 		\begin{center}
-			\thisfancyput(-0.75cm,-13cm){}
+			\global\tjbindinglinefalse
 			\vspace*{\fill}
 
 			\includegraphics[height=2.25cm]{figures/tongji.pdf}
@@ -624,6 +654,7 @@
 			\vspace*{\fill}
 		\end{center}
 	\end{titlepage}
+	\global\tjbindinglinetrue
 }
 
 % 设置中文摘要页

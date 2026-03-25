@@ -254,21 +254,7 @@
 
 \subsubsection{代码高亮方式介绍}
 
-在论文中，适当的代码高亮不仅可以提高代码的可读性，还能使文档更加专业美观。本模板提供了两种代码高亮解决方案：
-
-\begin{enumerate}
-  \item \textbf{\pkg{listings} 包}（始终可用）：\LaTeX{} 原生支持的代码显示包，无需外部依赖，适合所有环境。
-  \item \textbf{\pkg{minted} 包}（可选增强）：基于 Python Pygments 的高级代码高亮，提供更丰富的语法高亮功能和更精美的渲染效果。
-\end{enumerate}
-
-这两种方案可通过文档类选项 \texttt{minted=true}（默认）或 \texttt{minted=false} 来切换。无论使用哪种选项，\pkg{listings} 包总是可用的，而 \pkg{minted} 则作为增强功能提供更精细的代码高亮。
-
-% 重要说明：
-% \begin{itemize}
-%   \item 使用 \pkg{minted} 需要系统安装 Python 和 Pygments 库（\texttt{pip install pygments}）
-%   \item 使用 \pkg{minted} 编译时需添加 \texttt{-shell-escape} 参数
-%   \item 若环境受限不能安装 Python 或执行外部命令，请使用 \texttt{minted=false} 选项
-% \end{itemize}
+本模板提供 \pkg{listings} 和 \pkg{minted} 两种代码高亮方案，可通过文档类选项 \texttt{minted=true}（默认）或 \texttt{minted=false} 切换。\pkg{listings} 是 \LaTeX{} 原生的代码显示包，始终可用，无需外部依赖；\pkg{minted} 基于 Python Pygments，提供更精确的语法解析和更丰富的高亮效果，但需要安装 Python 和 Pygments（\texttt{pip install pygments}），编译时需添加 \texttt{-shell-escape} 参数。若环境受限，可设置 \texttt{minted=false} 回退至 \pkg{listings}。
 
 \subsubsection{\pkg{listings} 包基础用法}
 
@@ -277,17 +263,7 @@
 \begin{lstlisting}[
   language=Python,         % 指定语法高亮的编程语言
   caption={使用listings包的Python示例},
-  label=lst:basic-example,
-  frame=single,            % 添加单线边框
-  basicstyle=\small\ttfamily, % 设置字体为等宽小号字体
-  numbers=left,            % 显示行号
-  numberstyle=\tiny,       % 行号使用极小字体
-  backgroundcolor=\color{bg}, % 设置背景色
-  commentstyle=\color{commentcolor}\itshape, % 注释样式
-  keywordstyle=\color{keywordcolor}\bfseries, % 关键字样式
-  stringstyle=\color{stringcolor}, % 字符串样式
-  breaklines=true,         % 允许自动换行
-  showstringspaces=false   % 不显示字符串中的空格
+  label=lst:basic-example
 ]
 # 这是一个简单的Python函数
 def hello_world(name: str = "World") -> str:
@@ -303,36 +279,210 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
 
 \paragraph{关于跨页代码段的说明}
-需要注意的是，\pkg{listings} 包\textbf{不支持跨页显示的代码段}。当代码块较长需要跨页时，\pkg{listings} 可能会与页眉页脚产生冲突，导致排版混乱（如页眉、页脚或装订线区域出现代码内容）。如果确实需要展示较长的跨页代码，请使用 \pkg{minted} 包（设置 \texttt{minted=true}）。不过，一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
+\pkg{listings} 包支持跨页显示代码段。如果遇到页眉页脚排版异常，建议使用 \pkg{minted} 包（设置 \texttt{minted=true}）。一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
 
-\subsubsection{\pkg{minted} 包增强功能}
-
-当设置 \texttt{minted=true} 时（默认），可以使用 \pkg{minted} 包提供的增强高亮功能。\pkg{minted} 基于 Python 的 Pygments 库，支持超过 500 种编程语言，并提供更精确的语法解析和更丰富的高亮效果：
+以下为一个跨页代码段的示例，展示长代码块场景下的排版效果：
 
 \makeatletter
+\begin{longlisting}
 \iftongjithesis@minted
-\begin{listing}[!htb]
-  \begin{minted}{python}
-# 这是一个简单的Python函数
-def hello_world(name: str = "World") -> str:
-    """返回个性化问候语"""
-    greeting = f"Hello, {name}!"
-    return greeting
+\begin{minted}{python}
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
 
-# 调用函数并打印结果
-print(hello_world())  # 输出: Hello, World!
-print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
-  \end{minted}
-  \caption{使用minted包的Python示例}\label{listing:minted-example}
-\end{listing}
+@dataclass
+class Student:
+    """学生信息"""
+    name: str          # 姓名
+    student_id: str    # 学号
+    major: str         # 专业
+    grades: Dict[str, float] = field(default_factory=dict)
+
+    def add_grade(self, course: str, score: float) -> None:
+        """添加课程成绩"""
+        if not 0 <= score <= 100:
+            raise ValueError(f"成绩须在 0-100 之间: {score}")
+        self.grades[course] = score
+
+    @property
+    def gpa(self) -> float:
+        """计算绩点（满分 4.0）"""
+        if not self.grades:
+            return 0.0
+        total = sum(self._to_gpa(s) for s in self.grades.values())
+        return round(total / len(self.grades), 2)
+
+    @staticmethod
+    def _to_gpa(score: float) -> float:
+        """百分制转绩点"""
+        if score >= 90: return 4.0    # 优秀
+        elif score >= 80: return 3.0  # 良好
+        elif score >= 70: return 2.0  # 中等
+        elif score >= 60: return 1.0  # 及格
+        else: return 0.0              # 不及格
+
+    def summary(self) -> str:
+        """生成学生摘要"""
+        return f"{self.name}({self.student_id}) - {self.major}, 绩点: {self.gpa}"
+
+
+class GradeBook:
+    """成绩管理系统"""
+    def __init__(self):
+        self._students: Dict[str, Student] = {}
+
+    def enroll(self, student: Student) -> None:
+        """注册学生"""
+        if student.student_id in self._students:
+            raise KeyError(f"学号已存在: {student.student_id}")
+        self._students[student.student_id] = student
+
+    def find(self, student_id: str) -> Optional[Student]:
+        """按学号查找学生"""
+        return self._students.get(student_id)
+
+    def ranking(self) -> List[tuple]:
+        """绩点排名"""
+        ranked = sorted(self._students.values(),
+                        key=lambda s: s.gpa, reverse=True)
+        return [(i + 1, s.name, s.gpa) for i, s in enumerate(ranked)]
+
+    def course_avg(self, course: str) -> float:
+        """计算课程平均分"""
+        scores = [s.grades[course] for s in self._students.values()
+                  if course in s.grades]
+        return round(sum(scores) / len(scores), 1) if scores else 0.0
+
+
+if __name__ == "__main__":
+    book = GradeBook()
+
+    # 创建并注册学生
+    alice = Student("张三", "2024001", "计算机科学")
+    alice.add_grade("高等数学", 92)
+    alice.add_grade("线性代数", 88)
+    alice.add_grade("数据结构", 95)
+
+    bob = Student("李四", "2024002", "软件工程")
+    bob.add_grade("高等数学", 78)
+    bob.add_grade("线性代数", 85)
+    bob.add_grade("数据结构", 90)
+
+    for s in [alice, bob]:
+        book.enroll(s)
+        print(s.summary())
+
+    # 输出排名
+    print("\n=== 绩点排名 ===")
+    for rank, name, gpa in book.ranking():
+        print(f"第{rank}名: {name}, 绩点: {gpa}")
+
+    # 输出课程平均分
+    for course in ["高等数学", "线性代数", "数据结构"]:
+        print(f"{course} 平均分: {book.course_avg(course)}")
+\end{minted}
+\else
+\begin{lstlisting}[language=Python]
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+
+@dataclass
+class Student:
+    """学生信息"""
+    name: str          # 姓名
+    student_id: str    # 学号
+    major: str         # 专业
+    grades: Dict[str, float] = field(default_factory=dict)
+
+    def add_grade(self, course: str, score: float) -> None:
+        """添加课程成绩"""
+        if not 0 <= score <= 100:
+            raise ValueError(f"成绩须在 0-100 之间: {score}")
+        self.grades[course] = score
+
+    @property
+    def gpa(self) -> float:
+        """计算绩点（满分 4.0）"""
+        if not self.grades:
+            return 0.0
+        total = sum(self._to_gpa(s) for s in self.grades.values())
+        return round(total / len(self.grades), 2)
+
+    @staticmethod
+    def _to_gpa(score: float) -> float:
+        """百分制转绩点"""
+        if score >= 90: return 4.0    # 优秀
+        elif score >= 80: return 3.0  # 良好
+        elif score >= 70: return 2.0  # 中等
+        elif score >= 60: return 1.0  # 及格
+        else: return 0.0              # 不及格
+
+    def summary(self) -> str:
+        """生成学生摘要"""
+        return f"{self.name}({self.student_id}) - {self.major}, 绩点: {self.gpa}"
+
+
+class GradeBook:
+    """成绩管理系统"""
+    def __init__(self):
+        self._students: Dict[str, Student] = {}
+
+    def enroll(self, student: Student) -> None:
+        """注册学生"""
+        if student.student_id in self._students:
+            raise KeyError(f"学号已存在: {student.student_id}")
+        self._students[student.student_id] = student
+
+    def find(self, student_id: str) -> Optional[Student]:
+        """按学号查找学生"""
+        return self._students.get(student_id)
+
+    def ranking(self) -> List[tuple]:
+        """绩点排名"""
+        ranked = sorted(self._students.values(),
+                        key=lambda s: s.gpa, reverse=True)
+        return [(i + 1, s.name, s.gpa) for i, s in enumerate(ranked)]
+
+    def course_avg(self, course: str) -> float:
+        """计算课程平均分"""
+        scores = [s.grades[course] for s in self._students.values()
+                  if course in s.grades]
+        return round(sum(scores) / len(scores), 1) if scores else 0.0
+
+
+if __name__ == "__main__":
+    book = GradeBook()
+
+    # 创建并注册学生
+    alice = Student("张三", "2024001", "计算机科学")
+    alice.add_grade("高等数学", 92)
+    alice.add_grade("线性代数", 88)
+    alice.add_grade("数据结构", 95)
+
+    bob = Student("李四", "2024002", "软件工程")
+    bob.add_grade("高等数学", 78)
+    bob.add_grade("线性代数", 85)
+    bob.add_grade("数据结构", 90)
+
+    for s in [alice, bob]:
+        book.enroll(s)
+        print(s.summary())
+
+    # 输出排名
+    print("\n=== 绩点排名 ===")
+    for rank, name, gpa in book.ranking():
+        print(f"第{rank}名: {name}, 绩点: {gpa}")
+
+    # 输出课程平均分
+    for course in ["高等数学", "线性代数", "数据结构"]:
+        print(f"{course} 平均分: {book.course_avg(course)}")
+\end{lstlisting}
 \fi
+\caption{跨页代码段示例（Python）}\label{listing:cross-page}
+\end{longlisting}
 \makeatother
 
-\subsubsection{代码高亮方式的优势}
-
-代码高亮包（\pkg{minted} 和 \pkg{listings}）与纯文本 \verb|verbatim| 环境相比具有显著优势。这些高亮工具能够自动为代码元素（如关键字、变量、字符串和注释等）着色，准确识别不同编程语言的语法特性，并支持行号、边框和背景色等美化功能。同时，它们提供了行内命令（如 \verb|\mintinline| 或 \verb|\lstinline|）用于在行文中高亮代码片段，还允许用户根据个人喜好定制代码显示样式。
-
-在两种高亮解决方案中，基于Python的 \pkg{minted} 相比纯\LaTeX{}的 \pkg{listings} 提供了更多增强功能。\pkg{minted} 能够更准确地解析和高亮代码语法，支持多达数百种编程语言和方言，可以自动处理特殊字符而无需手动转义。行内代码高亮效果也更为精细，例如：
+行内代码可以使用 \verb|\verb| 命令，或使用高亮命令以获得更好的效果，例如：
 \makeatletter
 \iftongjithesis@minted
   \mintinline{python}{print("Hello")}
@@ -341,77 +491,6 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 \fi
 \makeatother
 （与普通文本 \verb|print("Hello")| 对比）。
-
-若不希望引入Python依赖，本模板也提供了纯\LaTeX{}的增强选项：
-\begin{itemize}
-  \item \textbf{\pkg{listings}}：内置于模板，完全不依赖外部程序
-  \item \textbf{\pkg{fancyvrb}}：在 \texttt{minted=false} 时可以使用的增强型verbatim环境
-\end{itemize}
-
-\subsubsection{代码兼容性策略}
-
-为使文档在任何环境下都能正常编译，推荐使用以下代码兼容性策略：
-
-\begin{enumerate}
-  \item \textbf{短代码段}：直接使用 \pkg{listings}，它在所有环境都可用。
-  \item \textbf{重要复杂代码}：使用条件判断，针对不同环境提供两种实现。
-  \item \textbf{行内代码}：使用通用的 \verb|\verb| 命令，或根据环境条件选择。
-  \item \textbf{跨页代码}：\pkg{listings} 不支持跨页代码段，请使用 \pkg{minted}。但学术论文中应尽量避免大段代码，建议精简为关键片段。
-\end{enumerate}
-
-以下是一个展示兼容性处理的示例：
-
-\makeatletter
-\iftongjithesis@minted
-% 当minted=true时显示的代码，使用minted增强功能
-\begin{listing}[!htb]
-  \begin{minted}[linenos, frame=lines, framesep=2mm, fontsize=\footnotesize]{c++}
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> fibonacci = {0, 1, 1, 2, 3, 5, 8, 13, 21};
-    
-    std::cout << "Fibonacci序列的前" << fibonacci.size() << "个数：" << std::endl;
-    for (const auto& num : fibonacci) {
-        std::cout << num << " ";
-    }
-    std::cout << std::endl;
-    
-    return 0;
-}
-  \end{minted}
-  \caption{使用minted高亮的C++代码示例}\label{listing:cpp-minted}
-\end{listing}
-\else
-% 当minted=false时显示的代码，使用listings基础功能
-\begin{lstlisting}[
-  language=C++,
-  caption={使用listings高亮的C++代码示例},
-  label=lst:cpp-listings,
-  float=htbp,
-  frame=lines,
-  numbers=left,
-  basicstyle=\footnotesize\ttfamily,
-  xleftmargin=15pt
-]
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> fibonacci = {0, 1, 1, 2, 3, 5, 8, 13, 21};
-    
-    std::cout << "Fibonacci序列的前" << fibonacci.size() << "个数：" << std::endl;
-    for (const auto& num : fibonacci) {
-        std::cout << num << " ";
-    }
-    std::cout << std::endl;
-    
-    return 0;
-}
-\end{lstlisting}
-\fi
-\makeatother
 
 \subsection{\texttt{clearpage} 与 \texttt{newpage}}
 
