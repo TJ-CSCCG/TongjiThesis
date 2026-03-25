@@ -222,8 +222,15 @@ jobs:
           sed -i 's/minted=true/minted=false/' main.tex
           sed -i 's/biblatex=true/biblatex=false/' main.tex
 
-      - name: Show main.tex diff
-        run: git diff main.tex
+      - name: Verify variant configuration
+        run: |
+          git diff main.tex
+          if [ "${{ matrix.variant }}" = "minted-false" ] || [ "${{ matrix.variant }}" = "minimal" ]; then
+            grep -q 'minted=false' main.tex || { echo "ERROR: minted=false not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "bibtex" ] || [ "${{ matrix.variant }}" = "minimal" ]; then
+            grep -q 'biblatex=false' main.tex || { echo "ERROR: biblatex=false not set"; exit 1; }
+          fi
 
       - name: Compile LaTeX document
         run: |
