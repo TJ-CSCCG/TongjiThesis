@@ -40,8 +40,8 @@ jobs:
       - name: Extract package metadata
         id: metadata
         run: |
-          VERSION=$(jq -r '.version // "1.1.0"' package.json)
-          AUTHOR=$(jq -r '.author // "R. Lin"' package.json)
+          VERSION=$(jq -r '.version // "1.1.1"' package.json)
+          AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)
           YEAR=$(date +%Y)
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"

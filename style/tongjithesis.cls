@@ -49,7 +49,23 @@
 % ==========================================
 % 加载 ctexart 类，有关该类简单说明，see https://www.overleaf.com/learn/latex/Chinese
 % 该类提供包括但不限于 \heiti \zihao 等指令
-\LoadClass[UTF8,a4paper]{ctexart}
+\LoadClass[UTF8,a4paper,zihao=5]{ctexart}
+
+% ==========================================
+% Formatting Constants (官方模板规范)
+% ==========================================
+% Font sizes
+\newcommand{\tjfonttitle}{\zihao{-2}}       % 课题名称：小二号
+\newcommand{\tjfontheading}{\zihao{4}}       % 一级标题 / 摘要标题 / 目录标题：四号
+\newcommand{\tjfontbody}{\zihao{5}}          % 正文 / 二三级标题 / 关键词 / 摘要正文：五号
+\newcommand{\tjfontcaption}{\small}          % 表题 / 图题：小五号（\small = \zihao{-5}）
+\newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
+% Spacing
+\newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
+\newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
+\newcommand{\tjlinespread}{1.5}               % 全文行距倍数（≈18磅 at 五号字）
+% Header text
+\newcommand{\tjheadertext}{毕业设计（论文）}
 
 % ==========================================
 % Required Packages
@@ -253,7 +269,7 @@
 % ==========================================
 
 % Line spacing
-\setstretch{1.5}  % 设置全文行距为 1.5
+\setstretch{\tjlinespread}  % 设置全文行距
 
 % ==========================================
 % Page Layout
@@ -276,7 +292,7 @@
 \newsavebox{\tjbindD}
 \newsavebox{\tjbindX}
 \AtBeginDocument{%
-  \sbox{\tjbindpipe}{\makebox[\bindwidth][c]{$|$}}%
+  \sbox{\tjbindpipe}{\makebox[\bindwidth][c]{\rule{0.4pt}{3mm}}}%
   \sbox{\tjbindZ}{\makebox[\bindwidth][c]{装}}%
   \sbox{\tjbindD}{\makebox[\bindwidth][c]{订}}%
   \sbox{\tjbindX}{\makebox[\bindwidth][c]{线}}%
@@ -336,16 +352,16 @@
   \put(\LenToUnit{#1},\LenToUnit{5.35cm}){\usebox{\tjbindpipe}}%
 }
 
-% Oneside: x=1.7cm from left edge (measured from official template, adjusted for box width)
-% Twoside even page: binding on right side at 21 - 1.7 = 19.3cm
+% Oneside: x=1.5cm from left edge
+% Twoside even page: binding on right side at 21 - 1.5 = 19.5cm
 \@ifclasswith{tongjithesis}{twoside}{%
   \AddToShipoutPictureBG{%
     \iftjbindingline
       \AtPageLowerLeft{%
         \ifodd\value{page}%
-          \tj@bindingcolumn{1.7cm}%
+          \tj@bindingcolumn{1.6cm}%
         \else
-          \tj@bindingcolumn{19.3cm}%
+          \tj@bindingcolumn{19.4cm}%
         \fi
       }%
     \fi
@@ -354,7 +370,7 @@
   \AddToShipoutPictureBG{%
     \iftjbindingline
       \AtPageLowerLeft{%
-        \tj@bindingcolumn{1.7cm}%
+        \tj@bindingcolumn{1.6cm}%
       }%
     \fi
   }%
@@ -366,7 +382,7 @@
 	\fancyhf{}
 	\pagenumbering{Roman}                    	% 页数使用罗马数字
 	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
-	\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
+	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
 	\fancyfoot[C]{\large \thepage}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
 	\renewcommand{\footrulewidth}{0pt}
@@ -377,7 +393,7 @@
 	\fancyhf{}
 	\pagenumbering{arabic}
 	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}   %页眉左侧插入同济大学logo
-	\fancyhead[RO,LE]{\large ~毕业设计（论文）~\\}
+	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
 	\fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
 	\fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
 	\renewcommand{\headrulewidth}{1.8pt}     	% 页眉横线
@@ -388,12 +404,12 @@
 % Typography and Font Settings
 % ==========================================
 
-% 表格内所有字体均为小五：\zihao{-5}
-\AtBeginEnvironment{table}{\zihao{-5}}
-\AtBeginEnvironment{tabular}{\zihao{-5}}
-\AtBeginEnvironment{tabularx}{\zihao{-5}}
-\AtBeginEnvironment{longtable}{\zihao{-5}}
-\AtBeginEnvironment{tablenotes}{\zihao{-5}}
+% 表格内所有字体均为小五
+\AtBeginEnvironment{table}{\tjfonttable}
+\AtBeginEnvironment{tabular}{\tjfonttable}
+\AtBeginEnvironment{tabularx}{\tjfonttable}
+\AtBeginEnvironment{longtable}{\tjfonttable}
+\AtBeginEnvironment{tablenotes}{\tjfonttable}
 
 % ==========================================
 % Lists and Enumerations
@@ -430,15 +446,20 @@
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
 \setlength{\cftbeforesubsubsecskip}{0pt}
-\renewcommand{\contentsname}{\zihao{4}\heiti\textmd{目~~录}}
-\renewcommand{\cftsecfont}{\songti\zihao{5}}
-\renewcommand{\cftsubsecfont}{\songti\zihao{5}}
-\renewcommand{\cftsubsubsecfont}{\songti\zihao{5}}
+\renewcommand{\contentsname}{\tjfontheading\heiti\textmd{目\hspace{0.5em}录}}
+\renewcommand{\cftsecfont}{\songti\tjfontbody}
+\renewcommand{\cftsubsecfont}{\songti\tjfontbody}
+\renewcommand{\cftsubsubsecfont}{\songti\tjfontbody}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsecdotsep}{\cftdotsep}
-\renewcommand{\cftsecpagefont}{\zihao{5}}
-\renewcommand{\cftsubsecpagefont}{\zihao{5}}
-\renewcommand{\cftsubsubsecpagefont}{\zihao{5}}
+\renewcommand{\cftsecpagefont}{\tjfontbody}
+\renewcommand{\cftsubsecpagefont}{\tjfontbody}
+\renewcommand{\cftsubsubsecpagefont}{\tjfontbody}
+
+% 目录使用单倍行距（官方模板要求）
+\apptocmd{\tableofcontents}{}{}{}% ensure command exists
+\pretocmd{\tableofcontents}{\begin{spacing}{1.0}}{}{}
+\apptocmd{\tableofcontents}{\end{spacing}}{}{}
 
 % ==========================================
 % Section/Chapter Numbering
@@ -456,26 +477,27 @@
 % 设置正文页内章节标题格式
 \ctexset{
 	section={% 一级标题
-	  format={\centering\heiti\zihao{4}}, % 格式：四号黑体居中
+	  format={\centering\heiti\tjfontheading}, % 格式：四号黑体居中
 	  aftername={\quad}, % 序号与题名间空 4 格
-	  beforeskip={.5\baselineskip}, % 段前 0.5 行
-	  afterskip={.5\baselineskip}, % 段后 0.5 行
+	  break={\clearpage}, % 每章另起一页
+	  beforeskip={1\baselineskip}, % 换页后空一行 + 段前 0.5 行
+	  afterskip={\tjskipaftersec}, % 段后 0.5 行
 	 },
 	subsection={% 二级标题
-			format={\heiti\zihao{5}}, % 格式：五号黑体
+			format={\heiti\tjfontbody}, % 格式：五号黑体
 			aftername={\space}, % 序号与题名间空 1 格
-			beforeskip={.5\baselineskip}, % 段前 0.5 行
-			afterskip={.5\baselineskip}, % 段后 0.5 行
+			beforeskip={\tjskipbeforesec}, % 段前 0.5 行
+			afterskip={\tjskipaftersec}, % 段后 0.5 行
 		},
 	subsubsection={% 三级标题
-			format={\heiti\zihao{5}}, % 格式：五号黑体
+			format={\heiti\tjfontbody}, % 格式：五号黑体
 			aftername={\space}, % 序号与题名间空 1 格
-			beforeskip={.5\baselineskip}, % 段前 0.5 行
-			afterskip={.5\baselineskip}, % 段后 0.5 行
+			beforeskip={\tjskipbeforesec}, % 段前 0.5 行
+			afterskip={\tjskipaftersec}, % 段后 0.5 行
 			indent={2em}, % 缩进 2 个汉字符
 		},
 	paragraph={% 四级标题
-			format={\heiti\zihao{5}}, % 格式：五号黑体
+			format={\heiti\tjfontbody}, % 格式：五号黑体
 			numbering=true, % 启用编号
 			number={\Alph{paragraph}}, % 编号格式：使用大写字母作为四级标题
 			aftername={.\space}, % 序号后带点和一个空格
@@ -485,7 +507,7 @@
 			aftertitle={\par}, % 标题后添加一个空行
 		},
 	subparagraph={% 五级标题
-			format={\heiti\zihao{5}}, % 格式：五号黑体
+			format={\heiti\tjfontbody}, % 格式：五号黑体
 			numbering=true, % 启用编号
 			number={\alph{subparagraph}}, % 编号格式：使用小写字母作为五级标题
 			aftername={.\space}, % 序号后带点和一个空格
@@ -687,7 +709,7 @@
 
 			\includegraphics[height=2.25cm]{figures/tongji.pdf}
 
-			\zihao{-2}\MakeUppercase{\textbf{\tongjiuniversityeng}}
+			\tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
 			\vskip 30pt
 
 			% 符合毕业设计模板（理工类），标题使用黑体小初
@@ -696,14 +718,14 @@
 
 			% 符合毕业设计模板（理工类），此处使用黑体小二
 			\begin{information}{M{5em}M{22em}}
-				\zihao{-2}\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
-				\zihao{-2}\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
-				\zihao{-2}\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
-				\zihao{-2}\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
-				\zihao{-2}\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
-				\zihao{-2}\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
-				\zihao{-2}\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
-				\zihao{-2}\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
+				\tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
+				\tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
+				\tjfonttitle\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
+				\tjfonttitle\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
+				\tjfonttitle\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
+				\tjfonttitle\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
+				\tjfonttitle\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
+				\tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
 			\end{information}
 
 			\vspace*{\fill}
@@ -714,23 +736,23 @@
 
 % 设置中文摘要页
 \newcommand{\MakeAbstract}[2]{
-	\begin{center}\bf\heiti\zihao{-2}
+	\begin{center}\bfseries\heiti\tjfonttitle
 		\ \\
 		\tongjithesistitle
 	\end{center}
 	\vspace{1pt}
-	\begin{center}\heiti\zihao{4}
-		摘要
+	\begin{center}\heiti\tjfontheading
+		摘\hspace{0.5em}要
 	\end{center}
 	\vspace{-0.5em}
 
 	\begin{spacing}{1.5}
-		\heiti\songti{#1}
+		\songti\tjfontbody #1
 		\par
 	\end{spacing}
 
 	\vskip 5mm
-	\noindent{\songti\zihao{5}{%
+	\noindent{\songti\tjfontbody{%
 			\textbf{关键词：}#2
 		}}~\\
 }
@@ -738,23 +760,23 @@
 % 设置英文摘要页
 \newcommand{\MakeAbstractEng}[2]{
 	\clearpage
-	\begin{center}\heiti\zihao{-2}
+	\begin{center}\heiti\tjfonttitle
 		\ \\
 		\textbf{\tongjithesistitleeng}
 	\end{center}
 	\vspace{1pt}
-	\begin{center}\heiti\zihao{4}
+	\begin{center}\heiti\tjfontheading
 		\textbf{ABSTRACT}
 	\end{center}
 	\vspace{-0.5em}
 
 	\begin{spacing}{1.5}
-		#1
+		\tjfontbody #1
 		\par
 	\end{spacing}
 
 	\vskip 13.65pt % 小五字体单倍行距 13.65pt
-	\noindent{\heiti\zihao{5}
+	\noindent{\heiti\tjfontbody
 		\textbf{Key words: }#2
 	}
 	\par
