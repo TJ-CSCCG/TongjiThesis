@@ -151,7 +151,7 @@
   xleftmargin=2.5em,
   framexleftmargin=2.5em,
   frame=single,
-  rulecolor=\color{bg},
+  rulecolor=\color{gray!40},
   framesep=2mm,
   aboveskip=\baselineskip,
   belowskip=\smallskipamount,
@@ -181,11 +181,8 @@
   % It's already defined by the minted package
 \else
   % When not using minted, create compatibility layer
-  \newenvironment{listing}[1][]{%
-    \begin{figure}[#1]%
-  }{%
-    \end{figure}%
-  }
+  \newfloat{listing}{htbp}{lop}
+  \floatname{listing}{代码}
 
   % Define a fake minted environment that forwards to listings
   \newenvironment{minted}[2][]{%
@@ -199,11 +196,7 @@
 \fi
 
 % Non-float listing environment for cross-page code with captions
-\iftongjithesis@minted
-  \newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
-\else
-  \newenvironment{longlisting}{\captionsetup{type=lstlisting}}{\medskip}
-\fi
+\newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
 \makeatother
 
 \RequirePackage{tcolorbox}
@@ -421,6 +414,8 @@
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
 \makeatother
+% Note: \backmatter is NOT redefined. The default ctexbook behavior
+% (disabling chapter numbering, keeping page numbers continuous) is correct.
 
 % ==========================================
 % Typography and Font Settings
@@ -493,9 +488,18 @@
 \RequirePackage{chngcntr}
 \counterwithin{figure}{chapter}
 \counterwithin{table}{chapter}
-\AtBeginDocument{\counterwithin{lstlisting}{chapter}}
 \counterwithin{equation}{chapter}
 \counterwithin{algorithm}{chapter}
+% listing counter: created by minted (minted=true) or \newfloat (minted=false)
+% lstlisting counter: created by listings package
+% Both are bound to chapter, then lstlisting is aliased to listing.
+\makeatletter
+\AtBeginDocument{%
+  \counterwithin{listing}{chapter}%
+  \counterwithin{lstlisting}{chapter}%
+  \let\c@lstlisting\c@listing
+}
+\makeatother
 
 % 设置正文页内章节标题格式
 \ctexset{
@@ -506,6 +510,8 @@
     number={\arabic{chapter}},
     aftername={\quad},
     break={\clearpage},
+    % Negative beforeskip: absolute value (16pt) is the vertical space above
+    % the heading; the negative sign suppresses first paragraph indent (ctex convention).
     beforeskip={-16pt},
     afterskip={\tjskipaftersec},
   },
@@ -547,12 +553,6 @@
 
 \setcounter{secnumdepth}{5}
 
-\makeatletter
-\iftongjithesis@minted
-  \AtBeginDocument{\let\c@listing\c@figure}
-\fi
-\AtBeginDocument{\let\c@lstlisting\c@figure}
-\makeatother
 
 % ==========================================
 % Float Settings
@@ -562,11 +562,7 @@
 \floatstyle{plaintop}       % 表格的 caption 在表格上方
 \restylefloat{table}
 \floatstyle{plain}
-\makeatletter
-\iftongjithesis@minted
-  \restylefloat{listing}    % listing 环境默认为 ruled，修改为 plain
-\fi
-\makeatother
+\restylefloat{listing}      % minted 默认 ruled，\newfloat 默认 plain；统一为 plain
 \sloppy
 
 % ==========================================
@@ -633,16 +629,9 @@
 \newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
 \newcommand*{\figref}[1]{\figurename~\ref{#1}~}
 
-% Counter and cross-reference setup for code listings
-\makeatletter
-\iftongjithesis@minted
-  % For minted package
-  \crefname{listing}{代码}{代码}
-  \Crefname{listing}{代码}{代码}
-\fi
-\makeatother
-
-% For listings package
+% Cross-reference names for code listings (both float types)
+\crefname{listing}{代码}{代码}
+\Crefname{listing}{代码}{代码}
 \crefname{lstlisting}{代码}{代码}
 \Crefname{lstlisting}{代码}{代码}
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}}
@@ -824,6 +813,7 @@
 \makeatother
 
 % 加载用户配置文件
+% cfg is found via TEXINPUTS: locally via .latexmkrc (./style//), or alongside cls on CTAN/texmf.
 \AtEndOfPackage{
 	\InputIfFileExists{tongjithesis.cfg}{}{}
 }
