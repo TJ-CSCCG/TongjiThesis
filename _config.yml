@@ -1,2 +1,5 @@
-theme: jekyll-theme-architect
+theme: jekyll-theme-cayman
+title: TongjiThesis
+description: 同济大学本科毕业设计论文 LaTeX 模板
+logo: figures/tongjithesis.png
 show_downloads: true

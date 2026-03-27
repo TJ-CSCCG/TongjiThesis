@@ -84,7 +84,7 @@ env:
     rsfs
     setspace
     siunitx
-    subfig
+    subcaption
     tcolorbox
     texcount
     texliveonfly
