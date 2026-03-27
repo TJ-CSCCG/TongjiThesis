@@ -12,29 +12,32 @@
 
 \begin{document}
 
-\input{sections/frontcover}
+\input{chapters/frontcover}
 \cleardoublepage
 
 \frontmatter
-\input{sections/00_abstract}
+\input{chapters/00_abstract}
 
 \clearpage
 \tableofcontents
+% \listoffigures   % 插图清单（根据需要取消注释）
+% \listoftables    % 表格清单（根据需要取消注释）
 \cleardoublepage
 
 \mainmatter
-\input{sections/01_intro}
-\input{sections/02_math}
-\input{sections/03_reference}
-\input{sections/04_float}
-\input{sections/05_conclusion}
+\input{chapters/01_guide}
+\input{chapters/02_intro}
+\input{chapters/03_float}
+\input{chapters/04_math}
+\input{chapters/05_reference}
+\input{chapters/06_conclusion}
 
 \makereferences
 
 \appendix
-\input{sections/appendix}
+\input{chapters/appendix}
 
 \backmatter
-\input{sections/ack}
+\input{chapters/ack}
 
 \end{document}
