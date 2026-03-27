@@ -34,7 +34,7 @@ LATEXMK_OPT = \
     -shell-escape \
     -synctex=1 \
     -recorder \
-	-usepretex="\listfiles" \
+    -usepretex="\listfiles" \
     $(ENGINE)
 
 # Preview continuous mode options
@@ -105,13 +105,13 @@ wordcount: $(THESIS).tex
 # Clean auxiliary files
 clean:
 	@echo "Cleaning auxiliary files..."
-	-@latexmk -c -bibtex -silent $(THESIS).tex styledef.tex 2> /dev/null
+	-@latexmk -c -bibtex -silent $(THESIS).tex 2> /dev/null
 	@echo "Clean complete."
 
 # Clean all generated files
 cleanall:
 	@echo "Cleaning all generated files..."
-	-@latexmk -C -bibtex -silent $(THESIS).tex styledef.tex 2> /dev/null
+	-@latexmk -C -bibtex -silent $(THESIS).tex 2> /dev/null
 	@echo "Clean complete."
 
 # Help target

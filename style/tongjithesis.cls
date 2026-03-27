@@ -2,25 +2,26 @@
 % tongjithesis -- Tongji University Thesis Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tongjithesis}[2026/03/25 v1.2.0 Tongji University Thesis Class]
+\ProvidesClass{tongjithesis}[2026/03/27 v1.2.0 Tongji University Thesis Class]
 
-%% tongji-undergrad-thesis
+%% TongjiThesis
 %% Copyright 2023-2026 TJ-CSCCG
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
 % of this license or (at your option) any later version.
 % The latest version of this license is in
-%   http://www.latex-project.org/lppl.txt
-% and version 1.3 or later is part of all distributions of LaTeX
-% version 2003/12/01 or later.
+%   https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
 %
 % This work has the LPPL maintenance status "maintained".
 %
-% This Current Maintainer of this work is R. Lin.
+% The Current Maintainer of this work is R. Lin.
 %
-% This work consists of all the *.tex, *.cls, *.cfg, and *.sty files in
-%   https://github.com/TJ-CSCCG/tongji-undergrad-thesis
+% This work consists of the files tongjithesis.cls and tongjithesis.cfg,
+% and all accompanying *.tex files in
+%   https://github.com/TJ-CSCCG/TongjiThesis
 
 % ==========================================
 % Option Declaration

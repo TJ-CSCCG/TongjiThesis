@@ -22,6 +22,9 @@ on:
 
 name: test
 
+permissions:
+  contents: read
+
 # On push use the branch ref; on PR use the PR number.
 # This avoids duplicate runs: a push to a PR branch cancels the push-triggered run.
 concurrency:

@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/tongji-undergrad-thesis?label=Release" alt="Release"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis?label=Release" alt="Release"></a>
   <a href="https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/tongji-undergrad-thesis?style=flat" alt="Stars"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
 </p>
 
 <p align="center">
@@ -17,13 +17,13 @@
 A LaTeX template that conforms to the official formatting requirements for Tongji University undergraduate theses. Supports XeLaTeX / LuaLaTeX compilation, offers both `minted` and `listings` for code highlighting, and is compatible with both `biblatex` and `bibtex` citation backends. Continuously tested on Linux, macOS, and Windows via CI.
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0027.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0031.jpg" width="30%">
 </p>
 
 > [!NOTE]
-> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/TongjiThesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/TongjiThesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
 
 ## Key Features
 
@@ -111,7 +111,7 @@ make wordcount          # word count
 
 <details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
 
-Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `tongji-undergrad-thesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
+Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `TongjiThesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
 
 Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
 
@@ -125,7 +125,7 @@ Alternatively, the LaTeX Workshop plugin will automatically compile the file whe
 
 <details><summary><b>Using in Docker</b></summary>
 
-For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
+For detailed usage, see [TongjiThesis-env](https://github.com/TJ-CSCCG/TongjiThesis-env).
 
 </details>
 
@@ -179,7 +179,7 @@ Use `\tjbibresource{file1.bib,file2.bib}` to specify bib files, and `\makerefere
 
 <details><summary><b>Rendering Rare Characters</b></summary>
 
-Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
+Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
 
 ```latex
 \documentclass[
@@ -228,7 +228,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md#提交-pull-request).
 
 ## Open Source License
 
-This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/blob/master/LICENSE) file for details.
+This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE) file for details.
 
 ## Project History
 
@@ -252,4 +252,4 @@ We have learned a lot from excellent open-source projects from top universities:
 
 ## Contact Information
 
-For questions, please use [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions).
+For questions, please use [Discussions](https://github.com/TJ-CSCCG/TongjiThesis/discussions).

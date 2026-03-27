@@ -130,13 +130,13 @@ goto :help
 
 :clean
     echo Cleaning auxiliary files...
-    latexmk -c -bibtex -silent %THESIS%.tex styledef.tex 2>nul
+    latexmk -c -bibtex -silent %THESIS%.tex 2>nul
     echo Clean complete.
     goto :EOF
 
 :cleanall
     echo Cleaning all generated files...
-    latexmk -C -bibtex -silent %THESIS%.tex styledef.tex 2>nul
+    latexmk -C -bibtex -silent %THESIS%.tex 2>nul
     if exist %THESIS%.pdf (
         echo Close the file: '%THESIS%.pdf'!
         pause

@@ -173,7 +173,7 @@ jobs:
 
           ## Links
 
-          - GitHub: https://github.com/TJ-CSCCG/tongji-undergrad-thesis
+          - GitHub: https://github.com/TJ-CSCCG/TongjiThesis
           - Overleaf: https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn
           HEREDOC
 
@@ -483,7 +483,7 @@ jobs:
             - Python with Pygments (optional, for minted code highlighting)
 
             ### Links
-            - [GitHub Repository](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)
+            - [GitHub Repository](https://github.com/TJ-CSCCG/TongjiThesis)
             - [Overleaf Template](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
             ---
