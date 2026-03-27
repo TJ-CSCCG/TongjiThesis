@@ -96,7 +96,7 @@
 \RequirePackage{setspace}
 \RequirePackage[inline]{enumitem}
 \RequirePackage{circledsteps}
-\RequirePackage{ulem}
+\RequirePackage[normalem]{ulem}
 \RequirePackage{calc}
 \RequirePackage{ifthen}
 \RequirePackage{hologo}
@@ -281,8 +281,8 @@
 % 重新定义 \cleardoublepage 命令
 \let\origdoublepage\cleardoublepage
 \newcommand{\clearemptydoublepage}{
-	\clearpage
-	{\pagestyle{empty}\origdoublepage}
+  \clearpage
+  {\pagestyle{empty}\origdoublepage}
 }
 \let\cleardoublepage\clearemptydoublepage
 
@@ -378,23 +378,23 @@
 
 % 设置摘要与目录页样式（如页眉、页脚等）
 \fancypagestyle{firststyle}{
-	\fancyhf{}
-	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
-	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
-	\fancyfoot[C]{\large \thepage}
-	\renewcommand{\headrulewidth}{1.8pt}
-	\renewcommand{\footrulewidth}{0pt}
+  \fancyhf{}
+  \fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
+  \fancyhead[RO,LE]{\large ~\tjheadertext~\\}
+  \fancyfoot[C]{\large \thepage}
+  \renewcommand{\headrulewidth}{1.8pt}
+  \renewcommand{\footrulewidth}{0pt}
 }
 
 % 设置正文页样式（如页眉、页脚等）
 \fancypagestyle{mainstyle}{
-	\fancyhf{}
-	\fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
-	\fancyhead[RO,LE]{\large ~\tjheadertext~\\}
-	\fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
-	\fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
-	\renewcommand{\headrulewidth}{1.8pt}
-	\renewcommand{\footrulewidth}{1.8pt}
+  \fancyhf{}
+  \fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
+  \fancyhead[RO,LE]{\large ~\tjheadertext~\\}
+  \fancyfoot[RO]{{\large 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
+  \fancyfoot[LE]{{\large 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
+  \renewcommand{\headrulewidth}{1.8pt}
+  \renewcommand{\footrulewidth}{1.8pt}
 }
 
 % 自动设置前言和正文的页面样式
@@ -450,8 +450,8 @@
 % 修改目录编号与文字的间距，默认为 1em，强制修改为 0.5em
 \makeatletter
 \renewcommand{\numberline}[1]{%
-	\settowidth\@tempdimb{#1\hspace{0.5em}}%
-	\hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
+  \settowidth\@tempdimb{#1\hspace{0.5em}}%
+  \hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
 \makeatother
 
 % 在上述修改基础上，符合模板标题对齐要求
@@ -622,43 +622,66 @@
 % ==========================================
 
 % 交叉引用
-\newcommand*{\chapref}[1]{第~\ref{#1}~章}
-\newcommand*{\secref}[1]{第~\ref{#1}~节}
+\newcommand*{\chapref}[1]{第~\ref{#1}~章~}
+\newcommand*{\secref}[1]{第~\ref{#1}~节~}
 \newcommand*{\algoref}[1]{算法~\ref{#1}~}
-\renewcommand*{\eqref}[1]{公式（\ref{#1}）}
+\renewcommand*{\eqref}[1]{公式（\ref{#1}）~}
 \newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
 \newcommand*{\figref}[1]{\figurename~\ref{#1}~}
 
 % Cross-reference names for code listings (both float types)
-\crefname{listing}{代码}{代码}
-\Crefname{listing}{代码}{代码}
-\crefname{lstlisting}{代码}{代码}
-\Crefname{lstlisting}{代码}{代码}
-\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}}
+\crefformat{listing}{代码~#2#1#3}
+\crefmultiformat{listing}{代码~#2#1#3}{和代码~#2#1#3}{、代码~#2#1#3}{和代码~#2#1#3}
+\crefrangeformat{listing}{代码~#3#1#4~至代码~#5#2#6}
+\crefformat{lstlisting}{代码~#2#1#3}
+\crefmultiformat{lstlisting}{代码~#2#1#3}{和代码~#2#1#3}{、代码~#2#1#3}{和代码~#2#1#3}
+\crefrangeformat{lstlisting}{代码~#3#1#4~至代码~#5#2#6}
+\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
 
 % Configure references in Chinese
-\crefname{equation}{式}{式}
-\crefname{figure}{图}{图}
-\crefname{table}{表}{表}
-\crefname{chapter}{章}{章}
-\crefname{section}{节}{节}
-\crefname{subsection}{小节}{小节}
-\crefname{subsubsection}{子小节}{子小节}
-\crefname{paragraph}{段落}{段落}
-\crefname{FancyVerbLine}{行}{行}
-\crefname{theorem}{定理}{定理}
-\crefname{thm}{定理}{定理}
-\crefname{cor}{推论}{推论}
-\crefname{lem}{引理}{引理}
-\crefname{prop}{命题}{命题}
-\crefname{conj}{猜想}{猜想}
-\crefname{assume}{假设}{假设}
-\crefname{dfn}{定义}{定义}
-\crefname{exmp}{例}{例}
-\crefname{rem}{注}{注}
-\crefname{pf}{证明}{证明}
-\crefname{proof}{证明}{证明}
-\crefname{algorithm}{算法}{算法}
+% "第X章/节" pattern: number is wrapped, needs full multi/range formats
+\crefformat{chapter}{第~#2#1#3~章}
+\crefmultiformat{chapter}{第~#2#1#3~章}{和第~#2#1#3~章}{、第~#2#1#3~章}{和第~#2#1#3~章}
+\crefrangeformat{chapter}{第~#3#1#4~章至第~#5#2#6~章}
+\crefformat{section}{第~#2#1#3~节}
+\crefmultiformat{section}{第~#2#1#3~节}{和第~#2#1#3~节}{、第~#2#1#3~节}{和第~#2#1#3~节}
+\crefrangeformat{section}{第~#3#1#4~节至第~#5#2#6~节}
+\crefformat{subsection}{第~#2#1#3~小节}
+\crefmultiformat{subsection}{第~#2#1#3~小节}{和第~#2#1#3~小节}{、第~#2#1#3~小节}{和第~#2#1#3~小节}
+\crefrangeformat{subsection}{第~#3#1#4~小节至第~#5#2#6~小节}
+% "名称~X" pattern: ~ separates CJK name from digit.
+% --- Common float/equation types ---
+\crefformat{equation}{式~#2#1#3}
+\crefmultiformat{equation}{式~#2#1#3}{和式~#2#1#3}{、式~#2#1#3}{和式~#2#1#3}
+\crefrangeformat{equation}{式~#3#1#4~至式~#5#2#6}
+\crefformat{figure}{图~#2#1#3}
+\crefmultiformat{figure}{图~#2#1#3}{和图~#2#1#3}{、图~#2#1#3}{和图~#2#1#3}
+\crefrangeformat{figure}{图~#3#1#4~至图~#5#2#6}
+\crefformat{table}{表~#2#1#3}
+\crefmultiformat{table}{表~#2#1#3}{和表~#2#1#3}{、表~#2#1#3}{和表~#2#1#3}
+\crefrangeformat{table}{表~#3#1#4~至表~#5#2#6}
+\crefformat{algorithm}{算法~#2#1#3}
+\crefmultiformat{algorithm}{算法~#2#1#3}{和算法~#2#1#3}{、算法~#2#1#3}{和算法~#2#1#3}
+\crefrangeformat{algorithm}{算法~#3#1#4~至算法~#5#2#6}
+\crefformat{FancyVerbLine}{第~#2#1#3~行}
+\crefmultiformat{FancyVerbLine}{第~#2#1#3~行}{和第~#2#1#3~行}{、第~#2#1#3~行}{和第~#2#1#3~行}
+\crefrangeformat{FancyVerbLine}{第~#3#1#4~行至第~#5#2#6~行}
+% --- Theorem types (single + multi for consistency) ---
+\crefformat{thm}{定理~#2#1#3}
+\crefmultiformat{thm}{定理~#2#1#3}{和定理~#2#1#3}{、定理~#2#1#3}{和定理~#2#1#3}
+\crefformat{cor}{推论~#2#1#3}
+\crefmultiformat{cor}{推论~#2#1#3}{和推论~#2#1#3}{、推论~#2#1#3}{和推论~#2#1#3}
+\crefformat{lem}{引理~#2#1#3}
+\crefmultiformat{lem}{引理~#2#1#3}{和引理~#2#1#3}{、引理~#2#1#3}{和引理~#2#1#3}
+\crefformat{prop}{命题~#2#1#3}
+\crefmultiformat{prop}{命题~#2#1#3}{和命题~#2#1#3}{、命题~#2#1#3}{和命题~#2#1#3}
+\crefformat{conj}{猜想~#2#1#3}
+\crefformat{assume}{假设~#2#1#3}
+\crefformat{dfn}{定义~#2#1#3}
+\crefformat{exmp}{例~#2#1#3}
+\crefformat{rem}{注~#2#1#3}
+\crefformat{pf}{证明~#2#1#3}
+\crefformat{proof}{证明~#2#1#3}
 
 % Configure connecting words
 \newcommand{\crefpairconjunction}{ 和~}
@@ -677,6 +700,11 @@
 \providecommand{\BibTeX}{\hologo{BibTeX}}
 \providecommand{\BibLaTeX}{\textsc{Bib}\LaTeX}
 \providecommand{\LuaTeX}{\hologo{LuaTeX}}
+\DeclareRobustCommand{\TongjiThesis}{%
+  \texorpdfstring{%
+    T{\scshape ongji}\kern.08em T{\scshape hesis}%
+  }{TongjiThesis}%
+}
 
 % ==========================================
 % Cover and User Information Commands
@@ -687,9 +715,9 @@
 \let\oldtabular\tabular
 \let\endoldtabular\endtabular
 \newenvironment{information}[1][h!]{
-	\renewcommand{\arraystretch}{1.5}
-	\setlength{\tabcolsep}{8pt}
-	\zihao{-3}\oldtabular[#1]
+  \renewcommand{\arraystretch}{1.5}
+  \setlength{\tabcolsep}{8pt}
+  \zihao{-3}\oldtabular[#1]
 }{\renewcommand{\arraystretch}{1.2}\endoldtabular
 }
 
@@ -697,15 +725,15 @@
 \newlength{\covermaxwidth}
 
 \newcommand{\ulinecentered}[1]{
-	\setlength{\covertextwidth}{\widthof{#1}}
-	\setlength{\covermaxwidth}{20em} % Set the maximum width you allow
-	\ifthenelse{\lengthtest{\covertextwidth > \covermaxwidth}}{
-		% Calculate scale factor and scale down text if too wide
-		\pgfmathsetmacro{\scalefactor}{\covermaxwidth/\covertextwidth}
-		\uline{\makebox[\covermaxwidth][c]{\scalebox{\scalefactor}[1]{#1}}}
-	}{
-		\uline{\makebox[\covermaxwidth][c]{#1}} % Use normal text if within the limit
-	}
+  \setlength{\covertextwidth}{\widthof{#1}}
+  \setlength{\covermaxwidth}{20em} % Set the maximum width you allow
+  \ifthenelse{\lengthtest{\covertextwidth > \covermaxwidth}}{
+    % Calculate scale factor and scale down text if too wide
+    \pgfmathsetmacro{\scalefactor}{\covermaxwidth/\covertextwidth}
+    \uline{\makebox[\covermaxwidth][c]{\scalebox{\scalefactor}[1]{#1}}}
+  }{
+    \uline{\makebox[\covermaxwidth][c]{#1}} % Use normal text if within the limit
+  }
 }
 
 % 论文基本信息配置
@@ -720,83 +748,83 @@
 % 设置封面
 \makeatletter
 \newcommand{\MakeCover}[0]{
-	\begin{titlepage}
-		\begin{center}
-			\global\tjbindinglinefalse
-			\vspace*{\fill}
+  \begin{titlepage}
+    \begin{center}
+      \global\tjbindinglinefalse
+      \vspace*{\fill}
 
-			\includegraphics[height=2.25cm]{figures/tongji.pdf}
+      \includegraphics[height=2.25cm]{figures/tongji.pdf}
 
-			\tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
-			\vskip 30pt
+      \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
+      \vskip 30pt
 
-			\zihao{-0}\heiti{\tj@covertype}
-			\vskip 60pt
+      \zihao{-0}\heiti{\tj@covertype}
+      \vskip 60pt
 
-			\begin{information}{M{5em}M{22em}}
-				\tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
-				\tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
-				\tjfonttitle\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
-				\tjfonttitle\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
-				\tjfonttitle\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
-				\tjfonttitle\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
-				\tjfonttitle\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
-				\tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
-			\end{information}
+      \begin{information}{M{5em}M{22em}}
+        \tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
+        \tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
+        \tjfonttitle\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
+        \tjfonttitle\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
+        \tjfonttitle\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
+        \tjfonttitle\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
+        \tjfonttitle\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
+        \tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
+      \end{information}
 
-			\vspace*{\fill}
-		\end{center}
-	\end{titlepage}
-	\global\tjbindinglinetrue
+      \vspace*{\fill}
+    \end{center}
+  \end{titlepage}
+  \global\tjbindinglinetrue
 }
 \makeatother
 
 % 设置中文摘要页
 \newcommand{\MakeAbstract}[2]{
-	\begin{center}\bfseries\heiti\tjfonttitle
-		\ \\
-		\tongjithesistitle
-	\end{center}
-	\vspace{1pt}
-	\begin{center}\heiti\tjfontheading
-		摘\hspace{0.5em}要
-	\end{center}
-	\vspace{-0.5em}
+  \begin{center}\bfseries\heiti\tjfonttitle
+    \ \\
+    \tongjithesistitle
+  \end{center}
+  \vspace{1pt}
+  \begin{center}\heiti\tjfontheading
+    摘\hspace{0.5em}要
+  \end{center}
+  \vspace{-0.5em}
 
-	\begin{spacing}{1.5}
-		\songti\tjfontbody #1
-		\par
-	\end{spacing}
+  \begin{spacing}{1.5}
+    \songti\tjfontbody #1
+    \par
+  \end{spacing}
 
-	\vskip 5mm
-	\noindent{\songti\tjfontbody{%
-			\textbf{关键词：}#2
-		}}~\\
+  \vskip 5mm
+  \noindent{\songti\tjfontbody{%
+      \textbf{关键词：}#2
+    }}~\\
 }
 
 % 设置英文摘要页
 \newcommand{\MakeAbstractEng}[2]{
-	\clearpage
-	\begin{center}\heiti\tjfonttitle
-		\ \\
-		\textbf{\tongjithesistitleeng}
-	\end{center}
-	\vspace{1pt}
-	\begin{center}\heiti\tjfontheading
-		\textbf{ABSTRACT}
-	\end{center}
-	\vspace{-0.5em}
+  \clearpage
+  \begin{center}\heiti\tjfonttitle
+    \ \\
+    \textbf{\tongjithesistitleeng}
+  \end{center}
+  \vspace{1pt}
+  \begin{center}\heiti\tjfontheading
+    \textbf{ABSTRACT}
+  \end{center}
+  \vspace{-0.5em}
 
-	\begin{spacing}{1.5}
-		\tjfontbody #1
-		\par
-	\end{spacing}
+  \begin{spacing}{1.5}
+    \tjfontbody #1
+    \par
+  \end{spacing}
 
-	\vskip 13.65pt % 小五字体单倍行距 13.65pt
-	\noindent{\heiti\tjfontbody
-		\textbf{Key words: }#2
-	}
-	\par
+  \vskip 13.65pt % 小五字体单倍行距 13.65pt
+  \noindent{\heiti\tjfontbody
+    \textbf{Key words: }#2
+  }
+  \par
 }
 
 % ==========================================
@@ -815,5 +843,5 @@
 % 加载用户配置文件
 % cfg is found via TEXINPUTS: locally via .latexmkrc (./style//), or alongside cls on CTAN/texmf.
 \AtEndOfPackage{
-	\InputIfFileExists{tongjithesis.cfg}{}{}
+  \InputIfFileExists{tongjithesis.cfg}{}{}
 }
