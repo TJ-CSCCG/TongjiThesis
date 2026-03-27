@@ -1,0 +1,47 @@
+\chapter{补充数据}\label{chap:appendix-data}
+
+本附录提供正文中未详细列出的补充数据与推导过程，供读者参考。
+
+\section{数据处理公式推导}
+
+根据同济大学本科生成绩计算方法，课程成绩按五级制评定，成绩等级与课程绩点的对应关系如\cref{tab:grading-system}~所示。
+
+\begin{table}[!htb]
+  \caption{同济大学本科生成绩等级与绩点对照}\label{tab:grading-system}
+  \centering
+  \begin{tabular}{@{}ccccc@{}} \toprule
+    \textbf{课程成绩} & \textbf{成绩等级} & \textbf{课程绩点} & \textbf{百分制折算值} \\ \midrule
+    优（Excellent） & A & 5 & 95 \\
+    良（Good）      & B & 4 & 85 \\
+    中（Fair）      & C & 3 & 75 \\
+    及格（Pass）    & D & 2 & 65 \\
+    不及格（Failed）& F & 0 & 30 \\ \bottomrule
+  \end{tabular}
+\end{table}
+
+平均绩点（GPA）计算公式为：
+\begin{equation}\label{eq:gpa}
+  \text{GPA} = \frac{\sum(\text{课程学分} \times \text{课程绩点})}{\sum\text{课程学分}}
+\end{equation}
+全部课程的百分制平均成绩按以下公式折算：
+\begin{equation}\label{eq:avg-score}
+  \text{百分制平均成绩} = \frac{\sum(\text{百分制成绩折算值} \times \text{课程学分})}{\sum\text{课程学分}}
+\end{equation}
+
+\section{补充数据表}
+
+\cref{tab:appendix-sample} 列出了更多测试样本的详细数据。
+
+\begin{table}[!htb]
+  \caption{补充测试数据}
+  \label{tab:appendix-sample}
+  \centering
+  \begin{tabular}{@{}cccc@{}} \toprule
+    \textbf{样本编号} & \textbf{输入值} & \textbf{输出值} & \textbf{误差} \\ \midrule
+    1 & 0.50 & 0.48 & 0.02 \\
+    2 & 1.00 & 0.97 & 0.03 \\
+    3 & 1.50 & 1.52 & 0.02 \\
+    4 & 2.00 & 1.98 & 0.02 \\
+    5 & 2.50 & 2.53 & 0.03 \\ \bottomrule
+  \end{tabular}
+\end{table}

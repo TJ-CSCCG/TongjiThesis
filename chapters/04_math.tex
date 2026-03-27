@@ -1,19 +1,17 @@
-\section{数学公式与符号}\label{sec:math}
+\chapter{数学公式与符号}\label{chap:math}
 
-本节展示数字格式化、单位排版、数学公式以及定理环境等功能的使用方法。
+本章展示数字格式化、单位排版、数学公式以及定理环境等功能的使用方法。
 
-\subsection{数字和单位}
+\section{数字和单位}
 
-\subsubsection*{数字格式化}
+\subsection{数字格式化}
 
 数字可以使用 \verb|\num{}| 命令进行格式化，例如：
 
 \begin{itemize}
   \item \num{12345272.42146}：显示长数字。
   \item \num{9+-3i}：显示复数。
-        % \item \complexnum{1+-2i}  % For TeXLive 2021, siunitx >= 3.0
   \item \num{9.624 x 8.18 x 1.745}：显示乘积表达式。
-        % \item \numproduct{1.654 x 2.34 x 3.430}  % For TeXLive 2021, siunitx >= 3.0
   \item \num{1.234567e8}：以科学计数法显示数字。
   \item \num{-19.7}：显示负号。
   \item \num{3.2d-5}：显示数字和指数，使用小写的 d 来指示指数。
@@ -21,7 +19,7 @@
   \item \num[parse-numbers=false]{\$19,456.82}：显示一个货币金额，并将其解释为一个字符串，而不是数字。
 \end{itemize}
 
-\subsubsection*{单位格式化}
+\subsection{单位格式化}
 
 单位可以使用 \verb|\si{}| 命令进行格式化，例如：
 
@@ -36,7 +34,7 @@
   \item \SI{12}{\degree}：显示一个角度值，单位为度。
 \end{itemize}
 
-\subsubsection*{数字和单位组合}
+\subsection{数字和单位组合}
 
 数字和单位可以组合起来使用，例如：
 
@@ -46,7 +44,7 @@
   \item \SI{2.3}{\mega\joule\per\kelvin}：显示物理量的值和单位。
 \end{itemize}
 
-\subsubsection*{数字和单位列表}
+\subsection{数字和单位列表}
 
 数字和单位列表可以使用以下命令进行格式化：
 
@@ -56,7 +54,7 @@
   \item \SIlist{0.53;0.74;0.99}{\milli\metre}：显示带有单位的数字列表，其中数字之间用分号隔开。
 \end{itemize}
 
-\subsubsection*{数字和单位范围}
+\subsection{数字和单位范围}
 
 数字和单位范围可以使用以下命令进行格式化：
 
@@ -67,7 +65,7 @@
 
 以上是一些常见的使用示例，宏包 \pkg{siunitx} 还提供了许多其他选项和命令，可以根据需要进行自定义设置。
 
-\subsection{数学符号和公式}
+\section{数学符号和公式}
 
 按照国标 GB/T 3102.11—1993《物理科学和技术中使用的数学符号》，
 微分符号 $\dd$ 应使用直立体。除此之外，数学常数也应使用直立体：
@@ -79,11 +77,12 @@
 \end{itemize}
 
 公式应另起一行居中排版。公式后应注明编号，按章顺序编排，编号右端对齐。
-\begin{equation}
-  \frac{\dd^2}{\dd t^2}x(t)+\omega^2x(t)=\sin(t)
+\begin{equation}\label{eq:harmonic-oscillator}
+  \frac{\dd^2}{\dd t^2}x(t)+\omega^2x(t)=\sin(t).
 \end{equation}
+如\cref{eq:harmonic-oscillator}~所示，这是一个受迫谐振子的运动方程。
 \begin{equation}
-  \frac{\partial^2u}{\partial t^2}=\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}
+  \frac{\partial^2u}{\partial t^2}=\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}.
 \end{equation}
 
 公式末尾是需要添加标点符号的，至于用逗号还是句号，取决于公式下面一句是接着公式说的，还是另起一句。
@@ -91,17 +90,17 @@
   \sum_{n=1}^{\infty}\frac{\cos(nx)}{n^2}=\frac{\uppi^2}{6}-\frac{x^2}{4}
 \end{equation}
 
-公式较长时最好在等号“$=$”处转行。
+公式较长时最好在等号“$=$”处转行。可使用 \texttt{align} 环境实现多行对齐，用 \verb|&| 指定对齐位置，用 \verb|\nonumber| 抑制某行的编号。
 \begin{align}
        & I(X_1;X_2)-I(X_1;X_2|X_3) \nonumber    \\
   =    & H(X_2)-H(X_2|X_3) \nonumber            \\
   =    & H(X_2,X_3)-H(X_3)-H(X_2|X_3) \nonumber \\
   =    & I(X_2;X_3)-I(X_2;X_3|X_1) \nonumber    \\
   =    & I(X_2;X_3,X_1) \nonumber               \\
-  \geq & 0
+  \geq & 0.
 \end{align}
 
-如果在等号处转行难以实现，也可在 $+$、$-$、$\times$、$\div$ 运算符号处转行，转行时运算符号仅书写于转行式前，不重复书写。
+如果在等号处转行难以实现，也可在 $+$、$-$、$\times$、$\div$ 运算符号处转行，转行时运算符号仅书写于转行式前，不重复书写。可以使用 \texttt{multline} 环境排版超长单行公式，第一行左对齐，最后一行右对齐。
 \begin{multline}
   \frac{1}{2} \Delta (f_{ij} f^{ij}) =
   2 \left(\sum_{i<j} \chi_{ij}(\sigma_{i} - \sigma_{j})^{2}
@@ -114,19 +113,47 @@
   - e^{2}\phi^{2}A_{\mu}A^{\mu} + \frac{1}{4}F_{\mu\nu}F^{\mu\nu}.
 \end{multline}
 
-\subsection{定理环境}
+\subsection{矩阵}
+
+矩阵是理工科论文中的常见元素，可使用 \texttt{pmatrix}（圆括号）、\texttt{bmatrix}（方括号）和 \texttt{vmatrix}（行列式）等环境排版：
+\begin{equation}
+  \mathbf{A} = \begin{pmatrix}
+    a_{11} & a_{12} & \cdots & a_{1n} \\
+    a_{21} & a_{22} & \cdots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \cdots & a_{mn}
+  \end{pmatrix}, \quad
+  \det(\mathbf{A}) = \begin{vmatrix}
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+  \end{vmatrix} = a_{11}a_{22} - a_{12}a_{21}.
+\end{equation}
+
+\subsection{分段函数}
+
+分段函数可使用 \texttt{cases} 环境排版：
+\begin{equation}\label{eq:piecewise}
+  f(x) = \begin{cases}
+    x^2,   & x \geq 0, \\
+    -x^2,  & x < 0.
+  \end{cases}
+\end{equation}
+
+\section{定理环境}
 
 定理环境是数学领域中常用的一种环境类型，用于表述和证明各种数学定理、推论、引理等。在 \LaTeX\ 中，我们可以通过定义定理环境来方便地排版定理等内容，使其在文档中具有更加统一的风格和格式。
 
-在本节中，我们展示了一些常用的定理环境，包括定理、推论、引理、命题、猜想、假设、定义、例、注等。这些环境的具体样式可以通过修改定理环境的定义进行自定义。此外，我们还展示了定理证明环境，用于证明各种定理和结论。在定理证明环境中，我们可以使用各种数学符号和公式，方便地展示证明过程，使读者更加易于理解。
+在本章中，我们展示了一些常用的定理环境，包括定理、推论、引理、命题、猜想、假设、定义、例、注等。这些环境的具体样式可以通过修改定理环境的定义进行自定义。此外，我们还展示了定理证明环境，用于证明各种定理和结论。在定理证明环境中，我们可以使用各种数学符号和公式，方便地展示证明过程，使读者更加易于理解。
 
-\begin{thm}
+\begin{thm}\label{thm:infinite-primes}
   素数有无穷多个。
 \end{thm}
 
 \begin{proof}
   假设素数只有有限个，记为 $p_1, p_2, \dots, p_n$。令 $N = p_1 p_2 \cdots p_n + 1$，则 $N > 1$，且 $N$ 除以任何 $p_i$ 都余 $1$，因此 $N$ 不能被任何 $p_i$ 整除。但 $N$ 必有素因子，该素因子不在 $p_1, \dots, p_n$ 中，与假设矛盾。故素数有无穷多个。
 \end{proof}
+
+以上通过\cref{thm:infinite-primes}~展示了定理与证明环境的基本用法。
 
 \begin{cor}
   如果 $a$ 和 $b$ 是正实数，则 $a+b \geq 2\sqrt{ab}$。
@@ -146,17 +173,11 @@
 \end{lem}
 
 \begin{proof}
-  我们定义一个新的函数 $g(x) = f(x) - \frac{f(b)-f(a)}{b-a} \cdot (x-a)$。这个函数满足 $g(a) = f(a)$，$g(b) = f(b)$，且 $g'(x) = f'(x) - \frac{f(b)-f(a)}{b-a}$。如果我们能够找到一个点 $c \in (a,b)$，使得 $g(c) = 0$，那么根据罗尔定理，$g'(x)$ 必然在 $[a,b]$ 中的某个点为 $0$，即存在 $x_0 \in (a,b)$，使得 $f'(x_0) = \frac{f(b)-f(a)}{b-a}$。因此，我们只需要证明 $g(a)$ 和 $g(b)$ 异号即可。由于 $f$ 在 $[a,b]$ 上连续，根据介值定理，存在一个点 $c \in [a,b]$，使得 $f(c) = \frac{f(b)+f(a)}{2}$。那么，我们有：
-  \begin{align*}
-    g(a) & = f(a) - \frac{f(b)-f(a)}{b-a} \cdot (a-a) \\
-         & = f(a)                                     \\
-         & < \frac{f(b)+f(a)}{2}                      \\
-         & = f(c)                                     \\
-         & > \frac{f(b)-f(a)}{b-a} \cdot (c-a)        \\
-         & = f(a) - \frac{f(b)-f(a)}{b-a} \cdot (b-a) \\
-         & = g(b)
-  \end{align*}
-  因此，$g(a)$ 和 $g(b)$ 异号，定理得证。
+  定义辅助函数 $g(x) = f(x) - \frac{f(b)-f(a)}{b-a}(x-a)$。易验证 $g(a) = f(a)$，$g(b) = f(b) - (f(b)-f(a)) = f(a)$，故 $g(a) = g(b)$。由罗尔定理，存在 $c \in (a,b)$ 使得 $g'(c) = 0$，即
+  \begin{equation*}
+    f'(c) - \frac{f(b)-f(a)}{b-a} = 0,
+  \end{equation*}
+  因此 $f'(c) = \frac{f(b)-f(a)}{b-a}$，定理得证。
 \end{proof}
 
 \begin{prop}
@@ -194,6 +215,10 @@
 \begin{rem}
   在数学中，定义和定理是数学推理的基础，而引理和命题则通常作为定理证明的中间步骤。而且在数学研究中，猜想和猜测往往需要大量的证明和反证，才能得到确定的结论。
 \end{rem}
+
+\begin{thm}
+  对于任意正整数 $n$，有 $\displaystyle\sum_{i=1}^n i = \frac{n(n+1)}{2}$。
+\end{thm}
 
 \begin{proof}
   设 $n$ 是任意正整数，则存在一个双射 $f: \left\{1,2,\dots,n\right\} \rightarrow \left\{n,n-1,\dots,1\right\}$，即将 $\left\{1,2,\dots,n\right\}$ 中的元素按照相反的顺序重新编号，使得 $f(i) = n-i+1$。因此，我们有：

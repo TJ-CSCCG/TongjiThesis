@@ -1,30 +1,49 @@
-\section{绪论}\label{sec:introduction}
+\chapter{绪论}\label{chap:introduction}
 
-本节展示论文写作中常用的排版元素，包括标题层级、列表和字体等基础功能。
+本章展示论文写作中常用的排版元素，包括标题层级、列表和字体等基础功能。在正式撰写毕业设计（论文）时，请将本章内容替换为实际的绪论内容，通常包括课题研究背景与意义、国内外研究现状综述、本文主要研究内容与组织结构等。后续各章分别展示图表与代码、数学公式与符号、引用与注释的排版方法，亦可在写作时作为参考。
 
-\subsection{标题层级示例}
+\section{标题层级示例}
 
-二级标题是一种较为重要的标题级别，一般用于表示文章中的主要章节或主题。通常，它们会在上面添加分割线或加粗等效果，以突出其重要性。
+本模板按照同济大学规范配置了五级标题层级，具体设置如\tabref{tab:heading-levels}所示。
 
-\subsubsection{三级标题示例}
+\begin{table}[htbp]
+  \centering
+  \caption{标题层级设置}\label{tab:heading-levels}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{cccl}
+    \toprule
+    \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{编号格式} & \textbf{示例} \\
+    \midrule
+    1 & \texttt{\textbackslash chapter}       & 1, 2, 3       & {\heiti\tjfontheading 1\quad 绪论} \\
+    2 & \texttt{\textbackslash section}       & 1.1, 1.2      & {\heiti\tjfontbody 1.1 标题层级示例} \\
+    3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2  & {\heiti\tjfontbody 1.1.1 三级标题示例} \\
+    4 & \texttt{\textbackslash subsubsection} & A, B, C       & {\heiti\tjfontbody A.\ 段落标题} \\
+    5 & \texttt{\textbackslash paragraph}     & a, b, c       & {\heiti\tjfontbody a. 子段落标题} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-相对于二级标题而言，三级标题是更加具体的标题级别，通常用于表示二级标题下的具体内容描述。它们的长度通常比二级标题短，与二级标题之间应有一定的间距。
+二级标题用于划分各章的主要内容板块。例如，在绪论中可使用二级标题分别介绍“研究背景与意义”、“国内外研究现状”和“本文组织结构”等。
 
-\paragraph{段落标题}
+\subsection{三级标题示例}
 
-段落标题是文章中比正文稍微具有一些重要性和突出性的内容，通常用加粗或斜体等方式来区别于正文。
+三级标题用于在二级标题下进一步细分内容，例如在“国内外研究现状”下分别介绍国内和国外的研究进展。
 
-\subparagraph{子段落标题}
+\subsubsection{段落标题}
 
-子段落标题是相对于段落标题更加细节化的内容，用于突出一段文字中的重点内容。通常采用斜体或加粗的方式表示。在一些正式的文献中，子段落标题的使用较少。
+段落标题适用于需要进一步细分的场景。注意本模板中段落标题使用大写字母（A、B、C）编号，符合同济大学的排版规范。
 
-\subsection{列表}
+\paragraph{子段落标题}
 
-在下面的段落中，我们将展示如何使用不同的列表类型来表示不同的内容。在文档中，列表是一种非常常见的内容表示方式，它可以帮助读者更好地理解文章的结构和内容。以下内容将结合同济大学的一些相关信息进行展示。
+子段落标题是最细粒度的标题层级，编号采用小写字母（a、b、c）。在实际论文写作中，通常不建议使用超过三级的标题层级，以保持文章结构的清晰性。
 
-\subsubsection{无序列表}
+\section{列表}
 
-无序列表是一种不带编号的列表类型，通常用于表示一组相关的内容。在无序列表中，每个列表项通常由一个特殊的符号或图标来表示。
+列表是论文中常用的排版元素，本节展示无序列表和有序列表的使用方法。有序列表的编号格式已按照同济大学毕业设计（论文）撰写规范进行配置。
+
+\subsection{无序列表}
+
+无序列表适用于列举不需要特定顺序的内容，使用 \texttt{itemize} 环境实现。
 
 \begin{itemize}
     \item 同济大学概述：同济大学是一所以工科著称的综合性大学，具有深厚的历史和优秀的教学资源，是中国著名的高等学府之一，享有盛誉。
@@ -37,9 +56,9 @@
     \item 学术成就：同济大学在多个领域取得了显著的学术成就，培养了大批优秀人才。学校在科学研究、技术创新和社会服务方面都有突出的表现，为国家和社会的发展做出了重要贡献。
 \end{itemize}
 
-\subsubsection{有序列表}
+\subsection{有序列表}
 
-有序列表是一种带编号的列表类型，通常用于表示一组按顺序排列的内容。在有序列表中，每个列表项通常由一个数字或字母来表示。
+有序列表适用于列举需要按顺序排列的内容，使用 \texttt{enumerate} 环境实现。
 
 需要注意的是，根据同济大学提供的理工科毕业设计（论文）撰写规范，有序列表的第一级编号应使用全角圆括号内的数字，如“（1）”、“（2）”等；第二级编号应使用圆圈内的阿拉伯数字，如“\Circled{1}”、“\Circled{2}”等。此外，有序列表的第二级应为行内列表，即不应另起一行，而应与上一级列表项在同一行内；我们在写 \LaTeX{} 代码时，应该使用 \texttt{enumerate*} 环境来实现有序列表的第二级。
 
@@ -64,9 +83,9 @@
     \end{enumerate*}
 \end{enumerate}
 
-\subsection{字体}
+\section{字体}
 
-在下面的段落中，我们使用了不同的字体来表示不同的文字信息。下面是各段落所使用的字体和对应的命令：
+本模板正文默认使用宋体，标题使用黑体。以下展示模板中可用的中文字体及其效果：
 
 \begin{itemize}
     \item {\songti 宋体}：使用命令 \texttt{\textbackslash songti}。
@@ -74,6 +93,32 @@
     \item {\fangsong 仿宋}：使用命令 \texttt{\textbackslash fangsong}。
     \item {\kaishu 楷书}：使用命令 \texttt{\textbackslash kaishu}。
 \end{itemize}
+
+\subsection{字号设置}
+
+本模板已按照同济大学毕业设计（论文）撰写规范预设了各部分的字号，一般无需手动调整。如有特殊需要，可使用 \verb|\zihao{}| 命令设置字号，例如 \verb|\zihao{-4}| 表示小四号。常用字号对应关系如\tabref{tab:font-sizes}所示。
+
+\begin{table}[htbp]
+  \centering
+  \caption{常用字号对照}\label{tab:font-sizes}
+  \begin{tabular}{ccl}
+    \toprule
+    \textbf{字号命令} & \textbf{字号名称} & \textbf{用途} \\
+    \midrule
+    \texttt{\textbackslash zihao\{2\}}  & 二号   & 封面课题名称 \\
+    \texttt{\textbackslash zihao\{-2\}} & 小二号 & 章标题 \\
+    \texttt{\textbackslash zihao\{3\}}  & 三号   & 封面副标题 \\
+    \texttt{\textbackslash zihao\{4\}}  & 四号   & 封面信息 \\
+    \texttt{\textbackslash zihao\{-4\}} & 小四号 & 正文、节标题 \\
+    \texttt{\textbackslash zihao\{5\}}  & 五号   & 脚注 \\
+    \texttt{\textbackslash zihao\{-5\}} & 小五号 & 页眉页脚 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{文字样式}
+
+常用的文字样式命令包括：\textbf{加粗}（\verb|\textbf{}|）、\textit{斜体}（\verb|\textit{}|）、\underline{下划线}（\verb|\underline{}|）以及\emph{强调}（\verb|\emph{}|）。在中文环境下，\verb|\emph{}| 会自动切换为楷书以示强调。
 
 {\songti
 

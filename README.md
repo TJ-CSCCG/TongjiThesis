@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="550">
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/tongji-undergrad-thesis?label=Release" alt="Release"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis?label=Release" alt="Release"></a>
   <a href="https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/tongji-undergrad-thesis?style=flat" alt="Stars"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
 </p>
 
 <p align="center">
@@ -17,13 +17,24 @@
 符合同济大学本科毕业设计论文官方格式要求的 LaTeX 模板。支持 XeLaTeX / LuaLaTeX 编译，提供 `minted` 和 `listings` 两种代码高亮方案，兼容 `biblatex` 和 `bibtex` 两种引用方式。在 Linux、macOS、Windows 三平台 CI 持续测试。
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0031.jpg" width="30%">
 </p>
 
 > [!NOTE]
-> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) 中 "Assets" 下的 PDF 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
+> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/TongjiThesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/TongjiThesis/releases) 中 "Assets" 下的 PDF 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
+
+## 主要特性
+
+- 基于 `ctexbook` 文档类，支持 `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` 结构
+- 支持 `XeLaTeX` 和 `LuaLaTeX` 双编译器
+- 支持 `biblatex`（默认）和 `bibtex` 双引用后端，通过 `\makereferences` 统一输出
+- 支持 `minted`（默认）和 `listings` 双代码高亮方案
+- 提供 `longlisting` 环境，支持跨页代码块
+- 支持单面 / 双面打印，双面模式自动添加装订线
+- 键值对文档类选项，配置灵活
+- Linux / macOS / Windows 三平台 CI 持续测试
 
 ---
 
@@ -49,7 +60,7 @@
 > [!IMPORTANT]
 > 在使用 Overleaf 模板时，请检查编译器和主入口的设置：
 >
-> - 将 `main.tex` 文件设为主入口文件，而不是项目中的其他 `.tex` 文件（尤其是 `tongjithesis.cls` 或 `tongjithesis.sty`）；
+> - 将 `main.tex` 文件设为主入口文件，而不是项目中的其他文件（如 `tongjithesis.cls`）；
 > - 推荐使用 `XeLaTeX` 和 `LuaLaTeX` 编译器，本模板不支持某些编译器（如 `pdfLaTeX`）。
 
 #### 在 Overleaf 上导入本仓库
@@ -100,7 +111,7 @@ make wordcount          # wordcount
 
 <details><summary><b>通过 VS Code 及 LaTeX Workshop 插件</b></summary>
 
-在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `tongji-undergrad-thesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
+在 VS Code 中安装 LaTeX Workshop 插件，然后**直接打开本项目根目录**（即 `TongjiThesis` 文件夹，而非其上层文件夹，否则 `.vscode/settings.json` 配置无法生效）。
 
 因为我们已经在 `.vscode/settings.json` 中配置了 LaTeX Workshop 插件，所以您只需要：
 
@@ -114,7 +125,7 @@ make wordcount          # wordcount
 
 <details><summary><b>在 Docker 中使用</b></summary>
 
-详细使用方法见 [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env)。
+详细使用方法见 [TongjiThesis-env](https://github.com/TJ-CSCCG/TongjiThesis-env)。
 
 </details>
 
@@ -127,6 +138,7 @@ make wordcount          # wordcount
 ```latex
 \documentclass[
   oneside,           % 单面打印（默认），使用 twoside 可启用双面打印
+  degree=bachelor,   % 学位类型：bachelor（默认），master/doctor 留作扩展
   fullwidthstop=false, % 是否将中文句号"。"替换为西文句号"．"，默认为false
   fontset=fandol,    % 使用的字体集，默认为 fandol
   times=false,       % 是否使用 Times New Roman 字体，默认为 false
@@ -167,7 +179,7 @@ make wordcount          # wordcount
 
 <details><summary><b>渲染生僻字</b></summary>
 
-由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
+由于本模版默认使用 Fandol 字体，对于姓名、专有名词等生僻字的支持可能不够完善。我们在本模版 GitHub 仓库的 [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) 分支中提供了 Adobe 字体集，您可以下载、安装这些字体，然后在 `main.tex` 中通过 `fontset=adobe` 选项来使用 Adobe 字体集：
 
 ```latex
 \documentclass[
@@ -216,7 +228,7 @@ make wordcount          # wordcount
 
 ## 开源协议
 
-该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。详见 [LICENSE](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/blob/master/LICENSE) 文件。
+该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。详见 [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE) 文件。
 
 ## 项目历史
 
@@ -225,6 +237,7 @@ make wordcount          # wordcount
 - 2022.05.12 起，[skyleaworlder](https://github.com/skyleaworlder) 开始贡献本项目，并将其整合进 [TJ-CSCCG](https://github.com/TJ-CSCCG)，并持续对该项目进行更新和改进，目前已经成为一个完善的本科毕业论文模板。
 - 2023.04 起，[RizhongLin](https://github.com/RizhongLin) 开始贡献本项目，并负责项目的维护和更新。
 - 2025.04 更新，实现基于键值对的类选项，支持更灵活的配置。
+- 2026.03 更新，迁移至 `ctexbook` 基类，新增 `biblatex`/`bibtex` 双后端、`longlisting` 跨页代码环境、`\makereferences` 统一参考文献输出，CI 升级至 TeX Live 2026。
 
 我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
 
@@ -239,11 +252,4 @@ make wordcount          # wordcount
 
 ## 联系方式
 
-```python
-# Python
-[
-    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    f'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
-    f'rizhong.lin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
-][-1]
-```
+如有问题，请通过 [Discussions](https://github.com/TJ-CSCCG/TongjiThesis/discussions) 提问。

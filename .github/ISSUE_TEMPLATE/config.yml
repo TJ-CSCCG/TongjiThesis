@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: 提问与讨论 | Questions & Discussions
-    url: https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions
+    url: https://github.com/TJ-CSCCG/TongjiThesis/discussions
     about: 使用问题请在 Discussions 中提出，请勿通过 Issue 提问。| For usage questions, please use Discussions instead of Issues.

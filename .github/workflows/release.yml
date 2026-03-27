@@ -42,7 +42,7 @@ jobs:
       - name: Extract package metadata
         id: metadata
         run: |
-          VERSION=$(jq -r '.version // "1.1.2"' package.json)
+          VERSION=$(jq -r '.version // "1.2.0"' package.json)
           AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)
           YEAR=$(date +%Y)
 
@@ -134,8 +134,7 @@ jobs:
           ```latex
           \documentclass[oneside]{tongjithesis}  % Use 'twoside' for double-sided printing
 
-          \usepackage[backend=biber, style=gb7714-2015, natbib=true]{biblatex}
-          \addbibresource{references.bib}
+          \tjbibresource{references.bib}
 
           \school{计算机科学与技术学院}
           \major{计算机科学与技术}
@@ -147,8 +146,20 @@ jobs:
 
           \begin{document}
           \MakeCover
+          \cleardoublepage
+
+          \frontmatter
+          \MakeAbstract{摘要内容}{关键词1，关键词2}
+          \MakeAbstractEng{Abstract content}{Keyword1, Keyword2}
+          \clearpage
+          \tableofcontents
+          \cleardoublepage
+
+          \mainmatter
+          \chapter{引言}
           % ... your content ...
-          \printbibliography[heading=bibintoc,title=参考文献]
+
+          \makereferences
           \end{document}
           ```
 
@@ -162,7 +173,7 @@ jobs:
 
           ## Links
 
-          - GitHub: https://github.com/TJ-CSCCG/tongji-undergrad-thesis
+          - GitHub: https://github.com/TJ-CSCCG/TongjiThesis
           - Overleaf: https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn
           HEREDOC
 
@@ -185,11 +196,15 @@ jobs:
 
           \documentclass[
             oneside,
+            degree=bachelor,
             fullwidthstop=false,
             fontset=fandol,
             times=false,
             minted=true,
+            biblatex=true,
           ]{tongjithesis}
+
+          \tjbibresource{references.bib}
 
           % Set thesis information
           \school{计算机科学与技术学院}
@@ -204,9 +219,10 @@ jobs:
 
           % Generate cover
           \MakeCover
+          \cleardoublepage
 
-          % Abstract pages
-          \pagestyle{firststyle}
+          % Front matter: abstract and table of contents
+          \frontmatter
           \MakeAbstract{
               本文研究了基于机器学习的图像分类技术，并以交通标志识别为应用场景进行了实验验证。
               图像分类是计算机视觉中的基础任务，具有广泛的应用前景。本文首先综述了图像分类领域的经典算法和最新进展，
@@ -230,22 +246,22 @@ jobs:
           \tableofcontents
           \cleardoublepage
 
-          % Main content with page style
-          \pagestyle{mainstyle}
+          % Main matter: thesis chapters
+          \mainmatter
 
-          \section{引言}
+          \chapter{引言}
 
           图像分类是计算机视觉中的基础任务之一，其目标是将图像分配到预定义的类别中。
           随着深度学习技术的发展，图像分类的性能得到了显著提升。
           本文研究基于机器学习的图像分类技术，并以交通标志识别为例进行应用研究。
 
-          \subsection{研究背景}
+          \section{研究背景}
 
           交通标志识别是自动驾驶系统的重要组成部分，它能够帮助车辆理解道路环境，遵守交通规则。
           准确、实时的交通标志识别对于提高自动驾驶安全性具有重要意义。
 
-          % 代码示例（使用 minted 或 listings，取决于 minted 选项）
-          \begin{listing}
+          % 代码示例
+          \begin{listing}[!htb]
           \begin{minted}{python}
           import torch
           import torch.nn as nn
@@ -272,10 +288,17 @@ jobs:
           \label{listing:cnn}
           \end{listing}
 
-          \section{结论}
+          \chapter{结论}
 
           本文提出了一种高效的交通标志识别方法，在准确率和计算效率方面均表现出色。
           未来工作将探索模型的进一步轻量化，以及在嵌入式设备上的部署方案。
+
+          \makereferences
+
+          \backmatter
+          \chapter*{谢\hspace{0.5em}辞}
+          \addcontentsline{toc}{chapter}{谢\hspace{0.5em}辞}
+          感谢指导老师的悉心指导。
 
           \end{document}
           HEREDOC
@@ -460,7 +483,7 @@ jobs:
             - Python with Pygments (optional, for minted code highlighting)
 
             ### Links
-            - [GitHub Repository](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)
+            - [GitHub Repository](https://github.com/TJ-CSCCG/TongjiThesis)
             - [Overleaf Template](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn)
 
             ---

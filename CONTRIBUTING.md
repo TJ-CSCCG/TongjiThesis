@@ -2,7 +2,7 @@
 
 ## 仓库结构 | Repository Structure
 
-- **源文件**：`.cls`、`.sty` 等定义模板的文件。
+- **源文件**：`.cls`、`.cfg` 等定义模板的文件。
 - **文档文件**：`.tex` 文件（包括 `main.tex`），用于展示模板的使用方法。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
 
@@ -10,13 +10,13 @@
 
 ### 寻求帮助 | Asking for Help
 
-我们通过 [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions) 提供技术支持，详见[此帖](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/6)。
+我们通过 [Discussions](https://github.com/TJ-CSCCG/TongjiThesis/discussions) 提供技术支持，详见[此帖](https://github.com/TJ-CSCCG/TongjiThesis/discussions/6)。
 
 **请勿通过即时通讯工具直接联系贡献者。**
 
 ### 反馈 Bug | Reporting a Bug
 
-如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/issues) 模板提交反馈。
+如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/TongjiThesis/issues) 模板提交反馈。
 
 ### 提交 Pull Request
 

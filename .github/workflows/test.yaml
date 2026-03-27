@@ -22,6 +22,9 @@ on:
 
 name: test
 
+permissions:
+  contents: read
+
 # On push use the branch ref; on PR use the PR number.
 # This avoids duplicate runs: a push to a PR branch cancels the push-triggered run.
 concurrency:
@@ -84,7 +87,7 @@ env:
     rsfs
     setspace
     siunitx
-    subfig
+    subcaption
     tcolorbox
     texcount
     texliveonfly
@@ -181,6 +184,8 @@ jobs:
             pygments: true
           - variant: minimal
             pygments: false
+          - variant: twoside
+            pygments: true
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -222,6 +227,11 @@ jobs:
           sed -i 's/minted=true/minted=false/' main.tex
           sed -i 's/biblatex=true/biblatex=false/' main.tex
 
+      - name: Configure twoside variant
+        if: matrix.variant == 'twoside'
+        run: |
+          sed -i 's/oneside/twoside/' main.tex
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -230,6 +240,9 @@ jobs:
           fi
           if [ "${{ matrix.variant }}" = "bibtex" ] || [ "${{ matrix.variant }}" = "minimal" ]; then
             grep -q 'biblatex=false' main.tex || { echo "ERROR: biblatex=false not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "twoside" ]; then
+            grep -q 'twoside' main.tex || { echo "ERROR: twoside not set"; exit 1; }
           fi
 
       - name: Compile LaTeX document

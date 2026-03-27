@@ -6,8 +6,8 @@
 ###################
 # Path Settings
 ###################
-# Add paths for sections and other directories
-ensure_path("TEXINPUTS", "./sections//");  # For section files
+# Add paths for chapters and other directories
+ensure_path("TEXINPUTS", "./chapters//");  # For chapter files
 ensure_path("TEXINPUTS", "./figures//");   # For figure files
 ensure_path("TEXINPUTS", "./style//");     # For style files
 ensure_path("BIBINPUTS", "./bib//");       # For bibliography files
@@ -36,4 +36,4 @@ $max_repeat = 5;
 
 # Ensure required directories exist
 use File::Path qw(make_path);
-make_path('sections', 'figures', 'style', 'bib');
+make_path('chapters', 'figures', 'style', 'bib');

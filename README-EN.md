@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="400">
+  <img src="figures/tongjithesis.png" alt="TongjiThesis" width="550">
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/tongji-undergrad-thesis?label=Release" alt="Release"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis?label=Release" alt="Release"></a>
   <a href="https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
-  <a href="https://github.com/TJ-CSCCG/tongji-undergrad-thesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/tongji-undergrad-thesis?style=flat" alt="Stars"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
 </p>
 
 <p align="center">
@@ -17,13 +17,24 @@
 A LaTeX template that conforms to the official formatting requirements for Tongji University undergraduate theses. Supports XeLaTeX / LuaLaTeX compilation, offers both `minted` and `listings` for code highlighting, and is compatible with both `biblatex` and `bibtex` citation backends. Continuously tested on Linux, macOS, and Windows via CI.
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis/preview/main_page-0010.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0031.jpg" width="30%">
 </p>
 
 > [!NOTE]
-> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/TongjiThesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/TongjiThesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
+
+## Key Features
+
+- Based on `ctexbook`, supports `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` structure
+- Dual compiler support: `XeLaTeX` and `LuaLaTeX`
+- Dual bibliography backends: `biblatex` (default) and `bibtex`, unified via `\makereferences`
+- Dual code highlighting: `minted` (default) and `listings`
+- `longlisting` environment for cross-page code blocks
+- Single-sided / double-sided printing with automatic binding line
+- Key-value document class options for flexible configuration
+- Continuous CI testing on Linux, macOS, and Windows
 
 ---
 
@@ -49,7 +60,7 @@ You can use this template directly via the [Overleaf template link](https://www.
 > [!IMPORTANT]
 > When using the Overleaf template, please check the compiler and main entry settings:
 >
-> - Set `main.tex` as the main entry file, instead of other `.tex` files in the project (especially `tongjithesis.cls` or `tongjithesis.sty`);
+> - Set `main.tex` as the main entry file, instead of other files in the project (such as `tongjithesis.cls`);
 > - It is recommended to use the `XeLaTeX` or `LuaLaTeX` compilers, as some compilers (such as `pdfLaTeX`) are not supported by this template.
 
 #### Importing This Repository on Overleaf
@@ -100,7 +111,7 @@ make wordcount          # word count
 
 <details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
 
-Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `tongji-undergrad-thesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
+Install the LaTeX Workshop plugin in VS Code, and then **open the root directory of this project directly** (i.e., the `TongjiThesis` folder, not a parent folder, otherwise `.vscode/settings.json` will not take effect).
 
 Since we have configured the LaTeX Workshop plugin in `.vscode/settings.json`, you only need to:
 
@@ -114,7 +125,7 @@ Alternatively, the LaTeX Workshop plugin will automatically compile the file whe
 
 <details><summary><b>Using in Docker</b></summary>
 
-For detailed usage, see [tongji-undergrad-thesis-env](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-env).
+For detailed usage, see [TongjiThesis-env](https://github.com/TJ-CSCCG/TongjiThesis-env).
 
 </details>
 
@@ -127,6 +138,7 @@ This template provides the following document class options, which can be config
 ```latex
 \documentclass[
   oneside,           % One-sided printing (default), use twoside for double-sided printing
+  degree=bachelor,   % Degree type: bachelor (default), master/doctor reserved
   fullwidthstop=false, % Whether to replace Chinese period "。" with Western-style period "．", default is false
   fontset=fandol,    % Font set to use, default is fandol
   times=false,       % Whether to use Times New Roman font, default is false
@@ -167,7 +179,7 @@ Use `\tjbibresource{file1.bib,file2.bib}` to specify bib files, and `\makerefere
 
 <details><summary><b>Rendering Rare Characters</b></summary>
 
-Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
+Due to the default use of the Fandol font in this template, support for rare characters such as names and specific terms might not be adequate. We provide the Adobe font set in the [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) branch of our GitHub repository. You can download and install these fonts, and then use the `fontset=adobe` option in `main.tex` to use the Adobe font set:
 
 ```latex
 \documentclass[
@@ -216,7 +228,7 @@ Please refer to the [Contributing Guide](CONTRIBUTING.md#提交-pull-request).
 
 ## Open Source License
 
-This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/tongji-undergrad-thesis/blob/master/LICENSE) file for details.
+This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE) file for details.
 
 ## Project History
 
@@ -225,6 +237,7 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 - As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
 - From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 - April 2025 update, implemented key-value based class options, supporting more flexible configuration.
+- March 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026.
 
 We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
 
@@ -239,11 +252,4 @@ We have learned a lot from excellent open-source projects from top universities:
 
 ## Contact Information
 
-```python
-# Python
-[
-    f'jiawei#@$.edu'.replace('#', '6').replace('$', 'illinois'),
-    f'jgli22@$.edu.cn'.replace('$', 'm.fudan'),
-    f'rizhong.lin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
-][-1]
-```
+For questions, please use [Discussions](https://github.com/TJ-CSCCG/TongjiThesis/discussions).

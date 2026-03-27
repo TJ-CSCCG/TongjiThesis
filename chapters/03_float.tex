@@ -1,29 +1,37 @@
-\section{图表与代码}\label{sec:float}
+\chapter{图表与代码}\label{chap:float}
 
-本节介绍插图、表格、算法和代码等浮动体的使用方法。浮动体可以自由浮动在页面中，\LaTeX{} 会自动选择合适的位置进行排版。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
+本章介绍插图、表格、算法和代码等浮动体的使用方法。浮动体可以自由浮动在页面中，\LaTeX{} 会自动选择合适的位置进行排版。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
 
-\subsection{插图}
+浮动体位置选项说明：\texttt{h}（here，当前位置）、\texttt{t}（top，页面顶部）、\texttt{b}（bottom，页面底部）、\texttt{p}（page，独立浮动页）、\texttt{!}（放宽内部限制）、\texttt{H}（强制固定位置，需 \pkg{float} 宏包）。
+
+\section{插图}
 
 在 \TeX{} 中，插图功能是通过特定编译程序提供的机制实现的。不同的编译程序支持不同的图形格式。通常，图形都放置在浮动环境中。浮动的意思是，最终排版的图形位置不一定与源文件中的位置对应，这也是新手在使用 \LaTeX{} 时可能会遇到的问题。如果需要强制固定浮动图形的位置，请使用 \pkg{float} 宏包，并使用 \texttt{[H]} 参数。
 
-\subsubsection{单个图形}
+\subsection{单个图形}
 
 要插入单个图形，可以使用 \verb|\includegraphics| 命令，并在其参数中指定图像文件名和一些选项。例如：
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.5\textwidth]{figures/tongjithesis.png}
-  \caption{TongjiThesis 项目标志}
+  \includegraphics[width=0.7\textwidth]{figures/tongjithesis.pdf}
+  \caption{\TongjiThesis{} 项目标志}
   \label{fig:example}
 \end{figure}
 
-这段代码会在浮动体中插入一个名为 \verb|figures/tongjithesis.png| 的图形，并将其居中显示。图形下方会有一个标题，同时为该图形标上标签，以便于交叉引用。
+这段代码会在浮动体中插入一个名为 \verb|figures/tongjithesis.pdf| 的图形，并将其居中显示。图形下方会有一个标题，同时为该图形标上标签，以便于交叉引用。
+
+如需在正文中引用该图，可使用 \verb|\cref{fig:example}| 命令，效果为“\cref{fig:example}”；也可使用 \verb|\figref{fig:example}| 命令，效果为“\figref{fig:example}”。
 
 需要注意的是，在使用 \verb|\includegraphics| 命令时，应该将图像文件放在与主文档相同的目录中，或者在参数中指定文件的完整路径。
 
-\subsubsection{多个图形}
+推荐使用矢量图格式（PDF）用于图表和流程图，位图建议使用 PNG 格式（照片可用 JPG），矢量图在缩放时不会失真。
 
-如果需要在同一浮动体中插入多个图形，可以使用 \verb|\subfigure| 命令或 \pkg{subcaption} 宏包。这些方法可以按照一定的排列方式组合多个图形，并分别为每个子图形添加标题和标签。
+注意在浮动体内部应使用 \verb|\centering| 命令而非 \verb|\begin{center}...\end{center}| 环境，后者会引入额外的垂直间距。
+
+\subsection{多个图形}
+
+如果需要在同一浮动体中插入多个图形，可以使用 \pkg{subcaption} 宏包（注意：旧的 \pkg{subfigure} 和 \pkg{subfig} 宏包已过时，请勿使用）。这些方法可以按照一定的排列方式组合多个图形，并分别为每个子图形添加标题和标签。
 例如，可以使用 \verb|\subfigure| 命令插入两个水平并列的子图，如\cref{fig:example-subfig-1} 所示。这两个子图共用一个图形计数器，没有各自的子图题。
 
 \begin{figure}[!htb]
@@ -84,14 +92,12 @@
   \label{fig:subfigure}
 \end{figure}
 
-
-
 总之，在使用 \LaTeX{} 插图时，应该注意浮动体的特性，尽量使用 \pkg{float} 宏包进行浮动体的控制，避免出现排版问题。同时，也应该熟悉插图命令的使用方法，以便于插入单个或多个图形，并设置适当的标题和标签。
 
 
-\subsection{表格}
+\section{表格}
 
-\subsubsection{基本表格}
+\subsection{基本表格}
 
 编排表格时应简单明了、表达一致，内容明晰易懂，表文呼应，内容一致。表题应置于表格上方。
 
@@ -113,7 +119,7 @@
   \end{tabular}
 \end{table}
 
-\subsubsection{复杂表格}
+\subsection{复杂表格}
 
 我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。可以用
 \pkg{threeparttable} 实现带有脚注的表格，如\cref{tab:bigtable}。
@@ -208,26 +214,13 @@
     AA.B.2                 & 49.49                               & 0.001                               & 0.009          & 0.003 & 0.196 & 2254   \\
     AA.B.4                 & 24.69                               & 0.002                               & 0.012          & 0.004 & 0.122 & 1453   \\
     AA.B.8                 & 12.74                               & 0.003                               & 0.018          & 0.005 & 0.082 & 1432   \\
-    MG.A.2                 & 112.27                              & 0.002                               & 0.846          & 0.237 & 3.930 & 236473 \\
-    MG.A.4                 & 59.84                               & 0.003                               & 0.442          & 0.128 & 2.070 & 123875 \\
-    MG.A.8                 & 31.38                               & 0.003                               & 0.476          & 0.114 & 1.041 & 60627  \\
-    MG.B.2                 & 526.28                              & 0.002                               & 0.821          & 0.238 & 4.176 & 236635 \\
-    MG.B.4                 & 280.11                              & 0.003                               & 0.432          & 0.130 & 1.706 & 123793 \\
-    MG.B.8                 & 148.29                              & 0.003                               & 0.442          & 0.116 & 0.893 & 60600  \\
-    LU.A.2                 & 2116.54                             & 0.002                               & 0.110          & 0.030 & 0.532 & 28754  \\
-    LU.A.4                 & 1102.50                             & 0.002                               & 0.069          & 0.017 & 0.255 & 14915  \\
-    LU.A.8                 & 574.47                              & 0.003                               & 0.067          & 0.016 & 0.192 & 8655   \\
-    LU.B.2                 & 9712.87                             & 0.002                               & 0.357          & 0.104 & 1.734 & 101975 \\
-    LU.B.4                 & 4757.80                             & 0.003                               & 0.190          & 0.056 & 0.808 & 53522  \\
-    LU.B.8                 & 2444.05                             & 0.004                               & 0.222          & 0.057 & 0.548 & 30134  \\
-    EP.A.2                 & 123.81                              & 0.002                               & 0.010          & 0.003 & 0.074 & 1834   \\
     \bottomrule
   \end{longtable}
 \end{ThreePartTable}
 
 
 
-\subsection{算法}
+\section{算法}
 
 算法环境可以使用 \pkg{algorithms} 宏包或者较新的 \pkg{algorithm2e} 实现。
 \cref{algo:algorithm} 是一个使用 \pkg{algorithms} 的例子。关于排版算法环境
@@ -248,13 +241,13 @@
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{代码}
+\section{代码}
 
-\subsubsection{代码高亮方式}
+\subsection{代码高亮方式}
 
 本模板提供 \pkg{listings} 和 \pkg{minted} 两种代码高亮方案，可通过文档类选项 \texttt{minted=true}（默认）或 \texttt{minted=false} 切换。\pkg{listings} 是 \LaTeX{} 原生的代码显示包，始终可用，无需外部依赖；\pkg{minted} 基于 Python Pygments，提供更精确的语法解析和更丰富的高亮效果，但需要安装 Python 和 Pygments（\texttt{pip install pygments}），编译时需添加 \texttt{-shell-escape} 参数。若环境受限，可设置 \texttt{minted=false} 回退至 \pkg{listings}。
 
-\subsubsection{代码块示例}
+\subsection{代码块示例}
 
 \pkg{listings} 包是 \LaTeX{} 最常用的代码高亮工具，无论 \texttt{minted} 选项如何设置，它始终可用。以下是一个基本示例：
 
@@ -276,7 +269,7 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
 
-\paragraph{关于跨页代码段的说明}
+\subsubsection{关于跨页代码段的说明}
 \pkg{listings} 和 \pkg{minted} 均支持跨页显示代码段。一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
 
 本模板提供了 \texttt{longlisting} 环境，用于排版需要跨页显示并带有标题的代码块。与浮动体代码环境不同，\texttt{longlisting} 不会浮动，可以自然跨越多页。在环境内部放置代码块，并用 \cs{caption} 添加标题即可。以下为示例：
@@ -286,194 +279,212 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 \iftongjithesis@minted
 \begin{minted}{python}
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Tuple
+
+# 同济大学五级制绩点对照（2017年版）
+GRADE_TABLE: Dict[str, Tuple[int, int]] = {
+    "A": (5, 95),  # 优 Excellent
+    "B": (4, 85),  # 良 Good
+    "C": (3, 75),  # 中 Fair
+    "D": (2, 65),  # 及格 Pass
+    "F": (0, 30),  # 不及格 Failed
+}
+
+VALID_GRADES = set(GRADE_TABLE.keys())
+
 
 @dataclass
-class Student:
-    """学生信息"""
-    name: str          # 姓名
-    student_id: str    # 学号
-    major: str         # 专业
-    grades: Dict[str, float] = field(default_factory=dict)
+class Course:
+    """课程信息"""
+    name: str      # 课程名称
+    credits: float # 学分
+    grade: str     # 成绩等级 (A/B/C/D/F)
 
-    def add_grade(self, course: str, score: float) -> None:
-        """添加课程成绩"""
-        if not 0 <= score <= 100:
-            raise ValueError(f"成绩须在 0-100 之间: {score}")
-        self.grades[course] = score
+    def __post_init__(self):
+        if self.grade not in VALID_GRADES:
+            raise ValueError(f"无效的成绩等级: {self.grade}")
+        if self.credits <= 0:
+            raise ValueError(f"学分须为正数: {self.credits}")
+
+    @property
+    def grade_point(self) -> int:
+        """课程绩点"""
+        return GRADE_TABLE[self.grade][0]
+
+    @property
+    def equiv_score(self) -> int:
+        """百分制折算值"""
+        return GRADE_TABLE[self.grade][1]
+
+    def __repr__(self) -> str:
+        return f"{self.name}({self.credits}学分, {self.grade})"
+
+
+@dataclass
+class Transcript:
+    """成绩单：按同济大学本科生成绩计算方法"""
+    student_name: str = ""
+    student_id: str = ""
+    courses: List[Course] = field(default_factory=list)
+
+    def add(self, name: str, credits: float, grade: str) -> None:
+        """添加一门课程成绩"""
+        self.courses.append(Course(name, credits, grade))
+
+    @property
+    def total_credits(self) -> float:
+        """总学分"""
+        return sum(c.credits for c in self.courses)
 
     @property
     def gpa(self) -> float:
-        """计算绩点（满分 4.0）"""
-        if not self.grades:
+        """平均绩点 = sum(学分 * 绩点) / sum(学分)"""
+        if self.total_credits == 0:
             return 0.0
-        total = sum(self._to_gpa(s) for s in self.grades.values())
-        return round(total / len(self.grades), 2)
+        weighted = sum(c.credits * c.grade_point for c in self.courses)
+        return round(weighted / self.total_credits, 2)
 
-    @staticmethod
-    def _to_gpa(score: float) -> float:
-        """百分制转绩点"""
-        if score >= 90: return 4.0    # 优秀
-        elif score >= 80: return 3.0  # 良好
-        elif score >= 70: return 2.0  # 中等
-        elif score >= 60: return 1.0  # 及格
-        else: return 0.0              # 不及格
+    @property
+    def avg_score(self) -> float:
+        """百分制平均成绩 = sum(折算值 * 学分) / sum(学分)"""
+        if self.total_credits == 0:
+            return 0.0
+        weighted = sum(c.credits * c.equiv_score for c in self.courses)
+        return round(weighted / self.total_credits, 1)
+
+    def ranking(self) -> List[Tuple[str, float, int]]:
+        """按绩点降序排列课程"""
+        return sorted(
+            [(c.name, c.credits, c.grade_point) for c in self.courses],
+            key=lambda x: x[2], reverse=True,
+        )
 
     def summary(self) -> str:
-        """生成学生摘要"""
-        return f"{self.name}({self.student_id}) - {self.major}, 绩点: {self.gpa}"
-
-
-class GradeBook:
-    """成绩管理系统"""
-    def __init__(self):
-        self._students: Dict[str, Student] = {}
-
-    def enroll(self, student: Student) -> None:
-        """注册学生"""
-        if student.student_id in self._students:
-            raise KeyError(f"学号已存在: {student.student_id}")
-        self._students[student.student_id] = student
-
-    def find(self, student_id: str) -> Optional[Student]:
-        """按学号查找学生"""
-        return self._students.get(student_id)
-
-    def ranking(self) -> List[tuple]:
-        """绩点排名"""
-        ranked = sorted(self._students.values(),
-                        key=lambda s: s.gpa, reverse=True)
-        return [(i + 1, s.name, s.gpa) for i, s in enumerate(ranked)]
-
-    def course_avg(self, course: str) -> float:
-        """计算课程平均分"""
-        scores = [s.grades[course] for s in self._students.values()
-                  if course in s.grades]
-        return round(sum(scores) / len(scores), 1) if scores else 0.0
+        """生成成绩摘要"""
+        lines = [f"学生: {self.student_name} ({self.student_id})"]
+        lines.append(f"总学分: {self.total_credits}")
+        lines.append(f"平均绩点 (GPA): {self.gpa}")
+        lines.append(f"百分制平均成绩: {self.avg_score}")
+        return "\n".join(lines)
 
 
 if __name__ == "__main__":
-    book = GradeBook()
+    t = Transcript("张三", "2024001")
+    t.add("高等数学", 6.0, "A")
+    t.add("线性代数", 4.0, "B")
+    t.add("数据结构", 4.0, "A")
+    t.add("大学物理", 4.0, "C")
+    t.add("程序设计", 3.0, "A")
 
-    # 创建并注册学生
-    alice = Student("张三", "2024001", "计算机科学")
-    alice.add_grade("高等数学", 92)
-    alice.add_grade("线性代数", 88)
-    alice.add_grade("数据结构", 95)
-
-    bob = Student("李四", "2024002", "软件工程")
-    bob.add_grade("高等数学", 78)
-    bob.add_grade("线性代数", 85)
-    bob.add_grade("数据结构", 90)
-
-    for s in [alice, bob]:
-        book.enroll(s)
-        print(s.summary())
-
-    # 输出排名
-    print("\n=== 绩点排名 ===")
-    for rank, name, gpa in book.ranking():
-        print(f"第{rank}名: {name}, 绩点: {gpa}")
-
-    # 输出课程平均分
-    for course in ["高等数学", "线性代数", "数据结构"]:
-        print(f"{course} 平均分: {book.course_avg(course)}")
+    print(t.summary())
+    print("\n课程排名:")
+    for name, credits, gp in t.ranking():
+        print(f"  {name}: {credits}学分, 绩点{gp}")
 \end{minted}
 \else
 \begin{lstlisting}[language=Python]
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Tuple
+
+# 同济大学五级制绩点对照（2017年版）
+GRADE_TABLE: Dict[str, Tuple[int, int]] = {
+    "A": (5, 95),  # 优 Excellent
+    "B": (4, 85),  # 良 Good
+    "C": (3, 75),  # 中 Fair
+    "D": (2, 65),  # 及格 Pass
+    "F": (0, 30),  # 不及格 Failed
+}
+
+VALID_GRADES = set(GRADE_TABLE.keys())
+
 
 @dataclass
-class Student:
-    """学生信息"""
-    name: str          # 姓名
-    student_id: str    # 学号
-    major: str         # 专业
-    grades: Dict[str, float] = field(default_factory=dict)
+class Course:
+    """课程信息"""
+    name: str      # 课程名称
+    credits: float # 学分
+    grade: str     # 成绩等级 (A/B/C/D/F)
 
-    def add_grade(self, course: str, score: float) -> None:
-        """添加课程成绩"""
-        if not 0 <= score <= 100:
-            raise ValueError(f"成绩须在 0-100 之间: {score}")
-        self.grades[course] = score
+    def __post_init__(self):
+        if self.grade not in VALID_GRADES:
+            raise ValueError(f"无效的成绩等级: {self.grade}")
+        if self.credits <= 0:
+            raise ValueError(f"学分须为正数: {self.credits}")
+
+    @property
+    def grade_point(self) -> int:
+        """课程绩点"""
+        return GRADE_TABLE[self.grade][0]
+
+    @property
+    def equiv_score(self) -> int:
+        """百分制折算值"""
+        return GRADE_TABLE[self.grade][1]
+
+    def __repr__(self) -> str:
+        return f"{self.name}({self.credits}学分, {self.grade})"
+
+
+@dataclass
+class Transcript:
+    """成绩单：按同济大学本科生成绩计算方法"""
+    student_name: str = ""
+    student_id: str = ""
+    courses: List[Course] = field(default_factory=list)
+
+    def add(self, name: str, credits: float, grade: str) -> None:
+        """添加一门课程成绩"""
+        self.courses.append(Course(name, credits, grade))
+
+    @property
+    def total_credits(self) -> float:
+        """总学分"""
+        return sum(c.credits for c in self.courses)
 
     @property
     def gpa(self) -> float:
-        """计算绩点（满分 4.0）"""
-        if not self.grades:
+        """平均绩点 = sum(学分 * 绩点) / sum(学分)"""
+        if self.total_credits == 0:
             return 0.0
-        total = sum(self._to_gpa(s) for s in self.grades.values())
-        return round(total / len(self.grades), 2)
+        weighted = sum(c.credits * c.grade_point for c in self.courses)
+        return round(weighted / self.total_credits, 2)
 
-    @staticmethod
-    def _to_gpa(score: float) -> float:
-        """百分制转绩点"""
-        if score >= 90: return 4.0    # 优秀
-        elif score >= 80: return 3.0  # 良好
-        elif score >= 70: return 2.0  # 中等
-        elif score >= 60: return 1.0  # 及格
-        else: return 0.0              # 不及格
+    @property
+    def avg_score(self) -> float:
+        """百分制平均成绩 = sum(折算值 * 学分) / sum(学分)"""
+        if self.total_credits == 0:
+            return 0.0
+        weighted = sum(c.credits * c.equiv_score for c in self.courses)
+        return round(weighted / self.total_credits, 1)
+
+    def ranking(self) -> List[Tuple[str, float, int]]:
+        """按绩点降序排列课程"""
+        return sorted(
+            [(c.name, c.credits, c.grade_point) for c in self.courses],
+            key=lambda x: x[2], reverse=True,
+        )
 
     def summary(self) -> str:
-        """生成学生摘要"""
-        return f"{self.name}({self.student_id}) - {self.major}, 绩点: {self.gpa}"
-
-
-class GradeBook:
-    """成绩管理系统"""
-    def __init__(self):
-        self._students: Dict[str, Student] = {}
-
-    def enroll(self, student: Student) -> None:
-        """注册学生"""
-        if student.student_id in self._students:
-            raise KeyError(f"学号已存在: {student.student_id}")
-        self._students[student.student_id] = student
-
-    def find(self, student_id: str) -> Optional[Student]:
-        """按学号查找学生"""
-        return self._students.get(student_id)
-
-    def ranking(self) -> List[tuple]:
-        """绩点排名"""
-        ranked = sorted(self._students.values(),
-                        key=lambda s: s.gpa, reverse=True)
-        return [(i + 1, s.name, s.gpa) for i, s in enumerate(ranked)]
-
-    def course_avg(self, course: str) -> float:
-        """计算课程平均分"""
-        scores = [s.grades[course] for s in self._students.values()
-                  if course in s.grades]
-        return round(sum(scores) / len(scores), 1) if scores else 0.0
+        """生成成绩摘要"""
+        lines = [f"学生: {self.student_name} ({self.student_id})"]
+        lines.append(f"总学分: {self.total_credits}")
+        lines.append(f"平均绩点 (GPA): {self.gpa}")
+        lines.append(f"百分制平均成绩: {self.avg_score}")
+        return "\n".join(lines)
 
 
 if __name__ == "__main__":
-    book = GradeBook()
+    t = Transcript("张三", "2024001")
+    t.add("高等数学", 6.0, "A")
+    t.add("线性代数", 4.0, "B")
+    t.add("数据结构", 4.0, "A")
+    t.add("大学物理", 4.0, "C")
+    t.add("程序设计", 3.0, "A")
 
-    # 创建并注册学生
-    alice = Student("张三", "2024001", "计算机科学")
-    alice.add_grade("高等数学", 92)
-    alice.add_grade("线性代数", 88)
-    alice.add_grade("数据结构", 95)
-
-    bob = Student("李四", "2024002", "软件工程")
-    bob.add_grade("高等数学", 78)
-    bob.add_grade("线性代数", 85)
-    bob.add_grade("数据结构", 90)
-
-    for s in [alice, bob]:
-        book.enroll(s)
-        print(s.summary())
-
-    # 输出排名
-    print("\n=== 绩点排名 ===")
-    for rank, name, gpa in book.ranking():
-        print(f"第{rank}名: {name}, 绩点: {gpa}")
-
-    # 输出课程平均分
-    for course in ["高等数学", "线性代数", "数据结构"]:
-        print(f"{course} 平均分: {book.course_avg(course)}")
+    print(t.summary())
+    print("\n课程排名:")
+    for name, credits, gp in t.ranking():
+        print(f"  {name}: {credits}学分, 绩点{gp}")
 \end{lstlisting}
 \fi
 \caption{跨页代码段示例（Python）}\label{listing:cross-page}
@@ -490,7 +501,7 @@ if __name__ == "__main__":
 \makeatother
 （与普通文本 \verb|print("Hello")| 对比）。
 
-\subsection{分页控制}
+\section{分页控制}
 
 在\LaTeX{}排版系统中，\verb|\newpage| 和 \verb|\clearpage| 命令都能强制开始新页面，但它们有着重要区别。\verb|\newpage| 仅创建新页面，而 \verb|\clearpage| 还会处理所有待处理的浮动体，确保它们在新页面前被正确放置。
 

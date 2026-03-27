@@ -1,0 +1,107 @@
+\chapter{模板使用指南}\label{chap:guide}
+
+本文档是 \TongjiThesis{} 模板的使用示例，基本覆盖了模板的全部排版功能。建议在阅读本示例的同时参考源代码，了解各排版效果的实现方式。在正式撰写毕业设计（论文）时，请删除本章及后续示例章节，替换为实际内容。
+
+\section{文档类选项}
+
+在 \verb|main.tex| 的 \verb|\documentclass| 中设置选项。本模板基于 \pkg{ctexbook}，未被识别的选项会自动传递给 \pkg{ctexbook}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{文档类选项一览}\label{tab:class-options}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{llp{7cm}}
+    \toprule
+    \textbf{选项} & \textbf{默认值} & \textbf{说明} \\
+    \midrule
+    \texttt{oneside / twoside} & \texttt{oneside} & 单面或双面排版。双面模式下章节从奇数页开始，装订线自动左右交替。 \\
+    \texttt{degree} & \texttt{bachelor} & 学位类型，目前支持 \texttt{bachelor}（学士）。 \\
+    \texttt{fontset} & 系统默认 & 字体集，传递给 \pkg{ctex}。常用值：\texttt{fandol}（跨平台）、\texttt{windows}、\texttt{mac}、\texttt{ubuntu}。 \\
+    \texttt{times} & \texttt{false} & \texttt{true}：通过 \pkg{fontspec} 调用系统 Times New Roman 字体；\texttt{false}：使用 \pkg{newtx} 宏包提供的 TeX 原生 Times 风格字体。两者视觉效果相近。 \\
+    \texttt{fullwidthstop} & \texttt{false} & 设为 \texttt{true} 时将中文句号从“。”替换为“．”（全角圆点）。 \\
+    \texttt{minted} & \texttt{true} & 代码高亮方案。\texttt{true} 使用 \pkg{minted}（需安装 Python 和 Pygments），\texttt{false} 回退至 \pkg{listings}。 \\
+    \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{填写论文信息}
+
+在 \verb|chapters/frontcover.tex| 中填写个人信息，模板将自动生成封面：
+
+{\small
+\begin{verbatim}
+\school{某某学院}
+\major{某某专业}
+\student{1999999}{某某某}
+\thesistitle{课题名称}{副标题}     % 副标题可留空 {}
+\thesistitleeng{English Title}{Subtitle}
+\thesisadvisor{指导教师}
+\thesisdate{\the\year}{\the\month}{\the\day}
+
+\MakeCover
+\end{verbatim}
+}
+
+摘要在 \verb|chapters/00_abstract.tex| 中填写，分别使用 \verb|\MakeAbstract{正文}{关键词}| 和 \verb|\MakeAbstractEng{Text}{Keywords}| 生成中英文摘要页。
+
+\section{文档结构}
+
+\verb|main.tex| 已预置了完整的论文结构，用户只需修改各 \verb|\input| 文件的内容：
+
+\begin{table}[htbp]
+  \centering
+  \caption{文档结构一览}\label{tab:doc-structure}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{llp{7.5cm}}
+    \toprule
+    \textbf{结构} & \textbf{命令} & \textbf{说明} \\
+    \midrule
+    封面     & \verb|\MakeCover|        & 由 \verb|frontcover.tex| 中的信息自动生成 \\
+    前置部分 & \verb|\frontmatter|      & 页码切换为大写罗马数字（I, II, III\ldots） \\
+    摘要     & \verb|\MakeAbstract|     & 中英文摘要及关键词 \\
+    目录     & \verb|\tableofcontents|  & 自动生成；可取消注释 \verb|\listoffigures|、\verb|\listoftables| \\
+    正文     & \verb|\mainmatter|       & 页码切换为阿拉伯数字，从~1~重新开始 \\
+    参考文献 & \verb|\makereferences|   & 自动排版，格式符合 GB/T 7714 \\
+    附录     & \verb|\appendix|         & 章编号变为 A、B、C \\
+    谢辞     & \verb|\backmatter|       & 取消章编号，页码继续 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+参考文献数据库文件在导言区通过 \verb|\tjbibresource{bib/note.bib}| 指定，支持逗号分隔的多个文件。
+
+\section{常用命令速查}
+
+\tabref{tab:template-commands}列出了本模板提供的常用命令，具体用法在后续各章中演示。
+
+\begin{table}[htbp]
+  \centering
+  \caption{模板常用命令}\label{tab:template-commands}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{lp{9cm}}
+    \toprule
+    \textbf{命令} & \textbf{用途} \\
+    \midrule
+    \multicolumn{2}{l}{\textbf{交叉引用}} \\
+    \verb|\cref{label}|           & 智能引用，自动生成“第~X~章”“图~X”“式~X”等 \\
+    \verb|\chapref{label}|        & 引用章：第~X~章 \\
+    \verb|\secref{label}|         & 引用节：第~X~节 \\
+    \verb|\figref{label}|         & 引用图：图~X \\
+    \verb|\tabref{label}|         & 引用表：表~X \\
+    \verb|\eqref{label}|          & 引用公式：公式（X） \\
+    \midrule
+    \multicolumn{2}{l}{\textbf{参考文献}} \\
+    \verb|\tjbibresource{file}|   & 导言区指定 \texttt{.bib} 文件 \\
+    \verb|\makereferences|        & 输出参考文献列表 \\
+    \verb|\cite{key}|             & 上标引用 \\
+    \midrule
+    \multicolumn{2}{l}{\textbf{排版辅助}} \\
+    \verb|\pkg{name}|             & 排版宏包名称（带 CTAN 链接） \\
+    \verb|\cs{name}|              & 排版命令名称（如 \cs{section}） \\
+    \verb|\Circled{n}|            & 带圈数字：\Circled{1} \Circled{2} \Circled{3} \\
+    \verb|\TongjiThesis|            & 项目 Logo：\TongjiThesis \\
+    \verb|\dd|, \verb|\ee|, \verb|\ii|, \verb|\jj| & 直立体微分 $\dd$、自然对数底 $\ee$、虚数单位 $\ii$、$\jj$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
