@@ -87,7 +87,6 @@ env:
     rsfs
     setspace
     siunitx
-    subcaption
     tcolorbox
     texcount
     texliveonfly
@@ -131,7 +130,7 @@ jobs:
 
       - name: Install TeX Live
         id: setup-tl
-        uses: tex-live/setup-texlive-action@v3
+        uses: tex-live/setup-texlive-action@v4
         with:
           version: 2026
           packages: ${{ env.TL_PACKAGES }}
@@ -204,7 +203,7 @@ jobs:
 
       - name: Install TeX Live
         id: setup-tl
-        uses: tex-live/setup-texlive-action@v3
+        uses: tex-live/setup-texlive-action@v4
         with:
           version: 2026
           packages: ${{ env.TL_PACKAGES }}
