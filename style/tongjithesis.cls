@@ -91,6 +91,7 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{eso-pic}
+\RequirePackage{emptypage}
 
 % Typography and text formatting
 \RequirePackage[T1]{fontenc}
@@ -278,14 +279,6 @@
 % ==========================================
 % Page Layout
 % ==========================================
-
-% 重新定义 \cleardoublepage 命令
-\let\origdoublepage\cleardoublepage
-\newcommand{\clearemptydoublepage}{
-  \clearpage
-  {\pagestyle{empty}\origdoublepage}
-}
-\let\cleardoublepage\clearemptydoublepage
 
 % 画边界线（使用 eso-pic + savebox，避免 fancyput 与 listings 的跨页冲突）
 % Pre-render binding line content into saved boxes, all centered in 1em width
@@ -510,7 +503,7 @@
     name={},
     number={\arabic{chapter}},
     aftername={\quad},
-    break={\clearpage},
+    break={\cleardoublepage},  % oneside 下等同 \clearpage；twoside 下章首始于奇数页，由 emptypage 抑制页眉
     % Negative beforeskip: absolute value (16pt) is the vertical space above
     % the heading; the negative sign suppresses first paragraph indent (ctex convention).
     beforeskip={-16pt},
@@ -752,6 +745,7 @@
   \begin{titlepage}
     \begin{center}
       \global\tjbindinglinefalse
+      \pagestyle{empty}
       \vspace*{\fill}
 
       \includegraphics[height=2.25cm]{figures/tongji.pdf}
@@ -776,6 +770,79 @@
       \vspace*{\fill}
     \end{center}
   \end{titlepage}
+  \global\tjbindinglinetrue
+}
+\makeatother
+
+% 设置信息说明页
+\makeatletter
+\newcommand{\infotype}[1]{\def\tongjiinfotype{#1}}
+\newcommand{\infoabstract}[1]{\def\tongjiinfoabstract{#1}}
+\newcommand{\infodrawings}[1]{\def\tongjiinfodrawings{#1}}
+\newcommand{\infowordcount}[1]{\def\tongjiinfowordcount{#1}}
+\newcommand{\infothesiswords}[1]{\def\tongjiinfothesiswords{#1}}
+\newcommand{\infomaterials}[1]{\def\tongjiinfomaterials{#1}}
+\newcommand{\infoline}[2]{%
+  \noindent #1：#2\par\vspace{0.5em}
+}
+
+\newcommand{\tjchecked}{\rlap{$\checkmark$}$\square$}
+\newcommand{\tjunchecked}{$\square$}
+\newcommand{\tjcheckbox}[1]{%
+  \ifthenelse{\equal{\tongjiinfotype}{#1}}{\tjchecked}{\tjunchecked}%
+}
+\newcommand{\ulinebox}[2][c]{%
+  \uline{\makebox[#2][#1]{\phantom{X}}}%
+}
+
+\newcommand{\MakeInfoPage}{%
+  \begin{titlepage}
+    \global\tjbindinglinefalse
+    \pagestyle{empty}  % 显式指定，确保 emptypage 宏包接管后续空白页的页眉页脚
+    \setstretch{1.3} % 设置行距为1.3倍，～28pt，满足官方模板要求
+
+    % 标题
+    \begin{center}
+      \zihao{3}\heiti 同济大学本科毕业设计（论文）信息说明页
+    \end{center}
+
+    \vspace{1em}
+
+    {\zihao{4}\songti
+    \setlength{\parindent}{0pt} % 关键：取消缩进
+
+    \infoline{课题名称}{\parbox[t]{\dimexpr\linewidth-5em\relax}{%
+      \tongjithesistitle
+      \ifx\tongjithesissubtitle\empty\else ——\tongjithesissubtitle\fi
+    }}%
+    \vspace{0.5em}
+
+    \infoline{成果类型}{\tjcheckbox{design}\,毕业设计\quad \tjcheckbox{thesis}\,毕业论文}%
+
+    \infoline{学科专业}{\tongjimajor}%
+
+    \infoline{内容简述（请用300字以内简要概述）}{%
+      \par\vspace{0.2em}
+      {\parindent=2em\relax\tongjiinfoabstract\par}
+    }
+
+    \infoline{毕业设计}{主要图纸~\ifx\tongjiinfodrawings\empty \ulinebox{4em} \else \underline{\makebox[4em][c]{\tongjiinfodrawings}} \fi~张，正文总字数~\ifx\tongjiinfowordcount\empty \ulinebox{6em} \else \underline{\makebox[6em][c]{\tongjiinfowordcount}} \fi~字}%
+
+    \infoline{毕业论文}{正文总字数~\ifx\tongjiinfothesiswords\empty \ulinebox{6em} \else \underline{\makebox[6em][c]{\tongjiinfothesiswords}} \fi~字}%
+
+    \infoline{随附资料}{%
+      \vspace{0.5em}
+      \ifx\tongjiinfomaterials\empty
+        \par\vspace{0.5em}
+      \else
+        \begin{enumerate}[label=\arabic*.,leftmargin=2em,labelsep=0.5em,itemsep=0.2em,parsep=0pt,topsep=0pt] \tongjiinfomaterials \end{enumerate}
+      \fi
+    }%
+    \vspace{0.5em}
+    （请列出所有提交的支撑材料名称，如：毕业设计--全套图纸、毕业作品、计算书、程序代码、附录等）
+    }
+  \end{titlepage}
+  \setstretch{\tjlinespread}  % 恢复全文行距
   \global\tjbindinglinetrue
 }
 \makeatother

@@ -53,6 +53,7 @@ env:
     collectbox
     ctex
     dvips
+    emptypage
     enumitem
     environ
     extarrows
