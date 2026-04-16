@@ -241,7 +241,7 @@ make wordcount          # wordcount
 - 2022.05.12 起，[skyleaworlder](https://github.com/skyleaworlder) 开始贡献本项目，并将其整合进 [TJ-CSCCG](https://github.com/TJ-CSCCG)，并持续对该项目进行更新和改进，目前已经成为一个完善的本科毕业论文模板。
 - 2023.04 起，[RizhongLin](https://github.com/RizhongLin) 开始贡献本项目，并负责项目的维护和更新。
 - 2025.04 更新，实现基于键值对的类选项，支持更灵活的配置。
-- 2026.03 更新，迁移至 `ctexbook` 基类，新增 `biblatex`/`bibtex` 双后端、`longlisting` 跨页代码环境、`\makereferences` 统一参考文献输出，CI 升级至 TeX Live 2026。
+- 2026 更新，迁移至 `ctexbook` 基类，新增 `biblatex`/`bibtex` 双后端、`longlisting` 跨页代码环境、`\makereferences` 统一参考文献输出，CI 升级至 TeX Live 2026；对齐 2026 版撰写规范，新增信息说明页（`\MakeInfoPage`）、字号常量体系（`\tjfontchapter` 等）与续表辅助命令（`\tjlongtablecont`）。
 
 我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
 

@@ -241,7 +241,7 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 - As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
 - From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 - April 2025 update, implemented key-value based class options, supporting more flexible configuration.
-- March 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026.
+- 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026; aligned with the 2026 Tongji writing standard — added information description page (`\MakeInfoPage`), font-size constant system (`\tjfontchapter` etc.), and longtable continuation helper (`\tjlongtablecont`).
 
 We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
 
