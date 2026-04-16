@@ -18,9 +18,10 @@
 符合同济大学本科毕业设计论文官方格式要求的 LaTeX 模板。支持 XeLaTeX / LuaLaTeX 编译，提供 `minted` 和 `listings` 两种代码高亮方案，兼容 `biblatex` 和 `bibtex` 两种引用方式。在 Linux、macOS、Windows 三平台 CI 持续测试。
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0031.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0002.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0038.jpg" width="23%">
 </p>
 
 > [!NOTE]
