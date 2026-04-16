@@ -9,7 +9,6 @@
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
   <img src="https://img.shields.io/badge/TeX%20Live-2026-blue" alt="TeX Live 2026">
-  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey" alt="Platform">
 </p>
 
 <p align="center">
@@ -19,9 +18,10 @@
 A LaTeX template that conforms to the official formatting requirements for Tongji University undergraduate theses. Supports XeLaTeX / LuaLaTeX compilation, offers both `minted` and `listings` for code highlighting, and is compatible with both `biblatex` and `bibtex` citation backends. Continuously tested on Linux, macOS, and Windows via CI.
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="30%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0031.jpg" width="30%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0002.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="23%">
+    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0038.jpg" width="23%">
 </p>
 
 > [!NOTE]
@@ -30,10 +30,12 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 ## Key Features
 
 - Based on `ctexbook`, supports `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` structure
+- Compliant with the 2026 Tongji undergraduate thesis writing standard (小四 body, 1.5× line spacing, 小三 chapter headings)
 - Dual compiler support: `XeLaTeX` and `LuaLaTeX`
 - Dual bibliography backends: `biblatex` (default) and `bibtex`, unified via `\makereferences`
 - Dual code highlighting: `minted` (default) and `listings`
 - `longlisting` environment for cross-page code blocks
+- Built-in information description page (`\MakeInfoPage`) per the 2026 official template
 - Single-sided / double-sided printing with automatic binding line
 - Key-value document class options for flexible configuration
 - Continuous CI testing on Linux, macOS, and Windows
@@ -239,7 +241,7 @@ This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lpp
 - As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
 - From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
 - April 2025 update, implemented key-value based class options, supporting more flexible configuration.
-- March 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026.
+- 2026 update: migrated to `ctexbook` base class, added dual `biblatex`/`bibtex` backend support, `longlisting` cross-page code environment, `\makereferences` unified bibliography output, CI upgraded to TeX Live 2026; aligned with the 2026 Tongji writing standard — added information description page (`\MakeInfoPage`), font-size constant system (`\tjfontchapter` etc.), and longtable continuation helper (`\tjlongtablecont`).
 
 We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
 
