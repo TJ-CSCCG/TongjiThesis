@@ -42,7 +42,7 @@ jobs:
       - name: Extract package metadata
         id: metadata
         run: |
-          VERSION=$(jq -r '.version // "1.2.0"' package.json)
+          VERSION=$(jq -r '.version // "1.3.0"' package.json)
           AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)
           YEAR=$(date +%Y)
 
@@ -213,12 +213,20 @@ jobs:
           \thesistitle{基于机器学习的图像分类研究}{——以交通标志识别为例}
           \thesistitleeng{Research on Image Classification Based on Machine Learning}{——Take Traffic Sign Recognition as an Example}
           \thesisadvisor{李四 教授}
-          \thesisdate{2025}{4}{20}
+          \thesisdate{2026}{4}{20}
+
+          % 信息说明页配置
+          \infotype{thesis}
+          \infoabstract{本文研究了基于机器学习的图像分类技术，并以交通标志识别为应用场景进行了实验验证。}
+          \infothesiswords{10000}
+          \infomaterials{\item 程序源代码}
 
           \begin{document}
 
-          % Generate cover
+          % Generate cover and info page
           \MakeCover
+          \cleardoublepage
+          \MakeInfoPage
           \cleardoublepage
 
           % Front matter: abstract and table of contents
@@ -296,8 +304,8 @@ jobs:
           \makereferences
 
           \backmatter
-          \chapter*{谢\hspace{0.5em}辞}
-          \addcontentsline{toc}{chapter}{谢\hspace{0.5em}辞}
+          \chapter*{谢辞}
+          \addcontentsline{toc}{chapter}{谢辞}
           感谢指导老师的悉心指导。
 
           \end{document}

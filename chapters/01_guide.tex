@@ -10,7 +10,7 @@
   \centering
   \caption{文档类选项一览}\label{tab:class-options}
   \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{llp{7cm}}
+  \begin{tabular}{llp{10cm}}
     \toprule
     \textbf{选项} & \textbf{默认值} & \textbf{说明} \\
     \midrule
@@ -57,11 +57,12 @@
     \toprule
     \textbf{结构} & \textbf{命令} & \textbf{说明} \\
     \midrule
-    封面     & \verb|\MakeCover|        & 由 \verb|frontcover.tex| 中的信息自动生成 \\
-    前置部分 & \verb|\frontmatter|      & 页码切换为大写罗马数字（I, II, III\ldots） \\
+    封面       & \verb|\MakeCover|      & 由 \verb|frontcover.tex| 中的信息自动生成 \\
+    信息说明页 & \verb|\MakeInfoPage|   & 由 \verb|infopage.tex| 中的信息自动生成 \\
+    前置部分   & \verb|\frontmatter|    & 页码切换为大写罗马数字（I, II, III\ldots） \\
     摘要     & \verb|\MakeAbstract|     & 中英文摘要及关键词 \\
     目录     & \verb|\tableofcontents|  & 自动生成；可取消注释 \verb|\listoffigures|、\verb|\listoftables| \\
-    正文     & \verb|\mainmatter|       & 页码切换为阿拉伯数字，从~1~重新开始 \\
+    正文     & \verb|\mainmatter|       & 页码切换为阿拉伯数字，从1重新开始 \\
     参考文献 & \verb|\makereferences|   & 自动排版，格式符合 GB/T 7714 \\
     附录     & \verb|\appendix|         & 章编号变为 A、B、C \\
     谢辞     & \verb|\backmatter|       & 取消章编号，页码继续 \\
