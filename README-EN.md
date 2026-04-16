@@ -9,7 +9,6 @@
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
   <img src="https://img.shields.io/badge/TeX%20Live-2026-blue" alt="TeX Live 2026">
-  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey" alt="Platform">
 </p>
 
 <p align="center">
@@ -30,10 +29,12 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 ## Key Features
 
 - Based on `ctexbook`, supports `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` structure
+- Compliant with the 2026 Tongji undergraduate thesis writing standard (小四 body, 1.5× line spacing, 小三 chapter headings)
 - Dual compiler support: `XeLaTeX` and `LuaLaTeX`
 - Dual bibliography backends: `biblatex` (default) and `bibtex`, unified via `\makereferences`
 - Dual code highlighting: `minted` (default) and `listings`
 - `longlisting` environment for cross-page code blocks
+- Built-in information description page (`\MakeInfoPage`) per the 2026 official template
 - Single-sided / double-sided printing with automatic binding line
 - Key-value document class options for flexible configuration
 - Continuous CI testing on Linux, macOS, and Windows

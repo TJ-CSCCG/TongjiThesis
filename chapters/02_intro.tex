@@ -9,12 +9,12 @@
 \begin{table}[htbp]
   \centering
   \caption{标题层级设置}\label{tab:heading-levels}
-  \renewcommand{\arraystretch}{1.4}
+  \renewcommand{\arraystretch}{1.8}
   \begin{tabular}{cccl}
     \toprule
     \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{编号格式} & \textbf{示例} \\
     \midrule
-    1 & \texttt{\textbackslash chapter}       & 1, 2, 3       & {\heiti\tjfontheading 1\quad 绪论} \\
+    1 & \texttt{\textbackslash chapter}       & 1, 2, 3       & {\heiti\tjfontchapter 1\quad 绪论} \\
     2 & \texttt{\textbackslash section}       & 1.1, 1.2      & {\heiti\tjfontbody 1.1 标题层级示例} \\
     3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2  & {\heiti\tjfontbody 1.1.1 三级标题示例} \\
     4 & \texttt{\textbackslash subsubsection} & A, B, C       & {\heiti\tjfontbody A.\ 段落标题} \\
@@ -105,13 +105,13 @@
     \toprule
     \textbf{字号命令} & \textbf{字号名称} & \textbf{用途} \\
     \midrule
-    \texttt{\textbackslash zihao\{2\}}  & 二号   & 封面课题名称 \\
-    \texttt{\textbackslash zihao\{-2\}} & 小二号 & 章标题 \\
-    \texttt{\textbackslash zihao\{3\}}  & 三号   & 封面副标题 \\
-    \texttt{\textbackslash zihao\{4\}}  & 四号   & 封面信息 \\
-    \texttt{\textbackslash zihao\{-4\}} & 小四号 & 正文、节标题 \\
-    \texttt{\textbackslash zihao\{5\}}  & 五号   & 脚注 \\
-    \texttt{\textbackslash zihao\{-5\}} & 小五号 & 页眉页脚 \\
+    \texttt{\textbackslash zihao\{-2\}} & 小二号 & 课题名称、摘要页标题 \\
+    \texttt{\textbackslash zihao\{-3\}} & 小三号 & 章标题、目录标题、封面字段值 \\
+    \texttt{\textbackslash zihao\{3\}}  & 三号   & 摘要副标题（\texttt{\textbackslash tjfontinfotitle}：信息说明页标题） \\
+    \texttt{\textbackslash zihao\{4\}}  & 四号   & 摘要/参考文献/谢辞标题 \\
+    \texttt{\textbackslash zihao\{-4\}} & 小四号 & 正文、节标题、页眉页脚 \\
+    \texttt{\textbackslash zihao\{5\}}  & 五号   & 脚注、装订线文字 \\
+    \texttt{\textbackslash zihao\{-5\}} & 小五号 & 表题、图题、表内文字 \\
     \bottomrule
   \end{tabular}
 \end{table}

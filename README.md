@@ -9,7 +9,6 @@
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis/stargazers"><img src="https://img.shields.io/github/stars/TJ-CSCCG/TongjiThesis?style=flat" alt="Stars"></a>
   <img src="https://img.shields.io/badge/TeX%20Live-2026-blue" alt="TeX Live 2026">
-  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey" alt="Platform">
 </p>
 
 <p align="center">
@@ -30,10 +29,12 @@
 ## 主要特性
 
 - 基于 `ctexbook` 文档类，支持 `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` 结构
+- 符合 2026 版同济大学本科毕业设计（论文）撰写规范（小四正文，1.5 倍行距，小三章标题）
 - 支持 `XeLaTeX` 和 `LuaLaTeX` 双编译器
 - 支持 `biblatex`（默认）和 `bibtex` 双引用后端，通过 `\makereferences` 统一输出
 - 支持 `minted`（默认）和 `listings` 双代码高亮方案
 - 提供 `longlisting` 环境，支持跨页代码块
+- 内置信息说明页（`\MakeInfoPage`），符合 2026 版官方模板要求
 - 支持单面 / 双面打印，双面模式自动添加装订线
 - 键值对文档类选项，配置灵活
 - Linux / macOS / Windows 三平台 CI 持续测试
