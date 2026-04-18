@@ -445,26 +445,33 @@
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
 % 附录（2026 spec）：
-%   「附录」作为 H1 章节标题（四号黑体居中），并写入目录。
-%   附录内的各小节请使用 \appendixsection / \appendixsubsection，
-%   它们是未编号的 \section*/\subsection*，自动写入目录。
+%   「附录」作为未编号 H1 章节标题（四号黑体居中），写入目录。
+%   附录内的小节使用 A. B. C. 编号（与正文 chapter.section 解耦），
+%   浮动体 (figure/table/equation/…) 随节编号为 A.1、A.2、B.1 …
+%   \appendixsection / \appendixsubsection 是 \section / \subsection 的别名，
+%   保持 chapters/appendix.tex 的语义；用户也可直接用 \section / \subsection。
 \let\tj@origappendix\appendix
 \renewcommand{\appendix}{%
   \tj@origappendix
   \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
   \chapter*{附录}%
   \addcontentsline{toc}{chapter}{附录}%
+  % 附录内小节：A、B、C … 与 chapter 解耦
+  \setcounter{section}{0}%
+  \renewcommand{\thesection}{\Alph{section}}%
+  \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}%
+  % 浮动体随节编号 (A.1, A.2, B.1, …)
+  \counterwithin{figure}{section}%
+  \counterwithin{table}{section}%
+  \counterwithin{equation}{section}%
+  \counterwithin{algorithm}{section}%
+  \counterwithin{listing}{section}%
+  \counterwithin{lstlisting}{section}%
+  % 标题格式 "A. 节名"（点号 + 空格）
+  \ctexset{section/aftername={.\space}}%
 }
-\newcommand{\appendixsection}[1]{%
-  \phantomsection
-  \section*{#1}%
-  \addcontentsline{toc}{section}{#1}%
-}
-\newcommand{\appendixsubsection}[1]{%
-  \phantomsection
-  \subsection*{#1}%
-  \addcontentsline{toc}{subsection}{#1}%
-}
+\newcommand{\appendixsection}{\section}
+\newcommand{\appendixsubsection}{\subsection}
 % Backmatter headings use 四号 (references, acknowledgements) per 2026 spec.
 % The \ctexset override is intentionally permanent for the rest of the document
 % (backmatter is always the final structural division).
@@ -621,6 +628,9 @@
 }
 
 \setcounter{secnumdepth}{5}
+
+% 脚注编号使用①②③… (官方模板规范)
+\renewcommand{\thefootnote}{\Circled{\arabic{footnote}}}
 
 
 % ==========================================
