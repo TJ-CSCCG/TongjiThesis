@@ -179,11 +179,35 @@
 \renewcommand{\lstlistingname}{代码}
 \renewcommand{\lstlistlistingname}{代码列表}
 
+% Enhanced verbatim support (pure TeX, no Python dependency).
+% fvextra extends fancyvrb with breaklines/breakanywhere/\Verb/bgcolor/etc.
+% Loaded BEFORE minted so minted (which pulls in fancyvrb internally) sees the extensions.
+% \fvset aligned with \lstset and \setminted so Verbatim / lstlisting / minted
+% blocks share one visual treatment: gray bg, thin frame, left line numbers, mathescape.
+\RequirePackage{fvextra}
+\fvset{
+  frame=single,
+  framesep=2mm,
+  rulecolor=\color{gray!40},
+  numbers=left,
+  numbersep=12pt,
+  xleftmargin=2.5em,
+  fontsize=\small,
+  baselinestretch=1,
+  tabsize=4,
+  breaklines=true,
+  bgcolor=bg,
+  mathescape=true
+}
+
 % Conditionally load minted package (optional)
 \iftongjithesis@minted
   \RequirePackage[chapter]{minted}
   \setminted{linenos,
     bgcolor=bg,
+    frame=single,
+    framesep=2mm,
+    rulecolor=\color{gray!40},
     fontsize=\small,
     breaklines,
     mathescape,
@@ -212,19 +236,7 @@
 \newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
 
 \RequirePackage{tcolorbox}
-\RequirePackage{verbatim}
-
-% Add enhanced verbatim support (no Python dependency)
-% fvextra extends fancyvrb with breaklines/breakanywhere/... (vanilla fancyvrb lacks breaklines).
-\RequirePackage{fvextra}
-\fvset{
-  frame=single,
-  numbers=left,
-  fontsize=\small,
-  baselinestretch=1,
-  tabsize=4,
-  breaklines=true
-}
+\RequirePackage{verbatim}  % kept for \comment / \verbatiminput; lowercase `verbatim` env is a kernel feature
 
 % Cross-referencing and hyperlinks
 \RequirePackage[colorlinks,allcolors=black,unicode=true]{hyperref}
