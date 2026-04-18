@@ -2,7 +2,7 @@
 % tongjithesis -- Tongji University Thesis Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tongjithesis}[2026/04/16 v1.3.0 Tongji University Thesis Class]
+\ProvidesClass{tongjithesis}[2026/04/18 v1.3.1 Tongji University Thesis Class]
 
 %% TongjiThesis
 %% Copyright 2023-2026 TJ-CSCCG
@@ -72,24 +72,25 @@
 \newcommand{\tjfontheading}{\zihao{4}}       % 摘要标题 / 参考文献 / 谢辞标题：四号
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{-5}}      % 表题 / 图题：小五号
-\newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号
+\newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
 \newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
 \newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
 \newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
-\newcommand{\tjlinespread}{1.5}               % 全文行距倍数（≈21.6磅 at 小四号12pt；setspace linespread × 1.2 × fontsize）
+% 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
+\newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
+\newcommand{\tjtoclinespread}{1.083}         % 目录：Word 单倍
 % Header and cover text
 \newcommand{\tjheadertext}{毕业设计（论文）}
-\makeatletter
-\newcommand{\tj@covertype}{毕业设计（论文）}
-\makeatother
 
 % ==========================================
 % Required Packages
 % ==========================================
 % Page layout
+% headheight 43pt ≈ 1.14cm logo (≈32pt) + 小四号正文行 (≈11pt)；防止 fancyhdr headheight warning
 \setlength{\headheight}{43pt}
+% 页边距按同济本科毕业设计（论文）官方 Word 模板复刻
 \RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
@@ -108,18 +109,19 @@
 \RequirePackage{graphicx}
 
 % Table of contents
+% [titles]: 让 ctex 保留其 \contentsname/\listfigurename 等中文名；tocloft 不会覆盖。
+% 副作用：ToC 标题由 class 的 \chapter* 渲染，\cft*toctitle* 钩子失效。
 \RequirePackage[titles]{tocloft}
 
 % Mathematics
 \RequirePackage{amsmath,amsthm,amsfonts,amssymb,amscd}
-\makeatletter
+% @ is already a letter in a .cls file; no \makeatletter needed here or below.
 \iftongjithesis@times
   \RequirePackage{fontspec}%
   \setmainfont{Times New Roman}%
 \else
   \RequirePackage{newtxtext,newtxmath}%
 \fi
-\makeatother
 
 \RequirePackage{upgreek}
 
@@ -137,6 +139,9 @@
 \DeclareCaptionFont{tj@songti}{\songti}
 \DeclareCaptionFont{tj@caption}{\tjfontcaption}
 \captionsetup{labelsep=tj@twospace,font={tj@caption,tj@songti}}
+% 代码块标题与代码框之间留出呼吸空间（listings / minted）
+\captionsetup[lstlisting]{skip=12pt}
+\captionsetup[listing]{skip=12pt}
 
 \RequirePackage{subcaption}
 
@@ -161,7 +166,7 @@
   numberstyle=\small\color{gray},
   numbersep=12pt,
   xleftmargin=2.5em,
-  framexleftmargin=2.5em,
+  xrightmargin=2mm,     % equal to framesep; keeps frame right edge within text area
   frame=single,
   rulecolor=\color{gray!40},
   framesep=2mm,
@@ -172,17 +177,41 @@
   captionpos=b,
   tabsize=4,
   mathescape=true,
-  escapeinside=||
+  escapeinside=||,
+  belowskip=0pt,
 }
 \renewcommand{\lstlistingname}{代码}
 \renewcommand{\lstlistlistingname}{代码列表}
 
+% Enhanced verbatim support (pure TeX, no Python dependency).
+% fvextra extends fancyvrb with breaklines/breakanywhere/\Verb/bgcolor/etc.
+% Loaded BEFORE minted so minted (which pulls in fancyvrb internally) sees the extensions.
+% \fvset aligned with \lstset and \setminted so Verbatim / lstlisting / minted
+% blocks share one visual treatment: gray bg, thin frame, left line numbers, mathescape.
+\RequirePackage{fvextra}
+\fvset{
+  frame=single,
+  framesep=2mm,
+  rulecolor=\color{gray!40},
+  numbers=left,
+  numbersep=12pt,
+  xleftmargin=2.5em,
+  fontsize=\small,
+  baselinestretch=1,
+  tabsize=4,
+  breaklines=true,
+  bgcolor=bg,
+  mathescape=true
+}
+
 % Conditionally load minted package (optional)
-\makeatletter
 \iftongjithesis@minted
   \RequirePackage[chapter]{minted}
   \setminted{linenos,
     bgcolor=bg,
+    frame=single,
+    framesep=2mm,
+    rulecolor=\color{gray!40},
     fontsize=\small,
     breaklines,
     mathescape,
@@ -207,22 +236,18 @@
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
 \fi
 
-% Non-float listing environment for cross-page code with captions
-\newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
-\makeatother
+% Non-float listing environment for cross-page code with captions.
+% Normalise lstlisting's \belowskip inside this env so it matches minted's
+% natural trailing (~10pt); combined with skip=2pt, both engines yield the
+% same ~12pt gap between code and caption. The \lstset call is group-local
+% to the environment, so regular (non-longlisting) lstlisting blocks keep
+% their configured belowskip.
+\newenvironment{longlisting}
+  {\captionsetup{type=listing,skip=2pt}\lstset{belowskip=10pt}}
+  {\medskip}
 
 \RequirePackage{tcolorbox}
-\RequirePackage{verbatim}
-
-% Add enhanced verbatim support (no Python dependency)
-\RequirePackage{fancyvrb}  % Enhanced verbatim environments
-\fvset{
-  frame=single,
-  numbers=left,
-  fontsize=\small,
-  baselinestretch=1,
-  tabsize=4
-}
+\RequirePackage{verbatim}  % kept for \comment / \verbatiminput; lowercase `verbatim` env is a kernel feature
 
 % Cross-referencing and hyperlinks
 \RequirePackage[colorlinks,allcolors=black,unicode=true]{hyperref}
@@ -237,7 +262,6 @@
 % ==========================================
 % Bibliography Configuration
 % ==========================================
-\makeatletter
 \iftongjithesis@biblatex
   \RequirePackage[
     backend=biber,
@@ -274,7 +298,6 @@
     \bibliography{\tj@bibfiles}%
   }
 \fi
-\makeatother
 
 % ==========================================
 % General Configurations
@@ -303,7 +326,6 @@
 }
 
 % Flag to suppress binding line on cover page
-\makeatletter
 \newif\iftjbindingline
 \tjbindinglinetrue
 
@@ -375,32 +397,40 @@
     \fi
   }%
 }
-\makeatother
+
+% 双横线页眉：两条 0.5pt 细线替代默认的单粗线。
+% fancyhdr 仅在 \headrulewidth>0pt 时调用 \headrule，故保留默认 0.4pt 即可触发，
+% 实际线宽由 \tjdoubleheadrule 内部的 \hrule \@height 控制。
+\newcommand{\tjdoubleheadrule}{%
+  \hrule\@height0.5pt\@width\headwidth
+  \vskip1pt
+  \hrule\@height0.5pt\@width\headwidth}
 
 % 设置摘要与目录页样式（如页眉、页脚等）
 \fancypagestyle{firststyle}{
   \fancyhf{}
-  \fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
+  \fancyhead[LO]{\hspace*{1cm}\includegraphics[height=1.14cm]{figures/tongji-header.pdf}~}
+  \fancyhead[RE]{~\includegraphics[height=1.14cm]{figures/tongji-header.pdf}\hspace*{1cm}}
   \fancyhead[RO,LE]{\tjfontbody ~\tjheadertext~\\}
   \fancyfoot[C]{\tjfontbody \thepage}
-  \renewcommand{\headrulewidth}{1.8pt}
+  \renewcommand{\headrule}{\tjdoubleheadrule}
   \renewcommand{\footrulewidth}{0pt}
 }
 
 % 设置正文页样式（如页眉、页脚等）
 \fancypagestyle{mainstyle}{
   \fancyhf{}
-  \fancyhead[LO,RE]{~ \includegraphics[height=1.14cm]{figures/tongji.pdf}~}
+  \fancyhead[LO]{\hspace*{1cm}\includegraphics[height=1.14cm]{figures/tongji-header.pdf}~}
+  \fancyhead[RE]{~\includegraphics[height=1.14cm]{figures/tongji-header.pdf}\hspace*{1cm}}
   \fancyhead[RO,LE]{\tjfontbody ~\tjheadertext~\\}
   \fancyfoot[RO]{{\tjfontbody 共\quad \pageref{LastPage}\quad 页\quad 第\quad \thepage \quad 页}}
   \fancyfoot[LE]{{\tjfontbody 第\quad \thepage \quad 页\quad 共\quad \pageref{LastPage}\quad 页}}
-  \renewcommand{\headrulewidth}{1.8pt}
+  \renewcommand{\headrule}{\tjdoubleheadrule}
   \renewcommand{\footrulewidth}{1.8pt}
 }
 
 % 自动设置前言和正文的页面样式
 % ctexbook 的 \chapter 会将首页设为 plain 样式，需要重定义 plain 以匹配当前样式
-\makeatletter
 \let\tj@origfrontmatter\frontmatter
 \renewcommand{\frontmatter}{%
   \tj@origfrontmatter
@@ -414,6 +444,34 @@
   \pagestyle{mainstyle}%
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
+% 附录（2026 spec）：
+%   「附录」作为未编号 H1 章节标题（四号黑体居中），写入目录。
+%   附录内的小节使用 A. B. C. 编号（与正文 chapter.section 解耦），
+%   浮动体 (figure/table/equation/…) 随节编号为 A.1、A.2、B.1 …
+%   \appendixsection / \appendixsubsection 是 \section / \subsection 的别名，
+%   保持 chapters/appendix.tex 的语义；用户也可直接用 \section / \subsection。
+\let\tj@origappendix\appendix
+\renewcommand{\appendix}{%
+  \tj@origappendix
+  \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
+  \chapter*{附录}%
+  \addcontentsline{toc}{chapter}{附录}%
+  % 附录内小节：A、B、C … 与 chapter 解耦
+  \setcounter{section}{0}%
+  \renewcommand{\thesection}{\Alph{section}}%
+  \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}%
+  % 浮动体随节编号 (A.1, A.2, B.1, …)
+  \counterwithin{figure}{section}%
+  \counterwithin{table}{section}%
+  \counterwithin{equation}{section}%
+  \counterwithin{algorithm}{section}%
+  \counterwithin{listing}{section}%
+  \counterwithin{lstlisting}{section}%
+  % 标题格式 "A. 节名"（点号 + 空格）
+  \ctexset{section/aftername={.\space}}%
+}
+\newcommand{\appendixsection}{\section}
+\newcommand{\appendixsubsection}{\subsection}
 % Backmatter headings use 四号 (references, acknowledgements) per 2026 spec.
 % The \ctexset override is intentionally permanent for the rest of the document
 % (backmatter is always the final structural division).
@@ -422,7 +480,6 @@
   \tj@origbackmatter
   \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
 }
-\makeatother
 
 % ==========================================
 % Typography and Font Settings
@@ -461,17 +518,16 @@
 % ==========================================
 
 % 修改目录编号与文字的间距，默认为 1em，强制修改为 0.5em
-\makeatletter
 \renewcommand{\numberline}[1]{%
   \settowidth\@tempdimb{#1\hspace{0.5em}}%
   \hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
-\makeatother
 
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
+% 目录缩进：章无缩进，节 2em，小节 4em（与标题缩进保持一致）；目录行距由 \tjtoclinespread 控制
 \setlength{\cftchapindent}{0em}
-\setlength{\cftsecindent}{1em}
+\setlength{\cftsecindent}{2em}
 \setlength{\cftsubsecindent}{4em}
 \setlength{\cftbeforechapskip}{0pt}
 \setlength{\cftbeforesecskip}{0pt}
@@ -479,6 +535,12 @@
 \renewcommand{\contentsname}{目\hspace{0.5em}录}
 \renewcommand{\cfttoctitlefont}{\hfill\heiti\tjfontchapter}
 \renewcommand{\cftaftertoctitle}{\hfill}
+% 目录标题后留一空行（匹配官方 Word 模板）
+% tocloft[titles] 下 \cftaftertoctitleskip 无效——\tableofcontents 内部走 \chapter*，
+% 所以直接在 \@starttoc 前注入 \vspace。
+% 标题“前”的空行由页面上边距 + ctex chapter beforeskip 提供，此处不再额外注入以免产生孤儿页。
+\patchcmd{\tableofcontents}{\@starttoc{toc}}{\vspace{\baselineskip}\@starttoc{toc}}%
+  {}{\ClassWarning{tongjithesis}{Failed to patch \string\tableofcontents\space for title spacing}}
 \renewcommand{\cftchapfont}{\songti\tjfontbody}
 \renewcommand{\cftsecfont}{\songti\tjfontbody}
 \renewcommand{\cftsubsecfont}{\songti\tjfontbody}
@@ -490,10 +552,11 @@
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
-% 目录使用单倍行距（官方模板要求）
-\apptocmd{\tableofcontents}{}{}{}% ensure command exists
-\pretocmd{\tableofcontents}{\begin{spacing}{1.0}}{}{}
-\apptocmd{\tableofcontents}{\end{spacing}}{}{}
+% 目录行距：对应 Word「单倍行距」——使用 \tjtoclinespread
+\let\tj@origtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
+}
 
 % ==========================================
 % Chapter/Section Numbering and Formatting
@@ -508,13 +571,11 @@
 % listing counter: created by minted (minted=true) or \newfloat (minted=false)
 % lstlisting counter: created by listings package
 % Both are bound to chapter, then lstlisting is aliased to listing.
-\makeatletter
 \AtBeginDocument{%
   \counterwithin{listing}{chapter}%
   \counterwithin{lstlisting}{chapter}%
   \let\c@lstlisting\c@listing
 }
-\makeatother
 
 % 设置正文页内章节标题格式
 \ctexset{
@@ -568,6 +629,9 @@
 
 \setcounter{secnumdepth}{5}
 
+% 脚注编号使用①②③… (官方模板规范)
+\renewcommand{\thefootnote}{\Circled{\arabic{footnote}}}
+
 
 % ==========================================
 % Float Settings
@@ -611,7 +675,6 @@
 % 伪代码
 \renewcommand{\algorithmicrequire}{\textbf{输入: }}
 \renewcommand{\algorithmicensure}{\textbf{输出: }}
-\makeatletter
 \renewenvironment{algorithm}
 {
   \vskip 20pt
@@ -630,7 +693,6 @@
   \kern2pt\hrule\relax
   \vskip 20pt
 }% \@fs@post for \@fs@ruled
-\makeatother
 
 % ==========================================
 % Cross-Referencing Commands
@@ -761,21 +823,21 @@
 \newcommand{\thesisdate}[3]{\def\tongjithesisyear{#1}\def\tongjithesismonth{#2}\def\tongjithesisday{#3}}
 
 % 设置封面
-\makeatletter
-\newcommand{\MakeCover}[0]{
+\newcommand{\MakeCover}{
   \begin{titlepage}
     \begin{center}
       \global\tjbindinglinefalse
-      \pagestyle{empty}
-      \vspace*{\fill}
+      \pagestyle{empty}% 防止多页封面在第二页出现页码（titlepage 只 \thispagestyle empty）
+      \vfill
 
-      \includegraphics[height=2.25cm]{figures/tongji.pdf}
+      \includegraphics[height=2.5cm]{figures/tongji.pdf}
 
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
-      \vskip 30pt
+      % \vskip 20pt
 
-      \zihao{-0}\heiti{\tj@covertype}
-      \vskip 60pt
+      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范）
+      \zihao{-0}\heiti{\tjheadertext}
+      \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}
         \tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
@@ -788,15 +850,13 @@
         \tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
       \end{information}
 
-      \vspace*{\fill}
+      \vfill
     \end{center}
   \end{titlepage}
   \global\tjbindinglinetrue
 }
-\makeatother
 
 % 设置信息说明页
-% (@ is already a letter throughout a cls file — no \makeatletter needed)
 \newcommand{\infotype}[1]{\def\tongjiinfotype{#1}}
 \newcommand{\infoabstract}[1]{\def\tongjiinfoabstract{#1}}
 \newcommand{\infodrawings}[1]{\def\tongjiinfodrawings{#1}}
@@ -820,8 +880,7 @@
 \newcommand{\MakeInfoPage}{%
   \begin{titlepage}
     \global\tjbindinglinefalse
-    \pagestyle{empty}
-    \setstretch{1.3}
+    \pagestyle{empty}% 防止信息页溢出到第二页时出现页码（titlepage 只 \thispagestyle empty）
 
     \begin{center}
       \tjfontinfotitle\heiti 同济大学本科毕业设计（论文）信息说明页
@@ -836,7 +895,7 @@
       \tongjithesistitle
       \ifx\tongjithesissubtitle\empty\else ——\tongjithesissubtitle\fi
     }}%
-    \vspace{0.5em}
+    \vspace{0.8em}
 
     \infoline{成果类型}{\tjcheckbox{design}\,毕业设计\quad \tjcheckbox{thesis}\,毕业论文}%
 
@@ -856,14 +915,13 @@
     }%
 
     \infoline{随附资料}{%
-      \vspace{0.5em}
+      \vspace{0.2em}
       \ifx\tongjiinfomaterials\empty
         \par\vspace{0.5em}
       \else
         \begin{enumerate}[label=\arabic*.,leftmargin=2em,labelsep=0.5em,itemsep=0.2em,parsep=0pt,topsep=0pt] \tongjiinfomaterials \end{enumerate}
       \fi
     }%
-    \vspace{0.5em}
     （请列出所有提交的支撑材料名称，如：毕业设计--全套图纸、毕业作品、计算书、程序代码、附录等）
     }
   \end{titlepage}
@@ -875,18 +933,18 @@
 \newcommand{\MakeAbstract}[2]{
   \begin{center}\bfseries\heiti\tjfonttitle
     \ \\
+    \vspace{-0.5em}
     \tongjithesistitle
     \ifx\tongjithesissubtitle\empty\else
-      \\[0.5em]{\zihao{3}\tongjithesissubtitle}
+      \\[0.2em]{\zihao{3}\tongjithesissubtitle}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{1pt}
+  \vspace{-0.8em}
   \begin{center}\heiti\tjfontheading
     摘\hspace{0.5em}要
   \end{center}
-  \vspace{-0.5em}
 
-  \begin{spacing}{1.5}
+  \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
     \songti\tjfontbody #1
     \par
@@ -903,24 +961,24 @@
   \clearpage
   \begin{center}\tjfonttitle
     \ \\
+    \vspace{-0.5em}
     \textbf{\tongjithesistitleeng}
     \ifx\tongjithesissubtitleeng\empty\else
-      \\[0.5em]{\zihao{3}\textbf{\tongjithesissubtitleeng}}
+      \\[0.2em]{\zihao{3}\textbf{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{1pt}
+  \vspace{-0.8em}
   \begin{center}\tjfontheading
     \textbf{ABSTRACT}
   \end{center}
-  \vspace{-0.5em}
 
-  \begin{spacing}{1.5}
+  \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
     \tjfontbody #1
     \par
   \end{spacing}
 
-  \vskip 13.65pt % 小五字体单倍行距 13.65pt
+  \vspace{1em}
   \noindent{\tjfontbody
     \textbf{Key words: }#2
   }
@@ -933,12 +991,10 @@
 
 % 设置全角句号替换为全角点号
 % Enable fullwidthstop replacement if the option is set to true
-\makeatletter
 \iftongjithesis@fullwidthstop
   \catcode`\。=\active
   \newcommand{。}{\ifmmode\text{．}\else ．\fi}
 \fi
-\makeatother
 
 % 加载用户配置文件
 % cfg is found via TEXINPUTS: locally via .latexmkrc (./style//), or alongside cls on CTAN/texmf.

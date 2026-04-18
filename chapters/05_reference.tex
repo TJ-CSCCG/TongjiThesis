@@ -13,29 +13,22 @@
 
 两种方式都能实现符合国标的参考文献格式。可通过文档类选项 \texttt{biblatex=true}（默认）或 \texttt{biblatex=false} 进行切换。无论选择哪种方式，均使用 \cs{tjbibresource} 命令在导言区指定参考文献数据库文件，使用 \cs{makereferences} 命令在正文中输出参考文献列表：
 
-\begin{verbatim}
+\begin{Verbatim}
 \tjbibresource{bib/references.bib}  % 导言区指定 .bib 文件
 ...
 \makereferences                     % 正文中输出参考文献
-\end{verbatim}
+\end{Verbatim}
 
 如需指定多个 \texttt{.bib} 文件，可用逗号分隔：\verb|\tjbibresource{file1.bib,file2.bib}|。
 
-在正文中，可使用 \verb|\cite| 命令引用参考文献。例如：
+在正文中，使用 \cs{cite} 命令引用参考文献；\verb|key| 为参考文献数据库中条目的唯一标识符，多个键用逗号分隔：
 
-\begin{verbatim}
+\begin{Verbatim}
 这是一个引用示例 \cite{book1}。
-\end{verbatim}
+多文献引用 \cite{book1,online1}。
+\end{Verbatim}
 
-其中，\verb|book1| 是参考文献的键值，即参考文献文件中每个条目的唯一标识符。引用命令会自动在文中插入相应文献序号，并在文末的参考文献列表中显示相应文献条目。
-
-如果需要同时标注多个参考文献，可使用逗号分隔键值。例如：
-
-\begin{verbatim}
-这是一个引用示例 \cite{book1,online1}。
-\end{verbatim}
-
-\cs{cite} 命令产生上标数字引用（如"……方法\textsuperscript{[1,2]}"），适合不影响行文流畅性的场景；而 \cs{citep}/\cs{parencite} 命令产生行内带括号引用（如"……方法[1,2]"），适合引用本身作为句子成分的场景。
+\cs{cite} 命令产生上标数字引用（如“……方法\textsuperscript{[1,2]}”），适合不影响行文流畅性的场景；\cs{citep}/\cs{parencite} 命令产生行内带括号引用（如“……方法[1,2]”），适合引用本身作为句子成分的场景。
 
 使用 \verb|\cite{key1,key2,key3...}| 命令可在正文中产生带有括号的上标引用的参考文献，如\cite{book1,online1,article1}。以下是使用 \verb|\cite| 命令的引用示例：
 \begin{itemize}
@@ -112,20 +105,18 @@
 有时，我们想要用脚注的形式引用某参考文献，那么我们可以使用 \verb|\footfullcite{key1}| 命令\footfullcite{qin2021}.
 \fi
 
-无论使用何种方法，都应该注意文献的准确性和完整性。在引用文献时，应尽可能使用最新的版本，并注意对文献信息的正确引用和格式化。这样可以提高文献的可信度，也能为读者提供更多参考信息。
 
 \section{脚注}
 
 脚注是一种在文本底部添加注释或补充说明的方式。在 \LaTeX\ 中，可以使用 \verb|\footnote| 命令添加脚注。例如，在文本中需要添加脚注时，可以在需要添加脚注的单词或句子后面使用 \verb|\footnote| 命令，如下所示：
 
-\begin{verbatim}
+\begin{Verbatim}
 脚注是一种在文本底部添加注释或补充说明的方式\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
-\end{verbatim}
+\end{Verbatim}
 
 其中，花括号中的文本就是脚注的内容。编译文档后，脚注会出现在页面底部，并自动标上数字：脚注是一种在文本底部添加注释或补充说明的方式\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
 
-需要注意的是，在使用脚注时，应该尽量避免使用过多的脚注，以免影响文本的阅读体验。同时，脚注的内容应该尽可能简洁明了，突出重点，有助于读者理解和记忆文本内容。
-另外，在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。同时，对于自己的观点和推断，应该明确标注为个人观点，以免误导读者。
+按 2026 同济模板规范，脚注编号以 \Circled{1}、\Circled{2}、\Circled{3}… 等带圈形式呈现，由模板自动渲染，无需显式切换。
 
 \section{交叉引用}
 
@@ -133,78 +124,67 @@
 
 为便于管理，建议为标签采用统一的命名前缀：
 \begin{center}
-\begin{tabular}{lllllll}
+\begin{tabular}{llll}
   \toprule
-  章：\verb|chap:a| & 节：\verb|sec:b| & 图：\verb|fig:c| & 表：\verb|tab:d| & 公式：\verb|eq:e| & 算法：\verb|algo:f| & 代码：\verb|lst:g| \\
+  章：\verb|chap:a| & 节：\verb|sec:b| & 图：\verb|fig:c| & 表：\verb|tab:d| \\
+  公式：\verb|eq:e| & 算法：\verb|algo:f| & 代码：\verb|lst:g| & 定理：\verb|thm:h| \\
   \bottomrule
 \end{tabular}
 \end{center}
 
 例如，在文档中的某个章节中添加一个标签：
 
-\begin{verbatim}
+\begin{Verbatim}
 \chapter{引言}
 \label{chap:intro}
 这是一段引言。
-\end{verbatim}
+\end{Verbatim}
 
 然后，在文档的其他位置使用 \verb|\ref| 命令来引用这个标签：
 
-\begin{verbatim}
+\begin{Verbatim}
 请参见第 \ref{chap:intro} 章。
-\end{verbatim}
+\end{Verbatim}
 
 这样，就可以在文档中产生“请参见第 X 章”的效果，其中 X 为标签所在章的编号。
 
 类似地，使用 \verb|\pageref| 命令可以引用页面编号。例如：
 
-\begin{verbatim}
+\begin{Verbatim}
 请参见第 \pageref{chap:intro} 页。
-\end{verbatim}
+\end{Verbatim}
 
 这样，就可以在文档中产生“请参见第 X 页”的效果，其中 X 为标签所在页码的编号。
 
-交叉引用在文档中很常用，可以帮助读者快速定位到相关内容，提高文档的可读性。但是，需要注意标签的唯一性和正确性，以及引用命令的正确使用方式。在使用交叉引用时，建议先编译一次文档，然后再编译一次，以确保标签和引用命令的对应关系正确。
+为了免于手动维护“第 X 章 / 图 X / 表 X”等引用词汇，本模板加载了 \pkg{cleveref} 宏包，并提供 \cs{cref} 命令自动根据标签所指对象的类型生成正确的引用词汇：
 
-当文档中需要交叉引用多个对象时，可以使用 \verb|\cref| 命令来自动根据引用对象的类型生成正确的引用词汇。本模板已经导入了 \pkg{cleveref} 宏包，设定好了一组默认的引用词汇，这些引用词汇可以根据需要进行修改。
+\begin{Verbatim}
+请参见\cref{chap:intro}。   % 产出：请参见第 1 章。
+\end{Verbatim}
 
-在文档中为需要引用的对象添加标签，例如：
+如需自定义引用词汇，可在导言区声明：
 
-\begin{verbatim}
-\chapter{引言}
-\label{chap:intro}
-这是一段引言。
-\end{verbatim}
-
-接下来，在文档的其他位置使用 \verb|\cref| 命令引用这个标签：
-\begin{verbatim}
-请参见\cref{chap:intro}。
-\end{verbatim}
-这样，就可以在文档中产生“请参见第 X 章”的效果，其中 X 为标签所在章的编号。\pkg{cleveref} 宏包会自动根据标签所在对象的类型生成正确的引用词汇，例如章用“第 X 章”、节用“第 X 节”、图用“图 X”、表用“表 X”等。
-
-需要注意的是，如果需要修改引用词汇，可以在导言区添加如下代码：
-
-\begin{verbatim}
+\begin{Verbatim}
 \crefname{对象类型}{引用词汇}{引用词汇复数形式}
 \Crefname{对象类型}{引用词汇}{引用词汇复数形式}
-\end{verbatim}
+\end{Verbatim}
 
 例如，可以使用以下代码将“定理”引用词汇修改为“命题”：
-\begin{verbatim}
+\begin{Verbatim}
 \crefname{theorem}{命题}{命题}
 \Crefname{theorem}{命题}{命题}
-\end{verbatim}
+\end{Verbatim}
 
 需要同时引用几个并列的对象时，可以直接使用 \verb|\cref| 命令，例如：
-\begin{verbatim}
+\begin{Verbatim}
 请参见\cref{chap:introduction,chap:conclusion}。
 请参见\cref{chap:introduction,chap:math,chap:reference,chap:float}。
 请参见\cref{chap:introduction,chap:reference,chap:conclusion}。
 请参见\cref{chap:introduction,chap:reference,chap:conclusion,%
   algo:algorithm,fig:parallel1,tab:firstone}。
-\end{verbatim}
+\end{Verbatim}
 
-这样，就可以在文档中产生“请参见第 X 章和第 Y 章”的效果。引用多个对象时，\pkg{cleveref} 宏包会自动根据对象类型生成正确的引用词汇，连续编号自动合并为范围，不同类型的对象分组显示：
+引用多个对象时，\pkg{cleveref} 会自动合并连续编号为范围，并按类型分组显示：
 \begin{itemize}
   \item 请参见\cref{chap:introduction,chap:conclusion}。
   \item 请参见\cref{chap:introduction,chap:math,chap:reference,chap:float}。
@@ -212,5 +192,3 @@
   \item 请参见\cref{chap:introduction,chap:reference,chap:conclusion,%
         algo:algorithm,fig:parallel1,tab:firstone}。
 \end{itemize}
-
-总之，交叉引用是撰写文档时非常有用的功能。使用 \verb|\ref| 命令需要手动书写引用词汇（如“第~\verb|\ref{...}|~章”），而 \verb|\cref| 命令则自动根据对象类型生成正确的格式，推荐优先使用后者。
