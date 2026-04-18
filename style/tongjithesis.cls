@@ -418,6 +418,27 @@
   \pagestyle{mainstyle}%
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
+% 附录（2026 spec）：
+%   「附录」作为 H1 章节标题（四号黑体居中），并写入目录。
+%   附录内的各小节请使用 \appendixsection / \appendixsubsection，
+%   它们是未编号的 \section*/\subsection*，自动写入目录。
+\let\tj@origappendix\appendix
+\renewcommand{\appendix}{%
+  \tj@origappendix
+  \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
+  \chapter*{附录}%
+  \addcontentsline{toc}{chapter}{附录}%
+}
+\newcommand{\appendixsection}[1]{%
+  \phantomsection
+  \section*{#1}%
+  \addcontentsline{toc}{section}{#1}%
+}
+\newcommand{\appendixsubsection}[1]{%
+  \phantomsection
+  \subsection*{#1}%
+  \addcontentsline{toc}{subsection}{#1}%
+}
 % Backmatter headings use 四号 (references, acknowledgements) per 2026 spec.
 % The \ctexset override is intentionally permanent for the rest of the document
 % (backmatter is always the final structural division).
