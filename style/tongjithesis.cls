@@ -139,6 +139,9 @@
 \DeclareCaptionFont{tj@songti}{\songti}
 \DeclareCaptionFont{tj@caption}{\tjfontcaption}
 \captionsetup{labelsep=tj@twospace,font={tj@caption,tj@songti}}
+% 代码块标题与代码框之间留出呼吸空间（listings / minted）
+\captionsetup[lstlisting]{skip=12pt}
+\captionsetup[listing]{skip=12pt}
 
 \RequirePackage{subcaption}
 
@@ -163,7 +166,7 @@
   numberstyle=\small\color{gray},
   numbersep=12pt,
   xleftmargin=2.5em,
-  framexleftmargin=2.5em,
+  xrightmargin=2mm,     % equal to framesep; keeps frame right edge within text area
   frame=single,
   rulecolor=\color{gray!40},
   framesep=2mm,
@@ -174,7 +177,8 @@
   captionpos=b,
   tabsize=4,
   mathescape=true,
-  escapeinside=||
+  escapeinside=||,
+  belowskip=0pt,
 }
 \renewcommand{\lstlistingname}{代码}
 \renewcommand{\lstlistlistingname}{代码列表}
@@ -232,8 +236,15 @@
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
 \fi
 
-% Non-float listing environment for cross-page code with captions
-\newenvironment{longlisting}{\captionsetup{type=listing}}{\medskip}
+% Non-float listing environment for cross-page code with captions.
+% Normalise lstlisting's \belowskip inside this env so it matches minted's
+% natural trailing (~10pt); combined with skip=2pt, both engines yield the
+% same ~12pt gap between code and caption. The \lstset call is group-local
+% to the environment, so regular (non-longlisting) lstlisting blocks keep
+% their configured belowskip.
+\newenvironment{longlisting}
+  {\captionsetup{type=listing,skip=2pt}\lstset{belowskip=10pt}}
+  {\medskip}
 
 \RequirePackage{tcolorbox}
 \RequirePackage{verbatim}  % kept for \comment / \verbatiminput; lowercase `verbatim` env is a kernel feature
@@ -912,12 +923,13 @@
 \newcommand{\MakeAbstract}[2]{
   \begin{center}\bfseries\heiti\tjfonttitle
     \ \\
+    \vspace{-0.5em}
     \tongjithesistitle
     \ifx\tongjithesissubtitle\empty\else
-      \\{\zihao{3}\tongjithesissubtitle}% 副标题：三号（官方模板规范）
+      \\[0.2em]{\zihao{3}\tongjithesissubtitle}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{-0.5em}
+  \vspace{-0.8em}
   \begin{center}\heiti\tjfontheading
     摘\hspace{0.5em}要
   \end{center}
@@ -939,12 +951,13 @@
   \clearpage
   \begin{center}\tjfonttitle
     \ \\
+    \vspace{-0.5em}
     \textbf{\tongjithesistitleeng}
     \ifx\tongjithesissubtitleeng\empty\else
-      \\{\zihao{3}\textbf{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
+      \\[0.2em]{\zihao{3}\textbf{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{-0.5em}
+  \vspace{-0.8em}
   \begin{center}\tjfontheading
     \textbf{ABSTRACT}
   \end{center}
