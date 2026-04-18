@@ -83,12 +83,25 @@ else
   git push origin "$BRANCH"
 fi
 
-# Update backward-compat branch to point to the same commit
+# Update backward-compat branch to point to the same commit.
+# --force-with-lease refuses to create a new branch (it needs an expected
+# remote ref to compare against), so split the path:
+#   - branch exists:   use --force-with-lease (safe overwrite)
+#   - branch missing:  plain push creates it without force
 echo ""
 echo "=== Syncing $COMPAT_BRANCH branch ==="
-git push origin "$BRANCH:$COMPAT_BRANCH" --force-with-lease 2>/dev/null \
-  && echo "Synced $COMPAT_BRANCH → $BRANCH" \
-  || echo "Warning: could not sync $COMPAT_BRANCH (may not exist)"
+if git ls-remote --exit-code --heads origin "$COMPAT_BRANCH" >/dev/null 2>&1; then
+  # The shallow clone only tracks $BRANCH; fetch the compat branch so
+  # --force-with-lease has a known-good remote ref to compare against.
+  git fetch --depth 1 origin "$COMPAT_BRANCH" 2>/dev/null || true
+  git push origin "$BRANCH:$COMPAT_BRANCH" --force-with-lease \
+    && echo "Synced $COMPAT_BRANCH → $BRANCH" \
+    || echo "Warning: force-with-lease push to $COMPAT_BRANCH failed (diverged?)"
+else
+  git push origin "$BRANCH:$COMPAT_BRANCH" \
+    && echo "Created $COMPAT_BRANCH from $BRANCH" \
+    || echo "Warning: could not create $COMPAT_BRANCH"
+fi
 
 echo ""
 echo "=== Done ==="
