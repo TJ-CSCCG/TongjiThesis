@@ -91,12 +91,20 @@ fi
 echo ""
 echo "=== Syncing $COMPAT_BRANCH branch ==="
 if git ls-remote --exit-code --heads origin "$COMPAT_BRANCH" >/dev/null 2>&1; then
-  # The shallow clone only tracks $BRANCH; fetch the compat branch so
-  # --force-with-lease has a known-good remote ref to compare against.
+  # Shallow clone narrows the fetch refspec to a single branch, so
+  # `git fetch origin $COMPAT_BRANCH` updates FETCH_HEAD but NOT
+  # refs/remotes/origin/$COMPAT_BRANCH. Bare --force-with-lease then
+  # fails with "stale info" because its default expected ref is missing.
+  # Capture the fetched SHA explicitly and pass it to --force-with-lease.
   git fetch --depth 1 origin "$COMPAT_BRANCH" 2>/dev/null || true
-  git push origin "$BRANCH:$COMPAT_BRANCH" --force-with-lease \
-    && echo "Synced $COMPAT_BRANCH → $BRANCH" \
-    || echo "Warning: force-with-lease push to $COMPAT_BRANCH failed (diverged?)"
+  EXPECTED=$(git rev-parse FETCH_HEAD 2>/dev/null || echo "")
+  if [ -n "$EXPECTED" ]; then
+    git push origin "$BRANCH:$COMPAT_BRANCH" --force-with-lease="$COMPAT_BRANCH:$EXPECTED" \
+      && echo "Synced $COMPAT_BRANCH → $BRANCH (was $EXPECTED)" \
+      || echo "Warning: push to $COMPAT_BRANCH rejected (remote moved since fetch?)"
+  else
+    echo "Warning: could not resolve remote SHA for $COMPAT_BRANCH; skipping sync"
+  fi
 else
   git push origin "$BRANCH:$COMPAT_BRANCH" \
     && echo "Created $COMPAT_BRANCH from $BRANCH" \
