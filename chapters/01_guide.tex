@@ -2,6 +2,8 @@
 
 本文档是 \TongjiThesis{} 模板的使用示例，基本覆盖了模板的全部排版功能。建议在阅读本示例的同时参考源代码，了解各排版效果的实现方式。在正式撰写毕业设计（论文）时，请删除本章及后续示例章节，替换为实际内容。
 
+后续示例章节依次演示：\cref{chap:introduction}（标题、列表、字体）、\cref{chap:float}（图、表、算法、代码）、\cref{chap:math}（数字单位、公式、定理）、\cref{chap:reference}（参考文献、脚注、交叉引用）、\cref{chap:conclusion}（总结与展望），附录则示范 \cs{appendixsection}/\cs{appendixsubsection} 的用法。
+
 \section{文档类选项}
 
 在 \verb|main.tex| 的 \verb|\documentclass| 中设置选项。本模板基于 \pkg{ctexbook}，未被识别的选项会自动传递给 \pkg{ctexbook}。
@@ -27,23 +29,13 @@
 
 \section{填写论文信息}
 
-在 \verb|chapters/frontcover.tex| 中填写个人信息，模板将自动生成封面：
+论文的封面、信息说明页与中英文摘要的个人信息分散在 \verb|chapters/| 目录下的三个文件中。各文件均已提供带注释的示例，照搬并替换字段值即可；模板据此自动生成对应页面。
 
-{\small
-\begin{verbatim}
-\school{某某学院}
-\major{某某专业}
-\student{1999999}{某某某}
-\thesistitle{课题名称}{副标题}     % 副标题可留空 {}
-\thesistitleeng{English Title}{Subtitle}
-\thesisadvisor{指导教师}
-\thesisdate{\the\year}{\the\month}{\the\day}
-
-\MakeCover
-\end{verbatim}
-}
-
-摘要在 \verb|chapters/00_abstract.tex| 中填写，分别使用 \verb|\MakeAbstract{正文}{关键词}| 和 \verb|\MakeAbstractEng{Text}{Keywords}| 生成中英文摘要页。
+\begin{itemize}
+  \item \textbf{封面} —— \verb|chapters/frontcover.tex|：\cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesistitleeng}、\cs{thesisadvisor}、\cs{thesisdate}，末尾调用 \cs{MakeCover}。
+  \item \textbf{信息说明页} —— \verb|chapters/infopage.tex|：\cs{infotype}（\texttt{thesis} 或 \texttt{design}）、\cs{infoabstract}、\cs{infothesiswords}（论文）或 \cs{infodrawings}+\cs{infowordcount}（设计）、\cs{infomaterials}，末尾调用 \cs{MakeInfoPage}。
+  \item \textbf{中英文摘要} —— \verb|chapters/00_abstract.tex|：\cs{MakeAbstract}\verb|{正文}{关键词}| 与 \cs{MakeAbstractEng}\verb|{Text}{Keywords}|。
+\end{itemize}
 
 \section{文档结构}
 
@@ -60,17 +52,17 @@
     封面       & \verb|\MakeCover|      & 由 \verb|frontcover.tex| 中的信息自动生成 \\
     信息说明页 & \verb|\MakeInfoPage|   & 由 \verb|infopage.tex| 中的信息自动生成 \\
     前置部分   & \verb|\frontmatter|    & 页码切换为大写罗马数字（I, II, III\ldots） \\
-    摘要     & \verb|\MakeAbstract|     & 中英文摘要及关键词 \\
+    摘要     & \verb|\MakeAbstract|     & 中英文摘要及关键词（\verb|00_abstract.tex|） \\
     目录     & \verb|\tableofcontents|  & 自动生成；可取消注释 \verb|\listoffigures|、\verb|\listoftables| \\
     正文     & \verb|\mainmatter|       & 页码切换为阿拉伯数字，从1重新开始 \\
     参考文献 & \verb|\makereferences|   & 自动排版，格式符合 GB/T 7714 \\
-    附录     & \verb|\appendix|         & 章编号变为 A、B、C \\
-    谢辞     & \verb|\backmatter|       & 取消章编号，页码继续 \\
+    附录     & \verb|\appendix|         & 新增「附录」章页，节编号为 A、B、C（\verb|appendix.tex|） \\
+    谢辞     & \verb|\backmatter|       & 取消章编号，页码继续（\verb|ack.tex|） \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-参考文献数据库文件在导言区通过 \verb|\tjbibresource{bib/note.bib}| 指定，支持逗号分隔的多个文件。
+正文各章放在 \verb|chapters/| 下，通过 \verb|main.tex| 中的 \verb|\input{chapters/XX_name}| 注册；参考文献数据库文件在导言区通过 \verb|\tjbibresource{bib/note.bib}| 指定，支持逗号分隔的多个文件。
 
 \section{常用命令速查}
 

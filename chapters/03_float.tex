@@ -6,8 +6,6 @@
 
 \section{插图}
 
-在 \TeX{} 中，插图功能是通过特定编译程序提供的机制实现的。不同的编译程序支持不同的图形格式。通常，图形都放置在浮动环境中。浮动的意思是，最终排版的图形位置不一定与源文件中的位置对应，这也是新手在使用 \LaTeX{} 时可能会遇到的问题。如果需要强制固定浮动图形的位置，请使用 \pkg{float} 宏包，并使用 \texttt{[H]} 参数。
-
 \subsection{单个图形}
 
 要插入单个图形，可以使用 \verb|\includegraphics| 命令，并在其参数中指定图像文件名和一些选项。例如：
@@ -31,8 +29,8 @@
 
 \subsection{多个图形}
 
-如果需要在同一浮动体中插入多个图形，可以使用 \pkg{subcaption} 宏包（注意：旧的 \pkg{subfigure} 和 \pkg{subfig} 宏包已过时，请勿使用）。这些方法可以按照一定的排列方式组合多个图形，并分别为每个子图形添加标题和标签。
-例如，可以使用 \verb|\subfigure| 命令插入两个水平并列的子图，如\cref{fig:example-subfig-1} 所示。这两个子图共用一个图形计数器，没有各自的子图题。
+如果需要在同一浮动体中插入多个图形，可以使用 \pkg{subcaption} 宏包（旧的 \pkg{subfigure} 与 \pkg{subfig} 宏包已过时，请勿使用）。
+最简单的做法是将多张图并排放入同一 \texttt{figure} 环境、用 \cs{hspace} 间隔——此时多图共用一个图号，没有各自子图题，如\cref{fig:example-subfig-1}。
 
 \begin{figure}[!htb]
   \centering
@@ -60,9 +58,7 @@
   \end{minipage}
 \end{figure}
 
-为共用一个计数器的多个子图添加子图题，建议使用较新的 \pkg{subcaption} 宏包，不建议使用 \pkg{subfigure} 或 \pkg{subfig} 等宏包。
-
-\pkg{subcaption} 宏包提供了 \cs{subcaptionbox} 命令，可以方便地实现子图的并排排列，并为每个子图添加子图题，如\cref{fig:subcaptionbox} 所示。此外，也可以使用 \pkg{subcaption} 宏包的 \cs{subcaption} 命令，将子图题放在子图之下，子图号用 a)、b) 等表示。可以将多个子图放在 \texttt{minipage} 中，用法与 \cs{caption} 相同。
+若希望多个子图共用一个计数器并分别拥有子图题，使用 \pkg{subcaption} 宏包的 \cs{subcaptionbox} 命令（或 \texttt{subfigure} 环境），子图号以 a)、b) 区分，如\cref{fig:subcaptionbox}。
 
 \begin{figure}[!htb]
   \centering
@@ -72,27 +68,6 @@
   \caption{包含子图题的示例（使用 subcaptionbox）}
   \label{fig:subcaptionbox}
 \end{figure}
-
-另外，\pkg{subcaption} 宏包还提供了 \pkg{subfigure} 和 \pkg{subtable} 环境，如\cref{fig:subfigure} 所示。这些环境的使用方法与 \pkg{subcaptionbox} 相似，可以实现子图的并排排列，并为每个子图添加子图题。
-
-\begin{figure}[!htb]
-  \centering
-  \begin{subfigure}{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{example-image-a}
-    \caption{左图}
-  \end{subfigure}
-  \hspace{1cm}
-  \begin{subfigure}{0.4\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{example-image-b}
-    \caption{右图}
-  \end{subfigure}
-  \caption{包含子图题的范例（使用 subfigure）}
-  \label{fig:subfigure}
-\end{figure}
-
-总之，在使用 \LaTeX{} 插图时，应该注意浮动体的特性，尽量使用 \pkg{float} 宏包进行浮动体的控制，避免出现排版问题。同时，也应该熟悉插图命令的使用方法，以便于插入单个或多个图形，并设置适当的标题和标签。
 
 
 \section{表格}
@@ -228,9 +203,8 @@
 
 \section{算法}
 
-算法环境可以使用 \pkg{algorithms} 宏包或者较新的 \pkg{algorithm2e} 实现。
-\cref{algo:algorithm} 是一个使用 \pkg{algorithms} 的例子。关于排版算法环境
-的具体方法，请阅读相关宏包的官方文档。
+算法环境可由 \pkg{algorithm} + \pkg{algpseudocode}（本模板已加载）或较新的 \pkg{algorithm2e} 宏包实现。
+\cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。
 
 \begin{algorithm}
   \caption{计算斐波那契数列}\label{algo:algorithm}
@@ -493,7 +467,7 @@ if __name__ == "__main__":
         print(f"  {name}: {credits}学分, 绩点{gp}")
 \end{lstlisting}
 \fi
-\caption{跨页代码段示例（Python）}\label{listing:cross-page}
+\caption{跨页代码段示例（Python）}\label{lst:cross-page}
 \end{longlisting}
 \makeatother
 
@@ -511,6 +485,4 @@ if __name__ == "__main__":
 
 在\LaTeX{}排版系统中，\verb|\newpage| 和 \verb|\clearpage| 命令都能强制开始新页面，但它们有着重要区别。\verb|\newpage| 仅创建新页面，而 \verb|\clearpage| 还会处理所有待处理的浮动体，确保它们在新页面前被正确放置。
 
-使用浮动体（如图、表）时，应当将它们置于适当的浮动环境中，并通过位置选项（如 \verb|[htb]|）来控制它们的排版位置。当需要确保所有浮动体都已处理并开始新页面时，应优先使用 \verb|\clearpage| 而非 \verb|\newpage|。这样可以防止浮动体累积并出现在文档中不合适的位置，导致排版混乱。
-
-合理使用 \verb|\clearpage| 命令和浮动体环境能有效确保文档排版的专业性和整洁度，使论文结构更加清晰有序。
+当需要确保所有浮动体都已处理并开始新页面时，应优先使用 \verb|\clearpage| 而非 \verb|\newpage|，以防止浮动体累积至错误位置。
