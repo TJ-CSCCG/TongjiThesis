@@ -42,7 +42,7 @@ jobs:
       - name: Extract package metadata
         id: metadata
         run: |
-          VERSION=$(jq -r '.version // "1.3.0"' package.json)
+          VERSION=$(jq -r '.version // "1.3.1"' package.json)
           AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)
           YEAR=$(date +%Y)
 
@@ -59,7 +59,7 @@ jobs:
 
       - name: Validate source files
         run: |
-          for f in style/tongjithesis.cls style/tongjithesis.cfg figures/tongji.pdf; do
+          for f in style/tongjithesis.cls style/tongjithesis.cfg figures/tongji.pdf figures/tongji-header.pdf; do
             [ -f "$f" ] || { echo "Error: $f not found"; exit 1; }
           done
           echo "All required source files present"
@@ -70,7 +70,7 @@ jobs:
 
           # Copy class files
           cp style/tongjithesis.cls style/tongjithesis.cfg ctan/tongjithesis/
-          cp figures/tongji.pdf ctan/tongjithesis/example/figures/
+          cp figures/tongji.pdf figures/tongji-header.pdf ctan/tongjithesis/example/figures/
 
           # Generate LICENSE
           cat > ctan/tongjithesis/LICENSE << HEREDOC
@@ -186,7 +186,8 @@ jobs:
           example/                      # Example directory
             example.tex                 # Example thesis document
             figures/                    # Figures directory
-              tongji.pdf               # Tongji University logo for example
+              tongji.pdf               # Tongji University logo for cover
+              tongji-header.pdf        # Tongji University logo for page header
           HEREDOC
 
           # Generate example
@@ -321,6 +322,7 @@ jobs:
             "ctan/tongjithesis/MANIFEST"
             "ctan/tongjithesis/example/example.tex"
             "ctan/tongjithesis/example/figures/tongji.pdf"
+            "ctan/tongjithesis/example/figures/tongji-header.pdf"
           )
           for file in "${required_files[@]}"; do
             [ -f "$file" ] || { echo "Error: $file missing"; exit 1; }

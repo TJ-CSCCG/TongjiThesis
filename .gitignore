@@ -1,10 +1,10 @@
 .DS_Store
 .env
 _out
-!figures/tongji.pdf
 
 # LaTeX compile output files
 *.pdf
+!figures/*.pdf
 *.fls
 *.aux
 *.bbl
