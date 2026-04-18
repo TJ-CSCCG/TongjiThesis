@@ -78,7 +78,9 @@
 % Spacing
 \newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
 \newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
-\newcommand{\tjlinespread}{1.5}               % 全文行距倍数（≈21.6磅 at 小四号12pt；setspace linespread × 1.2 × fontsize）
+% 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
+\newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
+\newcommand{\tjtoclinespread}{1.083}         % 目录：Word 单倍
 % Header and cover text
 \newcommand{\tjheadertext}{毕业设计（论文）}
 
@@ -492,8 +494,9 @@
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
+% 目录缩进：章无缩进，节 2em，小节 4em（与标题缩进保持一致）；目录行距由 \tjtoclinespread 控制
 \setlength{\cftchapindent}{0em}
-\setlength{\cftsecindent}{1em}
+\setlength{\cftsecindent}{2em}
 \setlength{\cftsubsecindent}{4em}
 \setlength{\cftbeforechapskip}{0pt}
 \setlength{\cftbeforesecskip}{0pt}
@@ -518,10 +521,10 @@
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
-% 目录使用单倍行距（官方模板要求）
+% 目录行距：对应 Word「单倍行距」——使用 \tjtoclinespread
 \let\tj@origtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
-  \begin{spacing}{1.0}\tj@origtableofcontents\end{spacing}%
+  \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
 }
 
 % ==========================================
@@ -791,16 +794,16 @@
     \begin{center}
       \global\tjbindinglinefalse
       \pagestyle{empty}% 防止多页封面在第二页出现页码（titlepage 只 \thispagestyle empty）
-      \vspace*{\fill}
+      \vfill
 
       \includegraphics[height=2.5cm]{figures/tongji.pdf}
 
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
-      \vskip 30pt
+      % \vskip 20pt
 
       % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范）
       \zihao{-0}\heiti{\tjheadertext}
-      \vskip 60pt
+      \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}
         \tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
@@ -813,7 +816,7 @@
         \tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
       \end{information}
 
-      \vspace*{\fill}
+      \vfill
     \end{center}
   \end{titlepage}
   \global\tjbindinglinetrue
@@ -844,7 +847,6 @@
   \begin{titlepage}
     \global\tjbindinglinefalse
     \pagestyle{empty}% 防止信息页溢出到第二页时出现页码（titlepage 只 \thispagestyle empty）
-    \setstretch{1.3}
 
     \begin{center}
       \tjfontinfotitle\heiti 同济大学本科毕业设计（论文）信息说明页
@@ -859,7 +861,7 @@
       \tongjithesistitle
       \ifx\tongjithesissubtitle\empty\else ——\tongjithesissubtitle\fi
     }}%
-    \vspace{0.5em}
+    \vspace{0.8em}
 
     \infoline{成果类型}{\tjcheckbox{design}\,毕业设计\quad \tjcheckbox{thesis}\,毕业论文}%
 
@@ -879,14 +881,13 @@
     }%
 
     \infoline{随附资料}{%
-      \vspace{0.5em}
+      \vspace{0.2em}
       \ifx\tongjiinfomaterials\empty
         \par\vspace{0.5em}
       \else
         \begin{enumerate}[label=\arabic*.,leftmargin=2em,labelsep=0.5em,itemsep=0.2em,parsep=0pt,topsep=0pt] \tongjiinfomaterials \end{enumerate}
       \fi
     }%
-    \vspace{0.5em}
     （请列出所有提交的支撑材料名称，如：毕业设计--全套图纸、毕业作品、计算书、程序代码、附录等）
     }
   \end{titlepage}
@@ -900,16 +901,15 @@
     \ \\
     \tongjithesistitle
     \ifx\tongjithesissubtitle\empty\else
-      \\[0.5em]{\zihao{3}\tongjithesissubtitle}% 副标题：三号（官方模板规范）
+      \\{\zihao{3}\tongjithesissubtitle}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{1pt}
+  \vspace{-0.5em}
   \begin{center}\heiti\tjfontheading
     摘\hspace{0.5em}要
   \end{center}
-  \vspace{-0.5em}
 
-  \begin{spacing}{1.5}
+  \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
     \songti\tjfontbody #1
     \par
@@ -928,22 +928,21 @@
     \ \\
     \textbf{\tongjithesistitleeng}
     \ifx\tongjithesissubtitleeng\empty\else
-      \\[0.5em]{\zihao{3}\textbf{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
+      \\{\zihao{3}\textbf{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
     \fi
   \end{center}
-  \vspace{1pt}
+  \vspace{-0.5em}
   \begin{center}\tjfontheading
     \textbf{ABSTRACT}
   \end{center}
-  \vspace{-0.5em}
 
-  \begin{spacing}{1.5}
+  \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
     \tjfontbody #1
     \par
   \end{spacing}
 
-  \vskip 13.65pt % 小五字体单倍行距 13.65pt
+  \vspace{1em}
   \noindent{\tjfontbody
     \textbf{Key words: }#2
   }
