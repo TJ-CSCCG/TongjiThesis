@@ -215,7 +215,8 @@
 \RequirePackage{verbatim}
 
 % Add enhanced verbatim support (no Python dependency)
-\RequirePackage{fancyvrb}  % Enhanced verbatim environments
+% fvextra extends fancyvrb with breaklines/breakanywhere/... (vanilla fancyvrb lacks breaklines).
+\RequirePackage{fvextra}
 \fvset{
   frame=single,
   numbers=left,
