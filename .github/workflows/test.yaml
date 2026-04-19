@@ -7,17 +7,25 @@ on:
       - 'feat/**'
       - 'fix/**'
       - 'refactor/**'
+    tags:
+      - 'v*'
     paths-ignore:
       - '*.md'
       - 'LICENSE'
       - '.gitignore'
       - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/workflows/release.yml'
   pull_request:
     paths-ignore:
       - '*.md'
       - 'LICENSE'
       - '.gitignore'
       - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 name: test

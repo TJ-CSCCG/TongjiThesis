@@ -22,11 +22,18 @@ on:
       - "figures/**"
       - ".github/workflows/release.yml"
       - "package.json"
+  workflow_run:
+    workflows: ["test"]
+    types: [completed]
   workflow_dispatch: # Allow manual triggering
 
 jobs:
   # Build CTAN package and source archives (runs on every trigger)
   package:
+    if: |
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_branch, 'v'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -395,10 +402,14 @@ jobs:
             ctan/tongjithesis/
           retention-days: 90
 
-  # Create GitHub release (only on manual dispatch)
+  # Create GitHub release (after successful test run on a version tag, or manual dispatch)
   release:
     needs: package
-    if: github.event_name == 'workflow_dispatch'
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_branch, 'v'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -429,14 +440,18 @@ jobs:
         run: |
           mkdir -p compiled-pdfs
 
-          # Find latest successful test run
-          WORKFLOW_RUN_ID=$(gh run list \
-            --repo "$GITHUB_REPOSITORY" \
-            --workflow="test.yaml" \
-            --status=success \
-            --limit=1 \
-            --json databaseId \
-            --jq '.[0].databaseId' 2>/dev/null || echo "")
+          # Use the exact triggering test run ID when available, otherwise find latest
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
+          else
+            WORKFLOW_RUN_ID=$(gh run list \
+              --repo "$GITHUB_REPOSITORY" \
+              --workflow="test.yaml" \
+              --status=success \
+              --limit=1 \
+              --json databaseId \
+              --jq '.[0].databaseId' 2>/dev/null || echo "")
+          fi
 
           if [ -z "$WORKFLOW_RUN_ID" ] || [ "$WORKFLOW_RUN_ID" = "null" ]; then
             echo "No successful test run found. PDFs will not be included."
