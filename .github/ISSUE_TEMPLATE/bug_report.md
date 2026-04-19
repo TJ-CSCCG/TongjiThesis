@@ -34,3 +34,10 @@ Please upload the `.log` file as an attachment, or paste the key error messages:
 
 如有修改项目文件结构或其他相关信息，请在此补充。
 Any other relevant information, e.g. modified file structure.
+
+## 是否计划自行修复？| Do you plan to fix this yourself?
+
+- [ ] 是，我计划提交 PR 修复此问题 | Yes, I plan to submit a PR to fix this
+
+如勾选，请在提交 PR 时在描述中写明 `Closes #<issue-number>` 以关联本 Issue，方便维护者追踪。
+If checked, please include `Closes #<issue-number>` in your PR description to link it to this issue.

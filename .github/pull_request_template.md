@@ -12,8 +12,8 @@
 
 ## 关联 Issue | Related Issues
 
-使用 "Closes #id" 关联相关 Issue，没有则留空。
-Use "Closes #id" to link related issues, or leave empty.
+使用 "Closes #id" 关联相关 Issue，没有则留空。若你在提交本 PR 前已填写对应 Issue 并勾选了"计划自行修复"，请务必在此处关联，合并后 Issue 将自动关闭。
+Use "Closes #id" to link related issues, or leave empty. If you filed an issue first and checked "plan to fix this yourself", link it here — it will be auto-closed on merge.
 
 ## 截图 | Screenshots
 
