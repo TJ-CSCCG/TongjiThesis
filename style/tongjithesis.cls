@@ -895,7 +895,6 @@
       \tongjithesistitle
       \ifx\tongjithesissubtitle\empty\else ——\tongjithesissubtitle\fi
     }}%
-    \vspace{0.8em}
 
     \infoline{成果类型}{\tjcheckbox{design}\,毕业设计\quad \tjcheckbox{thesis}\,毕业论文}%
 
