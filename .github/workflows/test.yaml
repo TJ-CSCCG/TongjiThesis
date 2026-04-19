@@ -17,6 +17,7 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - '.github/workflows/release.yml'
+      - 'scripts/**'
   pull_request:
     paths-ignore:
       - '*.md'
@@ -26,6 +27,7 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - '.github/workflows/release.yml'
+      - 'scripts/**'
   workflow_dispatch:
 
 name: test
