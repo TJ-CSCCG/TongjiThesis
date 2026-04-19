@@ -81,6 +81,10 @@
 % 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
 \newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
 \newcommand{\tjtoclinespread}{1.083}         % 目录：Word 单倍
+% 信息说明页行距（官方规范固定值，linespread = 目标磅数 ÷ (字号 × 1.2)）
+\newcommand{\tjinfofieldspread}{1.6667}   % 四号宋体 28 磅：28÷(14×1.2)≈5/3
+\newcommand{\tjinfoabstractspread}{1.25}  % 摘要小四 18 磅：18÷(12×1.2)=5/4（精确）
+\newcommand{\tjinfotitlevspace}{0.8em}    % 多行课题名称后的间距补偿（在四号上下文中解析）
 % Header and cover text
 \newcommand{\tjheadertext}{毕业设计（论文）}
 
@@ -863,6 +867,8 @@
 \newcommand{\infowordcount}[1]{\def\tongjiinfowordcount{#1}}
 \newcommand{\infothesiswords}[1]{\def\tongjiinfothesiswords{#1}}
 \newcommand{\infomaterials}[1]{\def\tongjiinfomaterials{#1}}
+\newsavebox{\tj@titlebox}
+\newlength{\tj@titledp}
 \newcommand{\infoline}[2]{%
   \noindent #1：#2\par\vspace{0.5em}
 }
@@ -888,14 +894,17 @@
 
     \vspace{1em}
 
-    {\tjfontheading\songti  % 字段标签：四号宋体
+    {\tjfontheading\songti\linespread{\tjinfofieldspread}\selectfont  % 四号宋体，行距 28 磅
     \setlength{\parindent}{0pt}
 
-    \infoline{课题名称}{\parbox[t]{\dimexpr\linewidth-5em\relax}{%
+    \savebox{\tj@titlebox}{\parbox[t]{\dimexpr\linewidth-5em\relax}{%
       \tongjithesistitle
       \ifx\tongjithesissubtitle\empty\else ——\tongjithesissubtitle\fi
     }}%
-    \vspace{0.8em}
+    \infoline{课题名称}{\usebox{\tj@titlebox}}%
+    \settodepth{\tj@titledp}{\usebox{\tj@titlebox}}%
+    \addtolength{\tj@titledp}{-\dp\strutbox}%
+    \ifdim\tj@titledp>0pt\vspace{\tjinfotitlevspace}\fi
 
     \infoline{成果类型}{\tjcheckbox{design}\,毕业设计\quad \tjcheckbox{thesis}\,毕业论文}%
 
@@ -904,7 +913,8 @@
     \infoline{内容简述（请用300字以内简要概述）}{%
       \par\vspace{0.2em}
       % 摘要正文用小四号（规范正文字号），外层字段标签为四号
-      {\tjfontbody\setlength{\parindent}{2em}\tongjiinfoabstract\par}
+      {\tjfontbody\linespread{\tjinfoabstractspread}\selectfont% 小四 18 磅
+       \setlength{\parindent}{2em}\tongjiinfoabstract\par}
     }
 
     % 按成果类型只显示对应行（官方模板为二选一）
@@ -915,7 +925,6 @@
     }%
 
     \infoline{随附资料}{%
-      \vspace{0.2em}
       \ifx\tongjiinfomaterials\empty
         \par\vspace{0.5em}
       \else
