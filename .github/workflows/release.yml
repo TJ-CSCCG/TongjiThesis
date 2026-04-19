@@ -395,10 +395,10 @@ jobs:
             ctan/tongjithesis/
           retention-days: 90
 
-  # Create GitHub release (only on manual dispatch)
+  # Create GitHub release (on version tag push or manual dispatch)
   release:
     needs: package
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
