@@ -840,14 +840,14 @@
       \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}
-        \tjfonttitle\heiti{课题名称} & \ulinecentered{\tongjithesistitle} \\
-        \tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tongjithesissubtitle} \\
-        \tjfonttitle\heiti{学\quad{}\quad{}院} & \ulinecentered{\tongjischool} \\
-        \tjfonttitle\heiti{专\quad{}\quad{}业} & \ulinecentered{\tongjimajor} \\
-        \tjfonttitle\heiti{学生姓名} & \ulinecentered{\tongjiauthor} \\
-        \tjfonttitle\heiti{学\quad{}\quad{}号} & \ulinecentered{\tongjiauthornumber} \\
-        \tjfonttitle\heiti{指导教师} & \ulinecentered{\tongjithesisadvisor} \\
-        \tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日} \\
+        \tjfonttitle\heiti{课题名称} & \ulinecentered{\tjfonttitle\heiti{\tongjithesistitle}} \\
+        \tjfonttitle\heiti{副\enskip{}标\enskip{}题} & \ulinecentered{\tjfonttitle\heiti{\tongjithesissubtitle}} \\
+        \tjfonttitle\heiti{学\quad{}\quad{}院} & \ulinecentered{\tjfonttitle\heiti{\tongjischool}} \\
+        \tjfonttitle\heiti{专\quad{}\quad{}业} & \ulinecentered{\tjfonttitle\heiti{\tongjimajor}} \\
+        \tjfonttitle\heiti{学生姓名} & \ulinecentered{\tjfonttitle\heiti{\tongjiauthor}} \\
+        \tjfonttitle\heiti{学\quad{}\quad{}号} & \ulinecentered{\tjfonttitle\heiti{\tongjiauthornumber}} \\
+        \tjfonttitle\heiti{指导教师} & \ulinecentered{\tjfonttitle\heiti{\tongjithesisadvisor}} \\
+        \tjfonttitle\heiti{日\quad{}\quad{}期} & \ulinecentered{\tjfonttitle\heiti{\tongjithesisyear{}年\tongjithesismonth{}月\tongjithesisday{}日}} \\
       \end{information}
 
       \vfill
