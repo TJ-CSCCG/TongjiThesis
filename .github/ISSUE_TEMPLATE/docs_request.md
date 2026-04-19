@@ -22,3 +22,10 @@ Describe the documentation content or improvements you expect.
 
 其他与该建议相关的信息。
 Any other relevant information.
+
+## 是否计划自行改进？| Do you plan to improve this yourself?
+
+- [ ] 是，我计划提交 PR 改进文档 | Yes, I plan to submit a PR to improve the documentation
+
+如勾选，请在提交 PR 时在描述中写明 `Closes #<issue-number>` 以关联本 Issue，方便维护者追踪。
+If checked, please include `Closes #<issue-number>` in your PR description to link it to this issue.
