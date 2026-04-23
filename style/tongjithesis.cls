@@ -471,8 +471,8 @@
   \counterwithin{algorithm}{section}%
   \counterwithin{listing}{section}%
   \counterwithin{lstlisting}{section}%
-  % 标题格式 "A. 节名"（点号 + 空格）
-  \ctexset{section/aftername={.\space}}%
+  % 标题格式 "A. 节名"（点号 + 0.5em 空格，与正文二级及以下标题一致）
+  \ctexset{section/aftername={.\hspace{0.5em}}}%
 }
 \newcommand{\appendixsection}{\section}
 \newcommand{\appendixsubsection}{\subsection}
@@ -597,13 +597,13 @@
   },
   section={%
     format={\heiti\tjfontbody},
-    aftername={\space},
+    aftername={\hspace{0.5em}},
     beforeskip={\tjskipbeforesec},
     afterskip={\tjskipaftersec},
   },
   subsection={%
     format={\heiti\tjfontbody},
-    aftername={\space},
+    aftername={\hspace{0.5em}},
     beforeskip={\tjskipbeforesec},
     afterskip={\tjskipaftersec},
     indent={2em},
@@ -612,7 +612,7 @@
     format={\heiti\tjfontbody},
     numbering=true,
     number={\Alph{subsubsection}},
-    aftername={.\space},
+    aftername={.\hspace{0.5em}},
     beforeskip={0pt},
     afterskip={0pt},
     indent={2em},
@@ -622,7 +622,7 @@
     format={\heiti\tjfontbody},
     numbering=true,
     number={\alph{paragraph}},
-    aftername={.\space},
+    aftername={.\hspace{0.5em}},
     beforeskip={0pt},
     afterskip={0pt},
     indent={2em},
