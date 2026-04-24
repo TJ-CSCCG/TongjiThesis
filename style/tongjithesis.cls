@@ -649,6 +649,7 @@
 \iftongjithesis@humanities
   \renewcommand{\thesection}{\chinese{section}}
   \renewcommand{\thesubsection}{\arabic{subsection}}
+  \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
   \ctexset{
     chapter/number    = {\chinese{chapter}},
     chapter/aftername = {、},
@@ -656,6 +657,10 @@
     section/aftername = {\hspace{0.5em}},
     subsection/number    = {\arabic{subsection}},
     subsection/aftername = {.\hspace{0.5em}},
+    subsubsection/number    = {（\arabic{subsubsection}）},
+    subsubsection/aftername = {\hspace{0.5em}},
+    paragraph/number    = {\Circled{\arabic{paragraph}}},
+    paragraph/aftername = {\hspace{0.5em}},
   }
 \fi
 
