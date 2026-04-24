@@ -28,9 +28,9 @@
 多文献引用 \cite{book1,online1}。
 \end{Verbatim}
 
-\cs{cite} 命令产生上标数字引用（如“……方法\textsuperscript{[1,2]}”），适合不影响行文流畅性的场景；\cs{citep}/\cs{parencite} 命令产生行内带括号引用（如“……方法[1,2]”），适合引用本身作为句子成分的场景。
+\cs{cite} 命令产生上标数字引用（如”……方法\textsuperscript{[1,2]}”），适合不影响行文流畅性的场景。
 
-使用 \verb|\cite{key1,key2,key3...}| 命令可在正文中产生带有括号的上标引用的参考文献，如\cite{book1,online1,article1}。以下是使用 \verb|\cite| 命令的引用示例：
+使用 \verb|\cite{key1,key2,key3...}| 命令可在正文中产生上标引用，如\cite{book1,online1,article1}。以下是使用 \verb|\cite| 命令的引用示例：
 \begin{itemize}
   \item 普通图书\cite{book1,book2}
   \item 论文集、会议录\cite{conf1,conf2}
@@ -42,39 +42,6 @@
   \item 报纸中析出的文献\cite{newspaper1,newspaper2}
   \item 电子文献\cite{online1,online2,online3}
 \end{itemize}
-
-% 以下根据 biblatex 选项自动切换示例：
-%   biblatex=false → \parencite 未定义 → 显示 \citep 示例
-%   biblatex=true  → \parencite 已定义 → 显示 \parencite 示例
-\ifx\parencite\undefined
-% biblatex=false: 使用 BibTeX，行内引用命令为 \citep
-使用 \verb|\citep{key1,key2,key3...}| 命令可以在正文中产生带有括号的引用参考文献。下面是使用 \verb|\citep| 命令的引用示例：
-\begin{itemize}
-  \item 普通图书\citep{book1,book2}
-  \item 论文集、会议录\citep{conf1,conf2}
-  \item 科技报告\citep{techreport1,techreport2}
-  \item 学位论文\citep{thesis1,thesis2,thesis3}
-  \item 专利文献\citep{patent1,patent2}
-  \item 专著中析出的文献\citep{inbook1,inbook2}
-  \item 期刊中析出的文献\citep{qin2021,article1,guo_deepseek-r1_2025}
-  \item 报纸中析出的文献\citep{newspaper1,newspaper2}
-  \item 电子文献\citep{online1,online2,online3}
-\end{itemize}
-\else
-% biblatex=true: 使用 BibLaTeX，行内引用命令为 \parencite
-使用 \verb|\parencite{key1,key2,key3...}| 命令可以在正文中产生带有括号的引用参考文献。下面是使用 \verb|\parencite| 命令的引用示例：
-\begin{itemize}
-  \item 普通图书\parencite{book1,book2}
-  \item 论文集、会议录\parencite{conf1,conf2}
-  \item 科技报告\parencite{techreport1,techreport2}
-  \item 学位论文\parencite{thesis1,thesis2,thesis3}
-  \item 专利文献\parencite{patent1,patent2}
-  \item 专著中析出的文献\parencite{inbook1,inbook2}
-  \item 期刊中析出的文献\parencite{qin2021,article1,guo_deepseek-r1_2025}
-  \item 报纸中析出的文献\parencite{newspaper1,newspaper2}
-  \item 电子文献\parencite{online1,online2,online3}
-\end{itemize}
-\fi
 
 可使用 \verb|\nocite{key1,key2,key3...}| 将参考文献条目加入文献表中，但不在正文中引用。使用 \verb|\nocite{*}| 可将参考文献数据库中的所有条目加入文献表中。
 
