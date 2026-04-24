@@ -80,7 +80,7 @@
 \newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
 % 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
 \newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
-\newcommand{\tjtoclinespread}{1.083}         % 目录：Word 单倍
+\newcommand{\tjtoclinespread}{1.625}         % 目录：Word 1.5 倍
 % 信息说明页行距（官方规范固定值，linespread = 目标磅数 ÷ (字号 × 1.2)）
 \newcommand{\tjinfofieldspread}{1.6667}   % 四号宋体 28 磅：28÷(14×1.2)≈5/3
 \newcommand{\tjinfoabstractspread}{1.25}  % 摘要小四 18 磅：18÷(12×1.2)=5/4（精确）
@@ -556,7 +556,7 @@
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
-% 目录行距：对应 Word「单倍行距」——使用 \tjtoclinespread
+% 目录行距：对应 Word「1.5 倍行距」——使用 \tjtoclinespread
 \let\tj@origtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
   \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
