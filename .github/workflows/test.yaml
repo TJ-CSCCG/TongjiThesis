@@ -196,6 +196,8 @@ jobs:
             pygments: false
           - variant: twoside
             pygments: true
+          - variant: humanities
+            pygments: true
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -242,6 +244,11 @@ jobs:
         run: |
           sed -i 's/oneside/twoside/' main.tex
 
+      - name: Configure humanities variant
+        if: matrix.variant == 'humanities'
+        run: |
+          sed -i 's/field=science/field=humanities/' main.tex
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -253,6 +260,9 @@ jobs:
           fi
           if [ "${{ matrix.variant }}" = "twoside" ]; then
             grep -q 'twoside' main.tex || { echo "ERROR: twoside not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "humanities" ]; then
+            grep -q 'field=humanities' main.tex || { echo "ERROR: field=humanities not set"; exit 1; }
           fi
 
       - name: Compile LaTeX document

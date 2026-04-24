@@ -43,6 +43,8 @@
 \DeclareBoolOption[true]{biblatex}
 % Define degree option: bachelor (default), master, doctor
 \DeclareStringOption[bachelor]{degree}
+% Define field option: science (default, 理工科), humanities (文科 — 经管/人文/法学/外语/艺术)
+\DeclareStringOption[science]{field}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
@@ -55,6 +57,14 @@
 }{%
   \ClassWarning{tongjithesis}{type=\tongjithesis@degree\space is reserved for future use. Falling back to bachelor format}%
   \tongjithesis@bachelortrue
+}
+\newif\iftongjithesis@humanities
+\expandafter\ifstrequal\expandafter{\tongjithesis@field}{humanities}{%
+  \tongjithesis@humanitiestrue
+}{%
+  \expandafter\ifstrequal\expandafter{\tongjithesis@field}{science}{}{%
+    \ClassWarning{tongjithesis}{field=\tongjithesis@field\space is unknown. Falling back to science format}%
+  }%
 }
 
 % ==========================================
@@ -632,6 +642,22 @@
 }
 
 \setcounter{secnumdepth}{5}
+
+% 文科类专业（field=humanities）：章节编号改用中文数字体系
+% 理工科（science，默认）：1 / 1.1 / 1.1.1 / A. / a.
+% 文科  （humanities）  ：一、/（一）/ 1. / A. / a.
+\iftongjithesis@humanities
+  \renewcommand{\thesection}{\chinese{section}}
+  \renewcommand{\thesubsection}{\arabic{subsection}}
+  \ctexset{
+    chapter/number    = {\chinese{chapter}},
+    chapter/aftername = {、},
+    section/number    = {（\chinese{section}）},
+    section/aftername = {\hspace{0.5em}},
+    subsection/number    = {\arabic{subsection}},
+    subsection/aftername = {.\hspace{0.5em}},
+  }
+\fi
 
 % 脚注编号使用①②③… (官方模板规范)
 \renewcommand{\thefootnote}{\Circled{\arabic{footnote}}}
