@@ -877,7 +877,9 @@
 \newcommand{\tjchecked}{\rlap{$\checkmark$}$\square$}
 \newcommand{\tjunchecked}{$\square$}
 \newcommand{\tjcheckbox}[1]{%
-  \ifthenelse{\equal{\tongjiinfotype}{#1}}{\tjchecked}{\tjunchecked}%
+  \ifthenelse{\equal{\tongjiinfotype}{#1}\OR
+              \(\equal{#1}{design}\AND\equal{\tongjiinfotype}{engineering}\)}%
+    {\tjchecked}{\tjunchecked}%
 }
 \newcommand{\ulinebox}[2][c]{%
   \uline{\makebox[#2][#1]{\phantom{X}}}%
@@ -918,7 +920,7 @@
     }
 
     % 按成果类型只显示对应行（官方模板为二选一）
-    \ifthenelse{\equal{\tongjiinfotype}{design}}{%
+    \ifthenelse{\equal{\tongjiinfotype}{design}\OR\equal{\tongjiinfotype}{engineering}}{%
       \infoline{毕业设计}{主要图纸~\ifx\tongjiinfodrawings\empty \ulinebox{4em} \else \underline{\makebox[4em][c]{\tongjiinfodrawings}} \fi~张，正文总字数~\ifx\tongjiinfowordcount\empty \ulinebox{6em} \else \underline{\makebox[6em][c]{\tongjiinfowordcount}} \fi~字}%
     }{%
       \infoline{毕业论文}{正文总字数~\ifx\tongjiinfothesiswords\empty \ulinebox{6em} \else \underline{\makebox[6em][c]{\tongjiinfothesiswords}} \fi~字}%
@@ -950,7 +952,7 @@
   \end{center}
   \vspace{-0.8em}
   \begin{center}\heiti\tjfontheading
-    \ifthenelse{\equal{\tongjiinfotype}{design}}{设计总说明}{摘\hspace{0.5em}要}
+    \ifthenelse{\equal{\tongjiinfotype}{engineering}}{设计总说明}{摘\hspace{0.5em}要}
   \end{center}
 
   \begin{spacing}{\tjlinespread}
