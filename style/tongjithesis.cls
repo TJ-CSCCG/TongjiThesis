@@ -938,7 +938,7 @@
   \global\tjbindinglinetrue
 }
 
-% 设置中文摘要页
+% 设置中文摘要页（毕业设计时标题改为"设计总说明"）
 \newcommand{\MakeAbstract}[2]{
   \begin{center}\bfseries\heiti\tjfonttitle
     \ \\
@@ -950,7 +950,7 @@
   \end{center}
   \vspace{-0.8em}
   \begin{center}\heiti\tjfontheading
-    摘\hspace{0.5em}要
+    \ifthenelse{\equal{\tongjiinfotype}{design}}{设计总说明}{摘\hspace{0.5em}要}
   \end{center}
 
   \begin{spacing}{\tjlinespread}
