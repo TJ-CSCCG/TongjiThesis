@@ -668,6 +668,26 @@
   \renewcommand{\cftchapaftersnum}{\kern-0.25em 、\hspace{0.5em}}
   \setlength{\cftchapnumwidth}{2.5em}
   \renewcommand{\cftsubsecaftersnum}{.\hspace{0.5em}}
+  % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
+  \counterwithout{figure}{chapter}
+  \counterwithout{table}{chapter}
+  \counterwithout{equation}{chapter}
+  \counterwithout{algorithm}{chapter}
+  % listing/lstlisting 在 \AtBeginDocument 中绑定；定理类环境在 \newtheorem 后定义，
+  % 均需在 document 开始后解绑，确保顺序正确
+  \AtBeginDocument{%
+    \counterwithout{listing}{chapter}%
+    \counterwithout{lstlisting}{chapter}%
+    \counterwithout{thm}{chapter}%
+    \counterwithout{cor}{chapter}%
+    \counterwithout{lem}{chapter}%
+    \counterwithout{prop}{chapter}%
+    \counterwithout{conj}{chapter}%
+    \counterwithout{assume}{chapter}%
+    \counterwithout{dfn}{chapter}%
+    \counterwithout{exmp}{chapter}%
+    \counterwithout{rem}{chapter}%
+  }%
 \fi
 
 % 脚注编号使用①②③… (官方模板规范)
