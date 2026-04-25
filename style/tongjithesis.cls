@@ -664,9 +664,10 @@
     paragraph/aftername = {\hspace{0.5em}},
   }
   % TOC: 章加顿号、小节加点，与正文标题一致；加宽章编号列以容纳「一、」
-  \renewcommand{\cftchapaftersnum}{、}
-  \setlength{\cftchapnumwidth}{2em}
-  \renewcommand{\cftsubsecaftersnum}{.}
+  % \kern-0.25em 消除 xeCJK 在汉字与顿号之间自动插入的字距
+  \renewcommand{\cftchapaftersnum}{\kern-0.25em 、\hspace{0.5em}}
+  \setlength{\cftchapnumwidth}{2.5em}
+  \renewcommand{\cftsubsecaftersnum}{.\hspace{0.5em}}
 \fi
 
 % 脚注编号使用①②③… (官方模板规范)
