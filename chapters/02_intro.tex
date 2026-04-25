@@ -10,15 +10,15 @@
   \centering
   \caption{标题层级与编号体系（\texttt{field} 选项）}\label{tab:heading-levels}
   \renewcommand{\arraystretch}{1.8}
-  \begin{tabular}{ccll}
+  \begin{tabular}{ccllp{3.5cm}}
     \toprule
-    \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{\texttt{field=science}（理工科，默认）} & \textbf{\texttt{field=humanities}（文科）} \\
+    \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{理工科（默认）} & \textbf{文科} & \textbf{示例（理工科）} \\
     \midrule
-    1 & \texttt{\textbackslash chapter}       & 1, 2, 3      & 一、二、三 \\
-    2 & \texttt{\textbackslash section}       & 1.1, 1.2     & （一）（二） \\
-    3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2 & 1.\ 2. \\
-    4 & \texttt{\textbackslash subsubsection} & A, B, C      & （1）（2）（3） \\
-    5 & \texttt{\textbackslash paragraph}     & a, b, c      & \Circled{1}\Circled{2}\Circled{3} \\
+    1 & \texttt{\textbackslash chapter}       & 1, 2, 3      & 一、二、三            & {\heiti\tjfontchapter 1\quad 绪论} \\
+    2 & \texttt{\textbackslash section}       & 1.1, 1.2     & （一）（二）          & {\heiti\tjfontbody 1.1\hspace{0.5em}标题层级示例} \\
+    3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2 & 1.\ 2.               & {\heiti\tjfontbody 1.1.1\hspace{0.5em}三级标题示例} \\
+    4 & \texttt{\textbackslash subsubsection} & A, B, C      & （1）（2）（3）       & {\heiti\tjfontbody A.\hspace{0.5em}段落标题} \\
+    5 & \texttt{\textbackslash paragraph}     & a, b, c      & \Circled{1}\Circled{2}\Circled{3} & {\heiti\tjfontbody a.\hspace{0.5em}子段落标题} \\
     \bottomrule
   \end{tabular}
 \end{table}
