@@ -86,8 +86,10 @@
 \newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
-\newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
-\newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
+% Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
+% 与段落自身行距无关；不能用 0.5\baselineskip（会被 \setstretch 拉伸）。
+\newcommand{\tjskipbeforesec}{0.6em}            % 段前 0.5 行（Word 口径）
+\newcommand{\tjskipaftersec}{0.6em}             % 段后 0.5 行（Word 口径）
 % 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
 \newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
 \newcommand{\tjtoclinespread}{1.625}         % 目录：Word 1.5 倍
@@ -640,6 +642,10 @@
     afterskip={\tjskipaftersec},
     indent={2em},
     aftertitle={\par},
+    % ctex's chinese-book scheme makes paragraph run-in by default; with run-in the
+    % afterskip is emitted as horizontal \hskip via \CTEX@heading@glue, which combines
+    % with \parindent to give "parindent + afterskip" indent on the body. Force display.
+    runin=false,
   },
   appendix/name={},
 }
