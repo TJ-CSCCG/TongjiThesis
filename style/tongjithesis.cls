@@ -647,6 +647,7 @@
 % 理工科（science，默认）：1 / 1.1 / 1.1.1 / A. / a.
 % 文科  （humanities）  ：一、/（一）/ 1. / A. / a.
 \iftongjithesis@humanities
+  \renewcommand{\thechapter}{\chinese{chapter}}
   \renewcommand{\thesection}{\chinese{section}}
   \renewcommand{\thesubsection}{\arabic{subsection}}
   \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
@@ -662,6 +663,15 @@
     paragraph/number    = {\Circled{\arabic{paragraph}}},
     paragraph/aftername = {\hspace{0.5em}},
   }
+  % \ref/\cref: Chinese numerals sit flush against Chinese characters — no ~ spacing
+  \renewcommand*{\chapref}[1]{第\ref{##1}章}
+  \renewcommand*{\secref}[1]{第\ref{##1}节}
+  \crefformat{chapter}{第#2#1#3章}
+  \crefmultiformat{chapter}{第#2#1#3章}{和第#2#1#3章}{、第#2#1#3章}{和第#2#1#3章}
+  \crefrangeformat{chapter}{第#3#1#4章至第#5#2#6章}
+  \crefformat{section}{第#2#1#3节}
+  \crefmultiformat{section}{第#2#1#3节}{和第#2#1#3节}{、第#2#1#3节}{和第#2#1#3节}
+  \crefrangeformat{section}{第#3#1#4节至第#5#2#6节}
 \fi
 
 % 脚注编号使用①②③… (官方模板规范)
