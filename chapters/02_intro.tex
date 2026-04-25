@@ -4,21 +4,21 @@
 
 \section{标题层级示例}
 
-本模板按照同济大学规范配置了五级标题层级，具体设置如\tabref{tab:heading-levels}所示。
+本模板按照同济大学规范配置了五级标题层级。编号体系因专业类别而异，由 \verb|main.tex| 中的 \texttt{field} 选项控制，具体对应关系如\tabref{tab:heading-levels}所示。
 
 \begin{table}[htbp]
   \centering
-  \caption{标题层级设置}\label{tab:heading-levels}
+  \caption{标题层级与编号体系（\texttt{field} 选项）}\label{tab:heading-levels}
   \renewcommand{\arraystretch}{1.8}
-  \begin{tabular}{cccl}
+  \begin{tabular}{ccll}
     \toprule
-    \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{编号格式} & \textbf{示例} \\
+    \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{\texttt{field=science}（理工科，默认）} & \textbf{\texttt{field=humanities}（文科）} \\
     \midrule
-    1 & \texttt{\textbackslash chapter}       & 1, 2, 3       & {\heiti\tjfontchapter 1\quad 绪论} \\
-    2 & \texttt{\textbackslash section}       & 1.1, 1.2      & {\heiti\tjfontbody 1.1 标题层级示例} \\
-    3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2  & {\heiti\tjfontbody 1.1.1 三级标题示例} \\
-    4 & \texttt{\textbackslash subsubsection} & A, B, C       & {\heiti\tjfontbody A.\ 段落标题} \\
-    5 & \texttt{\textbackslash paragraph}     & a, b, c       & {\heiti\tjfontbody a. 子段落标题} \\
+    1 & \texttt{\textbackslash chapter}       & 1, 2, 3      & 一、二、三 \\
+    2 & \texttt{\textbackslash section}       & 1.1, 1.2     & （一）（二） \\
+    3 & \texttt{\textbackslash subsection}    & 1.1.1, 1.1.2 & 1.\ 2. \\
+    4 & \texttt{\textbackslash subsubsection} & A, B, C      & （1）（2）（3） \\
+    5 & \texttt{\textbackslash paragraph}     & a, b, c      & \Circled{1}\Circled{2}\Circled{3} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -31,11 +31,11 @@
 
 \subsubsection{段落标题}
 
-段落标题适用于需要进一步细分的场景。注意本模板中段落标题使用大写字母（A、B、C）编号，符合同济大学的排版规范。
+段落标题适用于需要进一步细分的场景。理工科模式下编号采用大写字母（A、B、C），文科模式下采用带括号的阿拉伯数字（1）（2）（3），符合同济大学的排版规范。
 
 \paragraph{子段落标题}
 
-子段落标题是最细粒度的标题层级，编号采用小写字母（a、b、c）。在实际论文写作中，通常不建议使用超过三级的标题层级，以保持文章结构的清晰性。
+子段落标题是最细粒度的标题层级，理工科模式下编号采用小写字母（a、b、c），文科模式下采用 \Circled{1}\Circled{2}\Circled{3} 形式。在实际论文写作中，通常不建议使用超过三级的标题层级，以保持文章结构的清晰性。
 
 \section{列表}
 
