@@ -47,6 +47,7 @@ env:
     adjustbox
     algorithmicx
     algorithms
+    alphalph
     biber
     biblatex
     biblatex-gb7714-2015

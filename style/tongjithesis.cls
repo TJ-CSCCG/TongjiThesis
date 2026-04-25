@@ -115,6 +115,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{setspace}
 \RequirePackage[inline]{enumitem}
+\RequirePackage{alphalph}
 \RequirePackage{circledsteps}
 \RequirePackage[normalem]{ulem}
 \RequirePackage{calc}
@@ -470,9 +471,9 @@
   \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
   \chapter*{附录}%
   \addcontentsline{toc}{chapter}{附录}%
-  % 附录内小节：A、B、C … 与 chapter 解耦
+  % 附录内小节：A B C … Z AA AB …（alphalph 包提供，>26 自动延伸）
   \setcounter{section}{0}%
-  \renewcommand{\thesection}{\Alph{section}}%
+  \renewcommand{\thesection}{\AlphAlph{\value{section}}}%
   \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}%
   % 浮动体随节编号 (A.1, A.2, B.1, …)
   \counterwithin{figure}{section}%
@@ -535,11 +536,6 @@
 % Table of Contents Formatting
 % ==========================================
 
-% 修改目录编号与文字的间距，默认为 1em，强制修改为 0.5em
-\renewcommand{\numberline}[1]{%
-  \settowidth\@tempdimb{#1\hspace{0.5em}}%
-  \hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
-
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
@@ -547,6 +543,9 @@
 \setlength{\cftchapindent}{0em}
 \setlength{\cftsecindent}{2em}
 \setlength{\cftsubsecindent}{4em}
+\setlength{\cftsecnumwidth}{1.5em}
+\setlength{\cftsubsecnumwidth}{2em}
+\setlength{\cftsubsubsecnumwidth}{2.5em}
 \setlength{\cftbeforechapskip}{0pt}
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
@@ -625,7 +624,7 @@
   subsubsection={%
     format={\heiti\tjfontbody},
     numbering=true,
-    number={\Alph{subsubsection}},
+    number={\AlphAlph{\value{subsubsection}}},
     aftername={.\hspace{0.5em}},
     beforeskip={\tjskipbeforesec},
     afterskip={\tjskipaftersec},
@@ -635,7 +634,7 @@
   paragraph={%
     format={\heiti\tjfontbody},
     numbering=true,
-    number={\alph{paragraph}},
+    number={\alphalph{\value{paragraph}}},
     aftername={.\hspace{0.5em}},
     beforeskip={\tjskipbeforesec},
     afterskip={\tjskipaftersec},
@@ -671,12 +670,13 @@
     paragraph/aftername = {\hspace{0.5em}},
   }
   % TOC 目录列宽与分隔符
-  % h1: 0ch 缩进（基础配置已设），「一、」占 2em
-  \renewcommand{\cftchapaftersnum}{\!、\ \hspace*{0.5em}}
-  \setlength{\cftchapnumwidth}{4em}
-  % h2: 2em 缩进（基础配置已设），「（一）」+ 0.5em 间距 = 3.5em
-  \setlength{\cftsecnumwidth}{3.5em}
-  % h3: 4em 缩进（基础配置已设），「1.」+ 0.5em 间距 = 2em
+  % h1
+  \renewcommand{\cftchapaftersnum}{\!、}
+  \setlength{\cftchapnumwidth}{2.5em}
+  % h2
+  \setlength{\cftsecindent}{2.5em}
+  \setlength{\cftsecnumwidth}{2.5em}
+  % h3
   \renewcommand{\cftsubsecaftersnum}{.\hspace*{0.5em}}
   \setlength{\cftsubsecnumwidth}{1.5em}
   % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
