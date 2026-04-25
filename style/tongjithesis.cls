@@ -481,8 +481,12 @@
   \counterwithin{algorithm}{section}%
   \counterwithin{listing}{section}%
   \counterwithin{lstlisting}{section}%
-  % 标题格式 "A. 节名"（点号 + 0.5em 空格，与正文二级及以下标题一致）
-  \ctexset{section/aftername={.\hspace{0.5em}}}%
+  % 理工科：「A. 节名」；文科：「（A） 节名」（括号来自正文 section/name 延续，无点号）
+  \iftongjithesis@humanities
+    \ctexset{section/number={\thesection},section/aftername={\hspace{0.5em}}}%
+  \else
+    \ctexset{section/name={,},section/number={\thesection},section/aftername={.\hspace{0.5em}}}%
+  \fi
 }
 \newcommand{\appendixsection}{\section}
 \newcommand{\appendixsubsection}{\subsection}
@@ -648,26 +652,33 @@
 % 文科  （humanities）  ：一、/（一）/ 1. / （1） / ①②③
 \iftongjithesis@humanities
   \renewcommand{\thechapter}{\chinese{chapter}}
-  \renewcommand{\thesection}{\chinese{section}}
   \renewcommand{\thesubsection}{\arabic{subsection}}
   \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
   \ctexset{
     chapter/number    = {\chinese{chapter}},
     chapter/aftername = {、},
-    section/number    = {（\chinese{section}）},
-    section/aftername = {\hspace{0.5em}},
+    % 括号写入 name 而非 number，使 \thesection 保持裸数字（供 tocloft/cref 使用）
+    section/name      = {（,）},
+    section/number    = {\chinese{section}},
+    % section/aftername = {\hspace{0.5em}},
     subsection/number    = {\arabic{subsection}},
     subsection/aftername = {.\hspace{0.5em}},
-    subsubsection/number    = {（\arabic{subsubsection}）},
+    % 同理：括号写入 name，\thesubsubsection 保持裸数字
+    subsubsection/name     = {（,）},
+    subsubsection/number   = {\arabic{subsubsection}},
     subsubsection/aftername = {\hspace{0.5em}},
     paragraph/number    = {\Circled{\arabic{paragraph}}},
     paragraph/aftername = {\hspace{0.5em}},
   }
-  % TOC: 章加顿号、小节加点，与正文标题一致；加宽章编号列以容纳「一、」
-  % \kern-0.25em 消除 xeCJK 在汉字与顿号之间自动插入的字距
-  \renewcommand{\cftchapaftersnum}{\kern-0.25em 、\hspace{0.5em}}
-  \setlength{\cftchapnumwidth}{2.5em}
-  \renewcommand{\cftsubsecaftersnum}{.\hspace{0.5em}}
+  % TOC 目录列宽与分隔符
+  % h1: 0ch 缩进（基础配置已设），「一、」占 2em
+  \renewcommand{\cftchapaftersnum}{\!、\ \hspace*{0.5em}}
+  \setlength{\cftchapnumwidth}{4em}
+  % h2: 2em 缩进（基础配置已设），「（一）」+ 0.5em 间距 = 3.5em
+  \setlength{\cftsecnumwidth}{3.5em}
+  % h3: 4em 缩进（基础配置已设），「1.」+ 0.5em 间距 = 2em
+  \renewcommand{\cftsubsecaftersnum}{.\hspace*{0.5em}}
+  \setlength{\cftsubsecnumwidth}{1.5em}
   % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
   \counterwithout{figure}{chapter}
   \counterwithout{table}{chapter}
