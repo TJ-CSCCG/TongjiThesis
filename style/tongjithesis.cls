@@ -645,7 +645,7 @@
 
 % 文科类专业（field=humanities）：章节编号改用中文数字体系
 % 理工科（science，默认）：1 / 1.1 / 1.1.1 / A. / a.
-% 文科  （humanities）  ：一、/（一）/ 1. / A. / a.
+% 文科  （humanities）  ：一、/（一）/ 1. / （1） / ①②③
 \iftongjithesis@humanities
   \renewcommand{\thechapter}{\chinese{chapter}}
   \renewcommand{\thesection}{\chinese{section}}
@@ -663,6 +663,10 @@
     paragraph/number    = {\Circled{\arabic{paragraph}}},
     paragraph/aftername = {\hspace{0.5em}},
   }
+  % TOC: 章加顿号、小节加点，与正文标题一致；加宽章编号列以容纳「一、」
+  \renewcommand{\cftchapaftersnum}{、}
+  \setlength{\cftchapnumwidth}{2em}
+  \renewcommand{\cftsubsecaftersnum}{.}
 \fi
 
 % 脚注编号使用①②③… (官方模板规范)
