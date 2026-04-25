@@ -663,15 +663,6 @@
     paragraph/number    = {\Circled{\arabic{paragraph}}},
     paragraph/aftername = {\hspace{0.5em}},
   }
-  % \ref/\cref: Chinese numerals sit flush against Chinese characters — no ~ spacing
-  \renewcommand*{\chapref}[1]{第\ref{##1}章}
-  \renewcommand*{\secref}[1]{第\ref{##1}节}
-  \crefformat{chapter}{第#2#1#3章}
-  \crefmultiformat{chapter}{第#2#1#3章}{和第#2#1#3章}{、第#2#1#3章}{和第#2#1#3章}
-  \crefrangeformat{chapter}{第#3#1#4章至第#5#2#6章}
-  \crefformat{section}{第#2#1#3节}
-  \crefmultiformat{section}{第#2#1#3节}{和第#2#1#3节}{、第#2#1#3节}{和第#2#1#3节}
-  \crefrangeformat{section}{第#3#1#4节至第#5#2#6节}
 \fi
 
 % 脚注编号使用①②③… (官方模板规范)
@@ -744,8 +735,14 @@
 % ==========================================
 
 % 交叉引用
-\newcommand*{\chapref}[1]{第~\ref{#1}~章~}
-\newcommand*{\secref}[1]{第~\ref{#1}~节~}
+% \ref/\cref: Chinese numerals sit flush against Chinese chars — no ~ spacing needed
+\iftongjithesis@humanities
+  \newcommand*{\chapref}[1]{第\ref{#1}章}
+  \newcommand*{\secref}[1]{第\ref{#1}节}
+\else
+  \newcommand*{\chapref}[1]{第~\ref{#1}~章~}
+  \newcommand*{\secref}[1]{第~\ref{#1}~节~}
+\fi
 \newcommand*{\algoref}[1]{算法~\ref{#1}~}
 \renewcommand*{\eqref}[1]{公式（\ref{#1}）~}
 \newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
@@ -762,12 +759,21 @@
 
 % Configure references in Chinese
 % "第X章/节" pattern: number is wrapped, needs full multi/range formats
-\crefformat{chapter}{第~#2#1#3~章}
-\crefmultiformat{chapter}{第~#2#1#3~章}{和第~#2#1#3~章}{、第~#2#1#3~章}{和第~#2#1#3~章}
-\crefrangeformat{chapter}{第~#3#1#4~章至第~#5#2#6~章}
-\crefformat{section}{第~#2#1#3~节}
-\crefmultiformat{section}{第~#2#1#3~节}{和第~#2#1#3~节}{、第~#2#1#3~节}{和第~#2#1#3~节}
-\crefrangeformat{section}{第~#3#1#4~节至第~#5#2#6~节}
+\iftongjithesis@humanities
+  \crefformat{chapter}{第#2#1#3章}
+  \crefmultiformat{chapter}{第#2#1#3章}{和第#2#1#3章}{、第#2#1#3章}{和第#2#1#3章}
+  \crefrangeformat{chapter}{第#3#1#4章至第#5#2#6章}
+  \crefformat{section}{第#2#1#3节}
+  \crefmultiformat{section}{第#2#1#3节}{和第#2#1#3节}{、第#2#1#3节}{和第#2#1#3节}
+  \crefrangeformat{section}{第#3#1#4节至第#5#2#6节}
+\else
+  \crefformat{chapter}{第~#2#1#3~章}
+  \crefmultiformat{chapter}{第~#2#1#3~章}{和第~#2#1#3~章}{、第~#2#1#3~章}{和第~#2#1#3~章}
+  \crefrangeformat{chapter}{第~#3#1#4~章至第~#5#2#6~章}
+  \crefformat{section}{第~#2#1#3~节}
+  \crefmultiformat{section}{第~#2#1#3~节}{和第~#2#1#3~节}{、第~#2#1#3~节}{和第~#2#1#3~节}
+  \crefrangeformat{section}{第~#3#1#4~节至第~#5#2#6~节}
+\fi
 \crefformat{subsection}{第~#2#1#3~小节}
 \crefmultiformat{subsection}{第~#2#1#3~小节}{和第~#2#1#3~小节}{、第~#2#1#3~小节}{和第~#2#1#3~小节}
 \crefrangeformat{subsection}{第~#3#1#4~小节至第~#5#2#6~小节}
