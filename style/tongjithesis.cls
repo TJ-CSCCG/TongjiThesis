@@ -33,8 +33,8 @@
   setkeys=\kvsetkeys
 }
 
-% Define fullwidthstop option (default is false)
-\DeclareBoolOption[false]{fullwidthstop}
+% Define fullwidthstop option: circle（默认，保留 。）或 dot（替换为 ．）
+\DeclareStringOption[circle]{fullwidthstop}
 % Define times option (default is false)
 \DeclareBoolOption[false]{times}
 % Define minted option (default is true)
@@ -43,6 +43,10 @@
 \DeclareBoolOption[true]{biblatex}
 % Define degree option: bachelor (default), master, doctor
 \DeclareStringOption[bachelor]{degree}
+% Define field option: science (default, 理工科), humanities (文科 — 人文/法学/外语/艺术)
+% 经管类属社科：编号要求依理工，撰写依理工模版。26 届为过渡期，可选 science 或
+% humanities；自 27 届起统一使用 science。
+\DeclareStringOption[science]{field}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
@@ -55,6 +59,14 @@
 }{%
   \ClassWarning{tongjithesis}{type=\tongjithesis@degree\space is reserved for future use. Falling back to bachelor format}%
   \tongjithesis@bachelortrue
+}
+\newif\iftongjithesis@humanities
+\expandafter\ifstrequal\expandafter{\tongjithesis@field}{humanities}{%
+  \tongjithesis@humanitiestrue
+}{%
+  \expandafter\ifstrequal\expandafter{\tongjithesis@field}{science}{}{%
+    \ClassWarning{tongjithesis}{field=\tongjithesis@field\space is unknown. Falling back to science format}%
+  }%
 }
 
 % ==========================================
@@ -76,8 +88,10 @@
 \newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
-\newcommand{\tjskipbeforesec}{.5\baselineskip}  % 段前 0.5 行
-\newcommand{\tjskipaftersec}{.5\baselineskip}   % 段后 0.5 行
+% Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
+% 与段落自身行距无关；不能用 0.5\baselineskip（会被 \setstretch 拉伸）。
+\newcommand{\tjskipbeforesec}{0.6em}            % 段前 0.5 行（Word 口径）
+\newcommand{\tjskipaftersec}{0.6em}             % 段后 0.5 行（Word 口径）
 % 行距（近似 Word 模板行距倍数；LaTeX 与 Word 的度量略有差异）
 \newcommand{\tjlinespread}{1.625}            % 正文 / 摘要：Word 1.5 倍
 \newcommand{\tjtoclinespread}{1.625}         % 目录：Word 1.5 倍
@@ -85,8 +99,14 @@
 \newcommand{\tjinfofieldspread}{1.6667}   % 四号宋体 28 磅：28÷(14×1.2)≈5/3
 \newcommand{\tjinfoabstractspread}{1.25}  % 摘要小四 18 磅：18÷(12×1.2)=5/4（精确）
 \newcommand{\tjinfotitlevspace}{0.8em}    % 多行课题名称后的间距补偿（在四号上下文中解析）
-% Header and cover text
-\newcommand{\tjheadertext}{毕业设计（论文）}
+% Cover text：封面大标题恒定为"毕业设计（论文）"（文理科一致）
+\newcommand{\tjcovertext}{毕业设计（论文）}
+% Header text：理工=毕业设计（论文）；文科=毕业论文（设计）
+\iftongjithesis@humanities
+  \newcommand{\tjheadertext}{毕业论文（设计）}
+\else
+  \newcommand{\tjheadertext}{毕业设计（论文）}
+\fi
 
 % ==========================================
 % Required Packages
@@ -105,6 +125,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{setspace}
 \RequirePackage[inline]{enumitem}
+\RequirePackage{alphalph}
 \RequirePackage{circledsteps}
 \RequirePackage[normalem]{ulem}
 \RequirePackage{calc}
@@ -460,9 +481,9 @@
   \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
   \chapter*{附录}%
   \addcontentsline{toc}{chapter}{附录}%
-  % 附录内小节：A、B、C … 与 chapter 解耦
+  % 附录内小节：A B C … Z AA AB …（alphalph 包提供，>26 自动延伸）
   \setcounter{section}{0}%
-  \renewcommand{\thesection}{\Alph{section}}%
+  \renewcommand{\thesection}{\AlphAlph{\value{section}}}%
   \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}%
   % 浮动体随节编号 (A.1, A.2, B.1, …)
   \counterwithin{figure}{section}%
@@ -471,8 +492,12 @@
   \counterwithin{algorithm}{section}%
   \counterwithin{listing}{section}%
   \counterwithin{lstlisting}{section}%
-  % 标题格式 "A. 节名"（点号 + 0.5em 空格，与正文二级及以下标题一致）
-  \ctexset{section/aftername={.\hspace{0.5em}}}%
+  % 理工科：「A. 节名」；文科：「（A） 节名」（括号来自正文 section/name 延续，无点号）
+  \iftongjithesis@humanities
+    \ctexset{section/number={\thesection},section/aftername={\hspace{0.5em}}}%
+  \else
+    \ctexset{section/name={,},section/number={\thesection},section/aftername={.\hspace{0.5em}}}%
+  \fi
 }
 \newcommand{\appendixsection}{\section}
 \newcommand{\appendixsubsection}{\subsection}
@@ -521,11 +546,6 @@
 % Table of Contents Formatting
 % ==========================================
 
-% 修改目录编号与文字的间距，默认为 1em，强制修改为 0.5em
-\renewcommand{\numberline}[1]{%
-  \settowidth\@tempdimb{#1\hspace{0.5em}}%
-  \hb@xt@\@tempdimb{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
-
 % 在上述修改基础上，符合模板标题对齐要求
 \renewcommand{\cftdot}{$\cdot$}
 \renewcommand{\cftdotsep}{1}
@@ -533,6 +553,9 @@
 \setlength{\cftchapindent}{0em}
 \setlength{\cftsecindent}{2em}
 \setlength{\cftsubsecindent}{4em}
+\setlength{\cftsecnumwidth}{1.5em}
+\setlength{\cftsubsecnumwidth}{2em}
+\setlength{\cftsubsubsecnumwidth}{2.5em}
 \setlength{\cftbeforechapskip}{0pt}
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
@@ -611,27 +634,86 @@
   subsubsection={%
     format={\heiti\tjfontbody},
     numbering=true,
-    number={\Alph{subsubsection}},
+    number={\AlphAlph{\value{subsubsection}}},
     aftername={.\hspace{0.5em}},
-    beforeskip={0pt},
-    afterskip={0pt},
+    beforeskip={\tjskipbeforesec},
+    afterskip={\tjskipaftersec},
     indent={2em},
     aftertitle={\par},
   },
   paragraph={%
     format={\heiti\tjfontbody},
     numbering=true,
-    number={\alph{paragraph}},
+    number={\alphalph{\value{paragraph}}},
     aftername={.\hspace{0.5em}},
-    beforeskip={0pt},
-    afterskip={0pt},
+    beforeskip={\tjskipbeforesec},
+    afterskip={\tjskipaftersec},
     indent={2em},
     aftertitle={\par},
+    % ctex's chinese-book scheme makes paragraph run-in by default; with run-in the
+    % afterskip is emitted as horizontal \hskip via \CTEX@heading@glue, which combines
+    % with \parindent to give "parindent + afterskip" indent on the body. Force display.
+    runin=false,
   },
   appendix/name={},
 }
 
 \setcounter{secnumdepth}{5}
+
+% 文科类专业（field=humanities）：章节编号改用中文数字体系
+% 理工科（science，默认）：1 / 1.1 / 1.1.1 / A. / a.
+% 文科  （humanities）  ：一、/（一）/ 1. / （1） / ①②③
+\iftongjithesis@humanities
+  \renewcommand{\thechapter}{\chinese{chapter}}
+  \renewcommand{\thesubsection}{\arabic{subsection}}
+  \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+  \ctexset{
+    chapter/number    = {\chinese{chapter}},
+    chapter/aftername = {、},
+    % 括号写入 name 而非 number，使 \thesection 保持裸数字（供 tocloft/cref 使用）
+    section/name      = {（,）},
+    section/number    = {\chinese{section}},
+    % section/aftername = {\hspace{0.5em}},
+    subsection/number    = {\arabic{subsection}},
+    subsection/aftername = {.\hspace{0.5em}},
+    % 同理：括号写入 name，\thesubsubsection 保持裸数字
+    subsubsection/name     = {（,）},
+    subsubsection/number   = {\arabic{subsubsection}},
+    subsubsection/aftername = {\hspace{0.5em}},
+    paragraph/number    = {\Circled{\arabic{paragraph}}},
+    paragraph/aftername = {\hspace{0.5em}},
+  }
+  % TOC 目录列宽与分隔符
+  % h1
+  \renewcommand{\cftchapaftersnum}{\!、}
+  \setlength{\cftchapnumwidth}{2.5em}
+  % h2
+  \setlength{\cftsecindent}{2.5em}
+  \setlength{\cftsecnumwidth}{2.5em}
+  % h3
+  \renewcommand{\cftsubsecaftersnum}{.\hspace*{0.5em}}
+  \setlength{\cftsubsecnumwidth}{1.5em}
+  % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
+  \counterwithout{figure}{chapter}
+  \counterwithout{table}{chapter}
+  \counterwithout{equation}{chapter}
+  \counterwithout{algorithm}{chapter}
+  % listing/lstlisting 在 \AtBeginDocument 中绑定；定理类环境在 \newtheorem 后定义，
+  % 均需在 document 开始后解绑，确保顺序正确
+  \AtBeginDocument{%
+    \counterwithout{listing}{chapter}%
+    \counterwithout{lstlisting}{chapter}%
+    \counterwithout{thm}{chapter}%
+    \counterwithout{cor}{chapter}%
+    \counterwithout{lem}{chapter}%
+    \counterwithout{prop}{chapter}%
+    \counterwithout{conj}{chapter}%
+    \counterwithout{assume}{chapter}%
+    \counterwithout{dfn}{chapter}%
+    \counterwithout{exmp}{chapter}%
+    \counterwithout{rem}{chapter}%
+  }%
+\fi
 
 % 脚注编号使用①②③… (官方模板规范)
 \renewcommand{\thefootnote}{\Circled{\arabic{footnote}}}
@@ -703,66 +785,81 @@
 % ==========================================
 
 % 交叉引用
-\newcommand*{\chapref}[1]{第~\ref{#1}~章~}
-\newcommand*{\secref}[1]{第~\ref{#1}~节~}
+% \ref/\cref: Chinese numerals sit flush against Chinese chars — no ~ spacing needed
+\iftongjithesis@humanities
+  \newcommand*{\chapref}[1]{第\ref{#1}章}
+  \newcommand*{\secref}[1]{第\ref{#1}节}
+\else
+  \newcommand*{\chapref}[1]{第~\ref{#1}~章~}
+  \newcommand*{\secref}[1]{第~\ref{#1}~节~}
+\fi
 \newcommand*{\algoref}[1]{算法~\ref{#1}~}
-\renewcommand*{\eqref}[1]{公式（\ref{#1}）~}
+\renewcommand*{\eqref}[1]{公式~(\ref{#1})~}
 \newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
 \newcommand*{\figref}[1]{\figurename~\ref{#1}~}
 
-% Cross-reference names for code listings (both float types)
-\crefformat{listing}{代码~#2#1#3}
-\crefmultiformat{listing}{代码~#2#1#3}{和代码~#2#1#3}{、代码~#2#1#3}{和代码~#2#1#3}
-\crefrangeformat{listing}{代码~#3#1#4~至代码~#5#2#6}
-\crefformat{lstlisting}{代码~#2#1#3}
-\crefmultiformat{lstlisting}{代码~#2#1#3}{和代码~#2#1#3}{、代码~#2#1#3}{和代码~#2#1#3}
-\crefrangeformat{lstlisting}{代码~#3#1#4~至代码~#5#2#6}
+% Cross-reference formats: 名字放进 #2…#3 让 nameinlink 全段可点（图/表/公式 等整词都参与超链接）
+\crefformat{listing}{#2代码~#1#3}
+\crefmultiformat{listing}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
+\crefrangeformat{listing}{#3代码~#1#4~至#5代码~#2#6}
+\crefformat{lstlisting}{#2代码~#1#3}
+\crefmultiformat{lstlisting}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
+\crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6}
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
 
 % Configure references in Chinese
 % "第X章/节" pattern: number is wrapped, needs full multi/range formats
-\crefformat{chapter}{第~#2#1#3~章}
-\crefmultiformat{chapter}{第~#2#1#3~章}{和第~#2#1#3~章}{、第~#2#1#3~章}{和第~#2#1#3~章}
-\crefrangeformat{chapter}{第~#3#1#4~章至第~#5#2#6~章}
-\crefformat{section}{第~#2#1#3~节}
-\crefmultiformat{section}{第~#2#1#3~节}{和第~#2#1#3~节}{、第~#2#1#3~节}{和第~#2#1#3~节}
-\crefrangeformat{section}{第~#3#1#4~节至第~#5#2#6~节}
-\crefformat{subsection}{第~#2#1#3~小节}
-\crefmultiformat{subsection}{第~#2#1#3~小节}{和第~#2#1#3~小节}{、第~#2#1#3~小节}{和第~#2#1#3~小节}
-\crefrangeformat{subsection}{第~#3#1#4~小节至第~#5#2#6~小节}
-% "名称~X" pattern: ~ separates CJK name from digit.
+\iftongjithesis@humanities
+  \crefformat{chapter}{#2第#1章#3}
+  \crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{、#2第#1章#3}{和#2第#1章#3}
+  \crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
+  \crefformat{section}{#2第#1节#3}
+  \crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{、#2第#1节#3}{和#2第#1节#3}
+  \crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+\else
+  \crefformat{chapter}{#2第~#1~章#3}
+  \crefmultiformat{chapter}{#2第~#1~章#3}{和#2第~#1~章#3}{、#2第~#1~章#3}{和#2第~#1~章#3}
+  \crefrangeformat{chapter}{#3第~#1~章#4至#5第~#2~章#6}
+  \crefformat{section}{#2第~#1~节#3}
+  \crefmultiformat{section}{#2第~#1~节#3}{和#2第~#1~节#3}{、#2第~#1~节#3}{和#2第~#1~节#3}
+  \crefrangeformat{section}{#3第~#1~节#4至#5第~#2~节#6}
+\fi
+\crefformat{subsection}{#2第~#1~小节#3}
+\crefmultiformat{subsection}{#2第~#1~小节#3}{和#2第~#1~小节#3}{、#2第~#1~小节#3}{和#2第~#1~小节#3}
+\crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6}
+% "名称~X" pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
 % --- Common float/equation types ---
-\crefformat{equation}{式~#2#1#3}
-\crefmultiformat{equation}{式~#2#1#3}{和式~#2#1#3}{、式~#2#1#3}{和式~#2#1#3}
-\crefrangeformat{equation}{式~#3#1#4~至式~#5#2#6}
-\crefformat{figure}{图~#2#1#3}
-\crefmultiformat{figure}{图~#2#1#3}{和图~#2#1#3}{、图~#2#1#3}{和图~#2#1#3}
-\crefrangeformat{figure}{图~#3#1#4~至图~#5#2#6}
-\crefformat{table}{表~#2#1#3}
-\crefmultiformat{table}{表~#2#1#3}{和表~#2#1#3}{、表~#2#1#3}{和表~#2#1#3}
-\crefrangeformat{table}{表~#3#1#4~至表~#5#2#6}
-\crefformat{algorithm}{算法~#2#1#3}
-\crefmultiformat{algorithm}{算法~#2#1#3}{和算法~#2#1#3}{、算法~#2#1#3}{和算法~#2#1#3}
-\crefrangeformat{algorithm}{算法~#3#1#4~至算法~#5#2#6}
-\crefformat{FancyVerbLine}{第~#2#1#3~行}
-\crefmultiformat{FancyVerbLine}{第~#2#1#3~行}{和第~#2#1#3~行}{、第~#2#1#3~行}{和第~#2#1#3~行}
-\crefrangeformat{FancyVerbLine}{第~#3#1#4~行至第~#5#2#6~行}
+\crefformat{equation}{#2公式~(#1)#3}
+\crefmultiformat{equation}{#2公式~(#1)#3}{和#2公式~(#1)#3}{、#2公式~(#1)#3}{和#2公式~(#1)#3}
+\crefrangeformat{equation}{#3公式~(#1)#4~至#5公式~(#2)#6}
+\crefformat{figure}{#2图~#1#3}
+\crefmultiformat{figure}{#2图~#1#3}{和#2图~#1#3}{、#2图~#1#3}{和#2图~#1#3}
+\crefrangeformat{figure}{#3图~#1#4~至#5图~#2#6}
+\crefformat{table}{#2表~#1#3}
+\crefmultiformat{table}{#2表~#1#3}{和#2表~#1#3}{、#2表~#1#3}{和#2表~#1#3}
+\crefrangeformat{table}{#3表~#1#4~至#5表~#2#6}
+\crefformat{algorithm}{#2算法~#1#3}
+\crefmultiformat{algorithm}{#2算法~#1#3}{和#2算法~#1#3}{、#2算法~#1#3}{和#2算法~#1#3}
+\crefrangeformat{algorithm}{#3算法~#1#4~至#5算法~#2#6}
+\crefformat{FancyVerbLine}{#2第~#1~行#3}
+\crefmultiformat{FancyVerbLine}{#2第~#1~行#3}{和#2第~#1~行#3}{、#2第~#1~行#3}{和#2第~#1~行#3}
+\crefrangeformat{FancyVerbLine}{#3第~#1~行#4至#5第~#2~行#6}
 % --- Theorem types (single + multi for consistency) ---
-\crefformat{thm}{定理~#2#1#3}
-\crefmultiformat{thm}{定理~#2#1#3}{和定理~#2#1#3}{、定理~#2#1#3}{和定理~#2#1#3}
-\crefformat{cor}{推论~#2#1#3}
-\crefmultiformat{cor}{推论~#2#1#3}{和推论~#2#1#3}{、推论~#2#1#3}{和推论~#2#1#3}
-\crefformat{lem}{引理~#2#1#3}
-\crefmultiformat{lem}{引理~#2#1#3}{和引理~#2#1#3}{、引理~#2#1#3}{和引理~#2#1#3}
-\crefformat{prop}{命题~#2#1#3}
-\crefmultiformat{prop}{命题~#2#1#3}{和命题~#2#1#3}{、命题~#2#1#3}{和命题~#2#1#3}
-\crefformat{conj}{猜想~#2#1#3}
-\crefformat{assume}{假设~#2#1#3}
-\crefformat{dfn}{定义~#2#1#3}
-\crefformat{exmp}{例~#2#1#3}
-\crefformat{rem}{注~#2#1#3}
-\crefformat{pf}{证明~#2#1#3}
-\crefformat{proof}{证明~#2#1#3}
+\crefformat{thm}{#2定理~#1#3}
+\crefmultiformat{thm}{#2定理~#1#3}{和#2定理~#1#3}{、#2定理~#1#3}{和#2定理~#1#3}
+\crefformat{cor}{#2推论~#1#3}
+\crefmultiformat{cor}{#2推论~#1#3}{和#2推论~#1#3}{、#2推论~#1#3}{和#2推论~#1#3}
+\crefformat{lem}{#2引理~#1#3}
+\crefmultiformat{lem}{#2引理~#1#3}{和#2引理~#1#3}{、#2引理~#1#3}{和#2引理~#1#3}
+\crefformat{prop}{#2命题~#1#3}
+\crefmultiformat{prop}{#2命题~#1#3}{和#2命题~#1#3}{、#2命题~#1#3}{和#2命题~#1#3}
+\crefformat{conj}{#2猜想~#1#3}
+\crefformat{assume}{#2假设~#1#3}
+\crefformat{dfn}{#2定义~#1#3}
+\crefformat{exmp}{#2例~#1#3}
+\crefformat{rem}{#2注~#1#3}
+\crefformat{pf}{#2证明~#1#3}
+\crefformat{proof}{#2证明~#1#3}
 
 % Configure connecting words
 \newcommand{\crefpairconjunction}{ 和~}
@@ -839,8 +936,8 @@
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
       % \vskip 20pt
 
-      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范）
-      \zihao{-0}\heiti{\tjheadertext}
+      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范，文理科一致）
+      \zihao{-0}\heiti{\tjcovertext}
       \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}
@@ -1001,11 +1098,12 @@
 % ==========================================
 
 % 设置全角句号替换为全角点号
-% Enable fullwidthstop replacement if the option is set to true
-\iftongjithesis@fullwidthstop
+% fullwidthstop=dot：将句号（。U+3002）替换为全角句点（．U+FF0E）
+% ctex/xeCJK 的 PunctStyle 仅控制标点间距，不做字符映射，故需 \catcode 方案
+\expandafter\ifstrequal\expandafter{\tongjithesis@fullwidthstop}{dot}{%
   \catcode`\。=\active
-  \newcommand{。}{\ifmmode\text{．}\else ．\fi}
-\fi
+  \newcommand{。}{\ifmmode\text{．}\else ．\fi}%
+}{}
 
 % 加载用户配置文件
 % cfg is found via TEXINPUTS: locally via .latexmkrc (./style//), or alongside cls on CTAN/texmf.

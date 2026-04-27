@@ -18,9 +18,10 @@
     \midrule
     \texttt{oneside / twoside} & \texttt{oneside} & 单面或双面排版。双面模式下章节从奇数页开始，装订线自动左右交替。 \\
     \texttt{degree} & \texttt{bachelor} & 学位类型，目前支持 \texttt{bachelor}（学士）。 \\
+    \texttt{field} & \texttt{science} & 专业类别。\texttt{science}：理工科（工科/理科），章节编号采用阿拉伯数字体系；\texttt{humanities}：文科（经管/人文/法学/外语/艺术），章节编号采用汉字体系，详见\tabref{tab:heading-levels}。 \\
     \texttt{fontset} & 系统默认 & 字体集，传递给 \pkg{ctex}。常用值：\texttt{fandol}（跨平台）、\texttt{windows}、\texttt{mac}、\texttt{ubuntu}。 \\
     \texttt{times} & \texttt{false} & \texttt{true}：通过 \pkg{fontspec} 调用系统 Times New Roman 字体；\texttt{false}：使用 \pkg{newtx} 宏包提供的 TeX 原生 Times 风格字体。两者视觉效果相近。 \\
-    \texttt{fullwidthstop} & \texttt{false} & 设为 \texttt{true} 时将中文句号从“。”替换为“．”（全角圆点）。 \\
+    \texttt{fullwidthstop} & \texttt{circle} & 句号样式：\texttt{circle}（默认，保留“。”）或 \texttt{dot}（替换为“．”全角句点）。 \\
     \texttt{minted} & \texttt{true} & 代码高亮方案。\texttt{true} 使用 \pkg{minted}（需安装 Python 和 Pygments），\texttt{false} 回退至 \pkg{listings}。 \\
     \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
     \bottomrule
@@ -33,7 +34,7 @@
 
 \begin{itemize}
   \item \textbf{封面} —— \verb|chapters/frontcover.tex|：\cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesistitleeng}、\cs{thesisadvisor}、\cs{thesisdate}，末尾调用 \cs{MakeCover}。
-  \item \textbf{信息说明页} —— \verb|chapters/infopage.tex|：\cs{infotype}（\texttt{thesis} 或 \texttt{design}）、\cs{infoabstract}、\cs{infothesiswords}（论文）或 \cs{infodrawings}+\cs{infowordcount}（设计）、\cs{infomaterials}，末尾调用 \cs{MakeInfoPage}。
+  \item \textbf{信息说明页} —— \verb|chapters/infopage.tex|：\cs{infotype}（\texttt{thesis}、\texttt{design} 或 \texttt{engineering}）、\cs{infoabstract}、\cs{infothesiswords}（论文）或 \cs{infodrawings}+\cs{infowordcount}（设计）、\cs{infomaterials}，末尾调用 \cs{MakeInfoPage}。
   \item \textbf{中英文摘要} —— \verb|chapters/00_abstract.tex|：\cs{MakeAbstract}\verb|{正文}{关键词}| 与 \cs{MakeAbstractEng}\verb|{Text}{Keywords}|。
 \end{itemize}
 
@@ -77,12 +78,12 @@
     \textbf{命令} & \textbf{用途} \\
     \midrule
     \multicolumn{2}{l}{\textbf{交叉引用}} \\
-    \verb|\cref{label}|           & 智能引用，自动生成“第~X~章”“图~X”“式~X”等 \\
+    \verb|\cref{label}|           & 智能引用，自动生成“第~X~章”“图~X”“公式~(X)”等 \\
     \verb|\chapref{label}|        & 引用章：第~X~章 \\
     \verb|\secref{label}|         & 引用节：第~X~节 \\
     \verb|\figref{label}|         & 引用图：图~X \\
     \verb|\tabref{label}|         & 引用表：表~X \\
-    \verb|\eqref{label}|          & 引用公式：公式（X） \\
+    \verb|\eqref{label}|          & 引用公式：公式~(X) \\
     \midrule
     \multicolumn{2}{l}{\textbf{参考文献}} \\
     \verb|\tjbibresource{file}|   & 导言区指定 \texttt{.bib} 文件 \\

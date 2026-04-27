@@ -37,6 +37,7 @@
 - 提供 `longlisting` 环境，支持跨页代码块
 - 内置信息说明页（`\MakeInfoPage`），符合 2026 版官方模板要求
 - 支持单面 / 双面打印，双面模式自动添加装订线
+- 支持理工科与文科两套章节编号体系（`field=science|humanities`）
 - 键值对文档类选项，配置灵活
 - Linux / macOS / Windows 三平台 CI 持续测试
 
@@ -141,13 +142,14 @@ make wordcount          # wordcount
 
 ```latex
 \documentclass[
-  oneside,           % 单面打印（默认），使用 twoside 可启用双面打印
-  degree=bachelor,   % 学位类型：bachelor（默认），master/doctor 留作扩展
-  fullwidthstop=false, % 是否将中文句号"。"替换为西文句号"．"，默认为false
-  fontset=fandol,    % 使用的字体集，默认为 fandol
-  times=false,       % 是否使用 Times New Roman 字体，默认为 false
-  minted=true,       % 是否使用 minted 包进行代码高亮，默认为 true
-  biblatex=true,     % 是否使用 biblatex 管理参考文献，默认为 true
+  oneside,              % 单面打印（默认），使用 twoside 可启用双面打印
+  degree=bachelor,      % 学位类型：bachelor（默认），master/doctor 留作扩展
+  field=science,        % 专业类别：science 理工科（默认）/ humanities 文科
+  fullwidthstop=circle, % 句号样式：circle 保留"。"（默认）/ dot 替换为"．"
+  fontset=fandol,       % 字体集，传递给 ctex，默认为 fandol
+  times=false,          % true：使用系统 Times New Roman；false：使用 newtx（默认）
+  minted=true,          % true：minted 代码高亮（需 Python+Pygments）；false：listings
+  biblatex=true,        % true：biblatex+biber（默认）；false：bibtex+gbt7714
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % 指定参考文献数据库文件（支持多文件，逗号分隔）
@@ -160,6 +162,12 @@ make wordcount          # wordcount
 - `oneside`：单面打印（默认）
 - `twoside`：双面打印，会调整页边距和装订线
 
+##### 专业类别选项
+
+- `field=science`：理工科（工科/理科），章节编号采用阿拉伯数字体系 1 / 1.1 / 1.1.1（默认）
+- `field=humanities`：文科（人文/法学/外语/艺术），章节编号采用汉字体系 一 /（一）/ 1.
+- 经管类属社科类：编号层级依理工类要求，撰写依理工模版。**26 届为过渡期**，经管同学可在 `field=science`（推荐）和 `field=humanities` 之间自行选择；**自 27 届起，经管类统一使用 `field=science`**。
+
 ##### 字体选项
 
 - `fontset=fandol`：使用 Fandol 字体集（默认）
@@ -169,8 +177,8 @@ make wordcount          # wordcount
 
 ##### 中文标点选项
 
-- `fullwidthstop=false`：保持中文句号"。"不变（默认）
-- `fullwidthstop=true`：将中文句号"。"替换为西文句号"．"
+- `fullwidthstop=circle`：保持中文句号"。"不变（默认）
+- `fullwidthstop=dot`：将中文句号"。"替换为全角句点"．"
 
 ##### 参考文献选项
 
@@ -178,6 +186,12 @@ make wordcount          # wordcount
 - `biblatex=false`：使用 `bibtex` 配合 `gbt7714` 宏包管理参考文献
 
 使用 `\tjbibresource{file1.bib,file2.bib}` 指定参考文献数据库文件，使用 `\makereferences` 输出参考文献列表。
+
+##### 成果类型（`\infotype`，在 `chapters/metadata.tex` 中设置）
+
+- `\infotype{thesis}`：毕业论文，摘要标题为"摘要"
+- `\infotype{design}`：毕业设计（软件/创意/建筑等非工程类），摘要标题为"摘要"
+- `\infotype{engineering}`：毕业设计（工程设计类），摘要标题为"设计总说明"
 
 </details>
 
