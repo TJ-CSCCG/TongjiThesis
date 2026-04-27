@@ -37,6 +37,7 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 - `longlisting` environment for cross-page code blocks
 - Built-in information description page (`\MakeInfoPage`) per the 2026 official template
 - Single-sided / double-sided printing with automatic binding line
+- Two chapter numbering systems for sciences and humanities (`field=science|humanities`)
 - Key-value document class options for flexible configuration
 - Continuous CI testing on Linux, macOS, and Windows
 
@@ -141,13 +142,14 @@ This template provides the following document class options, which can be config
 
 ```latex
 \documentclass[
-  oneside,           % One-sided printing (default), use twoside for double-sided printing
-  degree=bachelor,   % Degree type: bachelor (default), master/doctor reserved
-  fullwidthstop=false, % Whether to replace Chinese period "。" with Western-style period "．", default is false
-  fontset=fandol,    % Font set to use, default is fandol
-  times=false,       % Whether to use Times New Roman font, default is false
-  minted=true,       % Whether to use the minted package for code highlighting, default is true
-  biblatex=true,     % Whether to use biblatex for bibliography management, default is true
+  oneside,              % One-sided printing (default); use twoside for double-sided printing
+  degree=bachelor,      % Degree type: bachelor (default); master/doctor reserved
+  field=science,        % Major category: science = engineering/sciences (default) / humanities
+  fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
+  fontset=fandol,       % Font set passed to ctex, default is fandol
+  times=false,          % true: system Times New Roman; false: newtx (default)
+  minted=true,          % true: minted highlighting (needs Python+Pygments); false: listings
+  biblatex=true,        % true: biblatex+biber (default); false: bibtex+gbt7714
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % Specify bib files (supports multiple, comma-separated)
@@ -160,6 +162,12 @@ This template provides the following document class options, which can be config
 - `oneside`: Single-sided printing (default)
 - `twoside`: Double-sided printing, adjusts page margins and binding line
 
+##### Major Category Options
+
+- `field=science`: Engineering/Sciences, chapter numbering uses Arabic system 1 / 1.1 / 1.1.1 (default)
+- `field=humanities`: Humanities (liberal arts/law/foreign languages/arts), chapter numbering uses Chinese system 一 /（一）/ 1.
+- Economics & Management belongs to social sciences: numbering hierarchy follows the science requirements, and writing follows the science template. **Class of 2026 is a transition period** — students may choose either `field=science` (recommended) or `field=humanities`. **Starting from the class of 2027, Economics & Management will uniformly use `field=science`.**
+
 ##### Font Options
 
 - `fontset=fandol`: Use Fandol font set (default)
@@ -169,8 +177,8 @@ This template provides the following document class options, which can be config
 
 ##### Chinese Punctuation Options
 
-- `fullwidthstop=false`: Keep Chinese period "。" unchanged (default)
-- `fullwidthstop=true`: Replace Chinese period "。" with Western-style period "．"
+- `fullwidthstop=circle`: Keep Chinese period "。" unchanged (default)
+- `fullwidthstop=dot`: Replace Chinese period "。" with full-width dot "．"
 
 ##### Bibliography Options
 
@@ -178,6 +186,12 @@ This template provides the following document class options, which can be config
 - `biblatex=false`: Use `bibtex` with `gbt7714` package for bibliography management
 
 Use `\tjbibresource{file1.bib,file2.bib}` to specify bib files, and `\makereferences` to output the bibliography.
+
+##### Output Type (`\infotype`, set in `chapters/metadata.tex`)
+
+- `\infotype{thesis}`: Graduation thesis; abstract heading is "摘要" (Abstract)
+- `\infotype{design}`: Graduation design (software/creative/architectural, non-engineering); abstract heading is "摘要" (Abstract)
+- `\infotype{engineering}`: Graduation design (engineering); abstract heading is "设计总说明" (Design Overview)
 
 </details>
 

@@ -43,7 +43,9 @@
 \DeclareBoolOption[true]{biblatex}
 % Define degree option: bachelor (default), master, doctor
 \DeclareStringOption[bachelor]{degree}
-% Define field option: science (default, 理工科), humanities (文科 — 经管/人文/法学/外语/艺术)
+% Define field option: science (default, 理工科), humanities (文科 — 人文/法学/外语/艺术)
+% 经管类属社科：编号要求依理工，撰写依理工模版。26 届为过渡期，可选 science 或
+% humanities；自 27 届起统一使用 science。
 \DeclareStringOption[science]{field}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
@@ -97,8 +99,14 @@
 \newcommand{\tjinfofieldspread}{1.6667}   % 四号宋体 28 磅：28÷(14×1.2)≈5/3
 \newcommand{\tjinfoabstractspread}{1.25}  % 摘要小四 18 磅：18÷(12×1.2)=5/4（精确）
 \newcommand{\tjinfotitlevspace}{0.8em}    % 多行课题名称后的间距补偿（在四号上下文中解析）
-% Header and cover text
-\newcommand{\tjheadertext}{毕业设计（论文）}
+% Cover text：封面大标题恒定为"毕业设计（论文）"（文理科一致）
+\newcommand{\tjcovertext}{毕业设计（论文）}
+% Header text：理工=毕业设计（论文）；文科=毕业论文（设计）
+\iftongjithesis@humanities
+  \newcommand{\tjheadertext}{毕业论文（设计）}
+\else
+  \newcommand{\tjheadertext}{毕业设计（论文）}
+\fi
 
 % ==========================================
 % Required Packages
@@ -928,8 +936,8 @@
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
       % \vskip 20pt
 
-      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范）
-      \zihao{-0}\heiti{\tjheadertext}
+      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范，文理科一致）
+      \zihao{-0}\heiti{\tjcovertext}
       \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}
