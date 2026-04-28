@@ -99,8 +99,12 @@
 \newcommand{\tjinfofieldspread}{1.6667}   % 四号宋体 28 磅：28÷(14×1.2)≈5/3
 \newcommand{\tjinfoabstractspread}{1.25}  % 摘要小四 18 磅：18÷(12×1.2)=5/4（精确）
 \newcommand{\tjinfotitlevspace}{0.8em}    % 多行课题名称后的间距补偿（在四号上下文中解析）
-% Cover text：封面大标题恒定为"毕业设计（论文）"（文理科一致）
-\newcommand{\tjcovertext}{毕业设计（论文）}
+% Cover text：理工=毕业设计（论文）；文科=毕业论文（设计）
+\iftongjithesis@humanities
+  \newcommand{\tjcovertext}{毕业论文（设计）}
+\else
+  \newcommand{\tjcovertext}{毕业设计（论文）}
+\fi
 % Header text：理工=毕业设计（论文）；文科=毕业论文（设计）
 \iftongjithesis@humanities
   \newcommand{\tjheadertext}{毕业论文（设计）}
@@ -936,7 +940,7 @@
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
       % \vskip 20pt
 
-      % 封面「毕业设计（论文）」字样：初号黑体（官方模板规范，文理科一致）
+      % 封面大标题：初号黑体（官方模板规范，理工/文科不同）
       \zihao{-0}\heiti{\tjcovertext}
       \vspace{60pt}
 
@@ -988,7 +992,7 @@
     \pagestyle{empty}% 防止信息页溢出到第二页时出现页码（titlepage 只 \thispagestyle empty）
 
     \begin{center}
-      \tjfontinfotitle\heiti 同济大学本科毕业设计（论文）信息说明页
+      \tjfontinfotitle\heiti 同济大学本科\tjheadertext 信息说明页
     \end{center}
 
     \vspace{1em}
