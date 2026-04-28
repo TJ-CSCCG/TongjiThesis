@@ -101,12 +101,8 @@
 \newcommand{\tjinfotitlevspace}{0.8em}    % 多行课题名称后的间距补偿（在四号上下文中解析）
 % Cover text：封面大标题恒定为"毕业设计（论文）"（文理科一致）
 \newcommand{\tjcovertext}{毕业设计（论文）}
-% Header text：理工=毕业设计（论文）；文科=毕业论文（设计）
-\iftongjithesis@humanities
-  \newcommand{\tjheadertext}{毕业论文（设计）}
-\else
-  \newcommand{\tjheadertext}{毕业设计（论文）}
-\fi
+% Header text
+\newcommand{\tjheadertext}{毕业设计（论文）}
 
 % ==========================================
 % Required Packages
