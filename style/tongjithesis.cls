@@ -118,7 +118,7 @@
 % Page layout
 % headheight 43pt ≈ 1.14cm logo (≈32pt) + 小四号正文行 (≈11pt)；防止 fancyhdr headheight warning
 \setlength{\headheight}{43pt}
-% 页边距按同济本科毕业设计（论文）官方 Word 模板复刻
+% 页边距按同济本科毕业设计（论文）/毕业论文（设计）官方 Word 模板复刻
 \RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
