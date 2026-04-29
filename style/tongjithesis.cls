@@ -80,8 +80,8 @@
 % ==========================================
 % Font sizes
 \newcommand{\tjfonttitle}{\zihao{-2}}        % 课题名称：小二号
-\newcommand{\tjfontchapter}{\zihao{-3}}      % 章标题 / 目录标题：小三号
-\newcommand{\tjfontheading}{\zihao{4}}       % 摘要标题 / 参考文献 / 谢辞标题：四号
+\newcommand{\tjfontchapter}{\zihao{-3}}      % 章标题：小三号
+\newcommand{\tjfontheading}{\zihao{4}}       % 摘要 / 目录 / 参考文献 / 谢辞标题：四号
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{-5}}      % 表题 / 图题：小五号
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
@@ -564,7 +564,7 @@
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
 \renewcommand{\contentsname}{目\hspace{0.5em}录}
-\renewcommand{\cfttoctitlefont}{\hfill\heiti\tjfontchapter}
+\renewcommand{\cfttoctitlefont}{\hfill\heiti\tjfontheading}
 \renewcommand{\cftaftertoctitle}{\hfill}
 % 目录标题后留一空行（匹配官方 Word 模板）
 % tocloft[titles] 下 \cftaftertoctitleskip 无效——\tableofcontents 内部走 \chapter*，
