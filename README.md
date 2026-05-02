@@ -17,29 +17,8 @@
 
 符合同济大学本科毕业设计论文官方格式要求的 LaTeX 模板。支持 XeLaTeX / LuaLaTeX 编译，提供 `minted` 和 `listings` 两种代码高亮方案，兼容 `biblatex` 和 `bibtex` 两种引用方式。在 Linux、macOS、Windows 三平台 CI 持续测试。
 
-<p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0002.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0039.jpg" width="23%">
-</p>
-
 > [!NOTE]
-> 完整样例可见 [模板输出样例展示（完整版）](https://github.com/TJ-CSCCG/TongjiThesis/discussions/21)、[Release 页](https://github.com/TJ-CSCCG/TongjiThesis/releases) 中 "Assets" 下的 PDF 下载链接或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。
-
-## 主要特性
-
-- 基于 `ctexbook` 文档类，支持 `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` 结构
-- 符合 2026 版同济大学本科毕业设计（论文）撰写规范（小四正文，1.5 倍行距，小三章标题）
-- 支持 `XeLaTeX` 和 `LuaLaTeX` 双编译器
-- 支持 `biblatex`（默认）和 `bibtex` 双引用后端，通过 `\makereferences` 统一输出
-- 支持 `minted`（默认）和 `listings` 双代码高亮方案
-- 提供 `longlisting` 环境，支持跨页代码块
-- 内置信息说明页（`\MakeInfoPage`），符合 2026 版官方模板要求
-- 支持单面 / 双面打印，双面模式自动添加装订线
-- 支持理工科与文科两套章节编号体系（`field=science|humanities`）
-- 键值对文档类选项，配置灵活
-- Linux / macOS / Windows 三平台 CI 持续测试
+> 完整样例可见 [Release 页](https://github.com/TJ-CSCCG/TongjiThesis/releases) 的 PDF 下载或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf)。各选项的详细用法见编译后的模板使用指南（第 1 章）。
 
 ---
 
@@ -52,7 +31,7 @@
 | **GitHub Actions** | Fork 本仓库，push 即可触发自动编译，在 Artifacts 中下载 PDF                                                                                      |
 
 > [!TIP]
-> 本模板的 CI 基于 **TeX Live 2026** 进行测试。如果您在本地编译时遇到难以解释的编译错误，请首先检查并升级您的 TeX Live 至 2026 版本。旧版 TeX Live 中的宏包版本可能与本模板不兼容。
+> 本模板的 CI 基于 **TeX Live 2026** 进行测试。如果您在本地编译时遇到难以解释的编译错误，请首先检查并升级您的 TeX Live 至 2026 版本。
 
 ## 使用方法
 
@@ -124,7 +103,7 @@ make wordcount          # wordcount
 
 #### 文档类选项
 
-本模板提供以下文档类选项，可以在 `main.tex` 中进行配置：
+在 `main.tex` 的 `\documentclass` 中配置：
 
 ```latex
 \documentclass[
@@ -141,99 +120,34 @@ make wordcount          # wordcount
 \tjbibresource{bib/note.bib}  % 指定参考文献数据库文件（支持多文件，逗号分隔）
 ```
 
-<details><summary><b>各选项详细说明</b></summary>
-
-##### 单双面打印选项
-
-- `oneside`：单面打印（默认）
-- `twoside`：双面打印，会调整页边距和装订线
-
-##### 专业类别选项
-
-- `field=science`：理工科（工科/理科），章节编号采用阿拉伯数字体系 1 / 1.1 / 1.1.1（默认）
-- `field=humanities`：文科（人文/法学/外语/艺术），章节编号采用汉字体系 一 /（一）/ 1.
-- 经管类属社科类：编号层级依理工类要求，撰写依理工模版。**26 届为过渡期**，经管同学可在 `field=science`（推荐）和 `field=humanities` 之间自行选择；**自 27 届起，经管类统一使用 `field=science`**。
-
-##### 字体选项
-
-- `fontset=fandol`：使用 Fandol 字体集（默认）
-- `fontset=adobe`：使用 Adobe 字体集（需要安装 Adobe 字体）
-- `times=false`：使用 `newtx` 包提供的字体（默认）
-- `times=true`：使用 Times New Roman 字体
-
-##### 中文标点选项
-
-- `fullwidthstop=circle`：保持中文句号"。"不变（默认）
-- `fullwidthstop=dot`：将中文句号"。"替换为全角句点"．"
-
-##### 参考文献选项
-
-- `biblatex=true`：使用 `biblatex`（biber 后端）管理参考文献（默认）
-- `biblatex=false`：使用 `bibtex` 配合 `gbt7714` 宏包管理参考文献
-
-使用 `\tjbibresource{file1.bib,file2.bib}` 指定参考文献数据库文件，使用 `\makereferences` 输出参考文献列表。
-
-##### 成果类型（`\infotype`，在 `chapters/metadata.tex` 中设置）
-
-- `\infotype{thesis}`：毕业论文，摘要标题为"摘要"
-- `\infotype{design}`：毕业设计（软件/创意/建筑等非工程类），摘要标题为"摘要"
-- `\infotype{engineering}`：毕业设计（工程设计类），摘要标题为"设计总说明"
-
-</details>
+> [!NOTE]
+> 经管类属社科类，26 届为过渡期可选 `field=science`（推荐）或 `field=humanities`；自 27 届起统一使用 `field=science`。
 
 <details><summary><b>渲染生僻字</b></summary>
 
-默认 Fandol 字体对生僻字支持有限。可从 [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) 分支下载 Adobe 字体集并安装到系统，然后在 `main.tex` 中设置 `fontset=adobe`：
-
-```latex
-\documentclass[
-  oneside,
-  fontset=adobe,
-  % 其他选项...
-]{tongjithesis}
-```
+默认 Fandol 字体对生僻字支持有限。可从 [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) 分支下载 Adobe 字体集并安装到系统，然后在 `main.tex` 中设置 `fontset=adobe`。
 
 > [!NOTE]
 > 建议将 Adobe 字体安装到系统字体目录，而非放在项目根目录。Overleaf 上可将字体文件放在根目录并用 LuaLaTeX 编译，但速度会变慢。
 
 </details>
 
-#### 代码高亮选项
+<details><summary><b>代码高亮选项</b></summary>
 
-本模板提供两种代码高亮解决方案：
+1. **`minted`**（默认）：基于 Python Pygments，语法高亮更丰富。需安装 Python 并确保 `pygments` 可用（`pip install pygments`）。
+2. **`listings`**：纯 LaTeX 实现，无外部依赖。
 
-1. **`minted`**（默认）：基于 Python Pygments，语法高亮更丰富。需安装 Python 并确保 `pygments` 可用（`pip install pygments`）。编译需 `-shell-escape`（已在 `latexmkrc` 中配置）。
-2. **`listings`**：纯 LaTeX 实现，无外部依赖。在 `main.tex` 中设置 `minted=false` 即可切换。
+在 `main.tex` 中设置 `minted=false` 即可切换。遇到 `minted` 相关错误时，改为 `minted=false` 即可。
 
-遇到 `minted` 相关错误时，改为 `minted=false` 即可，无需其他配置。
+</details>
 
-## 如何为该项目贡献代码？
+## 贡献与项目历史
 
-详见[贡献指南](CONTRIBUTING.md#提交-pull-request)。
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 开源协议
 
-该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。详见 [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE) 文件。
-
-## 项目历史
-
-- 该项目起源于 [YukuanHU](https://github.com/YukuanHu) 的本科毕业设计论文，论文于 2019.05.24 上传；
-- 2021.05.09 起，[ganler](https://github.com/ganler) 以上述项目为基础，增强其功能（项目结构与平台适配）并开始维护新项目。
-- 2022.05.12 起，[skyleaworlder](https://github.com/skyleaworlder) 开始贡献本项目，并将其整合进 [TJ-CSCCG](https://github.com/TJ-CSCCG)，并持续对该项目进行更新和改进，目前已经成为一个完善的本科毕业论文模板。
-- 2023.04 起，[RizhongLin](https://github.com/RizhongLin) 开始贡献本项目，并负责项目的维护和更新。
-- 2025.04 更新，实现基于键值对的类选项，支持更灵活的配置。
-- 2026 更新，迁移至 `ctexbook` 基类，全面对齐 2026 版撰写规范；新增 `biblatex`/`bibtex` 双后端、理工/文科双编号体系（`field`）、信息说明页（`\MakeInfoPage`）、跨页代码环境（`longlisting`）；CI 升级至 TeX Live 2026。
-
-我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
-
-在使用本模板时，如果您觉得本项目对您的毕业设计或论文有所帮助，我们希望您可以在您的致谢部分感谢并致以敬意。
-
-## 致谢
-
-我们从顶尖高校的优秀开源项目中学到了很多：
-
-- [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile
-- [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows
+该项目使用 [LPPL-1.3c 许可证](https://www.latex-project.org/lppl/lppl-1-3c/)。详见 [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE)。
 
 ## 联系方式
 

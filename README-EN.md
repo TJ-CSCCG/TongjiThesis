@@ -17,29 +17,8 @@
 
 A LaTeX template that conforms to the official formatting requirements for Tongji University undergraduate theses. Supports XeLaTeX / LuaLaTeX compilation, offers both `minted` and `listings` for code highlighting, and is compatible with both `biblatex` and `bibtex` citation backends. Continuously tested on Linux, macOS, and Windows via CI.
 
-<p align="center">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0001.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0002.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0005.jpg" width="23%">
-    <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/TongjiThesis/preview/main_page-0039.jpg" width="23%">
-</p>
-
 > [!NOTE]
-> A complete sample can be found in [Template Output Sample Display (Full Version)](https://github.com/TJ-CSCCG/TongjiThesis/discussions/21), in the PDF download link under "Assets" in the [Release page](https://github.com/TJ-CSCCG/TongjiThesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf).
-
-## Key Features
-
-- Based on `ctexbook`, supports `\frontmatter` / `\mainmatter` / `\backmatter` / `\appendix` structure
-- Compliant with the 2026 Tongji undergraduate thesis writing standard (小四 body, 1.5× line spacing, 小三 chapter headings)
-- Dual compiler support: `XeLaTeX` and `LuaLaTeX`
-- Dual bibliography backends: `biblatex` (default) and `bibtex`, unified via `\makereferences`
-- Dual code highlighting: `minted` (default) and `listings`
-- `longlisting` environment for cross-page code blocks
-- Built-in information description page (`\MakeInfoPage`) per the 2026 official template
-- Single-sided / double-sided printing with automatic binding line
-- Two chapter numbering systems for sciences and humanities (`field=science|humanities`)
-- Key-value document class options for flexible configuration
-- Continuous CI testing on Linux, macOS, and Windows
+> Full sample PDFs: [Release page](https://github.com/TJ-CSCCG/TongjiThesis/releases) or [Overleaf Template PDF](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn.pdf). Detailed option documentation is in the compiled template guide (Chapter 1).
 
 ---
 
@@ -52,7 +31,7 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 | **GitHub Actions** | Fork this repo, push to trigger CI, download PDFs from Artifacts                                                                                         |
 
 > [!TIP]
-> This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please first check and upgrade your TeX Live installation to 2026. Older TeX Live versions may ship package versions that are incompatible with this template.
+> This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please check and upgrade your TeX Live to 2026 first.
 
 ## Usage
 
@@ -61,10 +40,10 @@ A LaTeX template that conforms to the official formatting requirements for Tongj
 #### Using Directly via Overleaf Template
 
 > [!IMPORTANT]
-> When using the Overleaf template, please check the compiler and main entry settings:
+> When using the Overleaf template, check the compiler and main entry settings:
 >
-> - Set `main.tex` as the main entry file, instead of other files in the project (such as `tongjithesis.cls`);
-> - It is recommended to use the `XeLaTeX` or `LuaLaTeX` compilers, as some compilers (such as `pdfLaTeX`) are not supported by this template.
+> - Set `main.tex` as the main entry file, instead of other files (such as `tongjithesis.cls`);
+> - Use `XeLaTeX` or `LuaLaTeX` compilers; `pdfLaTeX` is not supported.
 
 #### Importing This Repository on Overleaf
 
@@ -78,11 +57,11 @@ Fork this repo and push to trigger CI. Download PDFs from the `Summary | Artifac
 
 #### Installing TeX Distribution
 
-We recommend installing TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
+Install TeX Live (Windows, Linux) or MacTeX (macOS) following the [official quick install guide](https://tug.org/texlive/quickinstall.html).
 
 #### Building the Project
 
-We recommend building the project via the command line. Alternatively, you can use the VS Code LaTeX Workshop plugin.
+We recommend building via the command line. VS Code LaTeX Workshop is also supported.
 
 ##### Command Line
 
@@ -110,7 +89,7 @@ make wordcount          # word count
 
 <details><summary><b>Using VS Code and LaTeX Workshop Plugin</b></summary>
 
-Install the LaTeX Workshop plugin, then **open this project's root directory directly** (the `TongjiThesis` folder — otherwise `.vscode/settings.json` won't take effect). Build recipes are pre-configured: open `main.tex`, select `Recipe: latexmk (xelatex)` from the TeX sidebar panel, or simply save to trigger auto-compilation.
+Install the LaTeX Workshop plugin, then **open this project's root directory directly** (the `TongjiThesis` folder — otherwise `.vscode/settings.json` won't take effect). Open `main.tex`, select `Recipe: latexmk (xelatex)` from the TeX sidebar panel, or save to trigger auto-compilation.
 
 </details>
 
@@ -124,7 +103,7 @@ For detailed usage, see [TongjiThesis-env](https://github.com/TJ-CSCCG/TongjiThe
 
 #### Document Class Options
 
-This template provides the following document class options, which can be configured in `main.tex`:
+Configure in `main.tex` via `\documentclass`:
 
 ```latex
 \documentclass[
@@ -141,100 +120,35 @@ This template provides the following document class options, which can be config
 \tjbibresource{bib/note.bib}  % Specify bib files (supports multiple, comma-separated)
 ```
 
-<details><summary><b>Detailed option descriptions</b></summary>
-
-##### Single/Double-Sided Printing Options
-
-- `oneside`: Single-sided printing (default)
-- `twoside`: Double-sided printing, adjusts page margins and binding line
-
-##### Major Category Options
-
-- `field=science`: Engineering/Sciences, chapter numbering uses Arabic system 1 / 1.1 / 1.1.1 (default)
-- `field=humanities`: Humanities (liberal arts/law/foreign languages/arts), chapter numbering uses Chinese system 一 /（一）/ 1.
-- Economics & Management belongs to social sciences: numbering hierarchy follows the science requirements, and writing follows the science template. **Class of 2026 is a transition period** — students may choose either `field=science` (recommended) or `field=humanities`. **Starting from the class of 2027, Economics & Management will uniformly use `field=science`.**
-
-##### Font Options
-
-- `fontset=fandol`: Use Fandol font set (default)
-- `fontset=adobe`: Use Adobe font set (requires Adobe fonts installation)
-- `times=false`: Use `newtx` package fonts (default)
-- `times=true`: Use Times New Roman font
-
-##### Chinese Punctuation Options
-
-- `fullwidthstop=circle`: Keep Chinese period "。" unchanged (default)
-- `fullwidthstop=dot`: Replace Chinese period "。" with full-width dot "．"
-
-##### Bibliography Options
-
-- `biblatex=true`: Use `biblatex` (biber backend) for bibliography management (default)
-- `biblatex=false`: Use `bibtex` with `gbt7714` package for bibliography management
-
-Use `\tjbibresource{file1.bib,file2.bib}` to specify bib files, and `\makereferences` to output the bibliography.
-
-##### Output Type (`\infotype`, set in `chapters/metadata.tex`)
-
-- `\infotype{thesis}`: Graduation thesis; abstract heading is "摘要" (Abstract)
-- `\infotype{design}`: Graduation design (software/creative/architectural, non-engineering); abstract heading is "摘要" (Abstract)
-- `\infotype{engineering}`: Graduation design (engineering); abstract heading is "设计总说明" (Design Overview)
-
-</details>
+> [!NOTE]
+> Economics & Management: class of 2026 may choose `field=science` (recommended) or `field=humanities`; from class of 2027 onward, use `field=science` uniformly.
 
 <details><summary><b>Rendering Rare Characters</b></summary>
 
-The default Fandol font has limited support for rare characters. Download the Adobe font set from the [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) branch, install them to your system, and set `fontset=adobe` in `main.tex`:
-
-```latex
-\documentclass[
-  oneside,
-  fontset=adobe,
-  % other options...
-]{tongjithesis}
-```
+The default Fandol font has limited support for rare characters. Download the Adobe font set from the [`fonts`](https://github.com/TJ-CSCCG/TongjiThesis/tree/fonts) branch, install them to your system, and set `fontset=adobe` in `main.tex`.
 
 > [!NOTE]
 > Install fonts to the system font directory rather than the project root. On Overleaf, placing fonts in the project root works with LuaLaTeX but may slow compilation.
 
 </details>
 
-#### Code Highlighting Options
+<details><summary><b>Code Highlighting Options</b></summary>
 
-Two code highlighting solutions are available:
+1. **`minted`** (default): Python-based (Pygments) with richer syntax highlighting. Requires Python with `pygments` installed (`pip install pygments`).
+2. **`listings`**: Pure LaTeX, no external dependencies.
 
-1. **`minted`** (default): Python-based (Pygments) with richer syntax highlighting. Requires Python with `pygments` installed (`pip install pygments`). Compilation needs `-shell-escape` (already configured in `latexmkrc`).
-2. **`listings`**: Pure LaTeX, no external dependencies. Set `minted=false` in `main.tex` to switch.
+Set `minted=false` in `main.tex` to switch. If you encounter `minted`-related errors, switch to `minted=false`.
 
-If you encounter `minted`-related errors, switch to `minted=false` — no further configuration needed.
+</details>
 
-## How to contribute to this project?
+## Contributing & Project History
 
-Please refer to the [Contributing Guide](CONTRIBUTING.md#提交-pull-request).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Open Source License
+## License
 
-This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See the [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE) file for details.
+This project uses the [LPPL-1.3c license](https://www.latex-project.org/lppl/lppl-1-3c/). See [LICENSE](https://github.com/TJ-CSCCG/TongjiThesis/blob/master/LICENSE).
 
-## Project History
-
-- This project originated from [YukuanHU](https://github.com/YukuanHu)'s undergraduate thesis, which was uploaded on May 24, 2019.
-- Starting May 9, 2021, [ganler](https://github.com/ganler) enhanced the functionalities (project structure and platform compatibility) based on the original project and began maintaining it.
-- As of May 12, 2022, [skyleaworlder](https://github.com/skyleaworlder) started contributing to the project, integrated it into [TJ-CSCCG](https://github.com/TJ-CSCCG), and has continued to update and improve it. It has now become a comprehensive undergraduate thesis template.
-- From April 2023, [RizhongLin](https://github.com/RizhongLin) began contributing to and managing the project.
-- April 2025 update, implemented key-value based class options, supporting more flexible configuration.
-- 2026 update: migrated to `ctexbook` base class, fully aligned with the 2026 writing standard; added dual `biblatex`/`bibtex` backends, science/humanities dual numbering (`field`), information description page (`\MakeInfoPage`), cross-page code environment (`longlisting`); CI upgraded to TeX Live 2026.
-
-We deeply appreciate the efforts of these contributors, whose work has facilitated and assisted many students.
-
-If you find this template helpful for your thesis or dissertation, we hope you will acknowledge and honor these contributors in your acknowledgements section.
-
-## Acknowledgements
-
-We have learned a lot from excellent open-source projects from top universities:
-
-- [sjtug/SJTUThesis](https://github.com/sjtug/SJTUThesis): makefile & batchfile contributions.
-- [stone-zeng/fduthesis](https://github.com/stone-zeng/fduthesis): workflows enhancements.
-
-## Contact Information
+## Contact
 
 For questions, please use [Discussions](https://github.com/TJ-CSCCG/TongjiThesis/discussions).

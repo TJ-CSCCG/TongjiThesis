@@ -30,11 +30,10 @@
 
 \section{填写论文信息}
 
-论文的封面、信息说明页与中英文摘要的个人信息分散在 \verb|chapters/| 目录下的三个文件中。各文件均已提供带注释的示例，照搬并替换字段值即可；模板据此自动生成对应页面。
+论文的封面、信息说明页与中英文摘要的个人信息分散在 \verb|chapters/| 目录下的两个文件中。各文件均已提供带注释的示例，照搬并替换字段值即可；模板据此自动生成对应页面。
 
 \begin{itemize}
-  \item \textbf{封面} —— \verb|chapters/frontcover.tex|：\cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesistitleeng}、\cs{thesisadvisor}、\cs{thesisdate}，末尾调用 \cs{MakeCover}。
-  \item \textbf{信息说明页} —— \verb|chapters/infopage.tex|：\cs{infotype}（\texttt{thesis}、\texttt{design} 或 \texttt{engineering}）、\cs{infoabstract}、\cs{infothesiswords}（论文）或 \cs{infodrawings}+\cs{infowordcount}（设计）、\cs{infomaterials}，末尾调用 \cs{MakeInfoPage}。
+  \item \textbf{封面与信息说明页} —— \verb|chapters/metadata.tex|：\cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesistitleeng}、\cs{thesisadvisor}、\cs{thesisdate}（封面），以及 \cs{infotype}（\texttt{thesis}、\texttt{design} 或 \texttt{engineering}）、\cs{infoabstract}、\cs{infothesiswords}（论文）或 \cs{infodrawings}+\cs{infowordcount}（设计）、\cs{infomaterials}（信息说明页）。封面与信息说明页由随后的 \cs{MakeCover}、\cs{MakeInfoPage} 命令自动生成。
   \item \textbf{中英文摘要} —— \verb|chapters/00_abstract.tex|：\cs{MakeAbstract}\verb|{正文}{关键词}| 与 \cs{MakeAbstractEng}\verb|{Text}{Keywords}|。
 \end{itemize}
 
@@ -50,8 +49,8 @@
     \toprule
     \textbf{结构} & \textbf{命令} & \textbf{说明} \\
     \midrule
-    封面       & \verb|\MakeCover|      & 由 \verb|frontcover.tex| 中的信息自动生成 \\
-    信息说明页 & \verb|\MakeInfoPage|   & 由 \verb|infopage.tex| 中的信息自动生成 \\
+    封面       & \verb|\MakeCover|      & 由 \verb|metadata.tex| 中的信息自动生成 \\
+    信息说明页 & \verb|\MakeInfoPage|   & 由 \verb|metadata.tex| 中的信息自动生成 \\
     前置部分   & \verb|\frontmatter|    & 页码切换为大写罗马数字（I, II, III\ldots） \\
     摘要     & \verb|\MakeAbstract|     & 中英文摘要及关键词（\verb|00_abstract.tex|） \\
     目录     & \verb|\tableofcontents|  & 自动生成；可取消注释 \verb|\listoffigures|、\verb|\listoftables| \\
