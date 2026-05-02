@@ -551,7 +551,7 @@
 % ==========================================
 
 % 在上述修改基础上，符合模板标题对齐要求
-\renewcommand{\cftdot}{$\cdot$}
+% \renewcommand{\cftdot}{.}
 \renewcommand{\cftdotsep}{1}
 % 目录缩进：章无缩进，节 2em，小节 4em（与标题缩进保持一致）；目录行距由 \tjtoclinespread 控制
 \setlength{\cftchapindent}{0em}
