@@ -122,7 +122,7 @@ make wordcount          # wordcount
 ### 字体选择
 
 - **Windows 用户**：可直接使用 `fontset=windows`，系统自带 SimSun / SimHei / KaiTi / FangSong 等字体，覆盖更广。
-- **跨平台用户**：推荐默认的 `fontset=fandol`（随 TeX Live 安装，零配置）。如需更广字符覆盖，可从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 Windows / Adobe / Founder 等字体并安装到系统，然后切换 `fontset`。
+- **跨平台用户**：推荐默认的 `fontset=fandol`（随 TeX Live 安装，零配置）。如需更广字符覆盖，可从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 `adobe` / `founder` / `windows` 等字体并安装到系统，然后切换 `fontset`。
 
 > [!NOTE]
 > 安装新字体后请运行 `fc-cache -fv` 刷新字体缓存。

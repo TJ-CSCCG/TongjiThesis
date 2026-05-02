@@ -1,0 +1,41 @@
+%%
+%% tongji-cjk-font-fandol.def — Fandol CJK fonts (shipped with TeX Live)
+%%
+%% Copyright (C) TJ-CSCCG
+%% This work may be distributed under the LPPL 1.3c or later.
+%%
+\ProvidesExplFile{tongji-cjk-font-fandol.def}
+  {2026/05/02}{1.4.0}{Fandol CJK fonts definition (TongjiThesis)}
+
+\setCJKmainfont{FandolSong}
+  [
+    Extension   = .otf,
+    UprightFont = *-Regular,
+    BoldFont    = *-Bold,
+    ItalicFont  = FandolKai-Regular
+  ]
+\setCJKsansfont{FandolHei}
+  [
+    Extension   = .otf,
+    UprightFont = *-Regular,
+    BoldFont    = *-Bold,
+    AutoFakeBold = 3
+  ]
+\setCJKmonofont{FandolFang}
+  [ Extension = .otf, UprightFont = *-Regular ]
+
+\setCJKfamilyfont{zhsong}{FandolSong}
+  [ Extension = .otf, UprightFont = *-Regular, BoldFont = *-Bold,
+    ItalicFont = FandolKai-Regular ]
+\setCJKfamilyfont{zhhei}{FandolHei}
+  [ Extension = .otf, UprightFont = *-Regular, BoldFont = *-Bold ]
+\setCJKfamilyfont{zhkai}{FandolKai}
+  [ Extension = .otf, UprightFont = *-Regular ]
+\setCJKfamilyfont{zhfs}{FandolFang}
+  [ Extension = .otf, UprightFont = *-Regular ]
+
+\NewDocumentCommand{\songti}   {} { \CJKfamily{zhsong} }
+\NewDocumentCommand{\heiti}    {} { \CJKfamily{zhhei}  }
+\NewDocumentCommand{\kaishu}   {} { \CJKfamily{zhkai}  }
+\NewDocumentCommand{\fangsong} {} { \CJKfamily{zhfs}   }
+\endinput

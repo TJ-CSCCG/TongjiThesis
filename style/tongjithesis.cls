@@ -33,6 +33,8 @@
   setkeys=\kvsetkeys
 }
 
+% Define fontset option (default is fandol)
+\DeclareStringOption[fandol]{fontset}
 % Define fullwidthstop option: circle（默认，保留 。）或 dot（替换为 ．）
 \DeclareStringOption[circle]{fullwidthstop}
 % Define times option (default is false)
@@ -73,7 +75,12 @@
 % Class Loading
 % ==========================================
 % 加载 ctexbook 类
-\LoadClass[UTF8,a4paper,zihao=-4]{ctexbook}  % zihao=-4 must match \tjfontbody (小四号)
+\LoadClass[UTF8,a4paper,zihao=-4,fontset=none]{ctexbook}  % zihao=-4 must match \tjfontbody (小四号)
+
+% Load our CJK fontset definition (fontspec is now available via ctexbook)
+\IfFileExists{tongji-cjk-font-\tongjithesis@fontset.def}
+  {\input{tongji-cjk-font-\tongjithesis@fontset.def}}
+  {\ClassError{tongjithesis}{Unknown fontset: \tongjithesis@fontset}{}}
 
 % ==========================================
 % Formatting Constants (官方模板规范)
@@ -936,13 +943,13 @@
       \pagestyle{empty}% 防止多页封面在第二页出现页码（titlepage 只 \thispagestyle empty）
       \vfill
 
-      \includegraphics[height=2.5cm]{figures/tongji.pdf}
+      \includegraphics[height=2.5cm]{figures/tongji.pdf}\\
 
-      \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}
+      \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}\\
       % \vskip 20pt
 
       % 封面大标题：初号黑体（官方模板规范，理工/文科不同）
-      \zihao{-0}\heiti{\tjcovertext}
+      \zihao{-0}\heiti{\tjcovertext}\\
       \vspace{60pt}
 
       \begin{information}{M{5em}M{22em}}

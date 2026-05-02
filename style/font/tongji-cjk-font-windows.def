@@ -1,0 +1,30 @@
+%%
+%% tongji-cjk-font-windows.def — Windows CJK fonts (SimSun, SimHei, etc.)
+%%
+%% Copyright (C) TJ-CSCCG
+%% This work may be distributed under the LPPL 1.3c or later.
+%%
+\ProvidesExplFile{tongji-cjk-font-windows.def}
+  {2026/05/02}{1.4.0}{Windows CJK fonts definition (TongjiThesis)}
+
+\setCJKmainfont{SimSun}
+  [ BoldFont = SimHei, ItalicFont = KaiTi ]
+\setCJKsansfont{SimHei}  [ AutoFakeBold = 3 ]
+\setCJKmonofont{FangSong}
+
+\setCJKfamilyfont{zhsong}{SimSun}   [ BoldFont = SimHei, ItalicFont = KaiTi ]
+\setCJKfamilyfont{zhhei}{SimHei}    [ AutoFakeBold = 3 ]
+\setCJKfamilyfont{zhkai}{KaiTi}
+\setCJKfamilyfont{zhfs}{FangSong}
+\setCJKfamilyfont{zhli}{LiSu}
+\setCJKfamilyfont{zhyou}{YouYuan}
+\setCJKfamilyfont{zhyahei}{Microsoft~YaHei} [ BoldFont = *~Bold ]
+
+\NewDocumentCommand{\songti}   {} { \CJKfamily{zhsong}  }
+\NewDocumentCommand{\heiti}    {} { \CJKfamily{zhhei}   }
+\NewDocumentCommand{\kaishu}   {} { \CJKfamily{zhkai}   }
+\NewDocumentCommand{\fangsong} {} { \CJKfamily{zhfs}    }
+\NewDocumentCommand{\lishu}    {} { \CJKfamily{zhli}    }
+\NewDocumentCommand{\youyuan}  {} { \CJKfamily{zhyou}   }
+\NewDocumentCommand{\yahei}    {} { \CJKfamily{zhyahei} }
+\endinput

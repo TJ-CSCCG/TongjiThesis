@@ -1,0 +1,25 @@
+%%
+%% tongji-cjk-font-adobe.def — Adobe CJK fonts (Song, Heiti, Kaiti, Fangsong Std)
+%%
+%% Copyright (C) TJ-CSCCG
+%% This work may be distributed under the LPPL 1.3c or later.
+%%
+\ProvidesExplFile{tongji-cjk-font-adobe.def}
+  {2026/05/02}{1.4.0}{Adobe CJK fonts definition (TongjiThesis)}
+
+\setCJKmainfont{AdobeSongStd-Light}
+  [ BoldFont = AdobeHeitiStd-Regular, ItalicFont = AdobeKaitiStd-Regular ]
+\setCJKsansfont{AdobeHeitiStd-Regular}  [ AutoFakeBold = 3 ]
+\setCJKmonofont{AdobeFangsongStd-Regular}
+
+\setCJKfamilyfont{zhsong}{AdobeSongStd-Light}
+  [ BoldFont = AdobeHeitiStd-Regular, ItalicFont = AdobeKaitiStd-Regular ]
+\setCJKfamilyfont{zhhei}{AdobeHeitiStd-Regular}  [ AutoFakeBold = 3 ]
+\setCJKfamilyfont{zhkai}{AdobeKaitiStd-Regular}
+\setCJKfamilyfont{zhfs}{AdobeFangsongStd-Regular}
+
+\NewDocumentCommand{\songti}   {} { \CJKfamily{zhsong} }
+\NewDocumentCommand{\heiti}    {} { \CJKfamily{zhhei}  }
+\NewDocumentCommand{\kaishu}   {} { \CJKfamily{zhkai}  }
+\NewDocumentCommand{\fangsong} {} { \CJKfamily{zhfs}   }
+\endinput
