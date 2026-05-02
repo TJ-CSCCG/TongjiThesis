@@ -12,6 +12,7 @@
 #   - package.json              "version" field
 #   - style/tongjithesis.cls    \ProvidesClass date and version
 #   - style/tongjithesis.cfg    \ProvidesFile  date and version
+#   - style/font/*.def          \ProvidesExplFile date and version
 
 set -euo pipefail
 
@@ -55,6 +56,12 @@ rm style/tongjithesis.cls.bak
 sed -i.bak -E "s/\\\\ProvidesFile\\{tongjithesis\.cfg\\}\[[0-9/]+ v[0-9]+\.[0-9]+\.[0-9]+/\\\\ProvidesFile{tongjithesis.cfg}[${TODAY} v${NEW_VERSION}/" style/tongjithesis.cfg
 rm style/tongjithesis.cfg.bak
 
+# style/font/*.def — update date and version in \ProvidesExplFile lines
+for def in style/font/tongji-cjk-font-*.def; do
+  sed -i.bak -E "s/\\{[0-9/]+\\}\\{[0-9]+\.[0-9]+\.[0-9]+\\}/\{${TODAY}\}\{${NEW_VERSION}\}/" "$def"
+  rm "${def}.bak"
+done
+
 echo ""
 echo "Updated files:"
 grep -n "version\|Provides" package.json style/tongjithesis.cls style/tongjithesis.cfg \
@@ -63,7 +70,7 @@ grep -n "version\|Provides" package.json style/tongjithesis.cls style/tongjithes
 echo ""
 git diff --stat
 
-git add package.json style/tongjithesis.cls style/tongjithesis.cfg
+git add package.json style/tongjithesis.cls style/tongjithesis.cfg style/font/*.def
 git commit -m "chore: bump version to v${NEW_VERSION}"
 
 if [ "$CREATE_TAG" = true ]; then
