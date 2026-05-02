@@ -149,7 +149,8 @@
   \RequirePackage{fontspec}%
   \setmainfont{Times New Roman}%
 \else
-  \RequirePackage{newtxtext,newtxmath}%
+  \RequirePackage{newtx}%
+  \defaultfontfeatures{Ligatures = TeX}%
 \fi
 
 \RequirePackage{upgreek}
