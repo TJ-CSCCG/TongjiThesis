@@ -1,0 +1,36 @@
+%%
+%% tongji-cjk-font-mac.def — macOS CJK fonts (Songti SC, Heiti SC, PingFang SC, etc.)
+%%
+%% Copyright (C) TJ-CSCCG
+%% This work may be distributed under the LPPL 1.3c or later.
+%%
+\ProvidesFile{tongji-cjk-font-mac.def}[2026/05/03 v1.4.0 macOS CJK fonts definition (TongjiThesis)]
+
+\setCJKmainfont{Songti SC}
+  [
+    UprightFont    = * Light,
+    BoldFont       = * Bold,
+    ItalicFont     = Kaiti SC Regular,
+    BoldItalicFont = Kaiti SC Bold
+  ]
+\setCJKsansfont{Heiti SC}
+  [
+    UprightFont  = * Medium,
+    AutoFakeBold = 3
+  ]
+\setCJKmonofont{STFangsong}
+
+\setCJKfamilyfont{zhsong}{Songti SC}
+  [ UprightFont = * Light, BoldFont = * Bold,
+    ItalicFont = Kaiti SC Regular, BoldItalicFont = Kaiti SC Bold ]
+\setCJKfamilyfont{zhhei}{Heiti SC}
+  [ UprightFont = * Medium, AutoFakeBold = 3 ]
+\setCJKfamilyfont{zhkai}{Kaiti SC}
+  [ UprightFont = * Regular, BoldFont = * Bold ]
+\setCJKfamilyfont{zhfs}{STFangsong}
+
+\NewDocumentCommand{\songti}   {} { \CJKfamily{zhsong} }
+\NewDocumentCommand{\heiti}    {} { \CJKfamily{zhhei}  }
+\NewDocumentCommand{\kaishu}   {} { \CJKfamily{zhkai}  }
+\NewDocumentCommand{\fangsong} {} { \CJKfamily{zhfs}   }
+\endinput

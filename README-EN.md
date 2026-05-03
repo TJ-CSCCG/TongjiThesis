@@ -122,6 +122,7 @@ Configure in `main.tex` via `\documentclass`:
 ### Font Selection
 
 - **Windows users**: Use `fontset=windows` — SimSun / SimHei / KaiTi / FangSong are included with the OS and provide broader coverage.
+- **macOS users**: Use `fontset=mac` — Songti SC / Heiti SC / STFangsong / Kaiti SC are included with macOS, zero-config.
 - **Cross-platform users**: The default `fontset=fandol` (shipped with TeX Live, zero-config) is recommended. For broader character coverage, download `adobe` / `founder` / `windows` fonts from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex), install them to your system, then switch the `fontset`.
 
 > [!NOTE]
