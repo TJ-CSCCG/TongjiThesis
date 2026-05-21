@@ -198,7 +198,7 @@
 % global tj@twospace from line above; labelformat=parens renders `(a)` style.
 \captionsetup[sub]{font={tj@caption,tj@songti}}
 
-% 浮动体内部基线：表格/图片内容使用单倍行距，与正文 1.5 倍区分
+% 浮动体内部基线：表格/图片内容行距 1 倍，段前 0 行，段后 0 行（官方规范）
 % \@floatboxreset 在 figure/table 环境起始处自动调用，此处在其后追加行距重置。
 \AtBeginDocument{%
   \let\tj@orig@floatboxreset\@floatboxreset
