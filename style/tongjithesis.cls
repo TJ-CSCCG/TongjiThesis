@@ -699,8 +699,10 @@
 % Both are bound to chapter, then lstlisting is aliased to listing.
 \AtBeginDocument{%
   \counterwithin{listing}{chapter}%
-  \counterwithin{lstlisting}{chapter}%
-  \let\c@lstlisting\c@listing
+  \@ifundefined{c@lstlisting}{}{%
+    \counterwithin{lstlisting}{chapter}%
+    \let\c@lstlisting\c@listing
+  }%
 }
 
 % 设置正文页内章节标题格式
