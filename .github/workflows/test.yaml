@@ -106,6 +106,7 @@ env:
     texliveonfly
     threeparttable
     threeparttablex
+    tabularx
     times
     titling
     tocloft
