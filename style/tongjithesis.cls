@@ -100,7 +100,7 @@
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{5}}       % 表题 / 图题：五号
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
-\newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
+\newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范）
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
 % Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
@@ -182,6 +182,7 @@
 \RequirePackage{longtable}
 \RequirePackage{threeparttable}
 \RequirePackage{threeparttablex}
+\RequirePackage{tabularx} % 三线表两端与页面对齐（官方规范）
 % Caption customization (must load before subcaption, which internally loads caption)
 \RequirePackage{caption}
 \DeclareCaptionLabelSeparator{tj@twospace}{\ ~}
@@ -197,13 +198,6 @@
 % Other settings (labelsep, labelformat, skip) inherit defaults — labelsep follows the
 % global tj@twospace from line above; labelformat=parens renders `(a)` style.
 \captionsetup[sub]{font={tj@caption,tj@songti}}
-
-% 浮动体内部基线：表格/图片内容行距 1 倍，段前 0 行，段后 0 行（官方规范）
-% \@floatboxreset 在 figure/table 环境起始处自动调用，此处在其后追加行距重置。
-\AtBeginDocument{%
-  \let\tj@orig@floatboxreset\@floatboxreset
-  \def\@floatboxreset{\tj@orig@floatboxreset\linespread{1.0}\selectfont}%
-}
 
 % Algorithms and code listings
 \iftongjithesis@algorithmtwoe
@@ -420,6 +414,14 @@
 \abovedisplayshortskip 0\p@ \@plus 3\p@
 \belowdisplayskip \abovedisplayskip
 \belowdisplayshortskip 6.5\p@ \@plus 3.5\p@ \@minus 3\p@
+
+% Table float spacing — 表格/图片上下与正文之间各空一行（官方规范）
+\setlength{\textfloatsep}{\baselineskip}
+\setlength{\intextsep}{\baselineskip}
+\setlength{\floatsep}{0.5\baselineskip}
+
+% 图居中（官方规范）
+\AtBeginEnvironment{figure}{\centering}
 
 % ==========================================
 % Page Layout
