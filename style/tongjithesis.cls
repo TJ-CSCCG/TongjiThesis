@@ -100,7 +100,7 @@
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{5}}       % 表题 / 图题：五号
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
-\newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范）
+\newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\linespread{1}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范；\linespread{1} 隔离全文 1.625 倍行距）
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
 % Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
@@ -615,6 +615,7 @@
 % 表格内所有字体均为小五
 \AtBeginEnvironment{table}{\tjfonttable}
 \AtBeginEnvironment{tabular}{\tjfonttable}
+\AtBeginEnvironment{tabular*}{\tjfonttable}
 \AtBeginEnvironment{tabularx}{\tjfonttable}
 \AtBeginEnvironment{longtable}{\tjfonttable}
 \AtBeginEnvironment{tablenotes}{\tjfonttable}
