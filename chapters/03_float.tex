@@ -131,27 +131,21 @@
     \item[a] 一个脚注
     \item[b] 另一个脚注
   \end{TableNotes}
-  \begin{longtable}[c]{c*{6}{r}}
+  \begin{longtable}[c]{@{\extracolsep{\fill}}c*{6}{r}}
     \caption{实验数据}
     \label{tab:performance}                                                                                                                      \\
     \toprule
-    \textbf{测试程序\tnote{b}} & \multicolumn{1}{c}{\textbf{正常运行}}   & \multicolumn{1}{c}{\textbf{同步}}
-                           & \multicolumn{1}{c}{\textbf{检查点}}    & \multicolumn{1}{c}{\textbf{卷回恢复}}
-                           & \multicolumn{1}{c}{\textbf{进程迁移}}   & \multicolumn{1}{c}{\textbf{检查点}}                                              \\
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \textbf{文件}（KB）                                                               \\
+    \textbf{测试程序\tnote{b}} & \textbf{运行时间 (s)} & \textbf{同步时间 (s)}
+                           & \textbf{检查点时间 (s)} & \textbf{卷回恢复时间 (s)}
+                           & \textbf{进程迁移时间 (s)} & \textbf{检查点文件 (KB)} \\
     \midrule
     \endfirsthead
     \tjlongtablecont{7}
 
     \toprule
-    \textbf{测试程序\tnote{b}} & \multicolumn{1}{c}{\textbf{正常运行}}   & \multicolumn{1}{c}{\textbf{同步}}
-                           & \multicolumn{1}{c}{\textbf{检查点}}    & \multicolumn{1}{c}{\textbf{卷回恢复}}
-                           & \multicolumn{1}{c}{\textbf{进程迁移}}   & \multicolumn{1}{c}{\textbf{检查点}}                                              \\
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \textbf{文件}（KB）                                                               \\
+    \textbf{测试程序\tnote{b}} & \textbf{运行时间 (s)} & \textbf{同步时间 (s)}
+                           & \textbf{检查点时间 (s)} & \textbf{卷回恢复时间 (s)}
+                           & \textbf{进程迁移时间 (s)} & \textbf{检查点文件 (KB)} \\
     \midrule
     \endhead
     \hline
