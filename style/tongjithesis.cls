@@ -1250,7 +1250,7 @@
       \fi
     }%
   \end{center}
-  \vspace{-0.8em}
+  \vspace{-0.2em}
   \begin{center}\heiti\tjfontheading
     \ifthenelse{\equal{\tongjiinfotype}{engineering}}{设计总说明}{摘\hspace{0.5em}要}
   \end{center}
@@ -1287,7 +1287,7 @@
       \fi
     }%
   \end{center}
-  \vspace{-0.8em}
+  \vspace{-0.2em}
   \begin{center}\tjfontheading
     \textbf{ABSTRACT}
   \end{center}
