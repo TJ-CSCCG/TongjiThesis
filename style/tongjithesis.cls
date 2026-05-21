@@ -198,6 +198,13 @@
 % global tj@twospace from line above; labelformat=parens renders `(a)` style.
 \captionsetup[sub]{font={tj@caption,tj@songti}}
 
+% 浮动体内部基线：表格/图片内容使用单倍行距，与正文 1.5 倍区分
+% \@floatboxreset 在 figure/table 环境起始处自动调用，此处在其后追加行距重置。
+\AtBeginDocument{%
+  \let\tj@orig@floatboxreset\@floatboxreset
+  \def\@floatboxreset{\tj@orig@floatboxreset\linespread{1.0}\selectfont}%
+}
+
 % Algorithms and code listings
 \iftongjithesis@algorithmtwoe
   \RequirePackage[ruled,linesnumbered,algochapter]{algorithm2e}
@@ -403,6 +410,16 @@
 
 % Line spacing
 \setstretch{\tjlinespread}  % 设置全文行距
+
+% Display math spacing — 公式段前 0 行，段后 0 行（官方规范）
+% 设置 \abovedisplayskip 等在 \normalsize 内部随字号自动重置，此处
+% 在正文行距设置后显式指定，确保 display math 间距与正文 1.5 倍行距协调。
+% 值参考 LaTeX bk12.clo 标准，stretch 分量由后续 \raggedbottom（twoside）
+% 或 oneside 默认行为控制，公式间距不会异常拉伸。
+\abovedisplayskip 12\p@ \@plus 3\p@ \@minus 7\p@
+\abovedisplayshortskip 0\p@ \@plus 3\p@
+\belowdisplayskip \abovedisplayskip
+\belowdisplayshortskip 6.5\p@ \@plus 3.5\p@ \@minus 3\p@
 
 % ==========================================
 % Page Layout
