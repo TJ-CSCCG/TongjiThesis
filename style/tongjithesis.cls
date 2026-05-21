@@ -581,7 +581,7 @@
   \counterwithin{equation}{section}%
   \counterwithin{algorithm}{section}%
   \counterwithin{listing}{section}%
-  \counterwithin{lstlisting}{section}%
+  \@ifundefined{c@lstlisting}{}{\counterwithin{lstlisting}{section}}%
   \counterwithin{thm}{section}%
   \counterwithin{cor}{section}%
   \counterwithin{lem}{section}%
@@ -803,7 +803,9 @@
   % 均需在 document 开始后解绑，确保顺序正确
   \AtBeginDocument{%
     \counterwithout{listing}{chapter}%
-    \counterwithout{lstlisting}{chapter}%
+    \@ifundefined{c@lstlisting}{}{%
+      \counterwithout{lstlisting}{chapter}%
+    }%
     \counterwithout{thm}{chapter}%
     \counterwithout{cor}{chapter}%
     \counterwithout{lem}{chapter}%
