@@ -25,7 +25,7 @@
 
 推荐使用矢量图格式（PDF）用于图表和流程图，位图建议使用 PNG 格式（照片可用 JPG），矢量图在缩放时不会失真。
 
-注意在浮动体内部应使用 \verb|\centering| 命令而非 \verb|\begin{center}...\end{center}| 环境，后者会引入额外的垂直间距。
+模板已通过 \cs{AtBeginEnvironment\{figure\}\{\textbackslash centering\}} 自动将图片居中，无需手动添加 \cs{centering}。但切勿使用 \verb|\begin{center}...\end{center}| 替代，后者会引入额外的垂直间距。
 
 \subsection{多个图形}
 
