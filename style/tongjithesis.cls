@@ -406,14 +406,11 @@
 \setstretch{\tjlinespread}  % 设置全文行距
 
 % Display math spacing — 公式段前 0 行，段后 0 行（官方规范）
-% 设置 \abovedisplayskip 等在 \normalsize 内部随字号自动重置，此处
-% 在正文行距设置后显式指定，确保 display math 间距与正文 1.5 倍行距协调。
-% 值参考 LaTeX bk12.clo 标准，stretch 分量由后续 \raggedbottom（twoside）
-% 或 oneside 默认行为控制，公式间距不会异常拉伸。
-\abovedisplayskip 12\p@ \@plus 3\p@ \@minus 7\p@
-\abovedisplayshortskip 0\p@ \@plus 3\p@
+% 公式前后不额外增加间距，仅依靠正文 1.5 倍行距的自然行间过渡。
+\abovedisplayskip 0\p@
+\abovedisplayshortskip 0\p@
 \belowdisplayskip \abovedisplayskip
-\belowdisplayshortskip 6.5\p@ \@plus 3.5\p@ \@minus 3\p@
+\belowdisplayshortskip 0\p@
 
 % Table float spacing — 表格/图片上下与正文之间各空一行（官方规范）
 \setlength{\textfloatsep}{\baselineskip}
