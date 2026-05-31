@@ -1079,26 +1079,31 @@
   \endgroup
 }
 
+\newcommand{\tj@abstractblock}[2]{%
+  \par\nointerlineskip
+  \begingroup
+    \setbox\@tempboxa\vbox{%
+      \hsize=\linewidth
+      \parindent=0pt
+      \parbox[t]{\linewidth}{%
+        \centering
+        #1%
+        \strut #2\strut\par
+      }%
+    }%
+    \box\@tempboxa
+  \endgroup
+  \par\nointerlineskip
+}
+
 % 论文基本信息配置
-\newif\iftj@abstracttitle@set
-\newif\iftj@abstracttitleeng@set
 \newcommand{\school}[1]{\def\tongjischool{#1}}
 \newcommand{\major}[1]{\def\tongjimajor{#1}}
 \newcommand{\student}[2]{\def\tongjiauthornumber{#1}\def\tongjiauthor{#2}}
 \newcommand{\thesistitle}[2]{\def\tongjithesistitle{#1}\def\tongjithesissubtitle{#2}}
 \newcommand{\thesistitleeng}[2]{\def\tongjithesistitleeng{#1}\def\tongjithesissubtitleeng{#2}}
-\newcommand{\abstracttitle}[2]{%
-  \def\tongjiabstracttitle{#1}\def\tongjiabstractsubtitle{#2}%
-  \ifstrempty{#1}{%
-    \ifstrempty{#2}{\tj@abstracttitle@setfalse}{\tj@abstracttitle@settrue}%
-  }{\tj@abstracttitle@settrue}%
-}
-\newcommand{\abstracttitleeng}[2]{%
-  \def\tongjiabstracttitleeng{#1}\def\tongjiabstractsubtitleeng{#2}%
-  \ifstrempty{#1}{%
-    \ifstrempty{#2}{\tj@abstracttitleeng@setfalse}{\tj@abstracttitleeng@settrue}%
-  }{\tj@abstracttitleeng@settrue}%
-}
+\newcommand{\abstracttitle}[2]{\def\tongjiabstracttitle{#1}\def\tongjiabstractsubtitle{#2}}
+\newcommand{\abstracttitleeng}[2]{\def\tongjiabstracttitleeng{#1}\def\tongjiabstractsubtitleeng{#2}}
 \newcommand{\thesisadvisor}[1]{\def\tongjithesisadvisor{#1}}
 \newcommand{\thesisdate}[3]{\def\tongjithesisyear{#1}\def\tongjithesismonth{#2}\def\tongjithesisday{#3}}
 
@@ -1218,28 +1223,28 @@
 
 % 设置中文摘要页（毕业设计时标题改为"设计总说明"）
 \newcommand{\MakeAbstract}[2]{
-  \begin{center}\bfseries\heiti\tjfonttitle
-    \ \\
-    \vspace{-0.5em}
-    \parbox[t]{\linewidth}{%
-      \centering
-      \iftj@abstracttitle@set
-        \tongjiabstracttitle
-        \ifx\tongjiabstractsubtitle\empty\else
-          \\[0.2em]{\zihao{3}\tongjiabstractsubtitle}% 副标题：三号（官方模板规范）
-        \fi
-      \else
-        \tjtitlecninline{\tongjithesistitle}%
-        \ifx\tongjithesissubtitle\empty\else
-          \\[0.2em]{\zihao{3}\tjtitlecninline{\tongjithesissubtitle}}% 副标题：三号（官方模板规范）
-        \fi
-      \fi
+  \vspace*{0.1em}
+  \tj@abstractblock{\bfseries\heiti\tjfonttitle}{%
+    \ifdefempty{\tongjiabstracttitle}{%
+      \tjtitlecninline{\tongjithesistitle}%
+    }{%
+      \tongjiabstracttitle
     }%
-  \end{center}
-  \vspace{-0.8em}
-  \begin{center}\heiti\tjfontheading
+  }
+  \ifdefempty{\tongjiabstractsubtitle}{%
+    \ifx\tongjithesissubtitle\empty\else
+      \vspace{0.6em}%
+      \tj@abstractblock{\bfseries\heiti\zihao{3}}{\tjtitlecninline{\tongjithesissubtitle}}% 副标题：三号（官方模板规范）
+    \fi
+  }{%
+    \vspace{0.6em}%
+    \tj@abstractblock{\bfseries\heiti\zihao{3}}{\tongjiabstractsubtitle}%
+  }
+  \vspace{0.8em}
+  \tj@abstractblock{\heiti\tjfontheading}{%
     \ifthenelse{\equal{\tongjiinfotype}{engineering}}{设计总说明}{摘\hspace{0.5em}要}
-  \end{center}
+  }
+  \vspace{1.6em}
 
   \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
@@ -1255,28 +1260,26 @@
 % 设置英文摘要页
 \newcommand{\MakeAbstractEng}[2]{
   \clearpage
-  \begin{center}\tjfonttitle
-    \ \\
-    \vspace{-0.5em}
-    \parbox[t]{\linewidth}{%
-      \centering
-      \iftj@abstracttitleeng@set
-        \textbf{\tongjiabstracttitleeng}%
-        \ifx\tongjiabstractsubtitleeng\empty\else
-          \\[0.2em]{\zihao{3}\textbf{\tongjiabstractsubtitleeng}}% 副标题：三号（官方模板规范）
-        \fi
-      \else
-        \textbf{\tjtitleeninline{\tongjithesistitleeng}}%
-        \ifx\tongjithesissubtitleeng\empty\else
-          \\[0.2em]{\zihao{3}\textbf{\tjtitleeninline{\tongjithesissubtitleeng}}}% 副标题：三号（官方模板规范）
-        \fi
-      \fi
+  \vspace*{0.1em}
+  \tj@abstractblock{\tjfonttitle\bfseries}{%
+    \ifdefempty{\tongjiabstracttitleeng}{%
+      \tjtitleeninline{\tongjithesistitleeng}%
+    }{%
+      \tongjiabstracttitleeng
     }%
-  \end{center}
-  \vspace{-0.8em}
-  \begin{center}\tjfontheading
-    \textbf{ABSTRACT}
-  \end{center}
+  }
+  \ifdefempty{\tongjiabstractsubtitleeng}{%
+    \ifx\tongjithesissubtitleeng\empty\else
+      \vspace{0.6em}%
+      \tj@abstractblock{\zihao{3}\bfseries}{\tjtitleeninline{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
+    \fi
+  }{%
+    \vspace{0.6em}%
+    \tj@abstractblock{\zihao{3}\bfseries}{\tongjiabstractsubtitleeng}%
+  }
+  \vspace{0.8em}
+  \tj@abstractblock{\tjfontheading\bfseries}{ABSTRACT}
+  \vspace{1.6em}
 
   \begin{spacing}{\tjlinespread}
     \setlength{\parindent}{2em}
