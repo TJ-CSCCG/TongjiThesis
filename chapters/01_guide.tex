@@ -11,8 +11,7 @@
 \begin{table}[htbp]
   \centering
   \caption{文档类选项一览}\label{tab:class-options}
-  \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{llp{10cm}}
+  \begin{tabularx}{\linewidth}{l l X}
     \toprule
     \textbf{选项} & \textbf{默认值} & \textbf{说明} \\
     \midrule
@@ -26,7 +25,7 @@
     \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
     \texttt{algo} & \texttt{algpseudocode} & 算法排版方案。\texttt{algpseudocode}（默认）与 \texttt{algorithm2e} 语法不同，详见说明。 \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table}
 
 \section{填写论文信息}
@@ -47,8 +46,7 @@
 \begin{table}[htbp]
   \centering
   \caption{文档结构一览}\label{tab:doc-structure}
-  \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{llp{7.5cm}}
+  \begin{tabularx}{\linewidth}{l l X}
     \toprule
     \textbf{结构} & \textbf{命令} & \textbf{说明} \\
     \midrule
@@ -62,7 +60,7 @@
     附录     & \verb|\appendix|         & 新增「附录」章页，节编号为 A、B、C（\verb|appendix.tex|） \\
     谢辞     & \verb|\backmatter|       & 取消章编号，页码继续（\verb|ack.tex|） \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table}
 
 正文各章放在 \verb|chapters/| 下，通过 \verb|main.tex| 中的 \verb|\input{chapters/XX_name}| 注册；参考文献数据库文件在导言区通过 \verb|\tjbibresource{bib/note.bib}| 指定，支持逗号分隔的多个文件。
@@ -74,12 +72,11 @@
 \begin{table}[htbp]
   \centering
   \caption{模板常用命令}\label{tab:template-commands}
-  \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{lp{9cm}}
+  \begin{tabularx}{\linewidth}{l X}
     \toprule
     \textbf{命令} & \textbf{用途} \\
     \midrule
-    \multicolumn{2}{l}{\textbf{交叉引用}} \\
+    \multicolumn{2}{l}{\textsf{交叉引用}} \\
     \verb|\cref{label}|           & 智能引用，自动生成“第~X~章”“图~X”“式~(X)”等 \\
     \verb|\chapref{label}|        & 引用章：第~X~章 \\
     \verb|\secref{label}|         & 引用节：第~X~节 \\
@@ -87,12 +84,12 @@
     \verb|\tabref{label}|         & 引用表：表~X \\
     \verb|\eqref{label}|          & 引用公式：式~(X) \\
     \midrule
-    \multicolumn{2}{l}{\textbf{参考文献}} \\
+    \multicolumn{2}{l}{\textsf{参考文献}} \\
     \verb|\tjbibresource{file}|   & 导言区指定 \texttt{.bib} 文件 \\
     \verb|\makereferences|        & 输出参考文献列表 \\
     \verb|\cite{key}|             & 上标引用 \\
     \midrule
-    \multicolumn{2}{l}{\textbf{排版辅助}} \\
+    \multicolumn{2}{l}{\textsf{排版辅助}} \\
     \verb|\pkg{name}|             & 排版宏包名称（带 CTAN 链接） \\
     \verb|\cs{name}|              & 排版命令名称（如 \cs{section}） \\
     \verb|\TJCircled{n}|           & 带圈数字：\TJCircled{1} \TJCircled{2} \TJCircled{3}（0–50 Unicode，51+ TikZ 画圈） \\
@@ -100,5 +97,5 @@
     \verb|\TongjiThesis|            & 项目 Logo：\TongjiThesis \\
     \verb|\dd|, \verb|\ee|, \verb|\ii|, \verb|\jj| & 直立体微分 $\dd$、自然对数底 $\ee$、虚数单位 $\ii$、$\jj$ \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table}

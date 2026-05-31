@@ -100,7 +100,7 @@
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{5}}       % 表题 / 图题：五号
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
-\newcommand{\tjfonttable}{\zihao{-5}}        % 表内文字：小五号
+\newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\linespread{1}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范；\linespread{1} 隔离全文 1.625 倍行距）
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
 % Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
@@ -182,6 +182,7 @@
 \RequirePackage{longtable}
 \RequirePackage{threeparttable}
 \RequirePackage{threeparttablex}
+\RequirePackage{tabularx} % 三线表两端与页面对齐（官方规范）
 % Caption customization (must load before subcaption, which internally loads caption)
 \RequirePackage{caption}
 \DeclareCaptionLabelSeparator{tj@twospace}{\ ~}
@@ -404,6 +405,21 @@
 % Line spacing
 \setstretch{\tjlinespread}  % 设置全文行距
 
+% Display math spacing — 公式段前 0 行，段后 0 行（官方规范）
+% 公式前后不额外增加间距，仅依靠正文 1.5 倍行距的自然行间过渡。
+\abovedisplayskip 0\p@
+\abovedisplayshortskip 0\p@
+\belowdisplayskip \abovedisplayskip
+\belowdisplayshortskip 0\p@
+
+% Table float spacing — 表格/图片上下与正文之间各空一行（官方规范）
+\setlength{\textfloatsep}{\baselineskip}
+\setlength{\intextsep}{\baselineskip}
+\setlength{\floatsep}{0.5\baselineskip}
+
+% 图居中（官方规范）
+\AtBeginEnvironment{figure}{\centering}
+
 % 禁止 twoside 模式下拉伸垂直间距
 % book 文档类在 twoside 模式下默认启用 \flushbottom，强制所有页面底部对齐，
 % 这会拉伸 \parskip 等带 stretch 的垂直间距，导致标题附近的空行行距不均匀。
@@ -571,7 +587,7 @@
   \counterwithin{equation}{section}%
   \counterwithin{algorithm}{section}%
   \counterwithin{listing}{section}%
-  \counterwithin{lstlisting}{section}%
+  \@ifundefined{c@lstlisting}{}{\counterwithin{lstlisting}{section}}%
   \counterwithin{thm}{section}%
   \counterwithin{cor}{section}%
   \counterwithin{lem}{section}%
@@ -606,6 +622,7 @@
 % 表格内所有字体均为小五
 \AtBeginEnvironment{table}{\tjfonttable}
 \AtBeginEnvironment{tabular}{\tjfonttable}
+\AtBeginEnvironment{tabular*}{\tjfonttable}
 \AtBeginEnvironment{tabularx}{\tjfonttable}
 \AtBeginEnvironment{longtable}{\tjfonttable}
 \AtBeginEnvironment{tablenotes}{\tjfonttable}
@@ -689,8 +706,10 @@
 % Both are bound to chapter, then lstlisting is aliased to listing.
 \AtBeginDocument{%
   \counterwithin{listing}{chapter}%
-  \counterwithin{lstlisting}{chapter}%
-  \let\c@lstlisting\c@listing
+  \@ifundefined{c@lstlisting}{}{%
+    \counterwithin{lstlisting}{chapter}%
+    \let\c@lstlisting\c@listing
+  }%
 }
 
 % 设置正文页内章节标题格式
@@ -791,7 +810,9 @@
   % 均需在 document 开始后解绑，确保顺序正确
   \AtBeginDocument{%
     \counterwithout{listing}{chapter}%
-    \counterwithout{lstlisting}{chapter}%
+    \@ifundefined{c@lstlisting}{}{%
+      \counterwithout{lstlisting}{chapter}%
+    }%
     \counterwithout{thm}{chapter}%
     \counterwithout{cor}{chapter}%
     \counterwithout{lem}{chapter}%

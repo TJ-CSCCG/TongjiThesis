@@ -9,8 +9,7 @@
 \begin{table}[htbp]
   \centering
   \caption{标题层级与编号体系（\texttt{field} 选项）}\label{tab:heading-levels}
-  \renewcommand{\arraystretch}{1.8}
-  \begin{tabular}{cclll}
+  \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}cclll}
     \toprule
     \textbf{层级} & \textbf{\LaTeX{} 命令} & \textbf{理工科（默认）} & \textbf{文科} & \textbf{示例（理工科）} \\
     \midrule
@@ -18,7 +17,7 @@
     2 & \texttt{\textbackslash section}    & 1.1, 1.2     & （一）（二） & {\heiti\tjfontbody 1.1\hspace{0.5em}二级标题示例} \\
     3 & \texttt{\textbackslash subsection} & 1.1.1, 1.1.2 & 1.\ 2.       & {\heiti\tjfontbody 1.1.1\hspace{0.5em}三级标题示例} \\
     \bottomrule
-  \end{tabular}
+  \end{tabular*}
 \end{table}
 
 二级标题用于划分各章的主要内容板块。例如，在绪论中可使用二级标题分别介绍“研究背景与意义”、“国内外研究现状”和“本文组织结构”等。
@@ -91,7 +90,7 @@
 \begin{table}[htbp]
   \centering
   \caption{常用字号对照}\label{tab:font-sizes}
-  \begin{tabular}{ccl}
+  \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}ccl}
     \toprule
     \textbf{字号命令} & \textbf{字号名称} & \textbf{用途} \\
     \midrule
@@ -103,7 +102,7 @@
     \texttt{\textbackslash zihao\{5\}}  & 五号   & 表题、图题、装订线文字 \\
     \texttt{\textbackslash zihao\{-5\}} & 小五号 & 表内文字 \\
     \bottomrule
-  \end{tabular}
+  \end{tabular*}
 \end{table}
 
 \subsection{文字样式}

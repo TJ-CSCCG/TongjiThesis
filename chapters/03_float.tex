@@ -25,7 +25,7 @@
 
 推荐使用矢量图格式（PDF）用于图表和流程图，位图建议使用 PNG 格式（照片可用 JPG），矢量图在缩放时不会失真。
 
-注意在浮动体内部应使用 \verb|\centering| 命令而非 \verb|\begin{center}...\end{center}| 环境，后者会引入额外的垂直间距。
+模板已通过 \cs{AtBeginEnvironment\{figure\}\{\textbackslash centering\}} 自动将图片居中，无需手动添加 \cs{centering}。但切勿使用 \verb|\begin{center}...\end{center}| 替代，后者会引入额外的垂直间距。
 
 \subsection{多个图形}
 
@@ -76,14 +76,14 @@
 
 编排表格时应简单明了、表达一致，内容明晰易懂，表文呼应，内容一致。表题应置于表格上方。
 
-表格的编排建议采用国际通行的三线表\footnote{三线表以其形式简洁、功能分明、阅读方便而在科技论文中被推荐使用。三线表通常只有3条线，即顶线、底线和栏目线，没有竖线。}。可以使用 \pkg{booktabs} 宏包提供的 \cs{toprule}、\cs{midrule} 和 \cs{bottomrule} 命令来绘制三线表。同时，\pkg{longtable} 宏包可以与三线表很好地配合使用，可以排版较长的表格。
+表格的编排建议采用国际通行的三线表\footnote{三线表以其形式简洁、功能分明、阅读方便而在科技论文中被推荐使用。三线表通常只有3条线，即顶线、底线和栏目线，没有竖线。}。可以使用 \pkg{booktabs} 宏包提供的 \cs{toprule}、\cs{midrule} 和 \cs{bottomrule} 命令来绘制三线表。同时，\pkg{longtable} 宏包可以与三线表很好地配合使用，可以排版较长的表格。按照同济大学撰写规范，三线表应「两端与页面对齐」，推荐使用 \pkg{tabularx} 宏包，将表格宽度指定为 \cs{linewidth} 即可自动撑满页宽。
 要编写三线表，需要在表格的头部、底部和每一栏之间绘制水平线。其中，\cs{toprule} 绘制顶部线，\cs{midrule} 绘制中部线，\cs{bottomrule} 绘制底部线。可以按照如下方式绘制三线表：
 
 \begin{table}[!hpt]
-  \caption{一个三线表}
+  \caption{一个三线表（两端与页面对齐）}
   \label{tab:firstone}
   \centering
-  \begin{tabular}{@{}llr@{}} \toprule
+  \begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}l@{\extracolsep{\fill}}r@{}} \toprule
     \multicolumn{2}{c}{\textbf{Item}}                            \\ \cmidrule(r){1-2}
     \textbf{Animal} & \textbf{Description} & \textbf{Price} (\$) \\ \midrule
     Gnat            & per gram             & 13.65               \\
@@ -91,7 +91,7 @@
     Gnu             & stuffed              & 92.50               \\
     Emu             & stuffed              & 33.33               \\
     Armadillo       & frozen               & 8.99                \\ \bottomrule
-  \end{tabular}
+  \end{tabular*}
 \end{table}
 
 \subsection{复杂表格}
@@ -104,7 +104,7 @@
   \begin{threeparttable}[b]
     \caption{一个更大的三线表}
     \label{tab:bigtable}
-    \begin{tabular}{@{}llrrrrrrr@{}} \toprule
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrrrr} \toprule
       \multicolumn{2}{c}{\textbf{Item}} & \multicolumn{2}{c}{\textbf{Category 1}} & \multicolumn{2}{c}{\textbf{Category 2}} & \multicolumn{2}{c}{\textbf{Category 3}} & \multicolumn{1}{c}{\textbf{Total}}                                                                                     \\ \cmidrule(r){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(l){9-9}
       \textbf{Animal}                   & \textbf{Description}                    & \textbf{Price} (\$)                     & \textbf{Quantity}                       & \textbf{Price} (\$)                & \textbf{Quantity} & \textbf{Price} (\$) & \textbf{Quantity} & \textbf{Price} (\$) \\ \midrule
       Gnat                              & per gram\tnote{a}                       & 13.65                                   & 100                                     & 12.35                              & 200               & 11.55               & 150               & 3650.00             \\
@@ -112,7 +112,7 @@
       Gnu                               & stuffed                                 & 92.50                                   & 10                                      & 94.50                              & 15                & 96.50               & 20                & 5815.00             \\
       Emu                               & stuffed                                 & 33.33                                   & 25                                      & 34.33                              & 30                & 35.33               & 35                & 2704.95             \\
       Armadillo                         & frozen                                  & 8.99                                    & 50                                      & 7.99                               & 40                & 6.99                & 30\tnote{b}       & 1094.50             \\ \bottomrule
-    \end{tabular}
+    \end{tabular*}
     \begin{tablenotes}
       \item [a] 第一条脚注。
       \item [b] 第二条脚注。
@@ -131,27 +131,27 @@
     \item[a] 一个脚注
     \item[b] 另一个脚注
   \end{TableNotes}
-  \begin{longtable}[c]{c*{6}{r}}
+  \begin{longtable}[c]{@{\extracolsep{\fill}}c*{6}{r}}
     \caption{实验数据}
     \label{tab:performance}                                                                                                                      \\
     \toprule
-    \textbf{测试程序\tnote{b}} & \multicolumn{1}{c}{\textbf{正常运行}}   & \multicolumn{1}{c}{\textbf{同步}}
-                           & \multicolumn{1}{c}{\textbf{检查点}}    & \multicolumn{1}{c}{\textbf{卷回恢复}}
-                           & \multicolumn{1}{c}{\textbf{进程迁移}}   & \multicolumn{1}{c}{\textbf{检查点}}                                              \\
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \textbf{文件}（KB）                                                               \\
+    \textbf{测试程序\tnote{b}} & \textbf{运行时间} & \textbf{同步时间}
+                           & \textbf{检查点时间} & \textbf{卷回恢复时间}
+                           & \textbf{进程迁移时间} & \textbf{检查点文件} \\
+                           & {(s)}            & {(s)}
+                           & {(s)}            & {(s)}
+                           & {(s)}            & {(KB)}              \\
     \midrule
     \endfirsthead
     \tjlongtablecont{7}
 
     \toprule
-    \textbf{测试程序\tnote{b}} & \multicolumn{1}{c}{\textbf{正常运行}}   & \multicolumn{1}{c}{\textbf{同步}}
-                           & \multicolumn{1}{c}{\textbf{检查点}}    & \multicolumn{1}{c}{\textbf{卷回恢复}}
-                           & \multicolumn{1}{c}{\textbf{进程迁移}}   & \multicolumn{1}{c}{\textbf{检查点}}                                              \\
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \multicolumn{1}{c}{\textbf{时间} (s)}
-                           & \multicolumn{1}{c}{\textbf{时间} (s)} & \textbf{文件}（KB）                                                               \\
+    \textbf{测试程序\tnote{b}} & \textbf{运行时间} & \textbf{同步时间}
+                           & \textbf{检查点时间} & \textbf{卷回恢复时间}
+                           & \textbf{进程迁移时间} & \textbf{检查点文件} \\
+                           & {(s)}            & {(s)}
+                           & {(s)}            & {(s)}
+                           & {(s)}            & {(KB)}              \\
     \midrule
     \endhead
     \hline
