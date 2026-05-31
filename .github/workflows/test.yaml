@@ -347,9 +347,7 @@ jobs:
       matrix:
         include:
           - field: science
-            sed_science: ''
           - field: humanities
-            sed_science: 's/field=science/field=humanities/'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -365,7 +363,7 @@ jobs:
       - name: Configure field
         if: matrix.field == 'humanities'
         run: |
-          sed -i '${{ matrix.sed_science }}' main.tex
+          sed -i 's/field=science/field=humanities/' main.tex
 
       - name: Compile LaTeX document
         run: |
