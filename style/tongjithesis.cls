@@ -328,10 +328,14 @@
 % ==========================================
 % Bibliography Configuration
 % ==========================================
+% 参考文献样式遵循 GB/T 7714-2025。所需宏包版本（均随 TeX Live 2026+ 分发）：
+%   - biblatex 路径：biblatex-gb7714-2015 >= v1.1w（提供 gb7714-2025 样式）
+%   - bibtex   路径：gbt7714 >= v2.2.0（提供 gbt7714-2025-numeric.bst）
+% 版本过旧会报「style/bst not found」错误；升级步骤见 README「快速开始」提示。
 \iftongjithesis@biblatex
   \RequirePackage[
     backend=biber,
-    style=gb7714-2015,
+    style=gb7714-2025,
     natbib=true,
   ]{biblatex}
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
@@ -354,7 +358,7 @@
     {\item}
 \else
   \RequirePackage[sort&compress]{gbt7714}
-  \bibliographystyle{gbt7714-numerical}
+  \bibliographystyle{gbt7714-2025-numeric}
   \setlength{\bibsep}{3pt}
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
   % gbt7714 已将 \@biblabel 改为 [#1]\hfill（左对齐）。natbib（gbt7714 内部加载）

@@ -42,7 +42,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -115,7 +115,7 @@ jobs:
           - Compliant with Tongji University's official undergraduate thesis requirements
           - Support for both one-sided and two-sided printing
           - Comprehensive formatting for title page, abstract, table of contents, chapters, etc.
-          - Customized citation styles that comply with Chinese GB/T 7714-2015 standard
+          - Customized citation styles that comply with Chinese GB/T 7714-2025 standard
           - Support for code listings with syntax highlighting (minted or listings)
           - Integration of mathematical formulas, figures, tables, and algorithms
 
@@ -141,7 +141,7 @@ jobs:
           ```latex
           \documentclass[oneside]{tongjithesis}  % Use 'twoside' for double-sided printing
 
-          \tjbibresource{references.bib}
+          \tjbibresource{bib/note.bib}
 
           \school{计算机科学与技术学院}
           \major{计算机科学与技术}
@@ -212,7 +212,7 @@ jobs:
             biblatex=true,
           ]{tongjithesis}
 
-          \tjbibresource{references.bib}
+          \tjbibresource{bib/note.bib}
 
           % Set thesis information
           \school{计算机科学与技术学院}
@@ -418,7 +418,7 @@ jobs:
       PACKAGE_VERSION: ${{ needs.package.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Check if release already exists
         id: check
@@ -503,7 +503,7 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.check.outputs.exists == 'false'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
           name: "TongjiThesis v${{ env.PACKAGE_VERSION }}"
