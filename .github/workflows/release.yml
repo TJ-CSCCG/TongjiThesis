@@ -404,7 +404,7 @@ jobs:
             ctan/tongjithesis/
           retention-days: 90
 
-  # Attach CTAN + PDF assets to the release created & published by release-please.
+  # Attach CTAN archives to the release created & published by release-please.
   # release-please owns release creation + the CHANGELOG body; this job only
   # uploads build artifacts to the existing release and moves the floating vX.Y tag.
   release:
@@ -420,7 +420,7 @@ jobs:
       PACKAGE_VERSION: ${{ needs.package.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -429,43 +429,15 @@ jobs:
         with:
           name: release-packages-v${{ env.PACKAGE_VERSION }}
 
-      - name: Download release PDFs from test workflow
-        run: |
-          mkdir -p release-pdfs
-          WORKFLOW_RUN_ID=$(gh run list \
-            --repo "$GITHUB_REPOSITORY" \
-            --workflow="test.yaml" \
-            --status=success \
-            --limit=1 \
-            --json databaseId \
-            --jq '.[0].databaseId' 2>/dev/null || echo "")
-
-          if [ -z "$WORKFLOW_RUN_ID" ] || [ "$WORKFLOW_RUN_ID" = "null" ]; then
-            echo "No successful test run found. Release PDFs will not be attached."
-            exit 0
-          fi
-
-          echo "Downloading release PDFs from test run: $WORKFLOW_RUN_ID"
-          for field in science humanities; do
-            gh run download "$WORKFLOW_RUN_ID" \
-              --repo "$GITHUB_REPOSITORY" \
-              --name "release-pdf-${field}" \
-              --dir release-pdfs 2>/dev/null || true
-          done
-          ls -la release-pdfs/*.pdf 2>/dev/null || echo "No release PDFs found"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Attach assets to the release
-        uses: softprops/action-gh-release@v2
+      - name: Attach CTAN archives to the release
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
           # No body/name: release-please already wrote them; softprops leaves them intact.
+          # PDFs are attached separately by test.yaml's build-release-pdfs job (no cross-workflow race).
           files: |
             ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz
             ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
-            release-pdfs/TongjiThesis-v${{ env.PACKAGE_VERSION }}-science.pdf
-            release-pdfs/TongjiThesis-v${{ env.PACKAGE_VERSION }}-humanities.pdf
           fail_on_unmatched_files: false
           make_latest: true
 

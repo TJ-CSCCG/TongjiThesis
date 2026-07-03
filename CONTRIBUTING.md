@@ -46,6 +46,6 @@
 
 ## 版本发布
 
-- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)（`feat:` / `fix:` / `docs:` 等）；[release-please](https://github.com/googleapis/release-please) 据此自动维护版本号与逐版本更新日志 [CHANGELOG.md](CHANGELOG.md)。
+- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)（`feat:` / `fix:` / `docs:` 等）；[release-please](https://github.com/googleapis/release-please) 据此自动维护版本号与逐版本更新日志 `CHANGELOG.md`（首次自动发布后生成）。
 - 发布流程：维护者合并 release-please 生成的「release PR」→ 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 CI 打包 CTAN 与示例 PDF 并附加到该 Release。
 - 版本号由 release-please 统一更新（`package.json` 及各 `\Provides*` 行），**无需手动修改**（原 `scripts/bump-version.sh` 已移除）。

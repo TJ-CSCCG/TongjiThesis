@@ -344,6 +344,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'release'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write   # attach the built PDF directly to the published release
     strategy:
       fail-fast: false
       matrix:
@@ -385,3 +387,14 @@ jobs:
           name: release-pdf-${{ matrix.field }}
           path: TongjiThesis-v*.pdf
           retention-days: 90
+
+      # When a release-please draft is published, attach the just-built PDF straight
+      # to that release — the build job owns its own artifact, so there is no
+      # cross-workflow "latest run" race with release.yml.
+      - name: Attach PDF to the release
+        if: success() && github.event_name == 'release'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: TongjiThesis-v*.pdf
+          fail_on_unmatched_files: true
