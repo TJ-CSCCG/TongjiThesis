@@ -25,6 +25,8 @@ on:
       - '.github/pull_request_template.md'
       - '.github/workflows/release.yml'
       - 'scripts/**'
+  release:
+    types: [published]   # build release PDFs when a release-please draft is published
   workflow_dispatch:
 
 name: test
@@ -339,7 +341,7 @@ jobs:
 
   # Build release PDFs on version tags (science + humanities, Linux xelatex-only)
   build-release-pdfs:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'release'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:

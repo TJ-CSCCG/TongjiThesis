@@ -1,0 +1,37 @@
+name: release-please
+
+# Maintains a release PR from Conventional Commits on master: bumps the version
+# across package.json + the LaTeX \Provides* lines, regenerates CHANGELOG.md, and
+# on merge creates the tag + a DRAFT GitHub Release. A maintainer publishes the
+# draft, which fires test.yaml / release.yml to attach the CTAN + PDF assets.
+#
+# Auth: a GitHub App token (secrets APP_ID + APP_PRIVATE_KEY) — required so that
+# the release/tag it creates can trigger other workflows (the default GITHUB_TOKEN
+# cannot trigger workflow runs).
+
+on:
+  push:
+    branches: [master]
+
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Run release-please
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

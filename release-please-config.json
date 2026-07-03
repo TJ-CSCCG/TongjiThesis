@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "draft": true,
+      "changelog-sections": [
+        { "type": "feat", "section": "新增 | New Features" },
+        { "type": "fix", "section": "修正 | Fixes" },
+        { "type": "refactor", "section": "规范对齐 | Spec Alignment" },
+        { "type": "perf", "section": "规范对齐 | Spec Alignment" },
+        { "type": "docs", "section": "文档与维护 | Docs & Maintenance" },
+        { "type": "chore", "section": "文档与维护 | Docs & Maintenance" },
+        { "type": "ci", "section": "文档与维护 | Docs & Maintenance" },
+        { "type": "build", "section": "文档与维护 | Docs & Maintenance" },
+        { "type": "test", "section": "文档与维护 | Docs & Maintenance", "hidden": true },
+        { "type": "style", "section": "文档与维护 | Docs & Maintenance", "hidden": true }
+      ],
+      "extra-files": [
+        { "type": "generic", "path": "style/tongjithesis.cls" },
+        { "type": "generic", "path": "style/tongjithesis.cfg" },
+        { "type": "generic", "path": "style/tongji-circled.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-fandol.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-mac.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-windows.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-adobe.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-founder.def" }
+      ]
+    }
+  }
+}

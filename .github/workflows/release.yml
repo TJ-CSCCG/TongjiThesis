@@ -25,6 +25,8 @@ on:
   workflow_run:
     workflows: ["test"]
     types: [completed]
+  release:
+    types: [published]   # release-please draft published → attach CTAN/PDF assets
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -402,14 +404,14 @@ jobs:
             ctan/tongjithesis/
           retention-days: 90
 
-  # Create GitHub release (after successful test run on a version tag, or manual dispatch)
+  # Attach CTAN + PDF assets to the release created & published by release-please.
+  # release-please owns release creation + the CHANGELOG body; this job only
+  # uploads build artifacts to the existing release and moves the floating vX.Y tag.
   release:
     needs: package
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == format('v{0}', needs.package.outputs.version))
+      github.event_name == 'release'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -418,46 +420,28 @@ jobs:
       PACKAGE_VERSION: ${{ needs.package.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Check if release already exists
-        id: check
-        run: |
-          if gh release view "v${PACKAGE_VERSION}" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Release v${PACKAGE_VERSION} already exists. Delete it first to re-create."
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Download package artifacts
-        if: steps.check.outputs.exists == 'false'
         uses: actions/download-artifact@v8
         with:
           name: release-packages-v${{ env.PACKAGE_VERSION }}
 
       - name: Download release PDFs from test workflow
-        if: steps.check.outputs.exists == 'false'
         run: |
           mkdir -p release-pdfs
-
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
-          else
-            WORKFLOW_RUN_ID=$(gh run list \
-              --repo "$GITHUB_REPOSITORY" \
-              --workflow="test.yaml" \
-              --status=success \
-              --limit=1 \
-              --json databaseId \
-              --jq '.[0].databaseId' 2>/dev/null || echo "")
-          fi
+          WORKFLOW_RUN_ID=$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow="test.yaml" \
+            --status=success \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId' 2>/dev/null || echo "")
 
           if [ -z "$WORKFLOW_RUN_ID" ] || [ "$WORKFLOW_RUN_ID" = "null" ]; then
-            echo "No successful test run found. Release PDFs will not be included."
-            echo "Tip: Run the test workflow first, then re-trigger this release."
+            echo "No successful test run found. Release PDFs will not be attached."
             exit 0
           fi
 
@@ -468,52 +452,25 @@ jobs:
               --name "release-pdf-${field}" \
               --dir release-pdfs 2>/dev/null || true
           done
-          echo "Downloaded PDFs:"
           ls -la release-pdfs/*.pdf 2>/dev/null || echo "No release PDFs found"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get previous version
-        if: steps.check.outputs.exists == 'false'
-        id: prev
-        run: |
-          PREV=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || true)
-          echo "tag=$PREV" >> "$GITHUB_OUTPUT"
-          echo "version=${PREV#v}" >> "$GITHUB_OUTPUT"
-          echo "Previous release: ${PREV:-none}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Read release template
-        if: steps.check.outputs.exists == 'false'
-        id: template
-        run: |
-          BODY=$(sed \
-            -e "s/PREV_VERSION_TOKEN/${{ steps.prev.outputs.version }}/g" \
-            -e "s/VERSION_TOKEN/$PACKAGE_VERSION/g" \
-            .github/release_template.md)
-          if [ -z "${{ steps.prev.outputs.version }}" ]; then
-            BODY=$(echo "$BODY" | sed '/PREV_VERSION_TOKEN\|完整对比\|Full changelog/d')
-          fi
-          {
-            echo "body<<EOF"
-            echo "$BODY"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Create GitHub Release
-        if: steps.check.outputs.exists == 'false'
-        uses: softprops/action-gh-release@v3
+      - name: Attach assets to the release
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
-          name: "TongjiThesis v${{ env.PACKAGE_VERSION }}"
-          body: ${{ steps.template.outputs.body }}
+          # No body/name: release-please already wrote them; softprops leaves them intact.
           files: |
             ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz
             ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
             release-pdfs/TongjiThesis-v${{ env.PACKAGE_VERSION }}-science.pdf
             release-pdfs/TongjiThesis-v${{ env.PACKAGE_VERSION }}-humanities.pdf
-          draft: true
-          prerelease: false
           fail_on_unmatched_files: false
           make_latest: true
+
+      - name: Move floating vX.Y tag to the release
+        run: |
+          SHORT="v$(echo "$PACKAGE_VERSION" | sed -E 's/\.[0-9]+$//')"
+          git tag -f "$SHORT" "v${PACKAGE_VERSION}"
+          git push -f origin "$SHORT"

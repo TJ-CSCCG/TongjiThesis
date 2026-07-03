@@ -8,8 +8,7 @@
 %% Copyright (C) TJ-CSCCG
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
-\ProvidesFile{tongji-circled.def}[2026/05/19 v1.4.3 Circled number rendering (TongjiThesis)]
-
+\ProvidesFile{tongji-circled.def}[v1.4.3 Circled number rendering (TongjiThesis)] %x-release-please-version
 % ==========================================
 % Counter-value helper for enumitem labels
 % ==========================================
