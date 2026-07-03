@@ -336,6 +336,7 @@
   \RequirePackage[
     backend=biber,
     style=gb7714-2025,
+    gbpunctwidth=mixed,   % GB/T 7714-2025：除“.”与“[]”用半角外，其余标识符用全角
     natbib=true,
   ]{biblatex}
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
@@ -357,7 +358,7 @@
     {\endlist}
     {\item}
 \else
-  \RequirePackage[sort&compress]{gbt7714}
+  \RequirePackage[sort&compress, bibpunct=GB]{gbt7714}   % GB=全角标点（除“.”“[]”外），与 biblatex 的 gbpunctwidth=mixed 对齐
   \bibliographystyle{gbt7714-2025-numeric}
   \setlength{\bibsep}{3pt}
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
