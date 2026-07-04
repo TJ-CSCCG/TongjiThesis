@@ -32,6 +32,15 @@
 
 > [!TIP]
 > 本模板的 CI 基于 **TeX Live 2026** 进行测试。如果您在本地编译时遇到难以解释的编译错误，请首先检查并升级您的 TeX Live 至 2026 版本。
+>
+> 参考文献样式遵循 GB/T 7714-2025。若编译报 `gb7714-2025` 样式或 `gbt7714-2025-numeric.bst` 未找到，说明本地 `biblatex-gb7714-2015` / `gbt7714` 宏包早于 2025 样式，更新即可（需 TeX Live ≥ 2026）：
+>
+> ```bash
+> tlmgr update --self                         # tlmgr 提示需自更新时先执行
+> tlmgr update gbt7714 biblatex-gb7714-2015
+> ```
+>
+> macOS / Linux 系统级安装需在命令前加 `sudo`；Windows 用户请在**管理员权限**的命令行中运行（无需 `sudo`）。若使用 MiKTeX，请改用 MiKTeX Console 更新上述宏包。
 
 ## 使用方法
 
@@ -114,7 +123,7 @@ make wordcount          # wordcount
   algo=algpseudocode,   % algpseudocode（默认）：algorithm+algorithmicx；algorithm2e：独立 algorithm2e 宏包
 ]{tongjithesis}
 
-\tjbibresource{bib/note.bib}  % 指定参考文献数据库文件（支持多文件，逗号分隔）
+\tjbibresource{bib/note.bib}  % 参考文献数据库（支持多文件，逗号分隔）；样式遵循 GB/T 7714-2025
 ```
 
 > [!NOTE]

@@ -32,6 +32,15 @@ LaTeX template for Tongji University undergraduate thesis (design).
 
 > [!TIP]
 > This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please check and upgrade your TeX Live to 2026 first.
+>
+> The bibliography follows GB/T 7714-2025. If the build reports the `gb7714-2025` style or `gbt7714-2025-numeric.bst` as *not found*, your local `biblatex-gb7714-2015` / `gbt7714` packages predate the 2025 styles — update them (requires TeX Live ≥ 2026):
+>
+> ```bash
+> tlmgr update --self                         # run first if tlmgr asks to self-update
+> tlmgr update gbt7714 biblatex-gb7714-2015
+> ```
+>
+> On macOS / Linux system-wide installs, prefix the commands with `sudo`; on Windows, run them from an **Administrator** command prompt (no `sudo`). MiKTeX users: update these packages via the MiKTeX Console instead.
 
 ## Usage
 
@@ -114,7 +123,7 @@ Configure in `main.tex` via `\documentclass`:
   algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
 ]{tongjithesis}
 
-\tjbibresource{bib/note.bib}  % Specify bib files (supports multiple, comma-separated)
+\tjbibresource{bib/note.bib}  % Bib database (supports multiple, comma-separated); styled per GB/T 7714-2025
 ```
 
 > [!NOTE]

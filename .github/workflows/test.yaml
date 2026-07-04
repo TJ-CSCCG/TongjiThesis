@@ -134,7 +134,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install TeX Live
         id: setup-tl
@@ -201,7 +201,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Python for minted
         if: matrix.pygments
@@ -350,7 +350,7 @@ jobs:
           - field: humanities
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install TeX Live
         uses: tex-live/setup-texlive-action@v4

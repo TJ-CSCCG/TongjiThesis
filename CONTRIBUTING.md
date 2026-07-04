@@ -36,6 +36,6 @@
 | 2022.05 | [skyleaworlder](https://github.com/skyleaworlder) | 开始贡献，整合进 [TJ-CSCCG](https://github.com/TJ-CSCCG)，持续更新改进                                                                                                                                   |
 | 2023.04 | [RizhongLin](https://github.com/RizhongLin)       | 开始贡献，负责项目维护和更新                                                                                                                                                                             |
 | 2025.04 | —                                                 | 实现基于键值对的类选项，支持更灵活的配置                                                                                                                                                                 |
-| 2026    | —                                                 | 迁移至 `ctexbook` 基类，全面对齐 2026 版撰写规范；新增 `biblatex`/`bibtex` 双后端、理工/文科双编号体系（`field`）、信息说明页（`\MakeInfoPage`）、跨页代码环境（`longlisting`）；CI 升级至 TeX Live 2026 |
+| 2026    | —                                                 | 迁移至 `ctexbook` 基类，全面对齐 2026 版撰写规范；新增 `biblatex`/`bibtex` 双后端、理工/文科双编号体系（`field`）、信息说明页（`\MakeInfoPage`）、跨页代码环境（`longlisting`）；参考文献样式升级至 GB/T 7714-2025（新增 `@preprint` 预印本类型示例）；CI 升级至 TeX Live 2026 |
 
 我们非常感谢以上贡献者的付出。如果您觉得本项目对您的毕业设计或论文有所帮助，希望您可以在致谢部分提及。

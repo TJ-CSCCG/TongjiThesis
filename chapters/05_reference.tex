@@ -7,14 +7,14 @@
 在学术论文或科技报告中，通常需要引用相关文献以支持观点或论证。为了方便读者查阅，我们需要在论文中标注参考文献。在 \LaTeX\ 中，可使用 \verb|\cite| 命令引用参考文献。参考文献的外观应符合国标 GB/T 7714，本模板提供两种方式：
 \begin{enumerate}
     \item 使用 \BibTeX{} 配合 \pkg{gbt7714} 宏包
-    \item 使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包
+    \item 使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包（其 \texttt{gb7714-2025} 样式实现 GB/T 7714-2025）
 \end{enumerate}
 其中，\BibLaTeX{} 方案功能更为丰富（支持 \cs{fullcite}、\cs{footfullcite} 等命令），且由 \texttt{biber} 引擎驱动，对 Unicode 和中文文献支持更好，是本模板的\textbf{默认推荐}方案。不过，\texttt{biber} 的编译速度较 \texttt{bibtex} 慢，在文献条目较多时差异尤为明显。\BibTeX{} 方案编译更快，且部分期刊投稿仍要求使用，如对编译速度敏感或有投稿需求，可设置 \texttt{biblatex=false} 切换至 \BibTeX{} 方案。
 
 两种方式都能实现符合国标的参考文献格式。可通过文档类选项 \texttt{biblatex=true}（默认）或 \texttt{biblatex=false} 进行切换。无论选择哪种方式，均使用 \cs{tjbibresource} 命令在导言区指定参考文献数据库文件，使用 \cs{makereferences} 命令在正文中输出参考文献列表：
 
 \begin{Verbatim}
-\tjbibresource{bib/references.bib}  % 导言区指定 .bib 文件
+\tjbibresource{bib/note.bib}        % 导言区指定 .bib 文件
 ...
 \makereferences                     % 正文中输出参考文献
 \end{Verbatim}
@@ -41,6 +41,7 @@
   \item 期刊中析出的文献\cite{qin2021,article1,guo_deepseek-r1_2025}
   \item 报纸中析出的文献\cite{newspaper1,newspaper2}
   \item 电子文献\cite{online1,online2,online3}
+  \item 预印本\cite{preprint1,preprint2}
 \end{itemize}
 
 可使用 \verb|\nocite{key1,key2,key3...}| 将参考文献条目加入文献表中，但不在正文中引用。使用 \verb|\nocite{*}| 可将参考文献数据库中的所有条目加入文献表中。
@@ -48,7 +49,7 @@
 在编写 \texttt{.bib} 文件时，需注意以下常见问题：
 \begin{itemize}
   \item 每个条目的键值（如 \texttt{book1}）在整个 \texttt{.bib} 文件中必须唯一；
-  \item 常见的条目类型包括 \texttt{@book}（图书）、\texttt{@article}（期刊论文）、\texttt{@inproceedings}（会议论文）、\texttt{@phdthesis}（博士论文）、\texttt{@mastersthesis}（硕士论文）、\texttt{@online}（网络资源）等；
+  \item 常见的条目类型包括 \texttt{@book}（图书）、\texttt{@article}（期刊论文）、\texttt{@inproceedings}（会议论文）、\texttt{@phdthesis}（博士论文）、\texttt{@mastersthesis}（硕士论文）、\texttt{@online}（网络资源）、\texttt{@preprint}（预印本，GB/T 7714-2025 新增）等；
   \item 中文作者姓名之间使用 \texttt{and} 连接，而非顿号或逗号；
   \item 建议使用 Zotero、Mendeley 等软件管理参考文献，可自动生成规范的 \texttt{.bib} 文件。
 \end{itemize}
