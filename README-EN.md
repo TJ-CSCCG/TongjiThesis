@@ -152,7 +152,7 @@ Configure in `main.tex` via `\documentclass`:
 
 ## Contributing & Project History
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Architecture notes and development conventions for AI coding agents live in [AGENTS.md](AGENTS.md).
 
 ## License
 
