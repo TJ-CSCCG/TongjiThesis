@@ -15,16 +15,16 @@
     \toprule
     \textbf{选项} & \textbf{默认值} & \textbf{说明} \\
     \midrule
+    \texttt{doctype} & \texttt{thesis} & 文档类型。\texttt{thesis}（默认）：本指南其余部分描述的论文正文；\texttt{taskbook}/\texttt{proposal}/\texttt{midterm}：分别生成任务书/开题报告/中期报告，详见\cref{sec:doctypes}。 \\
     \texttt{oneside / twoside} & \texttt{oneside} & 单面或双面排版。双面模式下章节从奇数页开始，装订线自动左右交替。 \\
     \texttt{degree} & \texttt{bachelor} & 学位类型，目前支持 \texttt{bachelor}（学士）。 \\
     \texttt{field} & \texttt{science} & 专业类别。\texttt{science}：理工科（工科/理科），章节编号采用阿拉伯数字体系；\texttt{humanities}：文科（经管/人文/法学/外语/艺术），章节编号采用汉字体系，详见\cref{tab:heading-levels}。 \\
+    \texttt{algo} & \texttt{algpseudocode} & 算法排版方案。\texttt{algpseudocode}（默认）与 \texttt{algorithm2e} 语法不同，详见说明。 \\
+    \texttt{minted} & \texttt{false} & 代码高亮方案。\texttt{false} 使用 \pkg{listings}（默认，无外部依赖），\texttt{true} 使用 \pkg{minted}（需安装 Python 3.11–3.13 和 Pygments）。 \\
+    \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
     \texttt{fontset} & \texttt{fandol} & 字体集。\texttt{fandol}（跨平台，默认）、\texttt{windows}、\texttt{mac}、\texttt{founder}、\texttt{adobe}。详见 \verb|style/font/| 目录下的字体定义文件。 \\
     \texttt{times} & \texttt{false} & \texttt{true}：通过 \pkg{fontspec} 调用系统 Times New Roman 字体；\texttt{false}：使用 \pkg{newtx} 宏包提供的 \TeX{} 原生 Times 风格字体。两者视觉效果相近。 \\
     \texttt{fullwidthstop} & \texttt{circle} & 句号样式：\texttt{circle}（默认，保留“。”）或 \texttt{dot}（替换为“．”全角句点）。 \\
-    \texttt{minted} & \texttt{false} & 代码高亮方案。\texttt{false} 使用 \pkg{listings}（默认，无外部依赖），\texttt{true} 使用 \pkg{minted}（需安装 Python 3.11–3.13 和 Pygments）。 \\
-    \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
-    \texttt{algo} & \texttt{algpseudocode} & 算法排版方案。\texttt{algpseudocode}（默认）与 \texttt{algorithm2e} 语法不同，详见说明。 \\
-    \texttt{doctype} & \texttt{thesis} & 文档类型。\texttt{thesis}（默认）：本指南其余部分描述的论文正文；\texttt{taskbook}/\texttt{proposal}/\texttt{midterm}：分别生成任务书/开题报告/中期报告，详见\cref{sec:doctypes}。 \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -58,7 +58,7 @@
     目录     & \verb|\tableofcontents|  & 自动生成；可取消注释 \verb|\listoffigures|、\verb|\listoftables| \\
     正文     & \verb|\mainmatter|       & 页码切换为阿拉伯数字，从1重新开始 \\
     参考文献 & \verb|\makereferences|   & 自动排版，格式符合 GB/T 7714 \\
-    附录     & \verb|\appendix|         & 新增「附录」章页，节编号为 A、B、C（\verb|appendix.tex|） \\
+    附录     & \verb|\appendix|         & 新增“附录”章页，节编号为 A、B、C（\verb|appendix.tex|） \\
     谢辞     & \verb|\backmatter|       & 取消章编号，页码继续（\verb|ack.tex|） \\
     \bottomrule
   \end{tabularx}
@@ -94,6 +94,8 @@
 \end{itemize}
 
 正文分节内容（课题背景、进度安排等）由上述 \verb|chapters/*_body.tex| 提供，可直接编辑替换示例文字，用法与 \verb|appendix.tex| 类似。任务书的起讫周数通过 \verb|\taskbookperiod{起始年}{起始月}{起始日}{截止年}{截止月}{截止日}|（在 \verb|chapters/metadata.tex| 中设置）按天数自动换算（向上取整），无需手动填写周数。
+
+中期报告“专业审核意见”的“同意/不同意”复选框默认两格均留空，供打印后手写勾选；如需提前在电子版中标注，调用 \verb|\midtermdecision{agree}| 或 \verb|\midtermdecision{disagree}| 即可勾选对应选项。该复选框基于通用的 \cs{tjcheckboxeq}\verb|{当前值}{目标值}| 命令实现（当前值与目标值相等时打勾，否则留空），可用于扩展其他“多选一”复选框场景；信息说明页“成果类型”复选框（“填写论文信息”一节的 \cs{infotype}）用的是专用命令 \cs{tjcheckbox}，语义上多做了 design/engineering 二选一映射，两者不通用。
 
 构建命令：\verb|make taskbook| / \verb|make proposal| / \verb|make midterm|（或一次性 \verb|make forms|），Windows 下对应 \verb|.\make.bat taskbook| 等。
 

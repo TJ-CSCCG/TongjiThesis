@@ -49,7 +49,9 @@
   专业审核意见：
 
   \vspace{1.5\baselineskip}
-  \tjunchecked~同\ 意\qquad\tjunchecked~不同意
+  % 默认两格均留空，供打印后手写勾选；如需提前在电子版中标注，在
+  % chapters/metadata.tex 中调用 \midtermdecision{agree} 或 \midtermdecision{disagree}
+  \tjcheckboxeq{\tongjimidtermdecision}{agree}~同\ 意\qquad\tjcheckboxeq{\tongjimidtermdecision}{disagree}~不同意
 
   \vspace{2\baselineskip}
   \begin{flushright}

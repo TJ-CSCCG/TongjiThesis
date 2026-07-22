@@ -124,7 +124,7 @@
 \newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\linespread{1}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范；\linespread{1} 隔离全文 1.625 倍行距）
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 % Spacing
-% Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
+% Word 的 “0.5 行” 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
 % 与段落自身行距无关；不能用 0.5\baselineskip（会被 \setstretch 拉伸）。
 \newcommand{\tjskipbeforesec}{0.6em}            % 段前 0.5 行（Word 口径）
 \newcommand{\tjskipaftersec}{0.6em}             % 段后 0.5 行（Word 口径）
@@ -362,7 +362,7 @@
 % 参考文献样式遵循 GB/T 7714-2025。所需宏包版本（均随 TeX Live 2026+ 分发）：
 %   - biblatex 路径：biblatex-gb7714-2015 >= v1.1w（提供 gb7714-2025 样式）
 %   - bibtex   路径：gbt7714 >= v2.2.0（提供 gbt7714-2025-numeric.bst）
-% 版本过旧会报「style/bst not found」错误；升级步骤见 README「快速开始」提示。
+% 版本过旧会报“style/bst not found”错误；升级步骤见 README“快速开始”提示。
 \iftongjithesis@biblatex
   \RequirePackage[
     backend=biber,
@@ -602,7 +602,7 @@
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
 % 附录（2026 spec）：
-%   「附录」作为未编号 H1 章节标题（四号黑体居中），写入目录。
+%   “附录”作为未编号 H1 章节标题（四号黑体居中），写入目录。
 %   附录内的小节使用 A. B. C. 编号（与正文 chapter.section 解耦），
 %   浮动体 (figure/table/equation/…) 随节编号为 A.1、A.2、B.1 …
 %   \appendixsection / \appendixsubsection 是 \section / \subsection 的别名，
@@ -633,7 +633,7 @@
   \counterwithin{dfn}{section}%
   \counterwithin{exmp}{section}%
   \counterwithin{rem}{section}%
-  % 理工科：「A. 节名」；文科：「（A） 节名」（括号来自正文 section/name 延续，无点号）
+  % 理工科：“A. 节名”；文科：“（A） 节名”（括号来自正文 section/name 延续，无点号）
   \iftongjithesis@humanities
     \ctexset{section/number={\thesection},section/aftername={\hspace{0.5em}}}%
   \else
@@ -721,7 +721,7 @@
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
-% 目录行距：对应 Word「1.5 倍行距」——使用 \tjtoclinespread
+% 目录行距：对应 Word“1.5 倍行距”——使用 \tjtoclinespread
 \let\tj@origtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
   \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
@@ -964,7 +964,7 @@
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
 
 % Configure references in Chinese
-% "第X章/节" pattern: number is wrapped, needs full multi/range formats
+% “第X章/节” pattern: number is wrapped, needs full multi/range formats
 \iftongjithesis@humanities
   \crefformat{chapter}{#2第#1章#3}
   \crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{、#2第#1章#3}{和#2第#1章#3}
@@ -983,7 +983,7 @@
 \crefformat{subsection}{#2第~#1~小节#3}
 \crefmultiformat{subsection}{#2第~#1~小节#3}{和#2第~#1~小节#3}{、#2第~#1~小节#3}{和#2第~#1~小节#3}
 \crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6}
-% "名称~X" pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
+% “名称~X” pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
 % --- Common float/equation types ---
 \crefformat{equation}{#2式~(#1)#3}
 \crefmultiformat{equation}{#2式~(#1)#3}{和#2式~(#1)#3}{、#2式~(#1)#3}{和#2式~(#1)#3}
@@ -1211,13 +1211,19 @@
   \noindent #1：#2\par\vspace{0.5em}
 }
 
-% Internal helpers for checkbox rendering (used only inside \MakeInfoPage)
+% 复选框渲染：\tjchecked/\tjunchecked 是勾选/未勾选的字形本身；\tjcheckbox
+% 是信息说明页“成果类型”专用的判断逻辑（含 design/engineering 二选一映射，
+% 不通用）；\tjcheckboxeq{当前值}{目标值} 是通用版本——当前值等于目标值时
+% 打勾，否则留空，供 \midtermdecision 等其他“多选一”复选框场景复用。
 \newcommand{\tjchecked}{\rlap{$\checkmark$}$\square$}
 \newcommand{\tjunchecked}{$\square$}
 \newcommand{\tjcheckbox}[1]{%
   \ifthenelse{\equal{\tongjiinfotype}{#1}\OR
               \(\equal{#1}{design}\AND\equal{\tongjiinfotype}{engineering}\)}%
     {\tjchecked}{\tjunchecked}%
+}
+\newcommand{\tjcheckboxeq}[2]{%
+  \ifthenelse{\equal{#1}{#2}}{\tjchecked}{\tjunchecked}%
 }
 \newcommand{\ulinebox}[2][c]{%
   \uline{\makebox[#2][#1]{\phantom{X}}}%
@@ -1278,7 +1284,7 @@
   \global\tjbindinglinetrue
 }
 
-% 设置中文摘要页（毕业设计时标题改为"设计总说明"）
+% 设置中文摘要页（毕业设计时标题改为“设计总说明”）
 \newcommand{\MakeAbstract}[2]{
   \vspace*{0.1em}
   \tj@abstractblock{\bfseries\heiti\tjfonttitle}{%
@@ -1388,6 +1394,11 @@
   \divide\tj@weeks by 7
   \edef\tongjitaskbookweeks{\the\tj@weeks}%
 }
+
+% 中期报告专用信息：专业审核意见的“同意/不同意”复选框（可选，默认留空——
+% 该项通常由专业负责人在打印后手写勾选；若需要提前在电子版中标注，
+% 可调用 \midtermdecision{agree} 或 \midtermdecision{disagree}）。
+\newcommand{\midtermdecision}[1]{\def\tongjimidtermdecision{#1}}
 
 % 表格环境：复用封面 information 环境的排版参数（字号、行距），供课题信息表/
 % 签字区使用。官方模板不绘制表格边框，仅靠下划线呈现填空位置（与 \MakeCover

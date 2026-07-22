@@ -120,16 +120,16 @@ Configure in `main.tex` via `\documentclass`:
 
 ```latex
 \documentclass[
+  doctype=thesis,       % Document type: thesis body (default); taskbook/proposal/midterm — see "Task Book / Opening Report / Mid-term Report" below
   oneside,              % One-sided printing (default); use twoside for double-sided printing
   degree=bachelor,      % Degree type: bachelor (default); master/doctor reserved
   field=science,        % Major category: science = engineering/sciences (default) / humanities
-  fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
-  fontset=fandol,       % Font set passed to ctex, default is fandol
-  times=false,          % true: system Times New Roman; false: newtx (default)
+  algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
   minted=false,         % true: minted highlighting (needs Python+Pygments); false: listings (default)
   biblatex=true,        % true: biblatex+biber (default); false: bibtex+gbt7714
-  algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
-  doctype=thesis,       % Document type: thesis body (default); taskbook/proposal/midterm — see "Task Book / Opening Report / Mid-term Report" below
+  fontset=fandol,       % Font set passed to ctex, default is fandol
+  times=false,          % true: system Times New Roman; false: newtx (default)
+  fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % Bib database (supports multiple, comma-separated); styled per GB/T 7714-2025

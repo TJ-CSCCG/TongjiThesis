@@ -120,16 +120,16 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 ```latex
 \documentclass[
+  doctype=thesis,       % 文档类型：thesis 论文正文（默认）；taskbook/proposal/midterm 见下方“任务书/开题报告/中期报告”
   oneside,              % 单面打印（默认），使用 twoside 可启用双面打印
   degree=bachelor,      % 学位类型：bachelor（默认），master/doctor 留作扩展
   field=science,        % 专业类别：science 理工科（默认）/ humanities 文科
-  fullwidthstop=circle, % 句号样式：circle 保留"。"（默认）/ dot 替换为"．"
-  fontset=fandol,       % 字体集，传递给 ctex，默认为 fandol
-  times=false,          % true：使用系统 Times New Roman；false：使用 newtx（默认）
+  algo=algpseudocode,   % algpseudocode（默认）：algorithm+algorithmicx；algorithm2e：独立 algorithm2e 宏包
   minted=false,         % true：minted 代码高亮（需 Python+Pygments）；false：listings（默认）
   biblatex=true,        % true：biblatex+biber（默认）；false：bibtex+gbt7714
-  algo=algpseudocode,   % algpseudocode（默认）：algorithm+algorithmicx；algorithm2e：独立 algorithm2e 宏包
-  doctype=thesis,       % 文档类型：thesis 论文正文（默认）；taskbook/proposal/midterm 见下方"任务书/开题报告/中期报告"
+  fontset=fandol,       % 字体集，传递给 ctex，默认为 fandol
+  times=false,          % true：使用系统 Times New Roman；false：使用 newtx（默认）
+  fullwidthstop=circle, % 句号样式：circle 保留“。”（默认）/ dot 替换为“．”
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % 参考文献数据库（支持多文件，逗号分隔）；样式遵循 GB/T 7714-2025
