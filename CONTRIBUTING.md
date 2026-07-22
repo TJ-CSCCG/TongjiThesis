@@ -2,9 +2,13 @@
 
 ## 仓库结构 | Repository Structure
 
-- **源文件**：`.cls`、`.cfg` 等定义模板的文件。
-- **文档文件**：`.tex` 文件（包括 `main.tex`），用于展示模板的使用方法。
+- **源文件**（`style/`）：`tongjithesis.cls`、`tongjithesis.cfg`、`tongji-circled.def`、`style/font/*.def` 等定义模板本身的文件。
+- **文档文件**（`chapters/`、`main.tex`）：`.tex` 文件，用于展示模板的使用方法；其中 `chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
+- **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
+- **构建脚本**（`scripts/`）：`bump-version.sh`（发布时统一升级版本号，仅在 `master` 分支执行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）。
+- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件），`release.yml` 负责打包与发布。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
+- **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。
 
 ## 如何贡献 | How to Contribute
 
@@ -22,10 +26,10 @@
 
 1. Fork 本仓库。
 2. 将 Fork 后的仓库克隆到本地。
-3. 创建一个新分支进行修改。
+3. 基于 `dev` 分支创建一个新分支进行修改（**不要**基于 `master`：`master` 仅在发布时由 `dev` 快进合并而来，不接受直接 PR）。
 4. 提交更改到新分支。
 5. 将分支推送到你的 Fork 仓库。
-6. 从你的分支向本仓库发起 Pull Request。
+6. 从你的分支向本仓库发起 Pull Request，**并将 base 分支手动改为 `dev`**（GitHub 默认会建议 `master`，需手动切换）。
 
 ## 项目历史
 

@@ -152,7 +152,7 @@ make wordcount          # wordcount
 
 ## 贡献与项目历史
 
-详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。AI 编码代理的架构说明与开发约定见 [AGENTS.md](AGENTS.md)。
 
 ## 开源协议
 
