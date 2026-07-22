@@ -5,7 +5,7 @@
 - **源文件**（`style/`）：`tongjithesis.cls`、`tongjithesis.cfg`、`tongji-circled.def`、`style/font/*.def` 等定义模板本身的文件。
 - **文档文件**（`chapters/`、`main.tex`）：`.tex` 文件，用于展示模板的使用方法；其中 `chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
 - **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
-- **构建脚本**（`scripts/`）：`bump-version.sh`（发布时统一升级版本号，仅在 `master` 分支执行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）。
+- **构建脚本**（`scripts/`）：`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方「版本发布」。
 - **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件），`release.yml` 负责打包与发布。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
 - **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。

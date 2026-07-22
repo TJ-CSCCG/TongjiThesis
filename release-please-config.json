@@ -5,6 +5,7 @@
     ".": {
       "release-type": "node",
       "draft": true,
+      "force-tag-creation": true,
       "changelog-sections": [
         { "type": "feat", "section": "新增 | New Features" },
         { "type": "fix", "section": "修正 | Fixes" },

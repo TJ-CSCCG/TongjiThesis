@@ -409,15 +409,17 @@ jobs:
   # uploads build artifacts to the existing release and moves the floating vX.Y tag.
   release:
     needs: package
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'release'
+    # release-please-published releases only — never workflow_dispatch, so this job can
+    # never accidentally publish a still-under-review draft (softprops publishes any
+    # draft it's pointed at unless draft: true is set) or move a tag before it exists.
+    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: write
     env:
       PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -432,7 +434,7 @@ jobs:
       - name: Attach CTAN archives to the release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: v${{ env.PACKAGE_VERSION }}
+          tag_name: ${{ env.RELEASE_TAG }}
           # No body/name: release-please already wrote them; softprops leaves them intact.
           # PDFs are attached separately by test.yaml's build-release-pdfs job (no cross-workflow race).
           files: |
@@ -443,6 +445,6 @@ jobs:
 
       - name: Move floating vX.Y tag to the release
         run: |
-          SHORT="v$(echo "$PACKAGE_VERSION" | sed -E 's/\.[0-9]+$//')"
-          git tag -f "$SHORT" "v${PACKAGE_VERSION}"
+          SHORT="${RELEASE_TAG%.*}"
+          git tag -f "$SHORT" "$RELEASE_TAG"
           git push -f origin "$SHORT"
