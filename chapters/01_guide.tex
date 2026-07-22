@@ -24,7 +24,7 @@
     \texttt{minted} & \texttt{false} & 代码高亮方案。\texttt{false} 使用 \pkg{listings}（默认，无外部依赖），\texttt{true} 使用 \pkg{minted}（需安装 Python 3.11–3.13 和 Pygments）。 \\
     \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
     \texttt{algo} & \texttt{algpseudocode} & 算法排版方案。\texttt{algpseudocode}（默认）与 \texttt{algorithm2e} 语法不同，详见说明。 \\
-    \texttt{doctype} & \texttt{thesis} & 文档类型。\texttt{thesis}（默认）：本文档描述的论文正文流程，不受影响；\texttt{taskbook}/\texttt{proposal}/\texttt{midterm}：分别生成任务书/开题报告/中期报告，详见\cref{sec:doctypes}。 \\
+    \texttt{doctype} & \texttt{thesis} & 文档类型。\texttt{thesis}（默认）：本指南其余部分描述的论文正文；\texttt{taskbook}/\texttt{proposal}/\texttt{midterm}：分别生成任务书/开题报告/中期报告，详见\cref{sec:doctypes}。 \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -77,7 +77,7 @@
     \toprule
     \textbf{doctype} & \textbf{文档} & \textbf{入口文件} & \textbf{说明} \\
     \midrule
-    \texttt{thesis}   & 论文正文（默认） & \verb|main.tex|     & 沿用\cref{tab:doc-structure}描述的完整封面/信息页/前置/正文/参考文献/附录/谢辞流程，不受本节影响。 \\
+    \texttt{thesis}   & 论文正文（默认） & \verb|main.tex|     & 完整封面/信息页/前置/正文/参考文献/附录/谢辞结构，详见\cref{tab:doc-structure}。 \\
     \texttt{taskbook} & 任务书           & \verb|taskbook.tex| & 课题信息表 + 起讫时间（由 \cs{taskbookperiod} 自动换算周数）+ 课题背景/主要内容/基本要求及成果形式/进度安排/资料及参考文献/其他要求 + 签字区。 \\
     \texttt{proposal} & 开题报告         & \verb|proposal.tex| & 课题信息表 + 填表日期 + 课题背景/方案介绍/参考文献/审核意见。 \\
     \texttt{midterm}  & 中期报告         & \verb|midterm.tex|  & 课题信息表 + 填表日期 + 填写说明 + 进展情况/成果/问题/计划/审核意见。 \\

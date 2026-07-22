@@ -1380,7 +1380,12 @@
   \ifnum\tj@julianend<\tj@julianstart
     \ClassError{tongjithesis}{\string\taskbookperiod: end date is before start date}{Swap the start/end date arguments of \string\taskbookperiod.}%
   \fi
-  \tj@weeks=\numexpr(\tj@julianend-\tj@julianstart+6)/7\relax
+  % \numexpr's "/" rounds to nearest (ties away from zero), not truncates,
+  % so a plain (delta+7-1)/7 ceiling-division trick silently over-counts by
+  % one week for many date ranges. \divide truncates (unlike \numexpr's "/"),
+  % so compute the sum with \numexpr and only then \divide.
+  \tj@weeks=\numexpr\tj@julianend-\tj@julianstart+7\relax
+  \divide\tj@weeks by 7
   \edef\tongjitaskbookweeks{\the\tj@weeks}%
 }
 
@@ -1433,7 +1438,7 @@
 % \fbox 的参数须一次性、完整地给出，不能跨 \newenvironment 的 begin/end 两段拆分
 % （\fbox 按普通花括号参数扫描，而非 \begingroup/\endgroup 式分组）；
 % 因此先用 lrbox 把 minipage 内容完整装入一个盒子寄存器，
-% 再在 end 段一次性用 \fbox 包裹已装订完成的盒子。
+% 再在 end 段一次性用 \fbox 包裹已装入完毕的盒子。
 \newsavebox{\tj@reviewbox}
 \newenvironment{tjreviewbox}{%
   \par\vspace{0.5\baselineskip}\noindent
@@ -1447,7 +1452,7 @@
 
 % 任务书/开题报告/中期报告全程不显示装订线：三者均为单独打印/提交的行政表格，
 % 不与正文一同装订，且官方 Word 模板本身无该装饰。这与 \MakeCover/\MakeInfoPage
-% 形成对比——后两者的装订线仅在封面/信息页本身关闭，随后随论文正文恢复；此处
+% 形成对比——后两者的装订线仅在封面/信息页本身关闭，此后随论文正文恢复；此处
 % 恢复为 true 没有意义（\clearpage 而非 titlepage 的 \newpage 触发首页 shipout，
 % 若在 \clearpage 前恢复为 true 会导致装订线错误地出现在封面页本身）。
 % 三个命令均不将 \tjbindingline 恢复为 true——同一次编译内不会再调用 \MakeCover
