@@ -1223,7 +1223,9 @@
 % 是信息说明页“成果类型”专用的判断逻辑（含 design/engineering 二选一映射，
 % 不通用）；\tjcheckboxeq{当前值}{目标值} 是通用版本——当前值等于目标值时
 % 打勾，否则留空，供 \midtermdecision 等其他“多选一”复选框场景复用。
-\newcommand{\tjchecked}{\rlap{$\checkmark$}$\square$}
+% \mbox 包裹：\rlap 若为段首第一个盒子会触发 TeX 的伪断行（勾号脱落、方框变空），
+% 故用 \mbox 强制水平模式，使复选框在段首（如中期报告审核意见框）也能正确渲染。
+\newcommand{\tjchecked}{\mbox{\rlap{$\checkmark$}$\square$}}
 \newcommand{\tjunchecked}{$\square$}
 \newcommand{\tjcheckbox}[1]{%
   \ifthenelse{\equal{\tongjiinfotype}{#1}\OR
