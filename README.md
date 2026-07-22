@@ -82,6 +82,10 @@ make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to c
 make clean              # rm intermediate files
 make cleanall           # rm all intermediate files (including .pdf)
 make wordcount          # wordcount
+make taskbook           # compile taskbook.pdf (任务书)
+make proposal           # compile proposal.pdf (开题报告)
+make midterm            # compile midterm.pdf (中期报告)
+make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 ```
 
 ###### Batchfile (Windows)
@@ -93,6 +97,10 @@ make wordcount          # wordcount
 .\make.bat clean          # clean all work files by latexmk -c
 .\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
 .\make.bat wordcount      # wordcount
+.\make.bat taskbook       # compile taskbook.pdf (任务书)
+.\make.bat proposal       # compile proposal.pdf (开题报告)
+.\make.bat midterm        # compile midterm.pdf (中期报告)
+.\make.bat forms          # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 .\make.bat help           # read the manual
 ```
 
@@ -121,6 +129,7 @@ make wordcount          # wordcount
   minted=false,         % true：minted 代码高亮（需 Python+Pygments）；false：listings（默认）
   biblatex=true,        % true：biblatex+biber（默认）；false：bibtex+gbt7714
   algo=algpseudocode,   % algpseudocode（默认）：algorithm+algorithmicx；algorithm2e：独立 algorithm2e 宏包
+  doctype=thesis,       % 文档类型：thesis 论文正文（默认）；taskbook/proposal/midterm 见下方"任务书/开题报告/中期报告"
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % 参考文献数据库（支持多文件，逗号分隔）；样式遵循 GB/T 7714-2025
@@ -128,6 +137,18 @@ make wordcount          # wordcount
 
 > [!NOTE]
 > 经管类属社科类，26 届为过渡期可选 `field=science`（推荐）或 `field=humanities`；自 27 届起统一使用 `field=science`。
+
+### 任务书 / 开题报告 / 中期报告
+
+除正文 `main.tex` 外，模板还提供 3 个独立可编译的官方行政文档，与正文共用 `chapters/metadata.tex` 中的学院/专业/学生/课题/指导教师信息：
+
+| 文档     | 入口文件        | 构建命令                                |
+| -------- | --------------- | --------------------------------------- |
+| 任务书   | `taskbook.tex`  | `make taskbook` / `.\make.bat taskbook`  |
+| 开题报告 | `proposal.tex`  | `make proposal` / `.\make.bat proposal`  |
+| 中期报告 | `midterm.tex`   | `make midterm` / `.\make.bat midterm`    |
+
+一次性构建全部 3 个文档：`make forms` / `.\make.bat forms`。任务书的起讫周数由 `\taskbookperiod{起始年}{起始月}{起始日}{截止年}{截止月}{截止日}` 自动换算，无需手动填写。详见编译后的模板使用指南。
 
 ### 字体选择
 

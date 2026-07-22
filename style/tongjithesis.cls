@@ -51,6 +51,10 @@
 % Define algo option: algpseudocode (default, algorithm + algorithmicx + algpseudocode),
 % algorithm2e (standalone algorithm2e package)
 \DeclareStringOption[algpseudocode]{algo}
+% Define doctype option: which document \MakeDocument renders.
+% thesis (default) — full thesis flow, unaffected (call \MakeCover/\MakeInfoPage as before)
+% taskbook  — 毕业设计（论文）任务书；proposal — 开题报告；midterm — 中期报告
+\DeclareStringOption[thesis]{doctype}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
@@ -77,6 +81,24 @@
   \tongjithesis@algorithmtwoetrue
 }{}{}
 \let\iftjalgorithmtwoe\iftongjithesis@algorithmtwoe
+\newif\iftongjithesis@doctype@taskbook
+\newif\iftongjithesis@doctype@proposal
+\newif\iftongjithesis@doctype@midterm
+\expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{taskbook}{%
+  \tongjithesis@doctype@taskbooktrue
+}{%
+  \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{proposal}{%
+    \tongjithesis@doctype@proposaltrue
+  }{%
+    \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{midterm}{%
+      \tongjithesis@doctype@midtermtrue
+    }{%
+      \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{thesis}{}{%
+        \ClassWarning{tongjithesis}{doctype=\tongjithesis@doctype\space is unknown. Falling back to thesis}%
+      }%
+    }%
+  }%
+}
 
 % ==========================================
 % Class Loading
@@ -1315,6 +1337,180 @@
   \tjfontbody
   \vspace{\baselineskip}
   {\noindent\textbf{Key words: }#2}\par
+}
+
+% ==========================================
+% Task Book / Proposal / Mid-term Report Commands
+% ==========================================
+% 任务书（doctype=taskbook）、开题报告（doctype=proposal）、中期报告（doctype=midterm）
+% 与正文论文共用 chapters/metadata.tex 中的学院/专业/学生/课题/指导教师信息；
+% \MakeDocument 依据 doctype 分派到 \MakeTaskBook / \MakeProposal / \MakeMidterm，
+% 三者仅渲染封面表格与签字区（如 \MakeCover 之于论文封面），正文各段落内容
+% 由 chapters/{taskbook,proposal,midterm}_body.tex 提供，写作者可直接编辑替换。
+
+\RequirePackage{colortbl}
+\definecolor{tjbordergray}{HTML}{BFBFBF}
+\definecolor{tjnotegray}{HTML}{ADADAD}
+\definecolor{tjhintgray}{HTML}{747474}
+
+% 任务书专用信息：起讫时间（其余字段复用 \school/\major/\student/\thesistitle/…）
+% 周数由起讫日期自动换算（向上取整），无需手动填写。
+\RequirePackage{pgfcalendar}
+\newcount\tj@julianstart
+\newcount\tj@julianend
+\newcount\tj@weeks
+% 数值零填充（如 9 -> 09），供拼接 ISO 日期字符串（yyyy-mm-dd）使用；
+% \numexpr 先规整输入（容忍调用方已自行补零，如 09 不会被重复补零）
+\newcommand{\tj@zeropad}[1]{%
+  \ifnum\numexpr#1\relax<10 0\the\numexpr#1\relax\else\the\numexpr#1\relax\fi
+}
+\newcommand{\taskbookperiod}[6]{%
+  \def\tongjitaskbookstartyear{#1}\def\tongjitaskbookstartmonth{#2}\def\tongjitaskbookstartday{#3}%
+  \def\tongjitaskbookendyear{#4}\def\tongjitaskbookendmonth{#5}\def\tongjitaskbookendday{#6}%
+  \pgfcalendardatetojulian{#1-\tj@zeropad{#2}-\tj@zeropad{#3}}{\tj@julianstart}%
+  \pgfcalendardatetojulian{#4-\tj@zeropad{#5}-\tj@zeropad{#6}}{\tj@julianend}%
+  \ifnum\tj@julianend<\tj@julianstart
+    \ClassError{tongjithesis}{\string\taskbookperiod: end date is before start date}{Swap the start/end date arguments of \string\taskbookperiod.}%
+  \fi
+  \tj@weeks=\numexpr(\tj@julianend-\tj@julianstart+6)/7\relax
+  \edef\tongjitaskbookweeks{\the\tj@weeks}%
+}
+
+% 表格边框统一为浅灰色（官方模板配色），复用封面 information 环境所用的 oldtabular。
+% 可选参数为 tabcolsep（默认 8pt，与 \MakeCover 的 information 环境一致）；
+% 必须在 \oldtabular 开始解析列格式前设定——tabcolsep 一旦用于构建列间距，
+% 在表格主体内再 \setlength 为时已晚（且直接放在 tabular 主体内并非合法位置）。
+\newenvironment{tjformtable}[2][8pt]{%
+  \renewcommand{\arraystretch}{1.8}
+  \setlength{\tabcolsep}{#1}
+  \tjfontcover\arrayrulecolor{tjbordergray}\oldtabular{#2}
+}{%
+  \endoldtabular
+}
+
+% 课题信息表：任务书/开题报告/中期报告共用（官方模板同源）
+% 合并单元格宽度（22em）与 \MakeCover 的 M{5em}M{22em} 保持一致，
+% 以匹配 \ulinecentered 内部固定的 20em 折行/缩放阈值（\covermaxwidth）。
+% 姓名/学号列较窄，改用不受该阈值影响的纯下划线 \uline。
+% 姓名/学号行实际展开为 4 个独立列（其余行经 multicolumn 合并为 2 列），
+% 4 列比 2 列多出一倍的 \tabcolsep/竖线开销，故此表专用更紧凑的 tabcolsep
+% 以确保整表宽度不超出 \linewidth（\MakeCover 的 8pt 是为 2 列表设计的）。
+\newcommand{\tj@formsubjecttable}{%
+  \begin{tjformtable}[4pt]{|M{5em}|M{9em}|M{4em}|M{9em}|}
+    \hline
+    课题名称 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjithesistitle}} \\ \hline
+    副\enskip{}标\enskip{}题 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjithesissubtitle}} \\ \hline
+    学\quad{}\quad{}院 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjischool}} \\ \hline
+    专\quad{}\quad{}业 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjimajor}} \\ \hline
+    学生姓名 & \uline{\tongjiauthor} & 学\enskip 号 & \uline{\tongjiauthornumber} \\ \hline
+  \end{tjformtable}%
+}
+
+% 说明性文字（此项成稿删除）与提示性文字（内容提示，不删除）——两种灰色，语义不同
+\newcommand{\tjformnote}[1]{{\tjfontbody\color{tjnotegray}\selectfont #1\par}}
+\newcommand{\tjformhint}[1]{{\tjfontbody\color{tjhintgray}\selectfont #1\par}}
+
+% 顶格小节标题（正文分节，不计入目录、不参与章节编号）
+\newcommand{\tjformsection}[1]{%
+  \par\vspace{\baselineskip}
+  \noindent{\tjfontbody\selectfont #1}\par
+  \vspace{0.5\baselineskip}
+}
+
+% 日期空白（年/月/日下划线填空）
+\newcommand{\tjdateblank}{\ulinebox{3em}~年~\ulinebox{2em}~月~\ulinebox{2em}~日}
+
+% 审核意见方框（指导教师/专业负责人意见 + 签名 + 日期）
+% \fbox 的参数须一次性、完整地给出，不能跨 \newenvironment 的 begin/end 两段拆分
+% （\fbox 按普通花括号参数扫描，而非 \begingroup/\endgroup 式分组）；
+% 因此先用 lrbox 把 minipage 内容完整装入一个盒子寄存器，
+% 再在 end 段一次性用 \fbox 包裹已装订完成的盒子。
+\newsavebox{\tj@reviewbox}
+\newenvironment{tjreviewbox}{%
+  \par\vspace{0.5\baselineskip}\noindent
+  \begin{lrbox}{\tj@reviewbox}
+  \begin{minipage}[t]{\dimexpr\linewidth-2\fboxsep-2\fboxrule-2pt\relax}\tjfontbody
+}{%
+  \end{minipage}
+  \end{lrbox}
+  \fbox{\usebox{\tj@reviewbox}}\par\vspace{0.5\baselineskip}
+}
+
+% 任务书/开题报告/中期报告全程不显示装订线：三者均为单独打印/提交的行政表格，
+% 不与正文一同装订，且官方 Word 模板本身无该装饰。这与 \MakeCover/\MakeInfoPage
+% 形成对比——后两者的装订线仅在封面/信息页本身关闭，随后随论文正文恢复；此处
+% 恢复为 true 没有意义（\clearpage 而非 titlepage 的 \newpage 触发首页 shipout，
+% 若在 \clearpage 前恢复为 true 会导致装订线错误地出现在封面页本身）。
+% 三个命令均不将 \tjbindingline 恢复为 true——同一次编译内不会再调用 \MakeCover
+% 等其他封面命令，故无需担心状态泄漏到其他文档。
+
+% 任务书封面：课题信息表 + 起讫时间 + 指导教师/教学院长签字区
+\newcommand{\MakeTaskBook}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    {\tjfonttitle\selectfont \tjheadertext 任务书}\par
+    \vspace{2\baselineskip}
+
+    \tj@formsubjecttable
+
+    \vspace{1em}
+    \tjheadertext 起讫时间：自~\tongjitaskbookstartyear~年~\tongjitaskbookstartmonth~月~\tongjitaskbookstartday~日至~\tongjitaskbookendyear~年~\tongjitaskbookendmonth~月~\tongjitaskbookendday~日共~\tongjitaskbookweeks~周
+    \vspace{1.5em}
+
+    \begin{tjformtable}[4pt]{|M{9em}|M{5.5em}|M{11.5em}|}
+      \hline
+      指导教师签名 & \ulinebox{5em} & \tjdateblank \\ \hline
+      教学院长签名 & \ulinebox{5em} & \tjdateblank \\ \hline
+    \end{tjformtable}
+  \end{center}
+  \clearpage
+}
+
+% 开题报告封面：课题信息表（无起讫时间）+ 填表日期
+\newcommand{\MakeProposal}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    {\tjfonttitle\selectfont \tjheadertext 开题报告}\par
+    \vspace{2\baselineskip}
+
+    \tj@formsubjecttable
+
+    \vspace{1.5em}
+    填表日期：\tjdateblank
+  \end{center}
+  \clearpage
+}
+
+% 中期报告封面：与开题报告共用同一表格结构（官方模板同源）
+\newcommand{\MakeMidterm}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    {\tjfonttitle\selectfont \tjheadertext 中期报告}\par
+    \vspace{2\baselineskip}
+
+    \tj@formsubjecttable
+
+    \vspace{1.5em}
+    填表日期：\tjdateblank
+  \end{center}
+  \clearpage
+}
+
+% \MakeDocument：按 doctype 分派封面渲染；正文由 chapters/{taskbook,proposal,midterm}_body.tex 提供。
+% doctype=thesis（默认）不使用本命令——论文封面/信息页仍由 \MakeCover/\MakeInfoPage 显式调用（main.tex 不变）。
+\newcommand{\MakeDocument}{%
+  \iftongjithesis@doctype@taskbook
+    \MakeTaskBook
+  \else\iftongjithesis@doctype@proposal
+    \MakeProposal
+  \else\iftongjithesis@doctype@midterm
+    \MakeMidterm
+  \else
+    \ClassError{tongjithesis}{\string\MakeDocument\space requires doctype=taskbook|proposal|midterm}{Set doctype in \string\documentclass[doctype=taskbook]{tongjithesis}, or call \string\MakeTaskBook/\string\MakeProposal/\string\MakeMidterm directly.}%
+  \fi\fi\fi
 }
 
 % ==========================================

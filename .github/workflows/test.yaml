@@ -64,6 +64,7 @@ env:
     circledsteps
     cleveref
     collectbox
+    colortbl
     ctex
     dvips
     emptypage
@@ -299,19 +300,64 @@ jobs:
           path: tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
           retention-days: 30
 
+  # Standalone administrative documents: task book, opening report, mid-term
+  # report (Linux-only, xelatex-only — mirrors build-variants' scope). Each is
+  # its own tongjithesis document (doctype=taskbook|proposal|midterm), sharing
+  # chapters/metadata.tex but otherwise independent of the main thesis build.
+  build-forms:
+    strategy:
+      fail-fast: false
+      matrix:
+        doc: [taskbook, proposal, midterm]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install TeX Live
+        uses: tex-live/setup-texlive-action@v4
+        with:
+          version: 2026
+          packages: ${{ env.TL_PACKAGES }}
+        env:
+          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
+
+      - name: Compile LaTeX document
+        run: |
+          make ENGINE=-xelatex ${{ matrix.doc }}
+
+      - name: Show log on failure
+        if: failure()
+        run: cat ${{ matrix.doc }}.log
+
+      - name: Rename PDF
+        if: success()
+        run: mv ${{ matrix.doc }}.pdf tongjithesis-${{ matrix.doc }}.pdf
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: document-form-${{ matrix.doc }}
+          path: tongjithesis-${{ matrix.doc }}.pdf
+          retention-days: 30
+
   # Summary job to check all builds completed successfully
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build, build-variants]
+    needs: [build, build-variants, build-forms]
     if: always()
     steps:
       - name: Check all builds succeeded
         run: |
           echo "Cross-platform build status: ${{ needs.build.result }}"
           echo "Variant build status: ${{ needs.build-variants.result }}"
+          echo "Forms build status: ${{ needs.build-forms.result }}"
 
           if [[ "${{ needs.build.result }}" != "success" ||
-                "${{ needs.build-variants.result }}" != "success" ]]; then
+                "${{ needs.build-variants.result }}" != "success" ||
+                "${{ needs.build-forms.result }}" != "success" ]]; then
             echo "One or more builds failed"
             exit 1
           fi
@@ -320,7 +366,7 @@ jobs:
   # Collect all compiled PDFs into a single artifact
   collect-pdfs:
     runs-on: ubuntu-latest
-    needs: [build, build-variants]
+    needs: [build, build-variants, build-forms]
     if: always() && !cancelled()
     steps:
       - name: Download all PDF artifacts

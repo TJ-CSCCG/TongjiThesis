@@ -24,6 +24,7 @@
     \texttt{minted} & \texttt{false} & 代码高亮方案。\texttt{false} 使用 \pkg{listings}（默认，无外部依赖），\texttt{true} 使用 \pkg{minted}（需安装 Python 3.11–3.13 和 Pygments）。 \\
     \texttt{biblatex} & \texttt{true} & 参考文献方案。\texttt{true} 使用 \BibLaTeX{} + \texttt{biber}（功能更丰富），\texttt{false} 使用 \BibTeX{} + \pkg{gbt7714}（编译更快）。 \\
     \texttt{algo} & \texttt{algpseudocode} & 算法排版方案。\texttt{algpseudocode}（默认）与 \texttt{algorithm2e} 语法不同，详见说明。 \\
+    \texttt{doctype} & \texttt{thesis} & 文档类型。\texttt{thesis}（默认）：本文档描述的论文正文流程，不受影响；\texttt{taskbook}/\texttt{proposal}/\texttt{midterm}：分别生成任务书/开题报告/中期报告，详见\cref{sec:doctypes}。 \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -64,6 +65,37 @@
 \end{table}
 
 正文各章放在 \verb|chapters/| 下，通过 \verb|main.tex| 中的 \verb|\input{chapters/XX_name}| 注册；参考文献数据库文件在导言区通过 \verb|\tjbibresource{bib/note.bib}| 指定，支持逗号分隔的多个文件。
+
+\section{任务书 / 开题报告 / 中期报告}\label{sec:doctypes}
+
+除本文档（论文正文，\texttt{doctype=thesis}，默认）外，模板还提供 3 个独立的官方行政文档，通过 \texttt{doctype} 选项选择：
+
+\begin{table}[htbp]
+  \centering
+  \caption{doctype 选项一览}\label{tab:doctype-options}
+  \begin{tabularx}{\linewidth}{l l l X}
+    \toprule
+    \textbf{doctype} & \textbf{文档} & \textbf{入口文件} & \textbf{说明} \\
+    \midrule
+    \texttt{thesis}   & 论文正文（默认） & \verb|main.tex|     & 沿用\cref{tab:doc-structure}描述的完整封面/信息页/前置/正文/参考文献/附录/谢辞流程，不受本节影响。 \\
+    \texttt{taskbook} & 任务书           & \verb|taskbook.tex| & 课题信息表 + 起讫时间（由 \cs{taskbookperiod} 自动换算周数）+ 课题背景/主要内容/基本要求及成果形式/进度安排/资料及参考文献/其他要求 + 签字区。 \\
+    \texttt{proposal} & 开题报告         & \verb|proposal.tex| & 课题信息表 + 填表日期 + 课题背景/方案介绍/参考文献/审核意见。 \\
+    \texttt{midterm}  & 中期报告         & \verb|midterm.tex|  & 课题信息表 + 填表日期 + 填写说明 + 进展情况/成果/问题/计划/审核意见。 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+三者与正文共用 \verb|chapters/metadata.tex| 中的 \cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesisadvisor}，无需重复填写。各入口文件结构一致，均为 \cs{MakeDocument}（依据 \texttt{doctype} 分派到 \cs{MakeTaskBook}、\cs{MakeProposal} 或 \cs{MakeMidterm}，仅渲染封面表格与签字区，如 \cs{MakeCover} 之于论文封面）加上对应的正文内容文件：
+
+\begin{itemize}
+  \item \texttt{taskbook.tex} \cs{MakeDocument} 后 \verb|\input{chapters/taskbook_body}|
+  \item \texttt{proposal.tex} \cs{MakeDocument} 后 \verb|\input{chapters/proposal_body}|
+  \item \texttt{midterm.tex} \cs{MakeDocument} 后 \verb|\input{chapters/midterm_body}|
+\end{itemize}
+
+正文分节内容（课题背景、进度安排等）由上述 \verb|chapters/*_body.tex| 提供，可直接编辑替换示例文字，用法与 \verb|appendix.tex| 类似。任务书的起讫周数通过 \verb|\taskbookperiod{起始年}{起始月}{起始日}{截止年}{截止月}{截止日}|（在 \verb|chapters/metadata.tex| 中设置）按天数自动换算（向上取整），无需手动填写周数。
+
+构建命令：\verb|make taskbook| / \verb|make proposal| / \verb|make midterm|（或一次性 \verb|make forms|），Windows 下对应 \verb|.\make.bat taskbook| 等。
 
 \section{常用命令速查}
 
