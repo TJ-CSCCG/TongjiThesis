@@ -1454,10 +1454,9 @@
 \newcommand{\tjdateblank}{\ulinebox{3em}~年~\ulinebox{2em}~月~\ulinebox{2em}~日}
 
 % 数字填空：定宽下划线 + 居中数字（#2 为空则为纯下划线），使起讫日期等数字字段
-% 无论填写与否都保持等长下划线，与信息说明页“总字数”等填空一致。
-\newcommand{\tjnumline}[2]{%
-  \ifx#2\empty\ulinebox{#1}\else\underline{\makebox[#1][c]{#2}}\fi
-}
+% 无论填写与否都保持等长下划线。用 ulem 的 \uline（同 \ulinebox/\ulinecentered），
+% 使全表下划线的粗细与位置一致。
+\newcommand{\tjnumline}[2]{\uline{\makebox[#1][c]{#2}}}
 
 % 审核意见方框（指导教师/专业负责人意见 + 签名 + 日期）
 % \fbox 的参数须一次性、完整地给出，不能跨 \newenvironment 的 begin/end 两段拆分
