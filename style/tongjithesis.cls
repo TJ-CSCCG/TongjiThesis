@@ -155,8 +155,18 @@
 % Page layout
 % headheight 43pt ≈ 1.14cm logo (≈32pt) + 小四号正文行 (≈11pt)；防止 fancyhdr headheight warning
 \setlength{\headheight}{43pt}
-% 页边距按同济本科毕业设计（论文）/毕业论文（设计）官方 Word 模板复刻
-\RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+% 页边距按同济本科毕业设计（论文）/毕业论文（设计）官方 Word 模板复刻；
+% 任务书/开题报告/中期报告使用各自官方模板的页边距（A4，上 2.3cm/下 1.0cm/
+% 左右各 3.17cm，左右对称），与论文正文的装订页边距（左 3.3cm/右 1.8cm）不同。
+\iftongjithesis@doctype@taskbook
+  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
+\else\iftongjithesis@doctype@proposal
+  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
+\else\iftongjithesis@doctype@midterm
+  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
+\else
+  \RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+\fi\fi\fi
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{eso-pic}
@@ -1348,8 +1358,6 @@
 % 三者仅渲染封面表格与签字区（如 \MakeCover 之于论文封面），正文各段落内容
 % 由 chapters/{taskbook,proposal,midterm}_body.tex 提供，写作者可直接编辑替换。
 
-\RequirePackage{colortbl}
-\definecolor{tjbordergray}{HTML}{BFBFBF}
 \definecolor{tjnotegray}{HTML}{ADADAD}
 \definecolor{tjhintgray}{HTML}{747474}
 
@@ -1376,14 +1384,16 @@
   \edef\tongjitaskbookweeks{\the\tj@weeks}%
 }
 
-% 表格边框统一为浅灰色（官方模板配色），复用封面 information 环境所用的 oldtabular。
-% 可选参数为 tabcolsep（默认 8pt，与 \MakeCover 的 information 环境一致）；
-% 必须在 \oldtabular 开始解析列格式前设定——tabcolsep 一旦用于构建列间距，
-% 在表格主体内再 \setlength 为时已晚（且直接放在 tabular 主体内并非合法位置）。
+% 表格环境：复用封面 information 环境的排版参数（字号、行距），供课题信息表/
+% 签字区使用。官方模板不绘制表格边框，仅靠下划线呈现填空位置（与 \MakeCover
+% 的 information 环境一致），故不设置任何竖线或 \hline。
+% 可选参数为 tabcolsep（默认 8pt，与 information 一致）；必须在 \oldtabular
+% 开始解析列格式前设定——tabcolsep 一旦用于构建列间距，在表格主体内再
+% \setlength 为时已晚（且直接放在 tabular 主体内并非合法位置）。
 \newenvironment{tjformtable}[2][8pt]{%
   \renewcommand{\arraystretch}{1.8}
   \setlength{\tabcolsep}{#1}
-  \tjfontcover\arrayrulecolor{tjbordergray}\oldtabular{#2}
+  \noindent\tjfontcover\oldtabular{#2}
 }{%
   \endoldtabular
 }
@@ -1393,16 +1403,15 @@
 % 以匹配 \ulinecentered 内部固定的 20em 折行/缩放阈值（\covermaxwidth）。
 % 姓名/学号列较窄，改用不受该阈值影响的纯下划线 \uline。
 % 姓名/学号行实际展开为 4 个独立列（其余行经 multicolumn 合并为 2 列），
-% 4 列比 2 列多出一倍的 \tabcolsep/竖线开销，故此表专用更紧凑的 tabcolsep
+% 4 列比 2 列多出一倍的 \tabcolsep 开销，故此表专用更紧凑的 tabcolsep
 % 以确保整表宽度不超出 \linewidth（\MakeCover 的 8pt 是为 2 列表设计的）。
 \newcommand{\tj@formsubjecttable}{%
-  \begin{tjformtable}[4pt]{|M{5em}|M{9em}|M{4em}|M{9em}|}
-    \hline
-    课题名称 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjithesistitle}} \\ \hline
-    副\enskip{}标\enskip{}题 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjithesissubtitle}} \\ \hline
-    学\quad{}\quad{}院 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjischool}} \\ \hline
-    专\quad{}\quad{}业 & \multicolumn{3}{|M{22em}|}{\ulinecentered{\tongjimajor}} \\ \hline
-    学生姓名 & \uline{\tongjiauthor} & 学\enskip 号 & \uline{\tongjiauthornumber} \\ \hline
+  \begin{tjformtable}[1.5pt]{M{4.5em}M{9em}M{4em}M{9em}}
+    课题名称 & \multicolumn{3}{M{22em}}{\ulinecentered{\tongjithesistitle}} \\
+    副\enskip{}标\enskip{}题 & \multicolumn{3}{M{22em}}{\ulinecentered{\tongjithesissubtitle}} \\
+    学\quad{}\quad{}院 & \multicolumn{3}{M{22em}}{\ulinecentered{\tongjischool}} \\
+    专\quad{}\quad{}业 & \multicolumn{3}{M{22em}}{\ulinecentered{\tongjimajor}} \\
+    学生姓名 & \uline{\tongjiauthor} & 学\enskip 号 & \uline{\tongjiauthornumber} \\
   \end{tjformtable}%
 }
 
@@ -1445,25 +1454,28 @@
 % 等其他封面命令，故无需担心状态泄漏到其他文档。
 
 % 任务书封面：课题信息表 + 起讫时间 + 指导教师/教学院长签字区
+% 官方模板仅标题居中，信息表/签字区一律左对齐（不居中）——与 \MakeCover 的
+% 论文封面（整体居中）是两种不同版式，此处以官方模板为准。
 \newcommand{\MakeTaskBook}{%
   \global\tjbindinglinefalse
   \begin{center}
     \vspace*{2\baselineskip}
+    \includegraphics[height=2cm]{figures/tongji.pdf}\\
+    \vspace{1em}
     {\tjfonttitle\selectfont \tjheadertext 任务书}\par
     \vspace{2\baselineskip}
-
-    \tj@formsubjecttable
-
-    \vspace{1em}
-    \tjheadertext 起讫时间：自~\tongjitaskbookstartyear~年~\tongjitaskbookstartmonth~月~\tongjitaskbookstartday~日至~\tongjitaskbookendyear~年~\tongjitaskbookendmonth~月~\tongjitaskbookendday~日共~\tongjitaskbookweeks~周
-    \vspace{1.5em}
-
-    \begin{tjformtable}[4pt]{|M{9em}|M{5.5em}|M{11.5em}|}
-      \hline
-      指导教师签名 & \ulinebox{5em} & \tjdateblank \\ \hline
-      教学院长签名 & \ulinebox{5em} & \tjdateblank \\ \hline
-    \end{tjformtable}
   \end{center}
+
+  \tj@formsubjecttable
+
+  \vspace{1em}
+  \tjheadertext 起讫时间：自~\tongjitaskbookstartyear~年~\tongjitaskbookstartmonth~月~\tongjitaskbookstartday~日至~\tongjitaskbookendyear~年~\tongjitaskbookendmonth~月~\tongjitaskbookendday~日共~\tongjitaskbookweeks~周
+  \vspace{1.5em}
+
+  \begin{tjformtable}[4pt]{M{9em}M{5.5em}M{11.5em}}
+    指导教师签名 & \ulinebox{5em} & \tjdateblank \\
+    教学院长签名 & \ulinebox{5em} & \tjdateblank \\
+  \end{tjformtable}
   \clearpage
 }
 
@@ -1472,14 +1484,16 @@
   \global\tjbindinglinefalse
   \begin{center}
     \vspace*{2\baselineskip}
+    \includegraphics[height=2cm]{figures/tongji.pdf}\\
+    \vspace{1em}
     {\tjfonttitle\selectfont \tjheadertext 开题报告}\par
     \vspace{2\baselineskip}
-
-    \tj@formsubjecttable
-
-    \vspace{1.5em}
-    填表日期：\tjdateblank
   \end{center}
+
+  \tj@formsubjecttable
+
+  \vspace{1.5em}
+  填表日期：\tjdateblank
   \clearpage
 }
 
@@ -1488,14 +1502,16 @@
   \global\tjbindinglinefalse
   \begin{center}
     \vspace*{2\baselineskip}
+    \includegraphics[height=2cm]{figures/tongji.pdf}\\
+    \vspace{1em}
     {\tjfonttitle\selectfont \tjheadertext 中期报告}\par
     \vspace{2\baselineskip}
-
-    \tj@formsubjecttable
-
-    \vspace{1.5em}
-    填表日期：\tjdateblank
   \end{center}
+
+  \tj@formsubjecttable
+
+  \vspace{1.5em}
+  填表日期：\tjdateblank
   \clearpage
 }
 

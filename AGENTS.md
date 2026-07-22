@@ -15,17 +15,19 @@ Every change should be evaluated against which audience it affects, and whether 
 
 | Path | Role |
 | --- | --- |
-| `style/tongjithesis.cls` | The class itself — options, layout, bibliography backends, cover/abstract macros. ~1300 lines, organized into `% ====` banner-delimited sections (see § Architecture). |
+| `style/tongjithesis.cls` | The class itself — options, layout, bibliography backends, cover/abstract macros, task book/proposal/mid-term report macros. ~1550 lines, organized into `% ====` banner-delimited sections (see § Architecture). |
 | `style/tongjithesis.cfg` | Loaded last by the class; the intended fork point for local overrides that shouldn't live in `.cls`. |
 | `style/tongji-circled.def` | Circled-numeral (①②…) glyph support for footnote markers, level-2 list labels, and `\paragraph` numbering. |
 | `style/font/*.def` | Per-fontset CJK font mappings (`fandol`/`mac`/`windows`/`adobe`/`founder`), selected by the `fontset` class option. |
-| `chapters/metadata.tex` | The one file thesis writers are meant to edit for front matter — school, author, title, advisor, info-page fields. |
+| `chapters/metadata.tex` | The one file thesis writers are meant to edit for front matter — school, author, title, advisor, info-page fields, plus `\taskbookperiod{...}` (task book start/end dates; only consumed when compiling `taskbook.tex`, harmless otherwise). |
 | `chapters/01_guide.tex` | "模板使用指南" — the compiled usage manual (class options, structure, command cheat-sheet). This *is* the user documentation; it ships inside every compiled PDF. |
 | `chapters/02_intro.tex`…`06_conclusion.tex` | Demo body chapters, one topic each: headings/lists/fonts, floats (figures/tables/algorithms/code), math/units/theorems, citations/footnotes/cross-references, conclusion structure — see `01_guide.tex`'s own per-chapter summary. |
 | `chapters/00_abstract.tex`, `ack.tex`, `appendix.tex` | Abstract, acknowledgements, appendix demos. |
+| `chapters/taskbook_body.tex`, `proposal_body.tex`, `midterm_body.tex` | Body content `\input` by `taskbook.tex`/`proposal.tex`/`midterm.tex` respectively — the administrative-document analogue of `chapters/02_intro.tex`…`06_conclusion.tex` for the thesis body. |
 | `bib/note.bib` | Example bibliography database, including GB/T 7714-2025 entry types (e.g. `@preprint`). |
 | `figures/` | Cover/header logo assets and other example figures. |
-| `main.tex` | Compilation entry point and example thesis skeleton — the `\documentclass[...]` option block here is also what CI mutates to test option combinations (see § Behavioral rules). |
+| `main.tex` | Compilation entry point and example thesis skeleton for the thesis body (`doctype=thesis`, the default) — the `\documentclass[...]` option block here is also what CI mutates to test option combinations (see § Behavioral rules). One of 4 top-level compilation entry points; see the next row for the other 3. |
+| `taskbook.tex` / `proposal.tex` / `midterm.tex` | Standalone compilation entry points for the 3 official administrative documents (毕业设计任务书/开题报告/中期报告), each setting `doctype=taskbook\|proposal\|midterm` respectively. They share `chapters/metadata.tex` with `main.tex` but are otherwise independent — no `\MakeCover`/`\MakeInfoPage`/frontmatter/mainmatter/bibliography, just `\input{chapters/metadata}` → `\MakeDocument` → `\input{chapters/{taskbook,proposal,midterm}_body}`. |
 | `Makefile` / `make.bat` | Build entry points for Unix/macOS and Windows respectively. Keep target names and behavior in sync between the two. |
 | `latexmkrc` | latexmk engine (`$pdf_mode=5`, XeLaTeX+xdvipdfmx), search paths, and clean-file list. |
 | `scripts/update-preview.sh` | Renders the compiled PDF to page images and pushes them to the sibling `TJ-CSCCG/TJCS-Images` repo (used by the Overleaf template gallery). |
@@ -52,6 +54,7 @@ Every change should be evaluated against which audience it affects, and whether 
 | Remove aux files | `make clean` | |
 | Remove aux files + PDF | `make cleanall` | |
 | Windows equivalents | `.\make.bat thesis [-xelatex\|-lualatex]`, `.\make.bat wordcount`, `.\make.bat clean` / `cleanall` | engine is a positional arg, not an env-style token — see `.\make.bat help` |
+| Build the 3 standalone admin documents | `make taskbook` / `make proposal` / `make midterm` (one at a time) or `make forms` (all 3) | Windows: `.\make.bat taskbook\|proposal\|midterm\|forms`; mirrors `test.yaml`'s `build-forms` job |
 | Exercise one CI matrix leg locally | edit the matching option in `main.tex`'s `\documentclass[...]` block (`biblatex=false`, `field=humanities`, `minted=true`, `algo=algorithm2e`, `twoside`), then `make` | mirrors `test.yaml`'s `build-variants` job |
 | Regenerate README preview images | `./scripts/update-preview.sh [path-to-pdf] [--amend]` | pushes to `TJ-CSCCG/TJCS-Images` |
 
@@ -67,7 +70,7 @@ Releases are not a local command: merge `release-please`'s standing release PR o
 
 **The two bibliography backends must stay behaviorally identical.** `biblatex=true` (biblatex+biber, `style=gb7714-2025`) and `biblatex=false` (bibtex+`gbt7714`, `bibliographystyle{gbt7714-2025-numeric}`) both implement GB/T 7714-2025 punctuation (`gbpunctwidth=mixed` / `bibpunct=GB`) and the same 0.74cm hanging-indent label geometry. A label-alignment or punctuation fix in one backend almost always needs the mirrored fix in the other — see the § Bibliography Configuration comments in `tongjithesis.cls` for the current implementation, including the `\AtBeginDocument{\let\@bibsetup\tj@bibsetup}` hook-ordering fix required because `gbt7714`'s bundled `natbib` overrides `thebibliography` itself and bypasses `book.cls`'s `\@openbib@code` hook.
 
-**CI is the test suite; there is no separate unit-test framework.** `test.yaml`'s `build` job (3 OS × {XeLaTeX, LuaLaTeX}, default options) and `build-variants` job (six option combinations applied to `main.tex` via `sed`) define what "passing" means. A change isn't verified until it has compiled clean in at least the matrix leg(s) it touches.
+**CI is the test suite; there is no separate unit-test framework.** `test.yaml`'s `build` job (3 OS × {XeLaTeX, LuaLaTeX}, default options), `build-variants` job (six option combinations applied to `main.tex` via `sed`), and `build-forms` job (compiles `taskbook.tex`/`proposal.tex`/`midterm.tex`, one matrix leg per document) define what "passing" means. A change isn't verified until it has compiled clean in at least the matrix leg(s) it touches.
 
 **`main.tex`'s option block is a CI dependency, not just an example.** `build-variants` mutates it with literal-string `sed` substitutions (e.g. `s/minted=false/minted=true/`). Don't reformat or reorder that block in a way that breaks those substitutions without updating `test.yaml` in the same change.
 
@@ -83,7 +86,7 @@ Releases are not a local command: merge `release-please`'s standing release PR o
 
 `tongjithesis.cls` loads `ctexbook` and layers Tongji-specific behavior on top, in banner-delimited (`% ====`) sections read top to bottom:
 
-1. **Option Declaration** — `kvoptions`-based key-value options, declared in this order: `fontset`, `fullwidthstop`, `times`, `minted`, `biblatex`, `degree`, `field`, `algo` (`oneside`/`twoside` pass through to `ctexbook`). Parsed into `\iftongjithesis@*` conditionals (`bachelor`, `humanities`, `algorithmtwoe`) that gate behavior throughout the rest of the file. `degree=master|doctor` (or any value other than `bachelor`) falls back to bachelor formatting with a `\ClassWarning` — reserved, not implemented.
+1. **Option Declaration** — `kvoptions`-based key-value options, declared in this order: `fontset`, `fullwidthstop`, `times`, `minted`, `biblatex`, `degree`, `field`, `algo`, `doctype` (`oneside`/`twoside` pass through to `ctexbook`). Parsed into `\iftongjithesis@*` conditionals (`bachelor`, `humanities`, `algorithmtwoe`, `doctype@taskbook`/`doctype@proposal`/`doctype@midterm`) that gate behavior throughout the rest of the file. `degree=master|doctor` (or any value other than `bachelor`) falls back to bachelor formatting with a `\ClassWarning` — reserved, not implemented. `doctype=thesis` (default) leaves the thesis flow untouched; `taskbook`/`proposal`/`midterm` select which standalone document `\MakeDocument` renders (item 9 below), and an unrecognized value falls back to `thesis` with a `\ClassWarning`.
 2. **Class Loading** — `\LoadClass[UTF8,a4paper,zihao=-4,fontset=none]{ctexbook}`, then the fontset-specific CJK font `.def` is `\input`.
 3. **Formatting Constants** — page geometry, font sizes, and spacing values transcribed from the official spec, most with a derivation comment.
 4. **Required Packages** — third-party package loading.
@@ -91,9 +94,10 @@ Releases are not a local command: merge `release-please`'s standing release PR o
 6. **General Configurations** — line-spread (`setstretch`), display-math skip lengths, float spacing, figure centering, `\AtEndOfClass{\raggedbottom}`.
 7. **Page Layout / Typography and Font Settings / Lists and Enumerations / Table of Contents Formatting / Chapter-Section Numbering / Float Settings / Math and Theorem Environments / Algorithm and Code Listing Settings / Cross-Referencing Commands / Logo Commands** — the bulk of the class, each in its own banner section, in this order.
 8. **Cover and User Information Commands** — `\school`, `\major`, `\student`, `\thesistitle{}{}`/`\thesistitleeng{}{}`, `\thesisadvisor`, `\thesisdate`, `\infotype`/`\infoabstract`/`\infomaterials`/`\infothesiswords`/`\infodrawings`+`\infowordcount` are the macros a writer calls in `chapters/metadata.tex`; `\MakeCover`, `\MakeInfoPage`, `\MakeAbstract`, `\MakeAbstractEng` consume them to typeset the cover, info page, and abstracts.
-9. **Configuration Input** — the class ends by loading `tongjithesis.cfg`, the intended override point for local customization.
+9. **Task Book / Proposal / Mid-term Report Commands** — `\taskbookperiod{startYear}{startMonth}{startDay}{endYear}{endMonth}{endDay}` (also called from `chapters/metadata.tex`, only meaningful for `doctype=taskbook`) computes the task book's week count from the date range; `\tjformtable`, `\tjformnote`, `\tjformhint`, `\tjformsection`, `\tjdateblank`, `\tjreviewbox` are shared layout primitives for the 3 forms' subject-info table, signature blocks, and review boxes; `\MakeTaskBook`/`\MakeProposal`/`\MakeMidterm` render each document's cover/subject table, and `\MakeDocument` dispatches to one of them based on the `doctype` option (`\ClassError` if `doctype` is still `thesis`).
+10. **Configuration Input** — the class ends by loading `tongjithesis.cfg`, the intended override point for local customization.
 
-`main.tex` mirrors this at the document level, simplified (see `main.tex` itself for the `\cleardoublepage`/`\clearpage` calls between stages, and the commented-out `\listoffigures`/`\listoftables` opt-in toggles): `\documentclass[...]{tongjithesis}` → `\tjbibresource{...}` → `\input{chapters/metadata}` → `\MakeCover`/`\MakeInfoPage` → `\frontmatter` (abstract, TOC) → `\mainmatter` (chapters `01`–`06`) → `\makereferences` → `\appendix` (`chapters/appendix`) → `\backmatter` (acknowledgements).
+`main.tex` mirrors this at the document level, simplified (see `main.tex` itself for the `\cleardoublepage`/`\clearpage` calls between stages, and the commented-out `\listoffigures`/`\listoftables` opt-in toggles): `\documentclass[...]{tongjithesis}` → `\tjbibresource{...}` → `\input{chapters/metadata}` → `\MakeCover`/`\MakeInfoPage` → `\frontmatter` (abstract, TOC) → `\mainmatter` (chapters `01`–`06`) → `\makereferences` → `\appendix` (`chapters/appendix`) → `\backmatter` (acknowledgements). `taskbook.tex`/`proposal.tex`/`midterm.tex` mirror the same idea at a much shorter scale: `\documentclass[doctype=taskbook|proposal|midterm]{tongjithesis}` → `\input{chapters/metadata}` → `\MakeDocument` → `\input{chapters/{taskbook,proposal,midterm}_body}` — no frontmatter/mainmatter/bibliography stages.
 
 Version identity is spread across `package.json` (`version`) and the `\ProvidesClass`/`\ProvidesFile` line in each of `style/tongjithesis.cls`, `style/tongjithesis.cfg`, `style/tongji-circled.def`, and `style/font/*.def` — kept in sync automatically by `release-please` (§ Branching and versioning), never by hand.
 
