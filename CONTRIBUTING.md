@@ -5,7 +5,7 @@
 - **源文件**（`style/`）：`tongjithesis.cls`、`tongjithesis.cfg`、`tongji-circled.def`、`style/font/*.def` 等定义模板本身的文件。
 - **文档文件**（`chapters/`、`main.tex`）：`.tex` 文件，用于展示模板的使用方法；其中 `chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
 - **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
-- **构建脚本**（`scripts/`）：`bump-version.sh`（发布时统一升级版本号，仅在 `master` 分支执行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）。
+- **构建脚本**（`scripts/`）：`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方「版本发布」。
 - **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件），`release.yml` 负责打包与发布。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
 - **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。
@@ -43,3 +43,9 @@
 | 2026    | —                                                 | 迁移至 `ctexbook` 基类，全面对齐 2026 版撰写规范；新增 `biblatex`/`bibtex` 双后端、理工/文科双编号体系（`field`）、信息说明页（`\MakeInfoPage`）、跨页代码环境（`longlisting`）；参考文献样式升级至 GB/T 7714-2025（新增 `@preprint` 预印本类型示例）；CI 升级至 TeX Live 2026 |
 
 我们非常感谢以上贡献者的付出。如果您觉得本项目对您的毕业设计或论文有所帮助，希望您可以在致谢部分提及。
+
+## 版本发布
+
+- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)（`feat:` / `fix:` / `docs:` 等）；[release-please](https://github.com/googleapis/release-please) 据此自动维护版本号与逐版本更新日志 `CHANGELOG.md`（首次自动发布后生成）。
+- 发布流程：维护者合并 release-please 生成的「release PR」→ 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 CI 打包 CTAN 与示例 PDF 并附加到该 Release。
+- 版本号由 release-please 统一更新（`package.json` 及各 `\Provides*` 行），**无需手动修改**（原 `scripts/bump-version.sh` 已移除）。

@@ -28,16 +28,17 @@ Every change should be evaluated against which audience it affects, and whether 
 | `main.tex` | Compilation entry point and example thesis skeleton — the `\documentclass[...]` option block here is also what CI mutates to test option combinations (see § Behavioral rules). |
 | `Makefile` / `make.bat` | Build entry points for Unix/macOS and Windows respectively. Keep target names and behavior in sync between the two. |
 | `latexmkrc` | latexmk engine (`$pdf_mode=5`, XeLaTeX+xdvipdfmx), search paths, and clean-file list. |
-| `scripts/bump-version.sh` | Release-time version bump across every `\Provides*` line plus `package.json`. Run from `master` only — see § Branching and versioning. |
 | `scripts/update-preview.sh` | Renders the compiled PDF to page images and pushes them to the sibling `TJ-CSCCG/TJCS-Images` repo (used by the Overleaf template gallery). |
+| `release-please-config.json` / `.release-please-manifest.json` | `release-please` config — `release-type: node` (version source of truth is `package.json`), plus an `extra-files` list of the 8 `\Provides*`-bearing files it keeps in sync. See § Branching and versioning. |
 | `.github/workflows/test.yaml` | The CI build matrix — functions as this project's test suite (see § Behavioral rules). |
-| `.github/workflows/release.yml` | Builds the CTAN package and source archives, and cuts a draft GitHub Release on version tags. |
+| `.github/workflows/release-please.yml` | Runs on push to `master`; maintains a release PR (version bump + `CHANGELOG.md`) and, on merge, creates the tag and a draft GitHub Release. Uses a GitHub App token so the release it creates can trigger other workflows. |
+| `.github/workflows/release.yml` | Runs on the release-please draft being published: builds the CTAN package and source archives, attaches them to that release, and moves the floating `vX.Y` tag. Does not create the release itself. |
 
 ## Branching and versioning
 
 - Feature and fix branches are cut from `dev` and PR back into `dev` — **not** `master`, even though `master` is GitHub's default branch (so the base branch must be set explicitly when opening a PR). `dev` is periodically fast-forwarded into `master` for a release; `master` is always an ancestor of `dev`, never diverges from it.
 - Commits observably follow Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `ci:`, …), though this is not yet CI-enforced on `dev`.
-- **Never bump the version string on `dev` or a feature branch.** `\ProvidesClass`/`\ProvidesFile` lines across `style/*.cls|*.cfg|*.def` and `package.json`'s `version` field move together, only via `./scripts/bump-version.sh X.Y.Z --tag`, and only at release time from `master`. Changelog-worthy context can still go into `CONTRIBUTING.md`'s project-history table in the same PR; the version number itself waits. (A `release-please`-based migration that would replace this manual script is in progress on a separate branch — check whether it has landed on `dev` before trusting this section verbatim.)
+- **Never hand-edit the version string on `dev` or a feature branch.** `release-please` owns `\ProvidesClass`/`\ProvidesFile` lines across `style/*.cls|*.cfg|*.def` and `package.json`'s `version` field (its `extra-files` list in `release-please-config.json`), driven by Conventional Commits on `master`: it maintains a standing release PR, and merging that PR bumps every version line and regenerates `CHANGELOG.md` in one commit. There is no local bump command — don't write one, and don't edit a `\Provides*` line by hand outside that flow. Changelog-worthy context can still go into `CONTRIBUTING.md`'s project-history table in a regular PR.
 
 ## Commands
 
@@ -52,8 +53,9 @@ Every change should be evaluated against which audience it affects, and whether 
 | Remove aux files + PDF | `make cleanall` | |
 | Windows equivalents | `.\make.bat thesis [-xelatex\|-lualatex]`, `.\make.bat wordcount`, `.\make.bat clean` / `cleanall` | engine is a positional arg, not an env-style token — see `.\make.bat help` |
 | Exercise one CI matrix leg locally | edit the matching option in `main.tex`'s `\documentclass[...]` block (`biblatex=false`, `field=humanities`, `minted=true`, `algo=algorithm2e`, `twoside`), then `make` | mirrors `test.yaml`'s `build-variants` job |
-| Release version bump (`master` only) | `./scripts/bump-version.sh X.Y.Z --tag` | never on `dev`/feature branches |
 | Regenerate README preview images | `./scripts/update-preview.sh [path-to-pdf] [--amend]` | pushes to `TJ-CSCCG/TJCS-Images` |
+
+Releases are not a local command: merge `release-please`'s standing release PR on `master`, then publish the draft GitHub Release it creates — that publish event triggers `release.yml` to attach the CTAN/PDF assets.
 
 `latexmk` and `texcount` must be on `PATH` — the Makefile hard-errors at parse time otherwise (`$(foreach REQUIRED_PROGRAMS...)`).
 
@@ -93,7 +95,7 @@ Every change should be evaluated against which audience it affects, and whether 
 
 `main.tex` mirrors this at the document level, simplified (see `main.tex` itself for the `\cleardoublepage`/`\clearpage` calls between stages, and the commented-out `\listoffigures`/`\listoftables` opt-in toggles): `\documentclass[...]{tongjithesis}` → `\tjbibresource{...}` → `\input{chapters/metadata}` → `\MakeCover`/`\MakeInfoPage` → `\frontmatter` (abstract, TOC) → `\mainmatter` (chapters `01`–`06`) → `\makereferences` → `\appendix` (`chapters/appendix`) → `\backmatter` (acknowledgements).
 
-Version identity is spread across `package.json` (`version`) and the `\ProvidesClass`/`\ProvidesFile` line in each of `style/tongjithesis.cls`, `style/tongjithesis.cfg`, `style/tongji-circled.def`, and `style/font/*.def` — kept in sync only by `scripts/bump-version.sh` (§ Branching and versioning).
+Version identity is spread across `package.json` (`version`) and the `\ProvidesClass`/`\ProvidesFile` line in each of `style/tongjithesis.cls`, `style/tongjithesis.cfg`, `style/tongji-circled.def`, and `style/font/*.def` — kept in sync automatically by `release-please` (§ Branching and versioning), never by hand.
 
 ## Further reading
 
