@@ -84,14 +84,17 @@
 \newif\iftongjithesis@doctype@taskbook
 \newif\iftongjithesis@doctype@proposal
 \newif\iftongjithesis@doctype@midterm
+% \iftongjithesis@form：doctype 为 3 份行政表格之一（即非 thesis）。三者共享页边距、
+% 封面版式等行为，凡“是否为行政表格”的判断都用本开关，避免同一条件写成三重嵌套。
+\newif\iftongjithesis@form
 \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{taskbook}{%
-  \tongjithesis@doctype@taskbooktrue
+  \tongjithesis@doctype@taskbooktrue\tongjithesis@formtrue
 }{%
   \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{proposal}{%
-    \tongjithesis@doctype@proposaltrue
+    \tongjithesis@doctype@proposaltrue\tongjithesis@formtrue
   }{%
     \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{midterm}{%
-      \tongjithesis@doctype@midtermtrue
+      \tongjithesis@doctype@midtermtrue\tongjithesis@formtrue
     }{%
       \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{thesis}{}{%
         \ClassWarning{tongjithesis}{doctype=\tongjithesis@doctype\space is unknown. Falling back to thesis}%
@@ -166,15 +169,11 @@
 % 页边距按同济本科毕业设计（论文）/毕业论文（设计）撰写规范设定；
 % 任务书/开题报告/中期报告为 A4，上 2.3cm/下 1.0cm/左右各 3.17cm（左右对称），
 % 与论文正文的装订页边距（左 3.3cm/右 1.8cm）不同。
-\iftongjithesis@doctype@taskbook
-  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
-\else\iftongjithesis@doctype@proposal
-  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
-\else\iftongjithesis@doctype@midterm
+\iftongjithesis@form
   \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
 \else
   \RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
-\fi\fi\fi
+\fi
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{eso-pic}
@@ -1223,10 +1222,25 @@
 % 是信息说明页“成果类型”专用的判断逻辑（含 design/engineering 二选一映射，
 % 不通用）；\tjcheckboxeq{当前值}{目标值} 是通用版本——当前值等于目标值时
 % 打勾，否则留空，供 \midtermdecision 等其他“多选一”复选框场景复用。
-% \mbox 包裹：\rlap 若为段首第一个盒子会触发 TeX 的伪断行（勾号脱落、方框变空），
+% 方框尺寸：复选框的 □ 应与正文汉字等宽等高，而 amssymb 的 $\square$
+% 明显小于周围汉字，故按当前字号缩放到 \tj@checkboxsize（相对 em，随字号自适应）
+% 并整体下沉 0.1em，使方框与汉字视觉等高、基线一致。不直接使用 U+25A1 全角字符，
+% 是因为该字形在 fandol/mac/windows/adobe/founder 各 fontset 下的覆盖与宽度并不一致。
+% 勾号与方框分别装入等宽盒子后用 \llap 叠印，使勾号居中于方框（而非左对齐）；
+% 下沉量作用于整组而非仅方框，否则方框下沉而勾号不动，勾号尖端会越出方框上边框。
+% 勾号另按 \tj@checkmarksize（小于方框边长）限高，确保落在方框内部。
+% \mbox 包裹：\llap/\rlap 若为段首第一个盒子会触发 TeX 的伪断行（勾号脱落、方框变空），
 % 故用 \mbox 强制水平模式，使复选框在段首（如中期报告审核意见框）也能正确渲染。
-\newcommand{\tjchecked}{\mbox{\rlap{$\checkmark$}$\square$}}
-\newcommand{\tjunchecked}{$\square$}
+\newcommand{\tj@checkboxsize}{0.95em}
+\newcommand{\tj@checkmarksize}{0.62em}
+\newcommand{\tj@checkboxglyph}[1]{%
+  \mbox{\raisebox{-0.1em}{%
+    \makebox[\tj@checkboxsize][c]{\resizebox{\tj@checkboxsize}{!}{$\square$}}%
+    \llap{\makebox[\tj@checkboxsize][c]{#1}}%
+  }}%
+}
+\newcommand{\tjchecked}{\tj@checkboxglyph{\resizebox{!}{\tj@checkmarksize}{$\checkmark$}}}
+\newcommand{\tjunchecked}{\tj@checkboxglyph{}}
 \newcommand{\tjcheckbox}[1]{%
   \ifthenelse{\equal{\tongjiinfotype}{#1}\OR
               \(\equal{#1}{design}\AND\equal{\tongjiinfotype}{engineering}\)}%
@@ -1369,9 +1383,10 @@
 % Task Book / Proposal / Mid-term Report Commands
 % ==========================================
 % 任务书（doctype=taskbook）、开题报告（doctype=proposal）、中期报告（doctype=midterm）
-% 与正文论文共用 chapters/metadata.tex 中的学院/专业/学生/课题/指导教师信息；
+% 与正文论文共用 chapters/metadata.tex 中的学院/专业/学生/课题信息（指导教师
+% 在 3 份表格中均为手写签字位，不预填，故不读取 \tongjithesisadvisor）；
 % \MakeDocument 依据 doctype 分派到 \MakeTaskBook / \MakeProposal / \MakeMidterm，
-% 三者仅渲染封面表格与签字区（如 \MakeCover 之于论文封面），正文各段落内容
+% 三者仅渲染封面（任务书另含起讫时间与签字区，如 \MakeCover 之于论文封面），正文各段落内容
 % 由 chapters/{taskbook,proposal,midterm}_body.tex 提供，写作者可直接编辑替换。
 
 \definecolor{tjnotegray}{HTML}{ADADAD}
@@ -1410,7 +1425,10 @@
 % 可调用 \midtermdecision{agree} 或 \midtermdecision{disagree}）。
 \newcommand{\midtermdecision}[1]{\def\tongjimidtermdecision{#1}}
 
-% 表格环境：课题信息表 / 签字区专用，字段文字取四号（四号）。
+% 表格环境：课题信息表 / 签字区专用，字段文字取四号宋体。
+% 字体显式声明为 \songti：三份行政表格的课题信息表为四号宋体，与论文封面
+% \MakeCover 的小二号黑体不同——两者共用版式（居中、定宽下划线）而非字体，
+% 故此处不能依赖文档默认字族隐式生效。
 % 本表不绘制边框，仅靠下划线呈现填空位置（与 \MakeCover 的 information
 % 环境一致），故不设置任何竖线或 \hline。
 % 可选参数为 tabcolsep（默认 8pt，与 information 一致）；必须在 \oldtabular
@@ -1419,7 +1437,7 @@
 \newenvironment{tjformtable}[2][8pt]{%
   \renewcommand{\arraystretch}{1.6}
   \setlength{\tabcolsep}{#1}
-  \noindent\zihao{4}\selectfont\oldtabular{#2}
+  \noindent\songti\zihao{4}\selectfont\oldtabular{#2}
 }{%
   \endoldtabular
 }
@@ -1445,15 +1463,57 @@
 \newcommand{\tjformnote}[1]{{\tjfontbody\color{tjnotegray}\selectfont #1\par}}
 \newcommand{\tjformhint}[1]{{\tjfontbody\color{tjhintgray}\selectfont #1\par}}
 
-% 小节标题：四号黑体，缩进 2 字符（正文分节，不计入目录、不参与章节编号）
+% 一级小节标题：四号黑体，缩进 2 字符（正文分节，不计入目录、不参与章节编号）
 \newcommand{\tjformsection}[1]{%
   \par\vspace{\baselineskip}%
   \noindent{\zihao{4}\heiti\selectfont\hspace{2em}#1}\par
   \vspace{0.5\baselineskip}%
 }
 
+% 二级小节标题：小四号黑体，缩进 2 字符，段前/段后各 0.5 行
+% （撰写规范：2 级标题小四号黑体，序号与题名之间空一格）。
+% 与 \tjformsection 一样采用手工编号——两级标题均不进入目录、不参与章节编号，
+% 故不使用 enumerate：列表环境无法把序号本身也置为黑体，且会额外引入列表缩进。
+\newcommand{\tjformsubsection}[1]{%
+  \par\vspace{0.5\baselineskip}%
+  \noindent{\tjfontbody\heiti\selectfont\hspace{2em}#1}\par
+  \vspace{0.5\baselineskip}%
+}
+
+% 居中的说明性大标题（如中期报告首页的“填写说明”）：小二号黑体加粗
+\newcommand{\tjformnotice}[1]{%
+  \begin{center}
+    \vspace*{3\baselineskip}
+    {\zihao{-2}\heiti\bfseries\selectfont #1}\par
+    \vspace{2\baselineskip}
+  \end{center}%
+}
+
+% 说明性正文（\tjformnotice 标题之下的条目）：四号宋体，比正文各节的小四号大一号
+\newenvironment{tjformnoticebody}{%
+  \par\zihao{4}\selectfont
+}{%
+  \par
+}
+
+% 审核意见框内的字段标签（如“指导教师意见：”）：小四黑体。
+% 标签单独成组，使紧随其后的灰色提示文字（\tjformnote/\tjformhint）保持宋体。
+\newcommand{\tjformlabel}[1]{{\tjfontbody\heiti\selectfont #1}}
+
 % 日期空白（年/月/日下划线填空）
 \newcommand{\tjdateblank}{\ulinebox{3em}~年~\ulinebox{2em}~月~\ulinebox{2em}~日}
+
+% 签字行：签名标签 + 定宽下划线 + 日期填空，右对齐。整行（含年/月/日）取黑体——
+% 正文中的签字行（任务书末尾、开题/中期报告的审核意见框内）为黑体，与同框内的
+% 宋体提示文字不同；任务书封面的签字行则属于封面信息表的一部分，随 \tjformtable
+% 取四号宋体，不走本命令。
+% #1（可选）：字号，默认小四；任务书正文末尾的签字行为四号，故显式传 \zihao{4}。
+% #2：标签文字（如“指导教师签名”）；#3：签名下划线宽度。
+\newcommand{\tjformsignature}[3][\tjfontbody]{%
+  \begin{flushright}
+    {#1\heiti\selectfont #2：\ulinebox{#3}\qquad\tjdateblank}%
+  \end{flushright}%
+}
 
 % 数字填空：定宽下划线 + 居中数字（#2 为空则为纯下划线），使起讫日期等数字字段
 % 无论填写与否都保持等长下划线。用 ulem 的 \uline（同 \ulinebox/\ulinecentered），
@@ -1551,7 +1611,8 @@
   \tj@formsubjecttable
 
   \vfill
-  \begin{center}\zihao{4}\selectfont \tjdateblank\end{center}
+  % 中期报告封面填表日期为三号——此处字号与开题报告（四号）不同
+  \begin{center}\zihao{3}\selectfont \tjdateblank\end{center}
   \vspace*{1.3cm}
   \clearpage
 }

@@ -85,7 +85,7 @@
   \end{tabularx}
 \end{table}
 
-三者与正文共用 \verb|chapters/metadata.tex| 中的 \cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}、\cs{thesisadvisor}，无需重复填写。各入口文件结构一致，均为 \cs{MakeDocument}（依据 \texttt{doctype} 分派到 \cs{MakeTaskBook}、\cs{MakeProposal} 或 \cs{MakeMidterm}，仅渲染封面表格与签字区，如 \cs{MakeCover} 之于论文封面）加上对应的正文内容文件：
+三者与正文共用 \verb|chapters/metadata.tex| 中的 \cs{school}、\cs{major}、\cs{student}、\cs{thesistitle}，无需重复填写（\cs{thesisadvisor} 不参与——3 份表格中指导教师均为手写签字位，不预填）。各入口文件结构一致，均为 \cs{MakeDocument}（依据 \texttt{doctype} 分派到 \cs{MakeTaskBook}、\cs{MakeProposal} 或 \cs{MakeMidterm}，仅渲染封面；任务书另含起讫时间与签字区，如 \cs{MakeCover} 之于论文封面）加上对应的正文内容文件：
 
 \begin{itemize}
   \item \texttt{taskbook.tex} \cs{MakeDocument} 后 \verb|\input{chapters/taskbook_body}|
@@ -94,6 +94,18 @@
 \end{itemize}
 
 正文分节内容（课题背景、进度安排等）由上述 \verb|chapters/*_body.tex| 提供，可直接编辑替换示例文字，用法与 \verb|appendix.tex| 类似。任务书的起讫周数通过 \verb|\taskbookperiod{起始年}{起始月}{起始日}{截止年}{截止月}{截止日}|（在 \verb|chapters/metadata.tex| 中设置）按天数自动换算（向上取整），无需手动填写周数。
+
+编辑 \verb|chapters/*_body.tex| 时，字体字号由下列排版命令负责，直接书写文字即可，无需手动设置 \cs{heiti} 或 \cs{zihao}：
+
+\begin{itemize}
+  \item \cs{tjformsection}\verb|{一、……}|：一级分节标题，四号黑体、缩进 2 字符。
+  \item \cs{tjformsubsection}\verb|{1．……}|：二级分节标题，小四号黑体、缩进 2 字符。两级标题均为手工编号，不计入目录、不参与章节编号。
+  \item \cs{tjformnotice}\verb|{填写说明}|：居中的说明性大标题，小二号黑体加粗（中期报告首页）。
+  \item \cs{tjformlabel}\verb|{指导教师意见：}|：审核意见框内的字段标签，小四号黑体。
+  \item \cs{tjformsignature}\verb|[字号]{签名标签}{下划线宽度}|：右对齐的签字行（签名标签 + 定宽下划线 + 年/月/日填空），整行黑体；字号可选，默认小四号，任务书正文末尾的签字行为四号。
+  \item \cs{tjformnote}\verb|{……}| / \cs{tjformhint}\verb|{……}|：两种灰色批注——前者为成稿时应删除的说明文字，后者为保留在表格中的内容提示。
+  \item \verb|\begin{tjreviewbox}…\end{tjreviewbox}|：审核意见方框；\cs{tjdateblank} 为独立的“年 / 月 / 日”下划线填空。
+\end{itemize}
 
 中期报告“专业审核意见”的“同意/不同意”复选框默认两格均留空，供打印后手写勾选；如需提前在电子版中标注，调用 \verb|\midtermdecision{agree}| 或 \verb|\midtermdecision{disagree}| 即可勾选对应选项。该复选框基于通用的 \cs{tjcheckboxeq}\verb|{当前值}{目标值}| 命令实现（当前值与目标值相等时打勾，否则留空），可用于扩展其他“多选一”复选框场景；信息说明页“成果类型”复选框（“填写论文信息”一节的 \cs{infotype}）用的是专用命令 \cs{tjcheckbox}，语义上多做了 design/engineering 二选一映射，两者不通用。
 
