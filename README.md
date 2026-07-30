@@ -95,7 +95,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 .\make.bat thesis         # compile main.pdf
 .\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
 .\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat cleanall       # clean all work files and all output PDFs by latexmk -C
 .\make.bat wordcount      # wordcount
 .\make.bat taskbook       # compile taskbook.pdf (任务书)
 .\make.bat proposal       # compile proposal.pdf (开题报告)
@@ -140,7 +140,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 ### 任务书 / 开题报告 / 中期报告
 
-除正文 `main.tex` 外，模板还提供 3 个独立可编译的官方行政文档，与正文共用 `chapters/metadata.tex` 中的学院/专业/学生/课题/指导教师信息：
+除正文 `main.tex` 外，模板还提供 3 个独立可编译的官方行政文档，与正文共用 `chapters/metadata.tex` 中的学院/专业/学生/课题信息（指导教师在 3 份表格中均为手写签字位，不预填）：
 
 | 文档     | 入口文件        | 构建命令                                |
 | -------- | --------------- | --------------------------------------- |

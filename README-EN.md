@@ -95,7 +95,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 .\make.bat thesis         # compile main.pdf
 .\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
 .\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat cleanall       # clean all work files and all output PDFs by latexmk -C
 .\make.bat wordcount      # wordcount
 .\make.bat taskbook       # compile taskbook.pdf (task book)
 .\make.bat proposal       # compile proposal.pdf (opening report)
@@ -140,7 +140,7 @@ Configure in `main.tex` via `\documentclass`:
 
 ### Task Book / Opening Report / Mid-term Report
 
-Beyond the thesis body (`main.tex`), the template also provides 3 standalone, independently compilable official administrative documents, sharing the school/major/student/topic/advisor information in `chapters/metadata.tex`:
+Beyond the thesis body (`main.tex`), the template also provides 3 standalone, independently compilable official administrative documents, sharing the school/major/student/topic information in `chapters/metadata.tex` (the advisor is a handwritten signature slot on all 3 forms and is not prefilled):
 
 | Document                    | Entry file      | Build command                            |
 | --------------------------- | --------------- | ----------------------------------------- |
