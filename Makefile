@@ -7,6 +7,11 @@
 # Basename of thesis
 THESIS = main
 
+# Basenames of the standalone administrative documents (task book, opening
+# report, mid-term report) — each is its own tongjithesis document, sharing
+# chapters/metadata.tex but selected via the doctype= class option.
+FORMS = taskbook proposal midterm
+
 # LaTeX engines options
 ENGINES = -xelatex -lualatex
 ENGINE ?= -xelatex  # Default engine to XeLaTeX
@@ -17,11 +22,11 @@ $(foreach prog,$(REQUIRED_PROGRAMS),\
     $(if $(shell which $(prog)),,$(error "$(prog) not found in PATH")))
 
 # Check if engine is valid
-ifneq ($(filter all pvc, $(MAKECMDGOALS)), )
+ifneq ($(filter all pvc thesis taskbook proposal midterm forms, $(MAKECMDGOALS)), )
     ifeq ($(filter $(ENGINES), $(ENGINE)), )
         $(info Error: Expected $$ENGINE in {$(ENGINES)}, Got "$(ENGINE)")
         $(info Setting default $$ENGINE to "-xelatex")
-        ENGINE = -xelatex
+        override ENGINE = -xelatex
     endif
 endif
 
@@ -69,7 +74,7 @@ endif
 # Targets
 ###################
 
-.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE
+.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm
 
 # Legacy alias
 thesis: all
@@ -77,10 +82,16 @@ thesis: all
 # Default target
 all: $(THESIS).pdf
 
-# Force remake
-$(THESIS).pdf: $(THESIS).tex FORCE_MAKE
-	@echo "Building $(THESIS).pdf with $(ENGINE)..."
+# Force remake (pattern rule: also matches taskbook.pdf/proposal.pdf/midterm.pdf below)
+%.pdf: %.tex FORCE_MAKE
+	@echo "Building $@ with $(ENGINE)..."
 	@latexmk $(LATEXMK_OPT) $<
+
+# Standalone administrative documents (task book / opening report / mid-term report)
+taskbook: taskbook.pdf
+proposal: proposal.pdf
+midterm: midterm.pdf
+forms: $(addsuffix .pdf,$(FORMS))
 
 # Preview continuous mode
 pvc: $(THESIS).tex
@@ -106,12 +117,14 @@ wordcount: $(THESIS).tex
 clean:
 	@echo "Cleaning auxiliary files..."
 	-@latexmk -c -bibtex -silent $(THESIS).tex 2> /dev/null
+	-@for f in $(FORMS); do latexmk -c -bibtex -silent $$f.tex 2> /dev/null; done
 	@echo "Clean complete."
 
 # Clean all generated files
 cleanall:
 	@echo "Cleaning all generated files..."
 	-@latexmk -C -bibtex -silent $(THESIS).tex 2> /dev/null
+	-@for f in $(FORMS); do latexmk -C -bibtex -silent $$f.tex 2> /dev/null; done
 	@echo "Clean complete."
 
 # Help target
@@ -123,6 +136,10 @@ help:
 	@echo "  wordcount - Count words in Chinese and English"
 	@echo "  clean     - Remove auxiliary files"
 	@echo "  cleanall  - Remove all generated files"
+	@echo "  taskbook  - Build taskbook.pdf (毕业设计（论文）任务书)"
+	@echo "  proposal  - Build proposal.pdf (毕业设计（论文）开题报告)"
+	@echo "  midterm   - Build midterm.pdf (毕业设计（论文）中期报告)"
+	@echo "  forms     - Build taskbook.pdf, proposal.pdf, and midterm.pdf"
 	@echo "  help      - Show this help message"
 	@echo ""
 	@echo "Available engines (use ENGINE=<option>):"
@@ -133,6 +150,7 @@ help:
 	@echo "  make"
 	@echo "  make ENGINE=-lualatex"
 	@echo "  make pvc"
+	@echo "  make forms"
 
 # Force remake
 FORCE_MAKE:

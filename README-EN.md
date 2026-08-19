@@ -82,6 +82,10 @@ make ENGINE=$ENGINE all # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to c
 make clean              # remove intermediate files
 make cleanall           # remove all intermediate files (including .pdf)
 make wordcount          # word count
+make taskbook           # compile taskbook.pdf (task book)
+make proposal           # compile proposal.pdf (opening report)
+make midterm            # compile midterm.pdf (mid-term report)
+make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 ```
 
 ###### Batchfile (Windows)
@@ -91,8 +95,12 @@ make wordcount          # word count
 .\make.bat thesis         # compile main.pdf
 .\make.bat thesis $ENGINE # use $ENGINE (where $ENGINE=-xelatex or -lualatex) to compile main.pdf
 .\make.bat clean          # clean all work files by latexmk -c
-.\make.bat cleanall       # clean all work files and main.pdf by latexmk -C
+.\make.bat cleanall       # clean all work files and all output PDFs by latexmk -C
 .\make.bat wordcount      # wordcount
+.\make.bat taskbook       # compile taskbook.pdf (task book)
+.\make.bat proposal       # compile proposal.pdf (opening report)
+.\make.bat midterm        # compile midterm.pdf (mid-term report)
+.\make.bat forms          # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 .\make.bat help           # read the manual
 ```
 
@@ -112,15 +120,16 @@ Configure in `main.tex` via `\documentclass`:
 
 ```latex
 \documentclass[
+  doctype=thesis,       % Document type: thesis body (default); taskbook/proposal/midterm — see "Task Book / Opening Report / Mid-term Report" below
   oneside,              % One-sided printing (default); use twoside for double-sided printing
   degree=bachelor,      % Degree type: bachelor (default); master/doctor reserved
   field=science,        % Major category: science = engineering/sciences (default) / humanities
-  fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
-  fontset=fandol,       % Font set passed to ctex, default is fandol
-  times=false,          % true: system Times New Roman; false: newtx (default)
+  algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
   minted=false,         % true: minted highlighting (needs Python+Pygments); false: listings (default)
   biblatex=true,        % true: biblatex+biber (default); false: bibtex+gbt7714
-  algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
+  fontset=fandol,       % Font set passed to ctex, default is fandol
+  times=false,          % true: system Times New Roman; false: newtx (default)
+  fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
 ]{tongjithesis}
 
 \tjbibresource{bib/note.bib}  % Bib database (supports multiple, comma-separated); styled per GB/T 7714-2025
@@ -128,6 +137,18 @@ Configure in `main.tex` via `\documentclass`:
 
 > [!NOTE]
 > Economics & Management: class of 2026 may choose `field=science` (recommended) or `field=humanities`; from class of 2027 onward, use `field=science` uniformly.
+
+### Task Book / Opening Report / Mid-term Report
+
+Beyond the thesis body (`main.tex`), the template also provides 3 standalone, independently compilable official administrative documents, sharing the school/major/student/topic information in `chapters/metadata.tex` (the advisor is a handwritten signature slot on all 3 forms and is not prefilled):
+
+| Document                    | Entry file      | Build command                            |
+| --------------------------- | --------------- | ----------------------------------------- |
+| Task book (任务书)          | `taskbook.tex`  | `make taskbook` / `.\make.bat taskbook`   |
+| Opening report (开题报告)   | `proposal.tex`  | `make proposal` / `.\make.bat proposal`   |
+| Mid-term report (中期报告)  | `midterm.tex`   | `make midterm` / `.\make.bat midterm`     |
+
+Build all 3 at once: `make forms` / `.\make.bat forms`. The task book's duration (in weeks) is computed automatically from `\taskbookperiod{startYear}{startMonth}{startDay}{endYear}{endMonth}{endDay}` — no manual entry needed. See the compiled template guide for details.
 
 ### Font Selection
 

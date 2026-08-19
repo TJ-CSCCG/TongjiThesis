@@ -5,6 +5,11 @@ chcp 65001 >nul
 REM Basename of thesis
 set THESIS=main
 
+REM Basenames of the standalone administrative documents (task book, opening
+REM report, mid-term report) — each is its own tongjithesis document, sharing
+REM chapters/metadata.tex but selected via the doctype= class option.
+set FORMS=taskbook proposal midterm
+
 REM Parse command line arguments
 set TARGET=%1
 if "%TARGET%"=="" set TARGET=all
@@ -51,6 +56,10 @@ if "%TARGET%"=="clean" goto :clean
 if "%TARGET%"=="cleanall" goto :cleanall
 if "%TARGET%"=="help" goto :help
 if "%TARGET%"=="thesis" goto :thesis
+if "%TARGET%"=="taskbook" goto :taskbook
+if "%TARGET%"=="proposal" goto :proposal
+if "%TARGET%"=="midterm" goto :midterm
+if "%TARGET%"=="forms" goto :forms
 
 echo Unknown target: %TARGET%
 goto :help
@@ -69,6 +78,40 @@ goto :help
 :thesis
     echo Building %THESIS%.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% %THESIS%.tex
+    goto :EOF
+
+:taskbook
+    echo Building taskbook.pdf with %ENGINE%...
+    latexmk %LATEXMK_OPT% taskbook.tex
+    goto :EOF
+
+:proposal
+    echo Building proposal.pdf with %ENGINE%...
+    latexmk %LATEXMK_OPT% proposal.tex
+    goto :EOF
+
+:midterm
+    echo Building midterm.pdf with %ENGINE%...
+    latexmk %LATEXMK_OPT% midterm.tex
+    goto :EOF
+
+:forms
+    call :taskbook
+    if ERRORLEVEL 1 (
+        echo Error building taskbook.pdf - see taskbook.log for details
+        exit /b 1
+    )
+    call :proposal
+    if ERRORLEVEL 1 (
+        echo Error building proposal.pdf - see proposal.log for details
+        exit /b 1
+    )
+    call :midterm
+    if ERRORLEVEL 1 (
+        echo Error building midterm.pdf - see midterm.log for details
+        exit /b 1
+    )
+    echo Finished!
     goto :EOF
 
 :pvc
@@ -131,16 +174,29 @@ goto :help
 :clean
     echo Cleaning auxiliary files...
     latexmk -c -bibtex -silent %THESIS%.tex 2>nul
+    for %%f in (%FORMS%) do (
+        latexmk -c -bibtex -silent %%f.tex 2>nul
+    )
     echo Clean complete.
     goto :EOF
 
 :cleanall
     echo Cleaning all generated files...
     latexmk -C -bibtex -silent %THESIS%.tex 2>nul
+    for %%f in (%FORMS%) do (
+        latexmk -C -bibtex -silent %%f.tex 2>nul
+    )
     if exist %THESIS%.pdf (
         echo Close the file: '%THESIS%.pdf'!
         pause
         goto :cleanall
+    )
+    for %%f in (%FORMS%) do (
+        if exist %%f.pdf (
+            echo Close the file: '%%f.pdf'!
+            pause
+            goto :cleanall
+        )
     )
     echo Clean complete.
     goto :EOF
@@ -153,6 +209,10 @@ goto :help
     echo   wordcount - Count words in Chinese and English
     echo   clean     - Remove auxiliary files
     echo   cleanall  - Remove all generated files
+    echo   taskbook  - Build taskbook.pdf (毕业设计（论文）任务书)
+    echo   proposal  - Build proposal.pdf (毕业设计（论文）开题报告)
+    echo   midterm   - Build midterm.pdf (毕业设计（论文）中期报告)
+    echo   forms     - Build taskbook.pdf, proposal.pdf, and midterm.pdf
     echo   help      - Show this help message
     echo   thesis    - Legacy alias for 'all'
     echo.
@@ -164,6 +224,7 @@ goto :help
     echo   make
     echo   make all -lualatex
     echo   make pvc
+    echo   make forms
     goto :EOF
 
 exit /B 0

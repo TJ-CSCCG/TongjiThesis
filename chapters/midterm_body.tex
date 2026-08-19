@@ -1,0 +1,47 @@
+\tjformnotice{填写说明}
+
+\begin{tjformnoticebody}
+\begin{enumerate}[label=\arabic*.,leftmargin=2em,labelsep=0.5em]
+  \item 请每位学生根据学校及学院检查的要求认真进行自查，及时发现课题研究过程中存在的问题，分析原因，并提出解决思路和措施，明确下一阶段任务。
+  \item 每位学生应根据项目实施情况认真、实事求是填写。
+  \item 该表填写完毕后，须请指导教师审核，并签署意见。
+  \item 《同济大学本科生毕业设计（论文）中期检查报告》将作为答辩资格审查的主要材料之一。
+\end{enumerate}
+\end{tjformnoticebody}
+
+\clearpage
+
+\tjformsection{一、课题进展情况}
+\tjformhint{是否按开题报告的内容及进度安排进行}
+\tjformhint{请在此处填写课题进展情况。}
+
+\tjformsection{二、课题研究已取得的阶段性成果：}
+\tjformhint{已完成的研究工作及成果}
+\tjformhint{请在此处填写已取得的阶段性成果。}
+
+\tjformsection{三、存在的问题与解决思路}
+\tjformhint{请在此处填写存在的问题与解决思路。}
+
+\tjformsection{四、下一阶段的工作计划和研究内容}
+\tjformhint{请在此处填写下一阶段的工作计划和研究内容。}
+
+\tjformsection{五、审核意见}
+
+\begin{tjreviewbox}
+  \tjformlabel{指导教师意见：}\tjformhint{（建议对各项内容给与意见和评价，字数不限。）}
+
+  \vspace{7\baselineskip}
+  \tjformsignature{指导教师签名}{8em}
+\end{tjreviewbox}
+
+\begin{tjreviewbox}
+  \tjformlabel{专业审核意见：}
+
+  \vspace{1.5\baselineskip}
+  % 默认两格均留空，供打印后手写勾选；如需提前在电子版中标注，在
+  % chapters/metadata.tex 中调用 \midtermdecision{agree} 或 \midtermdecision{disagree}
+  \tjcheckboxeq{\tongjimidtermdecision}{agree}~同\ 意\qquad\tjcheckboxeq{\tongjimidtermdecision}{disagree}~不\ 同\ 意
+
+  \vspace{5\baselineskip}
+  \tjformsignature{负责人签名}{8em}
+\end{tjreviewbox}

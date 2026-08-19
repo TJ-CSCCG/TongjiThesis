@@ -51,6 +51,10 @@
 % Define algo option: algpseudocode (default, algorithm + algorithmicx + algpseudocode),
 % algorithm2e (standalone algorithm2e package)
 \DeclareStringOption[algpseudocode]{algo}
+% Define doctype option: which document \MakeDocument renders.
+% thesis (default) — full thesis flow, unaffected (call \MakeCover/\MakeInfoPage as before)
+% taskbook  — 毕业设计（论文）任务书；proposal — 开题报告；midterm — 中期报告
+\DeclareStringOption[thesis]{doctype}
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
@@ -77,6 +81,27 @@
   \tongjithesis@algorithmtwoetrue
 }{}{}
 \let\iftjalgorithmtwoe\iftongjithesis@algorithmtwoe
+\newif\iftongjithesis@doctype@taskbook
+\newif\iftongjithesis@doctype@proposal
+\newif\iftongjithesis@doctype@midterm
+% \iftongjithesis@form：doctype 为 3 份行政表格之一（即非 thesis）。三者共享页边距、
+% 封面版式等行为，凡“是否为行政表格”的判断都用本开关，避免同一条件写成三重嵌套。
+\newif\iftongjithesis@form
+\expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{taskbook}{%
+  \tongjithesis@doctype@taskbooktrue\tongjithesis@formtrue
+}{%
+  \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{proposal}{%
+    \tongjithesis@doctype@proposaltrue\tongjithesis@formtrue
+  }{%
+    \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{midterm}{%
+      \tongjithesis@doctype@midtermtrue\tongjithesis@formtrue
+    }{%
+      \expandafter\ifstrequal\expandafter{\tongjithesis@doctype}{thesis}{}{%
+        \ClassWarning{tongjithesis}{doctype=\tongjithesis@doctype\space is unknown. Falling back to thesis}%
+      }%
+    }%
+  }%
+}
 
 % ==========================================
 % Class Loading
@@ -90,7 +115,7 @@
   {\ClassError{tongjithesis}{Unknown fontset: \tongjithesis@fontset}{}}
 
 % ==========================================
-% Formatting Constants (官方模板规范)
+% Formatting Constants (官方规范)
 % ==========================================
 % Font sizes
 \newcommand{\tjfonttitle}{\zihao{-2}}        % 课题名称：小二号
@@ -101,8 +126,9 @@
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
 \newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\linespread{1}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范；\linespread{1} 隔离全文 1.625 倍行距）
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
+\newcommand{\tjfontformtitle}{\zihao{-0}}    % 任务书 / 开题报告 / 中期报告封面标题：小初号（36pt）
 % Spacing
-% Word 的 "0.5 行" 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
+% Word 的 “0.5 行” 按单倍行距字体行高计算（≈ 字号 × 1.2 × 0.5 = 0.6em），
 % 与段落自身行距无关；不能用 0.5\baselineskip（会被 \setstretch 拉伸）。
 \newcommand{\tjskipbeforesec}{0.6em}            % 段前 0.5 行（Word 口径）
 \newcommand{\tjskipaftersec}{0.6em}             % 段后 0.5 行（Word 口径）
@@ -126,6 +152,13 @@
 \else
   \newcommand{\tjheadertext}{毕业设计（论文）}
 \fi
+% 任务书/开题报告/中期报告封面大标题专用：与 \tjheadertext 同义，但括号取半角，
+% 使小初号（36pt）标题（如“毕业设计(论文)开题报告”）能在一行内排下。
+\iftongjithesis@humanities
+  \newcommand{\tjformheadertext}{毕业论文(设计)}
+\else
+  \newcommand{\tjformheadertext}{毕业设计(论文)}
+\fi
 
 % ==========================================
 % Required Packages
@@ -133,8 +166,14 @@
 % Page layout
 % headheight 43pt ≈ 1.14cm logo (≈32pt) + 小四号正文行 (≈11pt)；防止 fancyhdr headheight warning
 \setlength{\headheight}{43pt}
-% 页边距按同济本科毕业设计（论文）/毕业论文（设计）官方 Word 模板复刻
-\RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+% 页边距按同济本科毕业设计（论文）/毕业论文（设计）撰写规范设定；
+% 任务书/开题报告/中期报告为 A4，上 2.3cm/下 1.0cm/左右各 3.17cm（左右对称），
+% 与论文正文的装订页边距（左 3.3cm/右 1.8cm）不同。
+\iftongjithesis@form
+  \RequirePackage[a4paper,top=2.3cm,bottom=1.0cm,left=3.17cm,right=3.17cm]{geometry}
+\else
+  \RequirePackage[a4paper,top=4.0cm,bottom=2.7cm,left=3.3cm,right=1.8cm]{geometry}
+\fi
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{eso-pic}
@@ -330,7 +369,7 @@
 % 参考文献样式遵循 GB/T 7714-2025。所需宏包版本（均随 TeX Live 2026+ 分发）：
 %   - biblatex 路径：biblatex-gb7714-2015 >= v1.1w（提供 gb7714-2025 样式）
 %   - bibtex   路径：gbt7714 >= v2.2.0（提供 gbt7714-2025-numeric.bst）
-% 版本过旧会报「style/bst not found」错误；升级步骤见 README「快速开始」提示。
+% 版本过旧会报“style/bst not found”错误；升级步骤见 README“快速开始”提示。
 \iftongjithesis@biblatex
   \RequirePackage[
     backend=biber,
@@ -570,7 +609,7 @@
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
 % 附录（2026 spec）：
-%   「附录」作为未编号 H1 章节标题（四号黑体居中），写入目录。
+%   “附录”作为未编号 H1 章节标题（四号黑体居中），写入目录。
 %   附录内的小节使用 A. B. C. 编号（与正文 chapter.section 解耦），
 %   浮动体 (figure/table/equation/…) 随节编号为 A.1、A.2、B.1 …
 %   \appendixsection / \appendixsubsection 是 \section / \subsection 的别名，
@@ -601,7 +640,7 @@
   \counterwithin{dfn}{section}%
   \counterwithin{exmp}{section}%
   \counterwithin{rem}{section}%
-  % 理工科：「A. 节名」；文科：「（A） 节名」（括号来自正文 section/name 延续，无点号）
+  % 理工科：“A. 节名”；文科：“（A） 节名”（括号来自正文 section/name 延续，无点号）
   \iftongjithesis@humanities
     \ctexset{section/number={\thesection},section/aftername={\hspace{0.5em}}}%
   \else
@@ -672,7 +711,7 @@
 \renewcommand{\contentsname}{目\hspace{0.5em}录}
 \renewcommand{\cfttoctitlefont}{\hfill\heiti\tjfontheading}
 \renewcommand{\cftaftertoctitle}{\hfill}
-% 目录标题后留一空行（匹配官方 Word 模板）
+% 目录标题后留一空行
 % tocloft[titles] 下 \cftaftertoctitleskip 无效——\tableofcontents 内部走 \chapter*，
 % 所以直接在 \@starttoc 前注入 \vspace。
 % 标题“前”的空行由页面上边距 + ctex chapter beforeskip 提供，此处不再额外注入以免产生孤儿页。
@@ -689,7 +728,7 @@
 \renewcommand{\cftsecpagefont}{\tjfontbody}
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
-% 目录行距：对应 Word「1.5 倍行距」——使用 \tjtoclinespread
+% 目录行距：对应 Word“1.5 倍行距”——使用 \tjtoclinespread
 \let\tj@origtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
   \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
@@ -829,7 +868,7 @@
   }%
 \fi
 
-% 脚注编号使用①②③… (官方模板规范)
+% 脚注编号使用①②③… (官方规范)
 \renewcommand{\thefootnote}{\TJCircled{\the\c@footnote}}
 
 
@@ -932,7 +971,7 @@
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
 
 % Configure references in Chinese
-% "第X章/节" pattern: number is wrapped, needs full multi/range formats
+% “第X章/节” pattern: number is wrapped, needs full multi/range formats
 \iftongjithesis@humanities
   \crefformat{chapter}{#2第#1章#3}
   \crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{、#2第#1章#3}{和#2第#1章#3}
@@ -951,7 +990,7 @@
 \crefformat{subsection}{#2第~#1~小节#3}
 \crefmultiformat{subsection}{#2第~#1~小节#3}{和#2第~#1~小节#3}{、#2第~#1~小节#3}{和#2第~#1~小节#3}
 \crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6}
-% "名称~X" pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
+% “名称~X” pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
 % --- Common float/equation types ---
 \crefformat{equation}{#2式~(#1)#3}
 \crefmultiformat{equation}{#2式~(#1)#3}{和#2式~(#1)#3}{、#2式~(#1)#3}{和#2式~(#1)#3}
@@ -1145,7 +1184,7 @@
       \tjfonttitle\MakeUppercase{\textbf{\tongjiuniversityeng}}\\
       % \vskip 20pt
 
-      % 封面大标题：初号黑体（官方模板规范，理工/文科不同）
+      % 封面大标题：初号黑体（官方规范，理工/文科不同）
       \zihao{-0}\heiti{\tjcovertext}\\
       \vspace{60pt}
 
@@ -1179,13 +1218,36 @@
   \noindent #1：#2\par\vspace{0.5em}
 }
 
-% Internal helpers for checkbox rendering (used only inside \MakeInfoPage)
-\newcommand{\tjchecked}{\rlap{$\checkmark$}$\square$}
-\newcommand{\tjunchecked}{$\square$}
+% 复选框渲染：\tjchecked/\tjunchecked 是勾选/未勾选的字形本身；\tjcheckbox
+% 是信息说明页“成果类型”专用的判断逻辑（含 design/engineering 二选一映射，
+% 不通用）；\tjcheckboxeq{当前值}{目标值} 是通用版本——当前值等于目标值时
+% 打勾，否则留空，供 \midtermdecision 等其他“多选一”复选框场景复用。
+% 方框尺寸：复选框的 □ 应与正文汉字等宽等高，而 amssymb 的 $\square$
+% 明显小于周围汉字，故按当前字号缩放到 \tj@checkboxsize（相对 em，随字号自适应）
+% 并整体下沉 0.1em，使方框与汉字视觉等高、基线一致。不直接使用 U+25A1 全角字符，
+% 是因为该字形在 fandol/mac/windows/adobe/founder 各 fontset 下的覆盖与宽度并不一致。
+% 勾号与方框分别装入等宽盒子后用 \llap 叠印，使勾号居中于方框（而非左对齐）；
+% 下沉量作用于整组而非仅方框，否则方框下沉而勾号不动，勾号尖端会越出方框上边框。
+% 勾号另按 \tj@checkmarksize（小于方框边长）限高，确保落在方框内部。
+% \mbox 包裹：\llap/\rlap 若为段首第一个盒子会触发 TeX 的伪断行（勾号脱落、方框变空），
+% 故用 \mbox 强制水平模式，使复选框在段首（如中期报告审核意见框）也能正确渲染。
+\newcommand{\tj@checkboxsize}{0.95em}
+\newcommand{\tj@checkmarksize}{0.62em}
+\newcommand{\tj@checkboxglyph}[1]{%
+  \mbox{\raisebox{-0.1em}{%
+    \makebox[\tj@checkboxsize][c]{\resizebox{\tj@checkboxsize}{!}{$\square$}}%
+    \llap{\makebox[\tj@checkboxsize][c]{#1}}%
+  }}%
+}
+\newcommand{\tjchecked}{\tj@checkboxglyph{\resizebox{!}{\tj@checkmarksize}{$\checkmark$}}}
+\newcommand{\tjunchecked}{\tj@checkboxglyph{}}
 \newcommand{\tjcheckbox}[1]{%
   \ifthenelse{\equal{\tongjiinfotype}{#1}\OR
               \(\equal{#1}{design}\AND\equal{\tongjiinfotype}{engineering}\)}%
     {\tjchecked}{\tjunchecked}%
+}
+\newcommand{\tjcheckboxeq}[2]{%
+  \ifthenelse{\equal{#1}{#2}}{\tjchecked}{\tjunchecked}%
 }
 \newcommand{\ulinebox}[2][c]{%
   \uline{\makebox[#2][#1]{\phantom{X}}}%
@@ -1225,7 +1287,7 @@
        \setlength{\parindent}{2em}\tongjiinfoabstract\par}
     }
 
-    % 按成果类型只显示对应行（官方模板为二选一）
+    % 按成果类型只显示对应行（成果类型二选一）
     \ifthenelse{\equal{\tongjiinfotype}{design}\OR\equal{\tongjiinfotype}{engineering}}{%
       \infoline{毕业设计}{主要图纸~\ifx\tongjiinfodrawings\empty \ulinebox{4em} \else \underline{\makebox[4em][c]{\tongjiinfodrawings}} \fi~张，正文总字数~\ifx\tongjiinfowordcount\empty \ulinebox{6em} \else \underline{\makebox[6em][c]{\tongjiinfowordcount}} \fi~字}%
     }{%
@@ -1246,7 +1308,7 @@
   \global\tjbindinglinetrue
 }
 
-% 设置中文摘要页（毕业设计时标题改为"设计总说明"）
+% 设置中文摘要页（毕业设计时标题改为“设计总说明”）
 \newcommand{\MakeAbstract}[2]{
   \vspace*{0.1em}
   \tj@abstractblock{\bfseries\heiti\tjfonttitle}{%
@@ -1259,7 +1321,7 @@
   \ifdefempty{\tongjiabstractsubtitle}{%
     \ifx\tongjithesissubtitle\empty\else
       \vspace{0.6em}%
-      \tj@abstractblock{\bfseries\heiti\zihao{3}}{\tjtitlecninline{\tongjithesissubtitle}}% 副标题：三号（官方模板规范）
+      \tj@abstractblock{\bfseries\heiti\zihao{3}}{\tjtitlecninline{\tongjithesissubtitle}}% 副标题：三号（官方规范）
     \fi
   }{%
     \vspace{0.6em}%
@@ -1296,7 +1358,7 @@
   \ifdefempty{\tongjiabstractsubtitleeng}{%
     \ifx\tongjithesissubtitleeng\empty\else
       \vspace{0.6em}%
-      \tj@abstractblock{\zihao{3}\bfseries}{\tjtitleeninline{\tongjithesissubtitleeng}}% 副标题：三号（官方模板规范）
+      \tj@abstractblock{\zihao{3}\bfseries}{\tjtitleeninline{\tongjithesissubtitleeng}}% 副标题：三号（官方规范）
     \fi
   }{%
     \vspace{0.6em}%
@@ -1315,6 +1377,258 @@
   \tjfontbody
   \vspace{\baselineskip}
   {\noindent\textbf{Key words: }#2}\par
+}
+
+% ==========================================
+% Task Book / Proposal / Mid-term Report Commands
+% ==========================================
+% 任务书（doctype=taskbook）、开题报告（doctype=proposal）、中期报告（doctype=midterm）
+% 与正文论文共用 chapters/metadata.tex 中的学院/专业/学生/课题信息（指导教师
+% 在 3 份表格中均为手写签字位，不预填，故不读取 \tongjithesisadvisor）；
+% \MakeDocument 依据 doctype 分派到 \MakeTaskBook / \MakeProposal / \MakeMidterm，
+% 三者仅渲染封面（任务书另含起讫时间与签字区，如 \MakeCover 之于论文封面），正文各段落内容
+% 由 chapters/{taskbook,proposal,midterm}_body.tex 提供，写作者可直接编辑替换。
+
+\definecolor{tjnotegray}{HTML}{ADADAD}
+\definecolor{tjhintgray}{HTML}{747474}
+
+% 任务书专用信息：起讫时间（其余字段复用 \school/\major/\student/\thesistitle/…）
+% 周数由起讫日期自动换算（向上取整），无需手动填写。
+\RequirePackage{pgfcalendar}
+\newcount\tj@julianstart
+\newcount\tj@julianend
+\newcount\tj@weeks
+% 数值零填充（如 9 -> 09），供拼接 ISO 日期字符串（yyyy-mm-dd）使用；
+% \numexpr 先规整输入（容忍调用方已自行补零，如 09 不会被重复补零）
+\newcommand{\tj@zeropad}[1]{%
+  \ifnum\numexpr#1\relax<10 0\the\numexpr#1\relax\else\the\numexpr#1\relax\fi
+}
+\newcommand{\taskbookperiod}[6]{%
+  \def\tongjitaskbookstartyear{#1}\def\tongjitaskbookstartmonth{#2}\def\tongjitaskbookstartday{#3}%
+  \def\tongjitaskbookendyear{#4}\def\tongjitaskbookendmonth{#5}\def\tongjitaskbookendday{#6}%
+  \pgfcalendardatetojulian{#1-\tj@zeropad{#2}-\tj@zeropad{#3}}{\tj@julianstart}%
+  \pgfcalendardatetojulian{#4-\tj@zeropad{#5}-\tj@zeropad{#6}}{\tj@julianend}%
+  \ifnum\tj@julianend<\tj@julianstart
+    \ClassError{tongjithesis}{\string\taskbookperiod: end date is before start date}{Swap the start/end date arguments of \string\taskbookperiod.}%
+  \fi
+  % \numexpr's "/" rounds to nearest (ties away from zero), not truncates,
+  % so a plain (delta+7-1)/7 ceiling-division trick silently over-counts by
+  % one week for many date ranges. \divide truncates (unlike \numexpr's "/"),
+  % so compute the sum with \numexpr and only then \divide.
+  \tj@weeks=\numexpr\tj@julianend-\tj@julianstart+7\relax
+  \divide\tj@weeks by 7
+  \edef\tongjitaskbookweeks{\the\tj@weeks}%
+}
+
+% 中期报告专用信息：专业审核意见的“同意/不同意”复选框（可选，默认留空——
+% 该项通常由专业负责人在打印后手写勾选；若需要提前在电子版中标注，
+% 可调用 \midtermdecision{agree} 或 \midtermdecision{disagree}）。
+\newcommand{\midtermdecision}[1]{\def\tongjimidtermdecision{#1}}
+
+% 表格环境：课题信息表 / 签字区专用，字段文字取四号宋体。
+% 字体显式声明为 \songti：三份行政表格的课题信息表为四号宋体，与论文封面
+% \MakeCover 的小二号黑体不同——两者共用版式（居中、定宽下划线）而非字体，
+% 故此处不能依赖文档默认字族隐式生效。
+% 本表不绘制边框，仅靠下划线呈现填空位置（与 \MakeCover 的 information
+% 环境一致），故不设置任何竖线或 \hline。
+% 可选参数为 tabcolsep（默认 8pt，与 information 一致）；必须在 \oldtabular
+% 开始解析列格式前设定——tabcolsep 一旦用于构建列间距，在表格主体内再
+% \setlength 为时已晚（且直接放在 tabular 主体内并非合法位置）。
+\newenvironment{tjformtable}[2][8pt]{%
+  \renewcommand{\arraystretch}{1.6}
+  \setlength{\tabcolsep}{#1}
+  \noindent\songti\zihao{4}\selectfont\oldtabular{#2}
+}{%
+  \endoldtabular
+}
+
+% 课题信息表：任务书/开题报告/中期报告共用。沿用论文封面 \MakeCover 的版式——
+% 整体居中，每个字段独占一行，用 \ulinecentered 定宽下划线：下划线长度、位置
+% 不随是否填写而变化（空则为纯下划线，内容过长则在定宽内居中换行），与论文
+% 封面风格统一。
+\newcommand{\tj@formsubjecttable}{%
+  \begin{center}
+    \begin{tjformtable}{M{5em}M{22em}}
+      课题名称 & \ulinecentered{\tongjithesistitle} \\
+      副\enskip{}标\enskip{}题 & \ulinecentered{\tongjithesissubtitle} \\
+      学\quad{}\quad{}院 & \ulinecentered{\tongjischool} \\
+      专\quad{}\quad{}业 & \ulinecentered{\tongjimajor} \\
+      学生姓名 & \ulinecentered{\tongjiauthor} \\
+      学\quad{}\quad{}号 & \ulinecentered{\tongjiauthornumber} \\
+    \end{tjformtable}
+  \end{center}%
+}
+
+% 说明性文字（此项成稿删除）与提示性文字（内容提示，不删除）——两种灰色，语义不同
+\newcommand{\tjformnote}[1]{{\tjfontbody\color{tjnotegray}\selectfont #1\par}}
+\newcommand{\tjformhint}[1]{{\tjfontbody\color{tjhintgray}\selectfont #1\par}}
+
+% 一级小节标题：四号黑体，缩进 2 字符（正文分节，不计入目录、不参与章节编号）
+\newcommand{\tjformsection}[1]{%
+  \par\vspace{\baselineskip}%
+  \noindent{\zihao{4}\heiti\selectfont\hspace{2em}#1}\par
+  \vspace{0.5\baselineskip}%
+}
+
+% 二级小节标题：小四号黑体，缩进 2 字符，段前/段后各 0.5 行
+% （撰写规范：2 级标题小四号黑体，序号与题名之间空一格）。
+% 与 \tjformsection 一样采用手工编号——两级标题均不进入目录、不参与章节编号，
+% 故不使用 enumerate：列表环境无法把序号本身也置为黑体，且会额外引入列表缩进。
+\newcommand{\tjformsubsection}[1]{%
+  \par\vspace{0.5\baselineskip}%
+  \noindent{\tjfontbody\heiti\selectfont\hspace{2em}#1}\par
+  \vspace{0.5\baselineskip}%
+}
+
+% 居中的说明性大标题（如中期报告首页的“填写说明”）：小二号黑体加粗
+\newcommand{\tjformnotice}[1]{%
+  \begin{center}
+    \vspace*{3\baselineskip}
+    {\zihao{-2}\heiti\bfseries\selectfont #1}\par
+    \vspace{2\baselineskip}
+  \end{center}%
+}
+
+% 说明性正文（\tjformnotice 标题之下的条目）：四号宋体，比正文各节的小四号大一号
+\newenvironment{tjformnoticebody}{%
+  \par\zihao{4}\selectfont
+}{%
+  \par
+}
+
+% 审核意见框内的字段标签（如“指导教师意见：”）：小四黑体。
+% 标签单独成组，使紧随其后的灰色提示文字（\tjformnote/\tjformhint）保持宋体。
+\newcommand{\tjformlabel}[1]{{\tjfontbody\heiti\selectfont #1}}
+
+% 日期空白（年/月/日下划线填空）
+\newcommand{\tjdateblank}{\ulinebox{3em}~年~\ulinebox{2em}~月~\ulinebox{2em}~日}
+
+% 签字行：签名标签 + 定宽下划线 + 日期填空，右对齐。整行（含年/月/日）取黑体——
+% 正文中的签字行（任务书末尾、开题/中期报告的审核意见框内）为黑体，与同框内的
+% 宋体提示文字不同；任务书封面的签字行则属于封面信息表的一部分，随 \tjformtable
+% 取四号宋体，不走本命令。
+% #1（可选）：字号，默认小四；任务书正文末尾的签字行为四号，故显式传 \zihao{4}。
+% #2：标签文字（如“指导教师签名”）；#3：签名下划线宽度。
+\newcommand{\tjformsignature}[3][\tjfontbody]{%
+  \begin{flushright}
+    {#1\heiti\selectfont #2：\ulinebox{#3}\qquad\tjdateblank}%
+  \end{flushright}%
+}
+
+% 数字填空：定宽下划线 + 居中数字（#2 为空则为纯下划线），使起讫日期等数字字段
+% 无论填写与否都保持等长下划线。用 ulem 的 \uline（同 \ulinebox/\ulinecentered），
+% 使全表下划线的粗细与位置一致。
+\newcommand{\tjnumline}[2]{\uline{\makebox[#1][c]{#2}}}
+
+% 审核意见方框（指导教师/专业负责人意见 + 签名 + 日期）
+% \fbox 的参数须一次性、完整地给出，不能跨 \newenvironment 的 begin/end 两段拆分
+% （\fbox 按普通花括号参数扫描，而非 \begingroup/\endgroup 式分组）；
+% 因此先用 lrbox 把 minipage 内容完整装入一个盒子寄存器，
+% 再在 end 段一次性用 \fbox 包裹已装入完毕的盒子。
+\newsavebox{\tj@reviewbox}
+\newenvironment{tjreviewbox}{%
+  \par\vspace{0.5\baselineskip}\noindent
+  \begin{lrbox}{\tj@reviewbox}
+  \begin{minipage}[t]{\dimexpr\linewidth-2\fboxsep-2\fboxrule-2pt\relax}\tjfontbody
+}{%
+  \end{minipage}
+  \end{lrbox}
+  \fbox{\usebox{\tj@reviewbox}}\par\vspace{0.5\baselineskip}
+}
+
+% 任务书/开题报告/中期报告全程不显示装订线：三者均为单独打印/提交的行政表格，
+% 不与正文一同装订，且作为独立行政表格本无该装饰。这与 \MakeCover/\MakeInfoPage
+% 形成对比——后两者的装订线仅在封面/信息页本身关闭，此后随论文正文恢复；此处
+% 恢复为 true 没有意义（\clearpage 而非 titlepage 的 \newpage 触发首页 shipout，
+% 若在 \clearpage 前恢复为 true 会导致装订线错误地出现在封面页本身）。
+% 三个命令均不将 \tjbindingline 恢复为 true——同一次编译内不会再调用 \MakeCover
+% 等其他封面命令，故无需担心状态泄漏到其他文档。
+
+% 任务书封面：课题信息表 + 起讫时间 + 指导教师/教学院长签字区。
+% 版式沿用论文封面 \MakeCover：整体居中、下划线定宽（\ulinecentered），风格统一。
+\newcommand{\MakeTaskBook}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    \includegraphics[height=1.7cm]{figures/tongji.pdf}\\
+    \vspace{1em}
+    {\heiti\tjfontformtitle\selectfont \tjformheadertext 任务书}\par
+    \vspace{3\baselineskip}
+  \end{center}
+
+  \tj@formsubjecttable
+
+  \vspace{2\baselineskip}
+  % 起讫时间：标签独占一行 + 日期区间另起一行，整体居中
+  \begin{center}\zihao{4}\selectfont
+    \tjformheadertext 起讫时间\\[0.5em]
+    自~\tjnumline{2.4em}{\tongjitaskbookstartyear}~年~\tjnumline{1.5em}{\tongjitaskbookstartmonth}~月~\tjnumline{1.5em}{\tongjitaskbookstartday}~日至~\tjnumline{2.4em}{\tongjitaskbookendyear}~年~\tjnumline{1.5em}{\tongjitaskbookendmonth}~月~\tjnumline{1.5em}{\tongjitaskbookendday}~日共~\tjnumline{1.5em}{\tongjitaskbookweeks}~周
+  \end{center}
+
+  \vfill
+
+  % 签字区：居中
+  \begin{center}
+    \begin{tjformtable}[2pt]{M{7em}M{8.6em}M{11.5em}}
+      指导教师签名 & \ulinebox{8.6em} & \tjdateblank \\
+      教学院长签名 & \ulinebox{8.6em} & \tjdateblank \\
+    \end{tjformtable}
+  \end{center}
+  \vspace*{1.5cm}
+  \clearpage
+}
+
+% 开题报告封面：课题信息表（无起讫时间）+ 填表日期
+\newcommand{\MakeProposal}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    \includegraphics[height=1.7cm]{figures/tongji.pdf}\\
+    \vspace{1em}
+    {\heiti\tjfontformtitle\selectfont \tjformheadertext 开题报告}\par
+    \vspace{3\baselineskip}
+  \end{center}
+
+  \tj@formsubjecttable
+
+  \vfill
+  \begin{center}\zihao{4}\selectfont \tjdateblank\end{center}
+  \vspace*{1.3cm}
+  \clearpage
+}
+
+% 中期报告封面：与开题报告共用同一表格结构（三者同源）
+\newcommand{\MakeMidterm}{%
+  \global\tjbindinglinefalse
+  \begin{center}
+    \vspace*{2\baselineskip}
+    \includegraphics[height=1.7cm]{figures/tongji.pdf}\\
+    \vspace{1em}
+    {\heiti\tjfontformtitle\selectfont \tjformheadertext 中期报告}\par
+    \vspace{3\baselineskip}
+  \end{center}
+
+  \tj@formsubjecttable
+
+  \vfill
+  % 中期报告封面填表日期为三号——此处字号与开题报告（四号）不同
+  \begin{center}\zihao{3}\selectfont \tjdateblank\end{center}
+  \vspace*{1.3cm}
+  \clearpage
+}
+
+% \MakeDocument：按 doctype 分派封面渲染；正文由 chapters/{taskbook,proposal,midterm}_body.tex 提供。
+% doctype=thesis（默认）不使用本命令——论文封面/信息页仍由 \MakeCover/\MakeInfoPage 显式调用（main.tex 不变）。
+\newcommand{\MakeDocument}{%
+  \iftongjithesis@doctype@taskbook
+    \MakeTaskBook
+  \else\iftongjithesis@doctype@proposal
+    \MakeProposal
+  \else\iftongjithesis@doctype@midterm
+    \MakeMidterm
+  \else
+    \ClassError{tongjithesis}{\string\MakeDocument\space requires doctype=taskbook|proposal|midterm}{Set doctype in \string\documentclass[doctype=taskbook]{tongjithesis}, or call \string\MakeTaskBook/\string\MakeProposal/\string\MakeMidterm directly.}%
+  \fi\fi\fi
 }
 
 % ==========================================
