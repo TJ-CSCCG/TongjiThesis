@@ -200,6 +200,8 @@ jobs:
             pygments: false
           - variant: algo-algorithm2e
             pygments: false
+          - variant: times-true
+            pygments: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -256,6 +258,11 @@ jobs:
         run: |
           sed -i 's/algo=algpseudocode/algo=algorithm2e/' main.tex
 
+      - name: Configure times=true variant
+        if: matrix.variant == 'times-true'
+        run: |
+          sed -i 's/times=false/times=true/' main.tex
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -276,6 +283,9 @@ jobs:
           fi
           if [ "${{ matrix.variant }}" = "algo-algorithm2e" ]; then
             grep -q 'algo=algorithm2e' main.tex || { echo "ERROR: algo=algorithm2e not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "times-true" ]; then
+            grep -q 'times=true' main.tex || { echo "ERROR: times=true not set"; exit 1; }
           fi
 
       - name: Compile LaTeX document
