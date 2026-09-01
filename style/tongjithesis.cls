@@ -329,12 +329,13 @@
   \newfloat{listing}{htbp}{lop}
   \floatname{listing}{代码}
 
-  % Define a fake minted environment that forwards to listings
-  \newenvironment{minted}[2][]{%
-    \begin{lstlisting}[language=#2,#1]%
-  }{%
-    \end{lstlisting}%
-  }
+  % Define a minted-compatible environment that forwards to listings.
+  % Must be \lstnewenvironment, not a plain \newenvironment wrapper around
+  % lstlisting: lstlisting reads its body verbatim, scanning the source for the
+  % literal string \end{lstlisting}. That string never appears when the writer
+  % closes with \end{minted}, so a plain wrapper swallows the rest of the file
+  % and aborts with "no legal \end found".
+  \lstnewenvironment{minted}[2][]{\lstset{language=#2,#1}}{}
 
   % Define inputminted command
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
