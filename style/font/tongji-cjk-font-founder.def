@@ -4,7 +4,7 @@
 %% Copyright (C) TJ-CSCCG
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
-\ProvidesFile{tongji-cjk-font-founder.def}[v1.4.3 Founder CJK fonts definition (TongjiThesis)] %x-release-please-version
+\ProvidesFile{tongji-cjk-font-founder.def}[v1.5.0 Founder CJK fonts definition (TongjiThesis)] %x-release-please-version
 \setCJKmainfont{FZShuSong-Z01}
   [ BoldFont = FZXiaoBiaoSong-B05, ItalicFont = FZKai-Z03 ]
 \setCJKsansfont{FZHei-B01}  [ AutoFakeBold = 3 ]

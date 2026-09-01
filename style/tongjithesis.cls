@@ -2,7 +2,7 @@
 % tongjithesis -- Tongji University Thesis Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tongjithesis}[v1.4.3 Tongji University Thesis Class] %x-release-please-version
+\ProvidesClass{tongjithesis}[v1.5.0 Tongji University Thesis Class] %x-release-please-version
 %% TongjiThesis
 %% Copyright 2023-2026 TJ-CSCCG
 %
