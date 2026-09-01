@@ -39,7 +39,14 @@ Every change should be evaluated against which audience it affects, and whether 
 
 ## Branching and versioning
 
-- Feature and fix branches are cut from `dev` and PR back into `dev` — **not** `master`, even though `master` is GitHub's default branch (so the base branch must be set explicitly when opening a PR). `dev` is periodically fast-forwarded into `master` for a release; `master` is always an ancestor of `dev`, never diverges from it.
+- Feature and fix branches are cut from `dev` and PR back into `dev` — **not** `master`, even though `master` is GitHub's default branch (so the base branch must be set explicitly when opening a PR). `dev` is periodically fast-forwarded into `master` for a release; `master` is always an ancestor of `dev`, never diverges from it. This holds for automation too: `.github/dependabot.yml` sets `target-branch: dev` so dependency PRs follow the same path.
+- **A release is the one thing that commits directly to `master`, so it needs a back-sync.** `release-please` merges the version bumps and `CHANGELOG.md` into `master` alone, which momentarily leaves `master` one commit *ahead* of `dev` and breaks the invariant above — the next `git merge --ff-only dev` would fail. Immediately after the release PR merges, fast-forward the other way to restore it:
+
+  ```sh
+  git checkout dev && git merge --ff-only origin/master && git push origin dev
+  ```
+
+  Do this before letting anything else land on `dev`; once `dev` has moved on, the two branches have genuinely diverged and only a merge commit can reconcile them.
 - Commits observably follow Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `ci:`, …), though this is not yet CI-enforced on `dev`.
 - **Never hand-edit the version string on `dev` or a feature branch.** `release-please` owns `\ProvidesClass`/`\ProvidesFile` lines across `style/*.cls|*.cfg|*.def` and `package.json`'s `version` field (its `extra-files` list in `release-please-config.json`), driven by Conventional Commits on `master`: it maintains a standing release PR, and merging that PR bumps every version line and regenerates `CHANGELOG.md` in one commit. There is no local bump command — don't write one, and don't edit a `\Provides*` line by hand outside that flow. Changelog-worthy context can still go into `CONTRIBUTING.md`'s project-history table in a regular PR.
 

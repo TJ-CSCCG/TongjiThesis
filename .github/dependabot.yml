@@ -3,6 +3,12 @@ version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
+    # Open against dev, not the default branch. Everything merges into dev and
+    # reaches master only through a release fast-forward; a PR merged straight
+    # into master would put a commit there that dev lacks and break the
+    # `git merge --ff-only dev` promotion. Dependency bumps also want the full
+    # CI matrix on dev before they ride into a release.
+    target-branch: dev
     schedule:
       interval: monthly
     groups:
