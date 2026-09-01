@@ -4,7 +4,7 @@
 %% Copyright (C) TJ-CSCCG
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
-\ProvidesFile{tongji-cjk-font-windows.def}[v1.4.3 Windows CJK fonts definition (TongjiThesis)] %x-release-please-version
+\ProvidesFile{tongji-cjk-font-windows.def}[v1.5.0 Windows CJK fonts definition (TongjiThesis)] %x-release-please-version
 \setCJKmainfont{SimSun}
   [ BoldFont = SimHei, ItalicFont = KaiTi ]
 \setCJKsansfont{SimHei}  [ AutoFakeBold = 3 ]
