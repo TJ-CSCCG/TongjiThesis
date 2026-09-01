@@ -11,6 +11,8 @@ on:
     paths:
       - "style/**"
       - "figures/**"
+      - "bib/note.bib"
+      - "scripts/build-ctan.sh"
       - ".github/workflows/release.yml"
       - "package.json"
     tags:
@@ -20,6 +22,8 @@ on:
     paths:
       - "style/**"
       - "figures/**"
+      - "bib/note.bib"
+      - "scripts/build-ctan.sh"
       - ".github/workflows/release.yml"
       - "package.json"
   release:
