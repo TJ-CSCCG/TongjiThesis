@@ -207,9 +207,18 @@
   % 回退到 TeX Gyre Termes：TeX Live 自带、与 Times 度量兼容，且带真正的小型大写
   % 字形（Times New Roman 没有，\TongjiThesis / \BibLaTeX 两处 \scshape 在它下面
   % 会静默退回常规体）。
+  % 回退按文件名加载，不按字体名：TeX Live 自带的字体没有注册到 fontconfig，
+  % Linux 上按名字找不到（“The font "TeX Gyre Termes" cannot be found”），
+  % 按文件名走 kpathsea 才是各平台都可靠的方式。
   \IfFontExistsTF{Times New Roman}
     {\setmainfont{Times New Roman}}
-    {\setmainfont{TeX Gyre Termes}}%
+    {\setmainfont{texgyretermes}[
+       Extension     = .otf,
+       UprightFont   = *-regular,
+       BoldFont      = *-bold,
+       ItalicFont    = *-italic,
+       BoldItalicFont= *-bolditalic,
+     ]}%
 \else
   \RequirePackage{newtx}%
   \defaultfontfeatures{Ligatures = TeX}%
