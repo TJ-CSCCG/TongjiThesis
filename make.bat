@@ -137,7 +137,7 @@ goto :help
         exit /b 1
     )
 
-    findstr "\\documentclass\[[^\[]*en" %THESIS%.tex > nul
+    findstr "\\documentclass\[[^\[]*english" %THESIS%.tex > nul
     if %errorlevel% equ 0 (
         for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -char-only  2^>nul') do (
             if !found! equ 1 (
