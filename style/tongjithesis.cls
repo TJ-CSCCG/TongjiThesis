@@ -449,12 +449,18 @@
 % Line spacing
 \setstretch{\tjlinespread}  % 设置全文行距
 
-% Display math spacing — 公式段前 0 行，段后 0 行（官方规范）
-% 公式前后不额外增加间距，仅依靠正文 1.5 倍行距的自然行间过渡。
-\abovedisplayskip 0\p@
-\abovedisplayshortskip 0\p@
-\belowdisplayskip \abovedisplayskip
-\belowdisplayshortskip 0\p@
+% Display math spacing — 撰写规范（七）公式：“公式行行距1.5倍”，段前/段后 0 行。
+%
+% Word 里“段前 0 行 + 段后 0 行 + 行距 1.5 倍”指的是公式段落除 1.5 倍行距外不再
+% 追加段间距——1.5 倍行距本身带来的行间留白仍然存在。LaTeX 的默认值正好对应这个
+% 效果：\abovedisplayskip 12pt 对正文 \baselineskip 23.49pt 约为半行，与 Word 中
+% 1.5 倍行距公式行的留白一致，因此正文公式沿用 LaTeX 默认值，不另行赋值。
+%
+% 注意不要把它写成 \abovedisplayskip 0\p@：TeX 在显示公式上下插入的是
+% \abovedisplayskip / \belowdisplayskip 本身，而不是行距胶，置 0 会让公式紧贴上
+% 一行，比规范要求更挤。（并且类文件层的一次性赋值本就无效——size1x.clo 把
+% \normalsize、\small、\footnotesize 定义为「设置字号 + 重设这四个 skip」，
+% \begin{document} 处的 \normalsize 会立刻改回默认值。）
 
 % Table float spacing — 表格/图片上下与正文之间各空一行（官方规范）
 \setlength{\textfloatsep}{\baselineskip}
@@ -912,18 +918,29 @@
 % Algorithm and Code Listing Settings
 % ==========================================
 
+% 算法环境把行距压回 \linespread{1.0}（\baselineskip 由 23.49pt 降到 14.45pt），
+% 但 \abovedisplayskip / \belowdisplayskip 仍是正文行距下的 12pt——相对压缩后的
+% 行距接近一整行空白，算法内的行间公式上下会多出明显空行。按正文里的同一比例
+% （12pt ÷ 23.49pt ≈ 0.5 行）随当前行距缩放，两处算法实现都要挂。
+\newcommand{\tj@algodisplayskips}{%
+  \setlength\abovedisplayskip{0.5\baselineskip}%
+  \setlength\abovedisplayshortskip{\z@}%
+  \setlength\belowdisplayskip{0.5\baselineskip}%
+  \setlength\belowdisplayshortskip{\z@}%
+}
+
 % 伪代码
 \iftongjithesis@algorithmtwoe
   \SetAlgorithmName{算法}{算法}{算法列表}
   \SetKwInput{KwIn}{输入}
   \SetKwInput{KwOut}{输出}
   \gdef\algocf@Vspace{\vskip\baselineskip\relax}
-  \AtBeginEnvironment{algorithm}{\linespread{1.0}\selectfont}
+  \AtBeginEnvironment{algorithm}{\linespread{1.0}\selectfont\tj@algodisplayskips}
   \AfterEndEnvironment{algorithm}{\vspace{\baselineskip}}
 \else
   \renewcommand{\algorithmicrequire}{\textbf{输入: }}
   \renewcommand{\algorithmicensure}{\textbf{输出: }}
-  \AtBeginEnvironment{algorithmic}{\linespread{1.0}\selectfont}
+  \AtBeginEnvironment{algorithmic}{\linespread{1.0}\selectfont\tj@algodisplayskips}
   \renewenvironment{algorithm}
   {
     \vskip\baselineskip
