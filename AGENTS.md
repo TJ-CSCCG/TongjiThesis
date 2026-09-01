@@ -34,6 +34,8 @@ Every change should be evaluated against which audience it affects, and whether 
 | `scripts/update-preview.sh` | Renders the compiled PDF to page images and pushes them to the sibling `TJ-CSCCG/TJCS-Images` repo (used by the Overleaf template gallery). |
 | `release-please-config.json` / `.release-please-manifest.json` | `release-please` config — `release-type: node` (version source of truth is `package.json`), plus an `extra-files` list of the `\Provides*`-bearing files it keeps in sync. See § Branching and versioning. |
 | `.github/workflows/test.yaml` | The CI build matrix — functions as this project's test suite (see § Behavioral rules). |
+| `.github/workflows/promote.yml` | `workflow_dispatch`-only button that fast-forwards `master` to `dev`, which is what starts a release. Refuses anything that is not a fast-forward. Pushes with the GitHub App token on purpose — a `GITHUB_TOKEN` push does not trigger other workflows, so it would silently fail to start `release-please`. |
+| `.github/workflows/sync-dev.yml` | Runs on every push to `master` and fast-forwards `dev` back up to it, restoring the `master`-is-an-ancestor-of-`dev` invariant that a release breaks. No-ops right after a promotion; fails loudly if the two have genuinely diverged. Uses `GITHUB_TOKEN` deliberately, so the synced commit does not re-run the full matrix it just passed on `master`. |
 | `.github/workflows/release-please.yml` | Runs on push to `master`; maintains a release PR (version bump + `CHANGELOG.md`) and, on merge, creates the tag and a draft GitHub Release. Uses a GitHub App token so the release it creates can trigger other workflows. |
 | `.github/workflows/release.yml` | Runs on the release-please draft being published: builds the CTAN package (via `scripts/build-ctan.sh`) and source archives, attaches them to that release, and moves the floating `vX.Y` tag. Does not create the release itself. |
 
@@ -46,7 +48,8 @@ Every change should be evaluated against which audience it affects, and whether 
   git checkout dev && git merge --ff-only origin/master && git push origin dev
   ```
 
-  Do this before letting anything else land on `dev`; once `dev` has moved on, the two branches have genuinely diverged and only a merge commit can reconcile them.
+  Do this before letting anything else land on `dev`; once `dev` has moved on, the two branches have genuinely diverged and only a merge commit can reconcile them. `.github/workflows/sync-dev.yml` now does exactly this on every push to `master`, so the manual command is the fallback for when that job fails — not the normal path.
+- **Releasing is a two-button flow.** Run the `promote dev to master` workflow (`workflow_dispatch`) to fast-forward `master`; `release-please` then opens its release PR. Merging that PR creates the tag and a **draft** release. Publishing that draft is the second button, and it is what makes `release.yml` and `test.yaml` attach the CTAN archives and the two PDFs. Both gates are human on purpose: the first decides that a release should happen, the second that its notes and assets are right.
 - Commits observably follow Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `ci:`, …), though this is not yet CI-enforced on `dev`.
 - **Never hand-edit the version string on `dev` or a feature branch.** `release-please` owns `\ProvidesClass`/`\ProvidesFile` lines across `style/*.cls|*.cfg|*.def` and `package.json`'s `version` field (its `extra-files` list in `release-please-config.json`), driven by Conventional Commits on `master`: it maintains a standing release PR, and merging that PR bumps every version line and regenerates `CHANGELOG.md` in one commit. There is no local bump command — don't write one, and don't edit a `\Provides*` line by hand outside that flow. Changelog-worthy context can still go into `CONTRIBUTING.md`'s project-history table in a regular PR.
 
@@ -66,6 +69,8 @@ Every change should be evaluated against which audience it affects, and whether 
 | Exercise one CI matrix leg locally | edit the matching option in `main.tex`'s `\documentclass[...]` block (`biblatex=false`, `field=humanities`, `minted=true`, `algo=algorithm2e`, `twoside`), then `make` | mirrors `test.yaml`'s `build-variants` job |
 | Build + validate the CTAN package | `scripts/build-ctan.sh` | writes `ctan/` (gitignored); mirrors `test.yaml`'s `build-ctan` job, which then compiles `ctan/tongjithesis/example/example.tex` |
 | Regenerate README preview images | `./scripts/update-preview.sh [path-to-pdf] [--amend]` | pushes to `TJ-CSCCG/TJCS-Images` |
+
+| Promote `dev` → `master` (start a release) | `gh workflow run promote.yml` | or the Actions tab; `workflow_dispatch` only |
 
 Releases are not a local command: merge `release-please`'s standing release PR on `master`, then publish the draft GitHub Release it creates — that publish event triggers `release.yml` to attach the CTAN/PDF assets.
 

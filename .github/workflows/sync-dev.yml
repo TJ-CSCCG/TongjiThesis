@@ -1,0 +1,57 @@
+name: back-sync master to dev
+
+# Keeps master an ancestor of dev, the invariant the whole branching model rests
+# on (AGENTS.md § Branching and versioning).
+#
+# A release is the one thing that commits directly to master: release-please
+# merges the version bumps and CHANGELOG.md there and nowhere else, which leaves
+# master one commit ahead of dev. Left alone, the next promotion's
+# `git merge --ff-only dev` refuses, and by then dev has usually moved on so only
+# a merge commit can reconcile the two. The failure is silent until that moment,
+# which is exactly why this is a workflow and not a line in a checklist.
+#
+# Auth: the default GITHUB_TOKEN, on purpose. A push made with it does not
+# trigger other workflows, and that is what we want here — the commit being
+# synced has just passed the full matrix on master, so re-running the whole
+# thing on dev would burn a 3-OS build to re-prove an identical tree.
+
+on:
+  push:
+    branches: [master]
+
+permissions: {}
+
+jobs:
+  back-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Fast-forward dev to master
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin master dev
+
+          if git merge-base --is-ancestor origin/master origin/dev; then
+            echo "dev already contains every commit on master — nothing to sync."
+            echo "(Normal right after a promotion: master was fast-forwarded from dev.)"
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor origin/dev origin/master; then
+            echo "::error::dev and master have diverged; a fast-forward is impossible."
+            echo "::error::Reconcile them by hand — see AGENTS.md § Branching and versioning."
+            exit 1
+          fi
+
+          echo "Syncing these commits back to dev:"
+          git log --oneline origin/dev..origin/master
+
+          git push origin origin/master:refs/heads/dev
+          echo "dev fast-forwarded to $(git rev-parse --short origin/master)."
