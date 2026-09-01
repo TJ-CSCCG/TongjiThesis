@@ -201,7 +201,15 @@
 % @ is already a letter in a .cls file; no \makeatletter needed here or below.
 \iftongjithesis@times
   \RequirePackage{fontspec}%
-  \setmainfont{Times New Roman}%
+  % Times New Roman 是微软字体，只在装了它的系统上存在；Linux 与 Overleaf 上没有，
+  % 直接 \setmainfont 会以 “Package fontspec Error: The font ... cannot be found”
+  % 中止编译——times=true 因此在多数环境下完全不可用。
+  % 回退到 TeX Gyre Termes：TeX Live 自带、与 Times 度量兼容，且带真正的小型大写
+  % 字形（Times New Roman 没有，\TongjiThesis / \BibLaTeX 两处 \scshape 在它下面
+  % 会静默退回常规体）。
+  \IfFontExistsTF{Times New Roman}
+    {\setmainfont{Times New Roman}}
+    {\setmainfont{TeX Gyre Termes}}%
 \else
   \RequirePackage{newtx}%
   \defaultfontfeatures{Ligatures = TeX}%

@@ -105,6 +105,7 @@ env:
     setspace
     siunitx
     tcolorbox
+    tex-gyre
     texcount
     texliveonfly
     threeparttable
