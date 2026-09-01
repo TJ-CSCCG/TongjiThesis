@@ -1,0 +1,61 @@
+name: promote dev to master
+
+# Fast-forwards master to dev, which is what starts a release: the push to
+# master is what release-please.yml reacts to.
+#
+# Deliberately workflow_dispatch only. Cutting a release is a decision, not
+# something a push should trigger — this button just removes the fiddly local
+# git, it does not remove the judgement.
+#
+# Auth: the same GitHub App token release-please.yml uses (secrets APP_ID +
+# APP_PRIVATE_KEY). This is load-bearing, not cargo-culting: a push made with
+# the default GITHUB_TOKEN does not trigger other workflows, so promoting with
+# it would silently fail to start release-please and the release would simply
+# never begin.
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Fast-forward master to dev
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin master dev
+
+          if git merge-base --is-ancestor origin/dev origin/master; then
+            echo "master already contains every commit on dev — nothing to promote."
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor origin/master origin/dev; then
+            echo "::error::master is not an ancestor of dev, so this cannot be a fast-forward."
+            echo "::error::Most likely a commit landed on master without being synced back to dev."
+            echo "::error::See AGENTS.md § Branching and versioning for the back-sync step."
+            exit 1
+          fi
+
+          echo "Promoting these commits to master:"
+          git log --oneline origin/master..origin/dev
+
+          git push origin origin/dev:refs/heads/master
+          echo "master fast-forwarded to $(git rev-parse --short origin/dev)."
+          echo "release-please will now open or update its release PR."
