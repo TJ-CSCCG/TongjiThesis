@@ -217,6 +217,10 @@
     \Fib{$n$}\;
     \If{$n \leq 1$}{\Return $n$\;}
     \Return \Fib{$n-1$} + \Fib{$n-2$}\;
+    \tcp*[h]{通项公式：}
+    \begin{equation*}
+      F_n = \frac{1}{\sqrt{5}}\left[\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right]
+    \end{equation*}
   \end{algorithm}
 \else
   \cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。
@@ -233,6 +237,10 @@
       \State \Return \Call{Fibonacci}{$n-1$} + \Call{Fibonacci}{$n-2$}
       \EndIf
       \EndFunction
+      \State 亦可由通项公式直接求得：
+      \begin{equation*}
+        F_n = \frac{1}{\sqrt{5}}\left[\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right]
+      \end{equation*}
     \end{algorithmic}
   \end{algorithm}
 \fi

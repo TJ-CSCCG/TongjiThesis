@@ -11,6 +11,8 @@ on:
     paths:
       - "style/**"
       - "figures/**"
+      - "bib/note.bib"
+      - "scripts/build-ctan.sh"
       - ".github/workflows/release.yml"
       - "package.json"
     tags:
@@ -20,11 +22,10 @@ on:
     paths:
       - "style/**"
       - "figures/**"
+      - "bib/note.bib"
+      - "scripts/build-ctan.sh"
       - ".github/workflows/release.yml"
       - "package.json"
-  workflow_run:
-    workflows: ["test"]
-    types: [completed]
   release:
     types: [published]   # release-please draft published → attach CTAN/PDF assets
   workflow_dispatch: # Allow manual triggering
@@ -32,10 +33,6 @@ on:
 jobs:
   # Build CTAN package and source archives (runs on every trigger)
   package:
-    if: |
-      github.event_name != 'workflow_run' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       startsWith(github.event.workflow_run.head_branch, 'v'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -66,278 +63,11 @@ jobs:
 
           echo "Package version: $VERSION, author: $AUTHOR"
 
-      - name: Validate source files
-        run: |
-          for f in style/tongjithesis.cls style/tongjithesis.cfg figures/tongji.pdf figures/tongji-header.pdf; do
-            [ -f "$f" ] || { echo "Error: $f not found"; exit 1; }
-          done
-          echo "All required source files present"
-
-      - name: Build CTAN package
-        run: |
-          mkdir -p ctan/tongjithesis/example/figures
-
-          # Copy class files
-          cp style/tongjithesis.cls style/tongjithesis.cfg ctan/tongjithesis/
-          cp figures/tongji.pdf figures/tongji-header.pdf ctan/tongjithesis/example/figures/
-
-          # Generate LICENSE
-          cat > ctan/tongjithesis/LICENSE << HEREDOC
-          Copyright (C) 2022-${CURRENT_YEAR} TJ-CSCCG
-
-          This work may be distributed and/or modified under the
-          conditions of the LaTeX Project Public License, either version 1.3
-          of this license or (at your option) any later version.
-          The latest version of this license is in
-            http://www.latex-project.org/lppl.txt
-          and version 1.3 or later is part of all distributions of LaTeX
-          version 2003/12/01 or later.
-
-          This work has the LPPL maintenance status "maintained".
-
-          The Current Maintainer of this work is ${PACKAGE_AUTHOR}.
-
-          This work consists of the files:
-          - tongjithesis.cls (main class file)
-          - tongjithesis.cfg (configuration file)
-          - README.md (documentation)
-          - example/ (example files)
-          HEREDOC
-
-          # Generate README
-          cat > ctan/tongjithesis/README.md << 'HEREDOC'
-          # Tongji University Undergraduate Thesis Template
-
-          ## Overview
-
-          `tongjithesis` is a LaTeX class for creating undergraduate theses that comply with the official requirements of Tongji University, China. This template is designed to help students focus on content creation rather than formatting details.
-
-          ## Features
-
-          - Compliant with Tongji University's official undergraduate thesis requirements
-          - Support for both one-sided and two-sided printing
-          - Comprehensive formatting for title page, abstract, table of contents, chapters, etc.
-          - Customized citation styles that comply with Chinese GB/T 7714-2025 standard
-          - Support for code listings with syntax highlighting (minted or listings)
-          - Integration of mathematical formulas, figures, tables, and algorithms
-
-          ## Requirements
-
-          - A complete TeX distribution (TeX Live 2026+, MiKTeX, or MacTeX)
-          - XeLaTeX or LuaLaTeX engine (the template doesn't support pdfLaTeX)
-          - Python with Pygments installed (optional, for minted code highlighting)
-
-          ## Installation
-
-          1. **Manual Installation**:
-             - Copy `tongjithesis.cls` and `tongjithesis.cfg` to your project directory, or
-             - Install to your local texmf tree (recommended)
-
-          2. **Install to TEXMF tree**:
-             - For TeX Live on Unix-like systems: `~/texmf/tex/latex/tongjithesis/`
-             - For MiKTeX on Windows: `%USERPROFILE%\texmf\tex\latex\tongjithesis\`
-             - For MacTeX: `~/Library/texmf/tex/latex/tongjithesis/`
-
-          ## Basic Usage
-
-          ```latex
-          \documentclass[oneside]{tongjithesis}  % Use 'twoside' for double-sided printing
-
-          \tjbibresource{bib/note.bib}
-
-          \school{计算机科学与技术学院}
-          \major{计算机科学与技术}
-          \student{1234567}{张三}
-          \thesistitle{论文标题}{——副标题}
-          \thesistitleeng{Thesis Title}{--- Subtitle}
-          \thesisadvisor{李四 教授}
-          \thesisdate{2026}{6}{1}
-
-          \begin{document}
-          \MakeCover
-          \cleardoublepage
-
-          \frontmatter
-          \MakeAbstract{摘要内容}{关键词1，关键词2}
-          \MakeAbstractEng{Abstract content}{Keyword1, Keyword2}
-          \clearpage
-          \tableofcontents
-          \cleardoublepage
-
-          \mainmatter
-          \chapter{引言}
-          % ... your content ...
-
-          \makereferences
-          \end{document}
-          ```
-
-          ## Documentation
-
-          For detailed documentation, please refer to the GitHub repository.
-
-          ## License
-
-          This template is licensed under the LaTeX Project Public License (LPPL) version 1.3c or later.
-
-          ## Links
-
-          - GitHub: https://github.com/TJ-CSCCG/TongjiThesis
-          - Overleaf: https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn
-          HEREDOC
-
-          # Generate MANIFEST
-          cat > ctan/tongjithesis/MANIFEST << 'HEREDOC'
-          README.md                     # Package description and usage information
-          LICENSE                       # License information
-          tongjithesis.cls              # Main LaTeX class file
-          tongjithesis.cfg              # Configuration file
-          example/                      # Example directory
-            example.tex                 # Example thesis document
-            figures/                    # Figures directory
-              tongji.pdf               # Tongji University logo for cover
-              tongji-header.pdf        # Tongji University logo for page header
-          HEREDOC
-
-          # Generate example
-          cat > ctan/tongjithesis/example/example.tex << 'HEREDOC'
-          %!TEX program = xelatex
-          %!TEX encoding = UTF-8
-
-          \documentclass[
-            oneside,
-            degree=bachelor,
-            fullwidthstop=false,
-            fontset=fandol,
-            times=false,
-            minted=false,
-            biblatex=true,
-          ]{tongjithesis}
-
-          \tjbibresource{bib/note.bib}
-
-          % Set thesis information
-          \school{计算机科学与技术学院}
-          \major{计算机科学与技术}
-          \student{1234567}{张三}
-          \thesistitle{基于机器学习的图像分类研究}{——以交通标志识别为例}
-          \thesistitleeng{Research on Image Classification Based on Machine Learning}{——Take Traffic Sign Recognition as an Example}
-          \thesisadvisor{李四 教授}
-          \thesisdate{2026}{4}{20}
-
-          % 信息说明页配置
-          \infotype{thesis}
-          \infoabstract{本文研究了基于机器学习的图像分类技术，并以交通标志识别为应用场景进行了实验验证。}
-          \infothesiswords{10000}
-          \infomaterials{\item 程序源代码}
-
-          \begin{document}
-
-          % Generate cover and info page
-          \MakeCover
-          \cleardoublepage
-          \MakeInfoPage
-          \cleardoublepage
-
-          % Front matter: abstract and table of contents
-          \frontmatter
-          \MakeAbstract{
-              本文研究了基于机器学习的图像分类技术，并以交通标志识别为应用场景进行了实验验证。
-              图像分类是计算机视觉中的基础任务，具有广泛的应用前景。本文首先综述了图像分类领域的经典算法和最新进展，
-              然后提出了一种改进的卷积神经网络模型用于交通标志识别。实验结果表明，所提出的方法在准确率和计算效率方面
-              均取得了良好的性能。
-          }{机器学习; 图像分类; 卷积神经网络; 交通标志识别}
-
-          % English Abstract
-          \MakeAbstractEng{
-              This paper investigates image classification techniques based on machine learning,
-              with traffic sign recognition as an application scenario for experimental validation.
-              Image classification is a fundamental task in computer vision with extensive application prospects.
-              This paper first reviews classic algorithms and recent advances in the field of image classification,
-              then proposes an improved convolutional neural network model for traffic sign recognition.
-              Experimental results demonstrate that the proposed method achieves good performance in terms of
-              accuracy and computational efficiency.
-          }{Machine Learning; Image Classification; Convolutional Neural Network; Traffic Sign Recognition}
-
-          % Table of contents
-          \clearpage
-          \tableofcontents
-          \cleardoublepage
-
-          % Main matter: thesis chapters
-          \mainmatter
-
-          \chapter{引言}
-
-          图像分类是计算机视觉中的基础任务之一，其目标是将图像分配到预定义的类别中。
-          随着深度学习技术的发展，图像分类的性能得到了显著提升。
-          本文研究基于机器学习的图像分类技术，并以交通标志识别为例进行应用研究。
-
-          \section{研究背景}
-
-          交通标志识别是自动驾驶系统的重要组成部分，它能够帮助车辆理解道路环境，遵守交通规则。
-          准确、实时的交通标志识别对于提高自动驾驶安全性具有重要意义。
-
-          % 代码示例
-          \begin{listing}[!htb]
-          \begin{minted}{python}
-          import torch
-          import torch.nn as nn
-
-          class CNN(nn.Module):
-              def __init__(self, num_classes=43):
-                  super(CNN, self).__init__()
-                  self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
-                  self.relu = nn.ReLU()
-                  self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-                  self.fc = nn.Linear(32 * 16 * 16, num_classes)
-
-              def forward(self, x):
-                  x = self.pool(self.relu(self.conv1(x)))
-                  x = x.view(x.size(0), -1)
-                  x = self.fc(x)
-                  return x
-
-          # 创建模型实例
-          model = CNN()
-          print(model)
-          \end{minted}
-          \caption{用于交通标志识别的简化卷积神经网络模型}
-          \label{listing:cnn}
-          \end{listing}
-
-          \chapter{结论}
-
-          本文提出了一种高效的交通标志识别方法，在准确率和计算效率方面均表现出色。
-          未来工作将探索模型的进一步轻量化，以及在嵌入式设备上的部署方案。
-
-          \makereferences
-
-          \backmatter
-          \chapter*{谢辞}
-          \addcontentsline{toc}{chapter}{谢辞}
-          感谢指导老师的悉心指导。
-
-          \end{document}
-          HEREDOC
-
-      - name: Validate CTAN package
-        run: |
-          required_files=(
-            "ctan/tongjithesis/tongjithesis.cls"
-            "ctan/tongjithesis/tongjithesis.cfg"
-            "ctan/tongjithesis/LICENSE"
-            "ctan/tongjithesis/README.md"
-            "ctan/tongjithesis/MANIFEST"
-            "ctan/tongjithesis/example/example.tex"
-            "ctan/tongjithesis/example/figures/tongji.pdf"
-            "ctan/tongjithesis/example/figures/tongji-header.pdf"
-          )
-          for file in "${required_files[@]}"; do
-            [ -f "$file" ] || { echo "Error: $file missing"; exit 1; }
-          done
-          echo "CTAN package structure:"
-          find ctan/tongjithesis -type f | sort
+      # File set + generated LICENSE/README/MANIFEST/example live in
+      # scripts/build-ctan.sh, shared with test.yaml's build-ctan job so the
+      # packaged files and the compile check that proves they work cannot drift.
+      - name: Build and validate CTAN package
+        run: scripts/build-ctan.sh
 
       - name: Create source archives
         run: |
@@ -412,7 +142,14 @@ jobs:
     # release-please-published releases only — never workflow_dispatch, so this job can
     # never accidentally publish a still-under-review draft (softprops publishes any
     # draft it's pointed at unless draft: true is set) or move a tag before it exists.
-    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
+    # needs.package is gated explicitly: a custom job-level if: is evaluated in place of
+    # the default success(), so without this the job would start after a failed package
+    # job and die at "Download package artifacts", leaving a published release with no
+    # assets attached.
+    if: |
+      github.event_name == 'release' &&
+      startsWith(github.event.release.tag_name, 'v') &&
+      needs.package.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:

@@ -201,7 +201,24 @@
 % @ is already a letter in a .cls file; no \makeatletter needed here or below.
 \iftongjithesis@times
   \RequirePackage{fontspec}%
-  \setmainfont{Times New Roman}%
+  % Times New Roman 是微软字体，只在装了它的系统上存在；Linux 与 Overleaf 上没有，
+  % 直接 \setmainfont 会以 “Package fontspec Error: The font ... cannot be found”
+  % 中止编译——times=true 因此在多数环境下完全不可用。
+  % 回退到 TeX Gyre Termes：TeX Live 自带、与 Times 度量兼容，且带真正的小型大写
+  % 字形（Times New Roman 没有，\TongjiThesis / \BibLaTeX 两处 \scshape 在它下面
+  % 会静默退回常规体）。
+  % 回退按文件名加载，不按字体名：TeX Live 自带的字体没有注册到 fontconfig，
+  % Linux 上按名字找不到（“The font "TeX Gyre Termes" cannot be found”），
+  % 按文件名走 kpathsea 才是各平台都可靠的方式。
+  \IfFontExistsTF{Times New Roman}
+    {\setmainfont{Times New Roman}}
+    {\setmainfont{texgyretermes}[
+       Extension     = .otf,
+       UprightFont   = *-regular,
+       BoldFont      = *-bold,
+       ItalicFont    = *-italic,
+       BoldItalicFont= *-bolditalic,
+     ]}%
 \else
   \RequirePackage{newtx}%
   \defaultfontfeatures{Ligatures = TeX}%
@@ -329,12 +346,13 @@
   \newfloat{listing}{htbp}{lop}
   \floatname{listing}{代码}
 
-  % Define a fake minted environment that forwards to listings
-  \newenvironment{minted}[2][]{%
-    \begin{lstlisting}[language=#2,#1]%
-  }{%
-    \end{lstlisting}%
-  }
+  % Define a minted-compatible environment that forwards to listings.
+  % Must be \lstnewenvironment, not a plain \newenvironment wrapper around
+  % lstlisting: lstlisting reads its body verbatim, scanning the source for the
+  % literal string \end{lstlisting}. That string never appears when the writer
+  % closes with \end{minted}, so a plain wrapper swallows the rest of the file
+  % and aborts with "no legal \end found".
+  \lstnewenvironment{minted}[2][]{\lstset{language=#2,#1}}{}
 
   % Define inputminted command
   \newcommand{\inputminted}[3][]{\lstinputlisting[language=#2,#1]{#3}}
@@ -448,12 +466,18 @@
 % Line spacing
 \setstretch{\tjlinespread}  % 设置全文行距
 
-% Display math spacing — 公式段前 0 行，段后 0 行（官方规范）
-% 公式前后不额外增加间距，仅依靠正文 1.5 倍行距的自然行间过渡。
-\abovedisplayskip 0\p@
-\abovedisplayshortskip 0\p@
-\belowdisplayskip \abovedisplayskip
-\belowdisplayshortskip 0\p@
+% Display math spacing — 撰写规范（七）公式：“公式行行距1.5倍”，段前/段后 0 行。
+%
+% Word 里“段前 0 行 + 段后 0 行 + 行距 1.5 倍”指的是公式段落除 1.5 倍行距外不再
+% 追加段间距——1.5 倍行距本身带来的行间留白仍然存在。LaTeX 的默认值正好对应这个
+% 效果：\abovedisplayskip 12pt 对正文 \baselineskip 23.49pt 约为半行，与 Word 中
+% 1.5 倍行距公式行的留白一致，因此正文公式沿用 LaTeX 默认值，不另行赋值。
+%
+% 注意不要把它写成 \abovedisplayskip 0\p@：TeX 在显示公式上下插入的是
+% \abovedisplayskip / \belowdisplayskip 本身，而不是行距胶，置 0 会让公式紧贴上
+% 一行，比规范要求更挤。（并且类文件层的一次性赋值本就无效——size1x.clo 把
+% \normalsize、\small、\footnotesize 定义为「设置字号 + 重设这四个 skip」，
+% \begin{document} 处的 \normalsize 会立刻改回默认值。）
 
 % Table float spacing — 表格/图片上下与正文之间各空一行（官方规范）
 \setlength{\textfloatsep}{\baselineskip}
@@ -911,18 +935,29 @@
 % Algorithm and Code Listing Settings
 % ==========================================
 
+% 算法环境把行距压回 \linespread{1.0}（\baselineskip 由 23.49pt 降到 14.45pt），
+% 但 \abovedisplayskip / \belowdisplayskip 仍是正文行距下的 12pt——相对压缩后的
+% 行距接近一整行空白，算法内的行间公式上下会多出明显空行。按正文里的同一比例
+% （12pt ÷ 23.49pt ≈ 0.5 行）随当前行距缩放，两处算法实现都要挂。
+\newcommand{\tj@algodisplayskips}{%
+  \setlength\abovedisplayskip{0.5\baselineskip}%
+  \setlength\abovedisplayshortskip{\z@}%
+  \setlength\belowdisplayskip{0.5\baselineskip}%
+  \setlength\belowdisplayshortskip{\z@}%
+}
+
 % 伪代码
 \iftongjithesis@algorithmtwoe
   \SetAlgorithmName{算法}{算法}{算法列表}
   \SetKwInput{KwIn}{输入}
   \SetKwInput{KwOut}{输出}
   \gdef\algocf@Vspace{\vskip\baselineskip\relax}
-  \AtBeginEnvironment{algorithm}{\linespread{1.0}\selectfont}
+  \AtBeginEnvironment{algorithm}{\linespread{1.0}\selectfont\tj@algodisplayskips}
   \AfterEndEnvironment{algorithm}{\vspace{\baselineskip}}
 \else
   \renewcommand{\algorithmicrequire}{\textbf{输入: }}
   \renewcommand{\algorithmicensure}{\textbf{输出: }}
-  \AtBeginEnvironment{algorithmic}{\linespread{1.0}\selectfont}
+  \AtBeginEnvironment{algorithmic}{\linespread{1.0}\selectfont\tj@algodisplayskips}
   \renewenvironment{algorithm}
   {
     \vskip\baselineskip

@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - master
-      - proposal
       - dev
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
@@ -15,7 +14,7 @@ on:
       - '.github/pull_request_template.md'
       - '.github/workflows/release.yml'
       - '.github/workflows/release-please.yml'
-      - 'scripts/**'
+      - 'scripts/update-preview.sh'
   pull_request:
     paths-ignore:
       - '*.md'
@@ -26,7 +25,7 @@ on:
       - '.github/pull_request_template.md'
       - '.github/workflows/release.yml'
       - '.github/workflows/release-please.yml'
-      - 'scripts/**'
+      - 'scripts/update-preview.sh'
   release:
     types: [published]   # build release PDFs when a release-please draft is published
   workflow_dispatch:
@@ -106,6 +105,7 @@ env:
     setspace
     siunitx
     tcolorbox
+    tex-gyre
     texcount
     texliveonfly
     threeparttable
@@ -201,6 +201,8 @@ jobs:
             pygments: false
           - variant: algo-algorithm2e
             pygments: false
+          - variant: times-true
+            pygments: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -257,6 +259,11 @@ jobs:
         run: |
           sed -i 's/algo=algpseudocode/algo=algorithm2e/' main.tex
 
+      - name: Configure times=true variant
+        if: matrix.variant == 'times-true'
+        run: |
+          sed -i 's/times=false/times=true/' main.tex
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -277,6 +284,9 @@ jobs:
           fi
           if [ "${{ matrix.variant }}" = "algo-algorithm2e" ]; then
             grep -q 'algo=algorithm2e' main.tex || { echo "ERROR: algo=algorithm2e not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "times-true" ]; then
+            grep -q 'times=true' main.tex || { echo "ERROR: times=true not set"; exit 1; }
           fi
 
       - name: Compile LaTeX document
@@ -342,10 +352,52 @@ jobs:
           path: tongjithesis-${{ matrix.doc }}.pdf
           retention-days: 30
 
+  # The CTAN distribution package: build it with the same script release.yml uses,
+  # then compile the example it ships. The class \input's tongji-circled.def and a
+  # tongji-cjk-font-*.def and \ClassError's without them, so a package missing any
+  # runtime file is unusable — this job is what proves the shipped package compiles
+  # instead of discovering it after a release goes out.
+  build-ctan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install TeX Live
+        uses: tex-live/setup-texlive-action@v4
+        with:
+          version: 2026
+          packages: ${{ env.TL_PACKAGES }}
+        env:
+          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
+
+      - name: Build and validate CTAN package
+        run: scripts/build-ctan.sh
+
+      - name: Compile the packaged example
+        working-directory: ctan/tongjithesis/example
+        env:
+          TEXINPUTS: "..:"
+          BIBINPUTS: "./bib:"
+        run: latexmk -pdfxe -halt-on-error -interaction=nonstopmode example.tex
+
+      - name: Show log on failure
+        if: failure()
+        run: cat ctan/tongjithesis/example/example.log || true
+
+      - name: Upload packaged example PDF
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: document-ctan-example
+          path: ctan/tongjithesis/example/example.pdf
+          retention-days: 30
+
   # Summary job to check all builds completed successfully
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build, build-variants, build-forms]
+    needs: [build, build-variants, build-forms, build-ctan]
     if: always()
     steps:
       - name: Check all builds succeeded
@@ -353,10 +405,12 @@ jobs:
           echo "Cross-platform build status: ${{ needs.build.result }}"
           echo "Variant build status: ${{ needs.build-variants.result }}"
           echo "Forms build status: ${{ needs.build-forms.result }}"
+          echo "CTAN package status: ${{ needs.build-ctan.result }}"
 
           if [[ "${{ needs.build.result }}" != "success" ||
                 "${{ needs.build-variants.result }}" != "success" ||
-                "${{ needs.build-forms.result }}" != "success" ]]; then
+                "${{ needs.build-forms.result }}" != "success" ||
+                "${{ needs.build-ctan.result }}" != "success" ]]; then
             echo "One or more builds failed"
             exit 1
           fi
@@ -365,7 +419,7 @@ jobs:
   # Collect all compiled PDFs into a single artifact
   collect-pdfs:
     runs-on: ubuntu-latest
-    needs: [build, build-variants, build-forms]
+    needs: [build, build-variants, build-forms, build-ctan]
     if: always() && !cancelled()
     steps:
       - name: Download all PDF artifacts

@@ -22,7 +22,9 @@ $(foreach prog,$(REQUIRED_PROGRAMS),\
     $(if $(shell which $(prog)),,$(error "$(prog) not found in PATH")))
 
 # Check if engine is valid
-ifneq ($(filter all pvc thesis taskbook proposal midterm forms, $(MAKECMDGOALS)), )
+# $(MAKECMDGOALS) is empty for a bare `make`, which still builds the default `all`
+# goal — treat that as a build invocation so ENGINE is validated there too.
+ifneq ($(filter all pvc thesis taskbook proposal midterm forms, $(or $(MAKECMDGOALS),all)), )
     ifeq ($(filter $(ENGINES), $(ENGINE)), )
         $(info Error: Expected $$ENGINE in {$(ENGINES)}, Got "$(ENGINE)")
         $(info Setting default $$ENGINE to "-xelatex")
@@ -140,6 +142,7 @@ help:
 	@echo "  proposal  - Build proposal.pdf (毕业设计（论文）开题报告)"
 	@echo "  midterm   - Build midterm.pdf (毕业设计（论文）中期报告)"
 	@echo "  forms     - Build taskbook.pdf, proposal.pdf, and midterm.pdf"
+	@echo "  thesis    - Legacy alias for 'all'"
 	@echo "  help      - Show this help message"
 	@echo ""
 	@echo "Available engines (use ENGINE=<option>):"
