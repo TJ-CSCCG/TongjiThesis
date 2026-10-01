@@ -4,6 +4,13 @@
 
 Maintained automatically from [Conventional Commits](https://www.conventionalcommits.org/) by [release-please](https://github.com/googleapis/release-please) starting with v1.5.0. Do not edit by hand — both the version numbers and the entries are written when the release PR on `master` is merged.
 
+## [1.5.1](https://github.com/TJ-CSCCG/TongjiThesis/compare/v1.5.0...v1.5.1) (2026-10-01)
+
+
+### 文档与维护 | Docs & Maintenance
+
+* bump the github-actions group with 3 updates ([#135](https://github.com/TJ-CSCCG/TongjiThesis/issues/135)) ([b2cc1e2](https://github.com/TJ-CSCCG/TongjiThesis/commit/b2cc1e237ec6fcff896ee5ef45f529878c21dfbe))
+
 ## [1.5.0](https://github.com/TJ-CSCCG/TongjiThesis/compare/v1.4.3...v1.5.0) (2026-09-01)
 
 
