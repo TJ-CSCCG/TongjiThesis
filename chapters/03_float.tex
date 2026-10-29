@@ -224,7 +224,7 @@
     \end{equation*}
   \end{algorithm}
 \else
-  \cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。
+  \cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。默认方案下 \texttt{algorithm} 环境不浮动，按它在源文件中的位置排出，因此不要加 \texttt{[htbp]} 等位置参数。
 
   \begin{algorithm}
     \caption{计算斐波那契数列}\label{algo:algorithm}
@@ -276,6 +276,8 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 \end{lstlisting}
 
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
+
+模板为 \pkg{listings} 开启了 \texttt{mathescape} 和 \texttt{escapeinside=||}：代码中两个 \verb|$| 之间的内容按数学公式排版，两个 \verb+|+ 之间的内容按 \LaTeX{} 命令执行。代码本身含有 \verb|$| 或 \verb+|+ 时（如 Shell 变量、C 语言的 \verb+||+），在该代码块的选项中加上 \verb|mathescape=false, escapeinside={}|。
 
 \subsubsection{关于跨页代码段的说明}
 \pkg{listings} 和 \pkg{minted} 均支持跨页显示代码段。学术写作一般不建议在正文中放大段代码：正文只展示关键片段，完整代码放入附录或以外部链接形式提供。
