@@ -32,8 +32,9 @@
 \setCJKfamilyfont{zhfs}{FandolFang}
   [ Extension = .otf, UprightFont = *-Regular ]
 
-\NewDocumentCommand{\songti}   {} { \CJKfamily{zhsong} }
-\NewDocumentCommand{\heiti}    {} { \CJKfamily{zhhei}  }
-\NewDocumentCommand{\kaishu}   {} { \CJKfamily{zhkai}  }
-\NewDocumentCommand{\fangsong} {} { \CJKfamily{zhfs}   }
+% 以下定义体内不要加空格：本文件按普通 catcode 读入，空格会排进正文（标题、目录会因此缩进）。
+\NewDocumentCommand{\songti}   {} {\CJKfamily{zhsong}}
+\NewDocumentCommand{\heiti}    {} {\CJKfamily{zhhei}}
+\NewDocumentCommand{\kaishu}   {} {\CJKfamily{zhkai}}
+\NewDocumentCommand{\fangsong} {} {\CJKfamily{zhfs}}
 \endinput

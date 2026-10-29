@@ -99,11 +99,14 @@
 我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。可以用
 \pkg{threeparttable} 实现带有脚注的表格，如\cref{tab:bigtable}。
 
+表内文字按撰写规范使用五号。列数较多、表格超出版心时，可以在该表内用 \verb|\setlength{\tabcolsep}{4pt}| 缩小列间距（\cref{tab:bigtable} 即如此），或精简表头、拆分表格。
+
 \begin{table}[!htb]
   \centering
   \begin{threeparttable}[b]
     \caption{一个更大的三线表}
     \label{tab:bigtable}
+    \setlength{\tabcolsep}{4pt} % 列数较多的宽表：缩小列间距，而不是缩小规范要求的五号表内文字
     \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrrrr} \toprule
       \multicolumn{2}{c}{\textbf{Item}} & \multicolumn{2}{c}{\textbf{Category 1}} & \multicolumn{2}{c}{\textbf{Category 2}} & \multicolumn{2}{c}{\textbf{Category 3}} & \multicolumn{1}{c}{\textbf{Total}}                                                                                     \\ \cmidrule(r){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(l){9-9}
       \textbf{Animal}                   & \textbf{Description}                    & \textbf{Price} (\$)                     & \textbf{Quantity}                       & \textbf{Price} (\$)                & \textbf{Quantity} & \textbf{Price} (\$) & \textbf{Quantity} & \textbf{Price} (\$) \\ \midrule

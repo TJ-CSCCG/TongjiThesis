@@ -117,6 +117,8 @@
 % ==========================================
 % Formatting Constants (官方规范)
 % ==========================================
+% 依据：同济大学本科生毕业设计（论文）撰写规范（附件2，2026 年 10 月修订）；
+% 规范未写明的数值沿用 2026 届官方 Word 模板。
 % Font sizes
 \newcommand{\tjfonttitle}{\zihao{-2}}        % 课题名称：小二号
 \newcommand{\tjfontchapter}{\zihao{-3}}      % 章标题：小三号
@@ -124,7 +126,7 @@
 \newcommand{\tjfontbody}{\zihao{-4}}         % 正文 / 二三级标题 / 关键词 / 摘要正文：小四号
 \newcommand{\tjfontcaption}{\zihao{5}}       % 表题 / 图题：五号
 \newcommand{\tjfontcover}{\zihao{-3}}        % 封面表格字段值：小三号（与 \tjfontchapter 同字号，语义分离）
-\newcommand{\tjfonttable}{\zihao{-5}\fontsize{9}{18}\linespread{1}\selectfont} % 表内文字：小五号，行距 18 磅（官方规范；\linespread{1} 隔离全文 1.625 倍行距）
+\newcommand{\tjfonttable}{\fontsize{10.5bp}{18bp}\linespread{1}\selectfont} % 表内文字：五号 10.5 磅（撰写规范“表中文字原则上采用宋体五号”），行距 18 磅（沿用 Word 模板）；Word 的“磅”即 bp；\linespread{1} 隔离全文 1.625 倍行距
 \newcommand{\tjfontinfotitle}{\zihao{3}}     % 信息说明页标题：三号（仅此页专用）
 \newcommand{\tjfontformtitle}{\zihao{-0}}    % 任务书 / 开题报告 / 中期报告封面标题：小初号（36pt）
 % Spacing
@@ -392,7 +394,7 @@
   \RequirePackage[
     backend=biber,
     style=gb7714-2025,
-    gbpunctwidth=mixed,   % GB/T 7714-2025：除“.”与“[]”用半角外，其余标识符用全角
+    gbpunctwidth=half,    % 撰写规范：参考文献与正文引用方括号内的标点统一采用半角
     natbib=true,
   ]{biblatex}
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
@@ -414,9 +416,15 @@
     {\endlist}
     {\item}
 \else
-  \RequirePackage[sort&compress, bibpunct=GB]{gbt7714}   % GB=全角标点（除“.”“[]”外），与 biblatex 的 gbpunctwidth=mixed 对齐
+  \RequirePackage[sort&compress, bibpunct=half]{gbt7714}   % 半角标点，与 biblatex 的 gbpunctwidth=half 对齐（撰写规范：参考文献标点统一采用半角）
   \bibliographystyle{gbt7714-2025-numeric}
   \setlength{\bibsep}{3pt}
+  % 目录条目写在“参考文献”标题之后，页码与跳转锚点才落在标题所在页（与 biblatex 的 heading=bibintoc 一致）。
+  % 其余沿用 natbib 对 book 类的定义。
+  \renewcommand{\bibsection}{%
+    \chapter*{\bibname\@mkboth{\MakeUppercase{\bibname}}{\MakeUppercase{\bibname}}}%
+    \addcontentsline{toc}{chapter}{\bibname}%
+  }
   % 参考文献序号左对齐至页边距，悬挂统一为 0.74cm（与 Word 模板一致）。
   % gbt7714 已将 \@biblabel 改为 [#1]\hfill（左对齐）。natbib（gbt7714 内部加载）
   % 重写了 thebibliography，绕过 book.cls 的 \@openbib@code 钩子，因此须直接
@@ -447,15 +455,25 @@
   }
 \fi
 
+% 未编号一级标题（目录、插图/表格清单、参考文献、附录、谢辞）：撰写规范要求四号黑体居中，
+% 区别于正文章标题的小三号。目录、清单与参考文献在分组内调用，
+% \appendix 与 \backmatter 之后则一直生效。
+\newcommand{\tj@unnumberedheadingformat}{\ctexset{chapter/format={\centering\heiti\tjfontheading}}}
+
 % \makereferences — output bibliography chapter
 \iftongjithesis@biblatex
   \newcommand{\makereferences}{%
+    \begingroup
+    \tj@unnumberedheadingformat
     \printbibliography[heading=bibintoc,title=参考文献]%
+    \endgroup
   }
 \else
   \newcommand{\makereferences}{%
-    \addcontentsline{toc}{chapter}{参考文献}%
+    \begingroup
+    \tj@unnumberedheadingformat
     \bibliography{\tj@bibfiles}%
+    \endgroup
   }
 \fi
 
@@ -632,7 +650,7 @@
   \pagestyle{mainstyle}%
   \fancypagestyle{plain}{\pagestyle{mainstyle}}%
 }
-% 附录（2026 spec）：
+% 附录：
 %   “附录”作为未编号 H1 章节标题（四号黑体居中），写入目录。
 %   附录内的小节使用 A. B. C. 编号（与正文 chapter.section 解耦），
 %   浮动体 (figure/table/equation/…) 随节编号为 A.1、A.2、B.1 …
@@ -641,7 +659,7 @@
 \let\tj@origappendix\appendix
 \renewcommand{\appendix}{%
   \tj@origappendix
-  \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
+  \tj@unnumberedheadingformat
   \chapter*{附录}%
   \addcontentsline{toc}{chapter}{附录}%
   % 附录内小节：A B C … Z AA AB …（alphalph 包提供，>26 自动延伸）
@@ -673,20 +691,20 @@
 }
 \newcommand{\appendixsection}{\section}
 \newcommand{\appendixsubsection}{\subsection}
-% Backmatter headings use 四号 (references, acknowledgements) per 2026 spec.
+% Backmatter headings (acknowledgements) use 四号 per the spec.
 % The \ctexset override is intentionally permanent for the rest of the document
 % (backmatter is always the final structural division).
 \let\tj@origbackmatter\backmatter
 \renewcommand{\backmatter}{%
   \tj@origbackmatter
-  \ctexset{chapter/format={\centering\heiti\tjfontheading}}%
+  \tj@unnumberedheadingformat
 }
 
 % ==========================================
 % Typography and Font Settings
 % ==========================================
 
-% 表格内所有字体均为小五
+% 表格内所有字体均为五号（\tjfonttable）
 \AtBeginEnvironment{table}{\tjfonttable}
 \AtBeginEnvironment{tabular}{\tjfonttable}
 \AtBeginEnvironment{tabular*}{\tjfonttable}
@@ -733,8 +751,6 @@
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
 \renewcommand{\contentsname}{目\hspace{0.5em}录}
-\renewcommand{\cfttoctitlefont}{\hfill\heiti\tjfontheading}
-\renewcommand{\cftaftertoctitle}{\hfill}
 % 目录标题后留一空行
 % tocloft[titles] 下 \cftaftertoctitleskip 无效——\tableofcontents 内部走 \chapter*，
 % 所以直接在 \@starttoc 前注入 \vspace。
@@ -753,10 +769,16 @@
 \renewcommand{\cftsubsecpagefont}{\tjfontbody}
 
 % 目录行距：对应 Word“1.5 倍行距”——使用 \tjtoclinespread
+% 目录标题经 \chapter* 排出，spacing 分组内改用四号（\tj@unnumberedheadingformat）
 \let\tj@origtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
-  \begin{spacing}{\tjtoclinespread}\tj@origtableofcontents\end{spacing}%
+  \begin{spacing}{\tjtoclinespread}\tj@unnumberedheadingformat\tj@origtableofcontents\end{spacing}%
 }
+% 插图清单、表格清单（main.tex 中按需启用）的标题与目录一致，用四号
+\let\tj@origlistoffigures\listoffigures
+\renewcommand{\listoffigures}{\begingroup\tj@unnumberedheadingformat\tj@origlistoffigures\endgroup}
+\let\tj@origlistoftables\listoftables
+\renewcommand{\listoftables}{\begingroup\tj@unnumberedheadingformat\tj@origlistoftables\endgroup}
 
 % ==========================================
 % Chapter/Section Numbering and Formatting
