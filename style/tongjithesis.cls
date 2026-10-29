@@ -1164,79 +1164,79 @@
   \newcommand*{\chapref}[1]{第\ref{#1}章}
   \newcommand*{\secref}[1]{第\ref{#1}节}
 \else
-  \newcommand*{\chapref}[1]{第~\ref{#1}~章~}
-  \newcommand*{\secref}[1]{第~\ref{#1}~节~}
+  \newcommand*{\chapref}[1]{第~\ref{#1}~章}
+  \newcommand*{\secref}[1]{第~\ref{#1}~节}
 \fi
-\newcommand*{\algoref}[1]{算法~\ref{#1}~}
-\renewcommand*{\eqref}[1]{式~(\ref{#1})~}
-\newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
-\newcommand*{\figref}[1]{\figurename~\ref{#1}~}
+\newcommand*{\algoref}[1]{算法~\ref{#1}\tj@refnum}
+\renewcommand*{\eqref}[1]{式~(\ref{#1})}
+\newcommand*{\tabref}[1]{\tablename~\ref{#1}\tj@refnum}
+\newcommand*{\figref}[1]{\figurename~\ref{#1}\tj@refnum}
 
 % Cross-reference formats: 名字放进 #2…#3 让 nameinlink 全段可点（图/表/式 等整词都参与超链接）
-\crefformat{listing}{#2代码~#1#3}
-\crefmultiformat{listing}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
-\crefrangeformat{listing}{#3代码~#1#4~至#5代码~#2#6}
-\crefformat{lstlisting}{#2代码~#1#3}
-\crefmultiformat{lstlisting}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
-\crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6}
+\crefformat{listing}{#2代码~#1#3\tj@refnum}
+\crefmultiformat{listing}{#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}{、#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}
+\crefrangeformat{listing}{#3代码~#1#4~至#5代码~#2#6\tj@refnum}
+\crefformat{lstlisting}{#2代码~#1#3\tj@refnum}
+\crefmultiformat{lstlisting}{#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}{、#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}
+\crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6\tj@refnum}
 \newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
 
 % Configure references in Chinese
 % “第X章/节” pattern: number is wrapped, needs full multi/range formats
 \iftongjithesis@humanities
-  \crefformat{chapter}{#2第#1章#3}
-  \crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{、#2第#1章#3}{和#2第#1章#3}
-  \crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
-  \crefformat{section}{#2第#1节#3}
-  \crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{、#2第#1节#3}{和#2第#1节#3}
-  \crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+  \crefformat{chapter}{#2第#1章#3\tj@refnotnum}
+  \crefmultiformat{chapter}{#2第#1章#3\tj@refnotnum}{和#2第#1章#3\tj@refnotnum}{、#2第#1章#3\tj@refnotnum}{和#2第#1章#3\tj@refnotnum}
+  \crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6\tj@refnotnum}
+  \crefformat{section}{#2第#1节#3\tj@refnotnum}
+  \crefmultiformat{section}{#2第#1节#3\tj@refnotnum}{和#2第#1节#3\tj@refnotnum}{、#2第#1节#3\tj@refnotnum}{和#2第#1节#3\tj@refnotnum}
+  \crefrangeformat{section}{#3第#1节#4至#5第#2节#6\tj@refnotnum}
 \else
-  \crefformat{chapter}{#2第~#1~章#3}
-  \crefmultiformat{chapter}{#2第~#1~章#3}{和#2第~#1~章#3}{、#2第~#1~章#3}{和#2第~#1~章#3}
-  \crefrangeformat{chapter}{#3第~#1~章#4至#5第~#2~章#6}
-  \crefformat{section}{#2第~#1~节#3}
-  \crefmultiformat{section}{#2第~#1~节#3}{和#2第~#1~节#3}{、#2第~#1~节#3}{和#2第~#1~节#3}
-  \crefrangeformat{section}{#3第~#1~节#4至#5第~#2~节#6}
+  \crefformat{chapter}{#2第~#1~章#3\tj@refnotnum}
+  \crefmultiformat{chapter}{#2第~#1~章#3\tj@refnotnum}{和#2第~#1~章#3\tj@refnotnum}{、#2第~#1~章#3\tj@refnotnum}{和#2第~#1~章#3\tj@refnotnum}
+  \crefrangeformat{chapter}{#3第~#1~章#4至#5第~#2~章#6\tj@refnotnum}
+  \crefformat{section}{#2第~#1~节#3\tj@refnotnum}
+  \crefmultiformat{section}{#2第~#1~节#3\tj@refnotnum}{和#2第~#1~节#3\tj@refnotnum}{、#2第~#1~节#3\tj@refnotnum}{和#2第~#1~节#3\tj@refnotnum}
+  \crefrangeformat{section}{#3第~#1~节#4至#5第~#2~节#6\tj@refnotnum}
 \fi
-\crefformat{subsection}{#2第~#1~小节#3}
-\crefmultiformat{subsection}{#2第~#1~小节#3}{和#2第~#1~小节#3}{、#2第~#1~小节#3}{和#2第~#1~小节#3}
-\crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6}
+\crefformat{subsection}{#2第~#1~小节#3\tj@refnotnum}
+\crefmultiformat{subsection}{#2第~#1~小节#3\tj@refnotnum}{和#2第~#1~小节#3\tj@refnotnum}{、#2第~#1~小节#3\tj@refnotnum}{和#2第~#1~小节#3\tj@refnotnum}
+\crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6\tj@refnotnum}
 % “名称~X” pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
 % --- Common float/equation types ---
-\crefformat{equation}{#2式~(#1)#3}
-\crefmultiformat{equation}{#2式~(#1)#3}{和#2式~(#1)#3}{、#2式~(#1)#3}{和#2式~(#1)#3}
-\crefrangeformat{equation}{#3式~(#1)#4~至#5式~(#2)#6}
-\crefformat{figure}{#2图~#1#3}
-\crefmultiformat{figure}{#2图~#1#3}{和#2图~#1#3}{、#2图~#1#3}{和#2图~#1#3}
-\crefrangeformat{figure}{#3图~#1#4~至#5图~#2#6}
-\crefformat{table}{#2表~#1#3}
-\crefmultiformat{table}{#2表~#1#3}{和#2表~#1#3}{、#2表~#1#3}{和#2表~#1#3}
-\crefrangeformat{table}{#3表~#1#4~至#5表~#2#6}
-\crefformat{algorithm}{#2算法~#1#3}
-\crefmultiformat{algorithm}{#2算法~#1#3}{和#2算法~#1#3}{、#2算法~#1#3}{和#2算法~#1#3}
-\crefrangeformat{algorithm}{#3算法~#1#4~至#5算法~#2#6}
-\crefformat{algocf}{#2算法~#1#3}
-\crefmultiformat{algocf}{#2算法~#1#3}{和#2算法~#1#3}{、#2算法~#1#3}{和#2算法~#1#3}
-\crefrangeformat{algocf}{#3算法~#1#4~至#5算法~#2#6}
-\crefformat{FancyVerbLine}{#2第~#1~行#3}
-\crefmultiformat{FancyVerbLine}{#2第~#1~行#3}{和#2第~#1~行#3}{、#2第~#1~行#3}{和#2第~#1~行#3}
-\crefrangeformat{FancyVerbLine}{#3第~#1~行#4至#5第~#2~行#6}
+\crefformat{equation}{#2式~(#1)#3\tj@refnum}
+\crefmultiformat{equation}{#2式~(#1)#3\tj@refnum}{\tj@numsep 和#2式~(#1)#3\tj@refnum}{、#2式~(#1)#3\tj@refnum}{\tj@numsep 和#2式~(#1)#3\tj@refnum}
+\crefrangeformat{equation}{#3式~(#1)#4~至#5式~(#2)#6\tj@refnum}
+\crefformat{figure}{#2图~#1#3\tj@refnum}
+\crefmultiformat{figure}{#2图~#1#3\tj@refnum}{\tj@numsep 和#2图~#1#3\tj@refnum}{、#2图~#1#3\tj@refnum}{\tj@numsep 和#2图~#1#3\tj@refnum}
+\crefrangeformat{figure}{#3图~#1#4~至#5图~#2#6\tj@refnum}
+\crefformat{table}{#2表~#1#3\tj@refnum}
+\crefmultiformat{table}{#2表~#1#3\tj@refnum}{\tj@numsep 和#2表~#1#3\tj@refnum}{、#2表~#1#3\tj@refnum}{\tj@numsep 和#2表~#1#3\tj@refnum}
+\crefrangeformat{table}{#3表~#1#4~至#5表~#2#6\tj@refnum}
+\crefformat{algorithm}{#2算法~#1#3\tj@refnum}
+\crefmultiformat{algorithm}{#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}{、#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}
+\crefrangeformat{algorithm}{#3算法~#1#4~至#5算法~#2#6\tj@refnum}
+\crefformat{algocf}{#2算法~#1#3\tj@refnum}
+\crefmultiformat{algocf}{#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}{、#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}
+\crefrangeformat{algocf}{#3算法~#1#4~至#5算法~#2#6\tj@refnum}
+\crefformat{FancyVerbLine}{#2第~#1~行#3\tj@refnotnum}
+\crefmultiformat{FancyVerbLine}{#2第~#1~行#3\tj@refnotnum}{和#2第~#1~行#3\tj@refnotnum}{、#2第~#1~行#3\tj@refnotnum}{和#2第~#1~行#3\tj@refnotnum}
+\crefrangeformat{FancyVerbLine}{#3第~#1~行#4至#5第~#2~行#6\tj@refnotnum}
 % --- Theorem types (single + multi for consistency) ---
-\crefformat{thm}{#2定理~#1#3}
-\crefmultiformat{thm}{#2定理~#1#3}{和#2定理~#1#3}{、#2定理~#1#3}{和#2定理~#1#3}
-\crefformat{cor}{#2推论~#1#3}
-\crefmultiformat{cor}{#2推论~#1#3}{和#2推论~#1#3}{、#2推论~#1#3}{和#2推论~#1#3}
-\crefformat{lem}{#2引理~#1#3}
-\crefmultiformat{lem}{#2引理~#1#3}{和#2引理~#1#3}{、#2引理~#1#3}{和#2引理~#1#3}
-\crefformat{prop}{#2命题~#1#3}
-\crefmultiformat{prop}{#2命题~#1#3}{和#2命题~#1#3}{、#2命题~#1#3}{和#2命题~#1#3}
-\crefformat{conj}{#2猜想~#1#3}
-\crefformat{assume}{#2假设~#1#3}
-\crefformat{dfn}{#2定义~#1#3}
-\crefformat{exmp}{#2例~#1#3}
-\crefformat{rem}{#2注~#1#3}
-\crefformat{pf}{#2证明~#1#3}
-\crefformat{proof}{#2证明~#1#3}
+\crefformat{thm}{#2定理~#1#3\tj@refnum}
+\crefmultiformat{thm}{#2定理~#1#3\tj@refnum}{\tj@numsep 和#2定理~#1#3\tj@refnum}{、#2定理~#1#3\tj@refnum}{\tj@numsep 和#2定理~#1#3\tj@refnum}
+\crefformat{cor}{#2推论~#1#3\tj@refnum}
+\crefmultiformat{cor}{#2推论~#1#3\tj@refnum}{\tj@numsep 和#2推论~#1#3\tj@refnum}{、#2推论~#1#3\tj@refnum}{\tj@numsep 和#2推论~#1#3\tj@refnum}
+\crefformat{lem}{#2引理~#1#3\tj@refnum}
+\crefmultiformat{lem}{#2引理~#1#3\tj@refnum}{\tj@numsep 和#2引理~#1#3\tj@refnum}{、#2引理~#1#3\tj@refnum}{\tj@numsep 和#2引理~#1#3\tj@refnum}
+\crefformat{prop}{#2命题~#1#3\tj@refnum}
+\crefmultiformat{prop}{#2命题~#1#3\tj@refnum}{\tj@numsep 和#2命题~#1#3\tj@refnum}{、#2命题~#1#3\tj@refnum}{\tj@numsep 和#2命题~#1#3\tj@refnum}
+\crefformat{conj}{#2猜想~#1#3\tj@refnum}
+\crefformat{assume}{#2假设~#1#3\tj@refnum}
+\crefformat{dfn}{#2定义~#1#3\tj@refnum}
+\crefformat{exmp}{#2例~#1#3\tj@refnum}
+\crefformat{rem}{#2注~#1#3\tj@refnum}
+\crefformat{pf}{#2证明~#1#3\tj@refnum}
+\crefformat{proof}{#2证明~#1#3\tj@refnum}
 
 % Configure connecting words
 \newcommand{\crefpairconjunction}{ 和~}
@@ -1246,6 +1246,42 @@
 \newcommand{\crefmiddlegroupconjunction}{、}
 \newcommand{\creflastgroupconjunction}{ 和}
 \newcommand{\crefrangeconjunction}{ 至~}
+
+% 超链接在编号后结束，链接结尾会打断 xeCJK 的中西文自动间距，“如图 1.1所示”缺少空格。
+% 编号结尾的引用格式（图、表、式、算法、代码、定理等）之后若紧跟汉字，补上 xeCJK 的中西文间距
+% \CJKecglue；紧跟标点、空格或命令时什么也不加。章、节、行以汉字结尾，不需要。
+% LuaTeX 下由 luatexja 处理间距，这里不做任何事。
+\ExplSyntaxOn
+\bool_new:N \g__tj_ref_num_bool
+\cs_new_protected:Npn \__tj_ref_cjk_space:
+  {
+    \sys_if_engine_xetex:T
+      {
+        \peek_regex:nT { [\x{3400}-\x{4DBF}\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}] }
+          { \CJKecglue }
+      }
+  }
+% 引用格式以编号结尾：记下这一点，并处理格式内部紧跟的“和”
+\cs_new_protected:cpn { tj@refnum }
+  { \bool_gset_true:N \g__tj_ref_num_bool \__tj_ref_cjk_space: }
+% 同类多项引用中，编号与后一项的“和”之间（XeTeX）
+\cs_new_protected:cpn { tj@numsep }
+  { \sys_if_engine_xetex:T { \CJKecglue } }
+\cs_new_protected:cpn { tj@refnotnum }
+  { \bool_gset_false:N \g__tj_ref_num_bool }
+% 整条引用结束后：最后一项以编号结尾时，按后面的字符补间距
+\cs_new_protected:cpn { tj@refcjkspace }
+  {
+    \bool_if:NT \g__tj_ref_num_bool
+      { \bool_gset_false:N \g__tj_ref_num_bool \__tj_ref_cjk_space: }
+  }
+\ExplSyntaxOff
+\AtBeginDocument{%
+  \NewCommandCopy\tj@cref@orig\cref
+  \RenewDocumentCommand\cref{sm}{\IfBooleanTF{#1}{\tj@cref@orig*{#2}}{\tj@cref@orig{#2}}\tj@refcjkspace}%
+  \NewCommandCopy\tj@crefrange@orig\crefrange
+  \RenewDocumentCommand\crefrange{smm}{\IfBooleanTF{#1}{\tj@crefrange@orig*{#2}{#3}}{\tj@crefrange@orig{#2}{#3}}\tj@refcjkspace}%
+}
 
 % ==========================================
 % Logo Commands
