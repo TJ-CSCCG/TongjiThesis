@@ -118,7 +118,7 @@ cat > ctan/tongjithesis/README.md << 'HEREDOC'
 \major{计算机科学与技术}
 \student{1234567}{张三}
 \thesistitle{论文标题}{——副标题}
-\thesistitleeng{Thesis Title}{--- Subtitle}
+\thesistitleeng{Thesis title}{--- Subtitle}
 \thesisadvisor{李四 教授}
 \thesisdate{2026}{6}{1}
 
@@ -198,7 +198,7 @@ cat > ctan/tongjithesis/example/example.tex << 'HEREDOC'
 \major{计算机科学与技术}
 \student{1234567}{张三}
 \thesistitle{基于机器学习的图像分类研究}{——以交通标志识别为例}
-\thesistitleeng{Research on Image Classification Based on Machine Learning}{——Take Traffic Sign Recognition as an Example}
+\thesistitleeng{Research on image classification based on machine learning}{——Take traffic sign recognition as an example}
 \thesisadvisor{李四 教授}
 \thesisdate{2026}{4}{20}
 
