@@ -49,9 +49,9 @@
 数字和单位列表可以使用以下命令进行格式化：
 
 \begin{itemize}
-  \item \numlist{95;36}：显示数字列表，其中数字之间用分号隔开。
-  \item \numlist{52;74;59}：显示数字列表，其中数字之间用分号隔开。
-  \item \SIlist{0.53;0.74;0.99}{\milli\metre}：显示带有单位的数字列表，其中数字之间用分号隔开。
+  \item \numlist{95;36}：数字列表，输入时用分号分隔各数字，两个数字之间输出“和”。
+  \item \numlist{52;74;59}：数字列表，三个及以上数字时用顿号分隔，最后两个之间输出“和”。
+  \item \SIlist{0.53;0.74;0.99}{\milli\metre}：带单位的数字列表，每个数字后都带单位。
 \end{itemize}
 
 \subsection{数字和单位范围}
@@ -59,7 +59,7 @@
 数字和单位范围可以使用以下命令进行格式化：
 
 \begin{itemize}
-  \item \numrange{65}{1284}：显示数字范围，其中数字用短横线隔开。
+  \item \numrange{65}{1284}：显示数字范围，两个数字之间用浪纹线“～”连接。
   \item \SIrange{58}{1024}{\degreeCelsius}：显示带有单位的数字范围。
 \end{itemize}
 

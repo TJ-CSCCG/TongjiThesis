@@ -380,6 +380,14 @@
 
 % Units and graphics
 \RequirePackage{siunitx}[=v2]
+% 数字列表与数字范围的连接词：siunitx 默认输出英文“and”“to”。撰写规范（十三）要求标点按
+% GB/T 15834—2011《标点符号用法》使用：并列词语用顿号，数值范围用浪纹线“～”（规范正文亦写作“3～5个”）。
+\sisetup{
+  list-separator       = {、},
+  list-final-separator = {和},
+  list-pair-separator  = {和},
+  range-phrase         = {～},
+}
 \RequirePackage{pgf}
 \RequirePackage{tikz}
 
