@@ -1,6 +1,6 @@
 ---
 name: Bug 反馈 | Bug Report
-about: 反馈使用模板时遇到的 bug | Report a bug
+about: 反馈使用模板时遇到的 Bug | Report a bug
 labels: 'type/bug'
 ---
 
@@ -32,7 +32,7 @@ Please upload the `.log` file as an attachment, or paste the key error messages:
 
 ## 其他信息 | Additional Context
 
-如有修改项目文件结构或其他相关信息，请在此补充。
+如修改过项目文件结构，或有其他相关信息，请在此补充。
 Any other relevant information, e.g. modified file structure.
 
 ## 是否计划自行修复？| Do you plan to fix this yourself?

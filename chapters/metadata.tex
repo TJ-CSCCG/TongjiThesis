@@ -2,7 +2,7 @@
 %  文档类选项（在 main.tex 的 \documentclass[...]{tongjithesis} 中设置）
 %  field=science    理工科（工科类、理科类，默认）— 章节编号：1 / 1.1 / 1.1.1
 %  field=humanities 文科  （人文、法学、外语、艺术）        — 章节编号：一、/（一）/ 1.
-%  经管类属社科：编号要求依理工，撰写依理工模版；26 届为过渡期，可选 science 或
+%  经管类属社科：编号要求依理工，撰写依理工模板；26 届为过渡期，可选 science 或
 %  humanities；自 27 届起统一使用 science。
 % ============================================================
 
@@ -16,7 +16,7 @@
 % 英文题名：仅首词与专有名词首字母大写（撰写规范）
 \thesistitleeng{\TongjiThesis{} template and \LaTeX{} typesetting for Tongji University undergraduate thesis}{A guide to typesetting features, academic writing standards, and formatting}
 \thesisadvisor{李共济\quad 教授}
-\thesisdate{\the\year}{\the\month}{\the\day} % 使用当前日期; 也可以自定义日期
+\thesisdate{\the\year}{\the\month}{\the\day} % 使用当前日期；也可以自定义日期
 
 % 任务书专用信息（仅编译 taskbook.tex 时使用；起始年/月/日、截止年/月/日）
 % 周数由起讫日期自动换算（向上取整），无需手动填写
@@ -31,12 +31,12 @@
 % ============================================================
 
 % 成果类型（三选一）：
-%   thesis      — 毕业论文，摘要
-%   design      — 毕业设计（软件/创意/建筑等非工程设计类），摘要
-%   engineering — 毕业设计（工程设计类），设计总说明
+%   thesis      — 毕业论文（摘要页标题：摘要）
+%   design      — 毕业设计（软件/创意/建筑等非工程设计类；摘要页标题：摘要）
+%   engineering — 毕业设计（工程设计类；摘要页标题：设计总说明）
 \infotype{thesis}
 
-% 内容简述（请用300字以内简要概述）
+% 内容简述（300字以内）
 \infoabstract{%
 请在此处填写论文内容简述，字数建议不超过300字。内容简述应概括论文的研究背景与问题动机、研究目标、主要方法与技术路线、实验设计与数据来源、关键实验结果及性能指标，以及研究结论与创新点，使读者能够快速了解本论文的核心贡献与研究意义。建议按照以下结构来组织简述内容：首先介绍研究背景与问题动机，充分说明研究的必要性与现有相关工作的主要不足之处；其次阐述所提出的方法或技术方案及其设计原理与主要实现细节；然后给出在典型数据集或实际应用场景下的主要实验结果与量化评价指标的全面横向对比分析；最后总结本研究的主要结论与当前局限性，并展望未来改进方向与潜在应用前景。请将以上示例文字全部替换为您的实际内容简述。
 }
@@ -50,13 +50,13 @@
 
 % 随附资料（每条用 \item 开头；不填则显示空白行）
 \infomaterials{
-  \item 随附材料名称一（如：全套图纸、程序源代码、计算书等）；
-  \item 随附材料名称二
+  \item 随附资料名称一（如：全套图纸、程序源代码、计算书等）；
+  \item 随附资料名称二
 }
 
 % ============================================================
 %  中英文摘要页
 % ============================================================
-% 摘要页论文标题（可选）：设置摘要页展示的论文标题（非摘要 section 名称）。未设置或两个参数都留空时，沿用 \thesistitle 与 \thesistitleeng，如需让摘要页使用不同标题或独立换行位置，取消以下两行注释。
+% 摘要页论文标题（可选）：设置摘要页展示的论文标题（不是“摘要”二字的标题）。未设置或两个参数都留空时，沿用 \thesistitle 与 \thesistitleeng。如需让摘要页使用不同标题或独立换行位置，取消以下两行注释。
 % \abstracttitle{\TongjiThesis{}同济大学本科毕业设计（论文）模板与\LaTeX{}排版技术应用}{模板排版功能示例、学术写作规范与格式设置指南}
 % \abstracttitleeng{\TongjiThesis{} template and \LaTeX{} typesetting for Tongji University undergraduate thesis}{A guide to typesetting features, academic writing standards, and formatting}

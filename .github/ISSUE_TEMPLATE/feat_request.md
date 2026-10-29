@@ -8,9 +8,9 @@ labels: 'type/feat'
 
 在对应类型上打勾 | Check the relevant type:
 
-- [ ] 构建相关 | Build (新的构建方式、流程改进等)
-- [ ] 模板功能相关 | Template (新增功能、适配新样式等)
-- [ ] 文档相关 | Documentation (改进使用说明等)
+- [ ] 构建相关（新的构建方式、流程改进等）| Build
+- [ ] 模板功能相关（新增功能、适配新样式等）| Template
+- [ ] 文档相关（改进使用说明等）| Documentation
 
 ## 功能描述 | Description
 

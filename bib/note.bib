@@ -1,6 +1,7 @@
 % ================================================================
 % 参考文献数据库
 % 排列方式：按文献类型分组，组内按年份升序排列
+% 英文题名输出为句首大写，需保持大小写的专有名词与缩写用花括号保护，如 {IEEE}
 % ================================================================
 
 % ===== 期刊文章 =====
@@ -93,7 +94,7 @@
 @book{book1,
   author    = {严蔚敏 and 吴伟民},
   title     = {数据结构},
-  edition   = {C语言版},
+  subtitle  = {C语言版},
   publisher = {清华大学出版社},
   address   = {北京},
   year      = {1997}
@@ -136,7 +137,7 @@
 @inproceedings{conf1,
   author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
   title     = {Deep Residual Learning for Image Recognition},
-  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  booktitle = {Proceedings of the {IEEE} Conference on Computer Vision and Pattern Recognition},
   year      = {2016},
   pages     = {770--778},
   doi       = {10.1109/CVPR.2016.90}
@@ -256,7 +257,7 @@
 
 @online{online2,
   author  = {{PyTorch Contributors}},
-  title   = {PyTorch Documentation},
+  title   = {{PyTorch} Documentation},
   year    = {2026},
   url     = {https://pytorch.org/docs/stable/index.html},
   urldate = {2026-03-26}

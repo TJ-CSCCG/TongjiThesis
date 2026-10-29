@@ -1,6 +1,6 @@
 \chapter{图表与代码}\label{chap:float}
 
-本章介绍插图、表格、算法和代码等浮动体的使用方法。浮动体可以自由浮动在页面中，\LaTeX{} 会自动选择合适的位置进行排版。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
+本章介绍插图、表格、算法和代码等浮动体的使用方法。浮动体的位置不固定，由 \LaTeX{} 自动选择合适的位置。如需固定位置，可使用 \pkg{float} 宏包的 \texttt{[H]} 参数。
 
 浮动体位置选项说明：\texttt{h}（here，当前位置）、\texttt{t}（top，页面顶部）、\texttt{b}（bottom，页面底部）、\texttt{p}（page，独立浮动页）、\texttt{!}（放宽内部限制）、\texttt{H}（强制固定位置，需 \pkg{float} 宏包）。
 
@@ -17,20 +17,19 @@
   \label{fig:example}
 \end{figure}
 
-这段代码会在浮动体中插入一个名为 \verb|figures/tongjithesis.pdf| 的图形，并将其居中显示。图形下方会有一个标题，同时为该图形标上标签，以便于交叉引用。
+上例的源代码在浮动体中插入 \verb|figures/tongjithesis.pdf| 并居中显示，在图下方加图题，并设置标签以便交叉引用。
 
 如需在正文中引用该图，可使用 \verb|\cref{fig:example}| 命令，效果为“\cref{fig:example}”；也可使用 \verb|\figref{fig:example}| 命令，效果为“\figref{fig:example}”。
 
-需要注意的是，在使用 \verb|\includegraphics| 命令时，应该将图像文件放在与主文档相同的目录中，或者在参数中指定文件的完整路径。
+上例的 \verb|figures/tongjithesis.pdf| 是相对路径：\verb|\includegraphics| 中的文件路径相对于主文档所在的目录。用 latexmk 或 \verb|make| 编译时，模板的 \verb|latexmkrc| 已把 \verb|figures/| 目录加入搜索路径，其中的文件也可以只写文件名。
 
-推荐使用矢量图格式（PDF）用于图表和流程图，位图建议使用 PNG 格式（照片可用 JPG），矢量图在缩放时不会失真。
+图表和流程图推荐使用矢量图格式（PDF），缩放时不会失真；位图建议使用 PNG 格式，照片可用 JPG。
 
-模板已通过 \cs{AtBeginEnvironment\{figure\}\{\textbackslash centering\}} 自动将图片居中，无需手动添加 \cs{centering}。但切勿使用 \verb|\begin{center}...\end{center}| 替代，后者会引入额外的垂直间距。
+模板已通过 \cs{AtBeginEnvironment\{figure\}\{\textbackslash centering\}} 自动将图片居中，无需手动添加 \cs{centering}，也不要用 \verb|\begin{center}...\end{center}| 代替，后者会引入额外的垂直间距。
 
 \subsection{多个图形}
 
-如果需要在同一浮动体中插入多个图形，可以使用 \pkg{subcaption} 宏包（旧的 \pkg{subfigure} 与 \pkg{subfig} 宏包已过时，请勿使用）。
-最简单的做法是将多张图并排放入同一 \texttt{figure} 环境、用 \cs{hspace} 间隔——此时多图共用一个图号，没有各自子图题，如\cref{fig:example-subfig-1}。
+如果需要在同一浮动体中插入多个图形，最简单的做法是将多张图并排放入同一 \texttt{figure} 环境、用 \cs{hspace} 间隔，此时多图共用一个图号，没有各自的子图题，如\cref{fig:example-subfig-1}。
 
 \begin{figure}[!htb]
   \centering
@@ -41,7 +40,7 @@
   \label{fig:example-subfig-1}
 \end{figure}
 
-如果多个图形相互独立，不共用一个图形计数器，可以使用 \texttt{minipage} 或 \texttt{parbox}，如\cref{fig:parallel1,fig:parallel2}。
+如果多个图形相互独立、各有图号，可以使用 \texttt{minipage} 或 \texttt{parbox}，如\cref{fig:parallel1,fig:parallel2}。
 
 \begin{figure}[!htb]
   \begin{minipage}{0.4\textwidth}
@@ -58,7 +57,7 @@
   \end{minipage}
 \end{figure}
 
-若希望多个子图共用一个计数器并分别拥有子图题，使用 \pkg{subcaption} 宏包的 \cs{subcaptionbox} 命令（或 \texttt{subfigure} 环境），子图号以 (a)、(b) 区分，如\cref{fig:subcaptionbox}。
+若希望多个子图共用一个图号并分别拥有子图题，可以使用 \pkg{subcaption} 宏包的 \cs{subcaptionbox} 命令（或该宏包提供的 \texttt{subfigure} 环境；旧的 \pkg{subfigure} 与 \pkg{subfig} 宏包已过时，请勿使用），子图号以 (a)、(b) 区分，如\cref{fig:subcaptionbox}。
 
 \begin{figure}[!htb]
   \centering
@@ -74,10 +73,10 @@
 
 \subsection{基本表格}
 
-编排表格时应简单明了、表达一致，内容明晰易懂，表文呼应，内容一致。表题应置于表格上方。
+表格应简单明了、明晰易懂，表达与内容前后一致，表文呼应。表题应置于表格上方。
 
-表格的编排建议采用国际通行的三线表\footnote{三线表以其形式简洁、功能分明、阅读方便而在科技论文中被推荐使用。三线表通常只有3条线，即顶线、底线和栏目线，没有竖线。}。可以使用 \pkg{booktabs} 宏包提供的 \cs{toprule}、\cs{midrule} 和 \cs{bottomrule} 命令来绘制三线表。同时，\pkg{longtable} 宏包可以与三线表很好地配合使用，可以排版较长的表格。按照同济大学撰写规范，三线表应“两端与页面对齐”，推荐使用 \pkg{tabularx} 宏包，将表格宽度指定为 \cs{linewidth} 即可自动撑满页宽。
-要编写三线表，需要在表格的头部、底部和每一栏之间绘制水平线。其中，\cs{toprule} 绘制顶部线，\cs{midrule} 绘制中部线，\cs{bottomrule} 绘制底部线。可以按照如下方式绘制三线表：
+表格的编排建议采用国际通行的三线表\footnote{科技论文推荐使用三线表，因为它形式简洁、功能分明、阅读方便。三线表通常只有3条线，即顶线、底线和栏目线，没有竖线。}。可以使用 \pkg{booktabs} 宏包提供的 \cs{toprule}、\cs{midrule} 和 \cs{bottomrule} 命令来绘制三线表。排版较长的表格时，可用 \pkg{longtable} 宏包，它与三线表配合良好。按照同济大学撰写规范，三线表应“两端与页面对齐”，推荐使用 \pkg{tabularx} 宏包，将表格宽度指定为 \cs{linewidth} 即可自动撑满页宽。
+三线表只需三条横线：\cs{toprule} 绘制顶线，\cs{midrule} 绘制栏目线，\cs{bottomrule} 绘制底线。可以按照如下方式绘制三线表：
 
 \begin{table}[!hpt]
   \caption{一个三线表（两端与页面对齐）}
@@ -96,8 +95,7 @@
 
 \subsection{复杂表格}
 
-我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。可以用
-\pkg{threeparttable} 实现带有脚注的表格，如\cref{tab:bigtable}。
+表格下方常需标注数据来源或解释表中条目，可以用 \pkg{threeparttable} 实现带脚注的表格，如\cref{tab:bigtable}。
 
 表内文字按撰写规范使用五号。列数较多、表格超出版心时，可以在该表内用 \verb|\setlength{\tabcolsep}{4pt}| 缩小列间距（\cref{tab:bigtable} 即如此），或精简表头、拆分表格。
 
@@ -123,7 +121,7 @@
   \end{threeparttable}
 \end{table}
 
-为了编写更复杂的表格，我们可以使用 \href{https://www.tablesgenerator.com/}{Tables Generator} 来生成 \LaTeX{} 代码。该工具可以方便地设置表格的列数、行数、内容、格式、颜色等属性，支持常用的表格类型和样式，并且可以实时生成 \LaTeX{} 代码和预览效果，避免手动编写 \LaTeX{} 代码时出错。
+更复杂的表格可以借助 \href{https://www.tablesgenerator.com/}{Tables Generator} 生成 \LaTeX{} 代码。该工具可以设置表格的列数、行数、内容、格式、颜色等属性，支持常用的表格类型和样式，并能实时生成代码、预览效果，避免手写代码出错。
 
 
 如某个表需要转页接排，可以用 \pkg{longtable} 实现。接排时表题省略，表头应重复书
@@ -204,7 +202,7 @@
 
 
 
-\section{算法}
+\section{算法}\label{sec:algorithm}
 
 本模板默认使用 \pkg{algpseudocode} 排版算法，也可通过文档类选项 \texttt{algo=algorithm2e} 切换为 \pkg{algorithm2e}。
 
@@ -226,7 +224,7 @@
     \end{equation*}
   \end{algorithm}
 \else
-  \cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。
+  \cref{algo:algorithm} 是一个使用 \pkg{algpseudocode} 的示例。默认方案下 \texttt{algorithm} 环境不浮动，按它在源文件中的位置排出，因此不要加 \texttt{[htbp]} 等位置参数。
 
   \begin{algorithm}
     \caption{计算斐波那契数列}\label{algo:algorithm}
@@ -248,17 +246,17 @@
   \end{algorithm}
 \fi
 
-无论使用 \pkg{algpseudocode} 还是 \pkg{algorithm2e}，都可以通过相应的命令来定义函数、条件语句和循环结构，以便于编写清晰易懂的算法描述。
+\pkg{algpseudocode} 和 \pkg{algorithm2e} 都提供定义函数、条件语句和循环结构的命令。
 
 \section{代码}
 
 \subsection{代码高亮方式}
 
-本模板提供 \pkg{listings} 和 \pkg{minted} 两种代码高亮方案，可通过文档类选项 \texttt{minted=false}（默认）或 \texttt{minted=true} 切换。\pkg{listings} 是 \LaTeX{} 原生的代码显示包，始终可用，无需外部依赖；\pkg{minted} 基于 Python Pygments，提供更精确的语法解析和更丰富的高亮效果，但需要安装 Python 3.11–3.13 和 Pygments（\texttt{pip install pygments}），编译时需添加 \texttt{-shell-escape} 参数。若需要更好的高亮效果，可设置 \texttt{minted=true} 启用 \pkg{minted}。
+本模板提供 \pkg{listings} 和 \pkg{minted} 两种代码高亮方案，可通过文档类选项 \texttt{minted=false}（默认）或 \texttt{minted=true} 切换。\pkg{listings} 是 \LaTeX{} 原生的代码显示包，始终可用，无需外部依赖；\pkg{minted} 基于 Python Pygments，提供更精确的语法解析和更丰富的高亮效果，但需要安装 Python 3.11–3.13 和 Pygments（\texttt{pip install pygments}），编译时需添加 \texttt{-shell-escape} 参数。
 
 \subsection{代码块示例}
 
-\pkg{listings} 包是 \LaTeX{} 最常用的代码高亮工具，无论 \texttt{minted} 选项如何设置，它始终可用。如\cref{lst:basic-example} 所示。
+\pkg{listings} 包是 \LaTeX{} 最常用的代码高亮工具，无论 \texttt{minted} 选项如何设置都可以使用，示例见\cref{lst:basic-example}。
 
 \begin{lstlisting}[
   language=Python,         % 指定语法高亮的编程语言
@@ -279,8 +277,10 @@ print(hello_world("LaTeX"))  # 输出: Hello, LaTeX!
 
 \pkg{listings} 包支持绝大多数编程语言，如 C/C++、Java、Python、MATLAB、R、SQL 等，使用 \texttt{language} 参数指定即可。
 
+模板为 \pkg{listings} 开启了 \texttt{mathescape} 和 \texttt{escapeinside=||}：代码中两个 \verb|$| 之间的内容按数学公式排版，两个 \verb+|+ 之间的内容按 \LaTeX{} 命令执行。代码本身含有 \verb|$| 或 \verb+|+ 时（如 Shell 变量、C 语言的 \verb+||+），在该代码块的选项中加上 \verb|mathescape=false, escapeinside={}|。
+
 \subsubsection{关于跨页代码段的说明}
-\pkg{listings} 和 \pkg{minted} 均支持跨页显示代码段。一般而言，学术写作中不建议在正文中放置大段代码，建议仅展示关键代码片段，将完整代码放入附录或以外部链接形式提供。
+\pkg{listings} 和 \pkg{minted} 均支持跨页显示代码段。学术写作一般不建议在正文中放大段代码：正文只展示关键片段，完整代码放入附录或以外部链接形式提供。
 
 本模板提供了 \texttt{longlisting} 环境，用于排版需要跨页显示并带有标题的代码块。与浮动体代码环境不同，\texttt{longlisting} 不会浮动，可以自然跨越多页。在环境内部放置代码块，并用 \cs{caption} 添加标题即可。以下为示例：
 
@@ -513,6 +513,6 @@ if __name__ == "__main__":
 
 \section{分页控制}
 
-在\LaTeX{}排版系统中，\verb|\newpage| 和 \verb|\clearpage| 命令都能强制开始新页面，但它们有着重要区别。\verb|\newpage| 仅创建新页面，而 \verb|\clearpage| 还会处理所有待处理的浮动体，确保它们在新页面前被正确放置。
+\verb|\newpage| 和 \verb|\clearpage| 都能强制开始新页面。区别在于 \verb|\newpage| 只开始新页面，\verb|\clearpage| 还会先排出所有待处理的浮动体。
 
-当需要确保所有浮动体都已处理并开始新页面时，应优先使用 \verb|\clearpage| 而非 \verb|\newpage|，以防止浮动体累积至错误位置。
+需要在新页面开始前排出全部浮动体时，应优先使用 \verb|\clearpage| 而非 \verb|\newpage|，以免浮动体堆积到错误的位置。

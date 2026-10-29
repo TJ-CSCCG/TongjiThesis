@@ -45,7 +45,7 @@
 % Define degree option: bachelor (default), master, doctor
 \DeclareStringOption[bachelor]{degree}
 % Define field option: science (default, 理工科), humanities (文科 — 人文/法学/外语/艺术)
-% 经管类属社科：编号要求依理工，撰写依理工模版。26 届为过渡期，可选 science 或
+% 经管类属社科：编号要求依理工，撰写依理工模板。26 届为过渡期，可选 science 或
 % humanities；自 27 届起统一使用 science。
 \DeclareStringOption[science]{field}
 % Define algo option: algpseudocode (default, algorithm + algorithmicx + algpseudocode),
@@ -117,7 +117,7 @@
 % ==========================================
 % Formatting Constants (官方规范)
 % ==========================================
-% 依据：同济大学本科生毕业设计（论文）撰写规范（附件2，2026 年 10 月修订）；
+% 依据：《同济大学本科生毕业设计（论文）撰写规范》（2026 年 10 月修订版）；
 % 规范未写明的数值沿用 2026 届官方 Word 模板。
 % Font sizes
 \newcommand{\tjfonttitle}{\zihao{-2}}        % 课题名称：小二号
@@ -380,6 +380,19 @@
 
 % Units and graphics
 \RequirePackage{siunitx}[=v2]
+% 数字列表与数字范围的连接词：siunitx 默认输出英文“and”“to”。撰写规范（十三）要求标点按
+% GB/T 15834—2011《标点符号用法》使用：并列词语用顿号，数值范围用浪纹线“～”（规范正文亦写作“3～5个”）。
+% “和”两侧的 \tj@numsep 在 XeLaTeX 下补上数字与汉字之间的间距（LuaTeX 由 luatexja 处理）。
+\sisetup{
+  list-separator       = {、},
+  list-final-separator = {\tj@numsep 和\tj@numsep},
+  list-pair-separator  = {\tj@numsep 和\tj@numsep},
+  range-phrase         = {～},
+}
+% 英文摘要中恢复 siunitx 的英文连接词
+\newcommand*{\tj@siunitxenglish}{%
+  \sisetup{list-separator = {, }, list-final-separator = { and },
+            list-pair-separator = { and }, range-phrase = { to }}}
 \RequirePackage{pgf}
 \RequirePackage{tikz}
 
@@ -387,7 +400,7 @@
 % Bibliography Configuration
 % ==========================================
 % 参考文献样式遵循 GB/T 7714-2025。所需宏包版本（均随 TeX Live 2026+ 分发）：
-%   - biblatex 路径：biblatex-gb7714-2015 >= v1.1w（提供 gb7714-2025 样式）
+%   - biblatex 路径：biblatex-gb7714-2015 >= v1.1x（提供 gb7714-2025 样式；下方的覆盖定义按 v1.1x 编写）
 %   - bibtex   路径：gbt7714 >= v2.2.0（提供 gbt7714-2025-numeric.bst）
 % 版本过旧会报“style/bst not found”错误；升级步骤见 README“快速开始”提示。
 \iftongjithesis@biblatex
@@ -415,6 +428,159 @@
         \renewcommand*{\makelabel}[1]{##1\hfill}}}
     {\endlist}
     {\item}
+  % 以下四处改写 gb7714-2025 的默认输出，使其与 gbt7714 及 GB/T 7714—2025 的示例一致。
+  % （1）DOI 与 CSTR：§7.8 示例写作“DOI:10.3760/…”，冒号后不留空格；
+  %     样式原定义在冒号后加了 \addthinspace。
+  \DeclareFieldFormat{doi}{%
+    DOI\addcolon
+    \ifhyperref
+      {\href{https://doi.org/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}}
+  \DeclareFieldFormat{cstr}{%
+    CSTR\addcolon
+    \ifhyperref
+      {\href{https://cstr.cn/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}}
+  % （2）更新或修改日期与引用日期：§7.6 示例写作“（2012-05-03）[2013-11-12]”，两者之间不留空格；
+  %     样式原定义在引用日期前加了 \addthinspace。
+  \renewbibmacro*{urldate}{%
+    \printtext{\gbleftbracket}\printurldate\printtext{\gbrightbracket}}
+  % （3）英文题名：§5.6 要求大小写“符合信息资源本身文种的习惯用法”，标准示例的题名与书名均为
+  %     句首大写（sentence case），期刊名保留原样。与 gbt7714 的默认设置相同：title 与 booktitle
+  %     改为句首大写，journal 不变；只处理英文文献（userd 是样式按题名判定的语种）。
+  %     .bib 中需保持原样的专有名词与缩写须用花括号保护，如 {IEEE}、{LaTeX}，两种后端都会照录。
+  %     副题名（subtitle、booksubtitle）整体小写，与 gbt7714 的 capitalizesubtitle=false 及示例
+  %     “ARA：a flexible pipeline…”一致；\tj@mklowercase 沿用 biblatex 的花括号保护规则。
+  %     含 \url 的题名原样输出：\url 按原文读取参数，无法再经过大小写转换。
+  \newcommand*{\tj@mksentencecase}[1]{%
+    \iffieldequalstr{userd}{english}
+      {\tj@ifhasurl{#1}{#1}{%
+         \ifboolexpr{test {\ifcurrentfield{subtitle}} or test {\ifcurrentfield{booksubtitle}}
+                      or test {\ifcurrentfield{booktitleaddon}}}
+           {\tj@mklowercase{#1}}
+           {\MakeSentenceCase{#1}}}}
+      {#1}}
+  \ExplSyntaxOn
+  \cs_new_protected:Npn \tj@mklowercase #1
+    { \exp_args:No \text_lowercase:n { \biblatex_text_sentencecase_preprocess:n {#1} } }
+  \cs_new_protected:Npn \tj@ifhasurl #1#2#3 { \tl_if_in:nnTF {#1} { \url } {#2} {#3} }
+  \ExplSyntaxOff
+  \renewcommand{\mktitlecase}{\tj@mksentencecase}
+  \renewcommand{\mkbooktitlecase}{\tj@mksentencecase}
+  % （4）姓名：§7.1.1 规定西文名可缩写为首字母（缩写名后不加点），汉语拼音名“宜用全称”。
+  %     样式默认格式 gbnamefmt=lowercase 一律缩写名；全局改用 gbnamefmt=quanpin 又会把西文名
+  %     也写成全称。因此逐个判断姓名：姓与名都是汉语拼音时改用样式的全拼格式 name:gbquanpin，
+  %     其余仍按原格式缩写。判定规则照搬 gbt7714（gbt7714-2025-numeric.bst 的 is.name.pinyin）：
+  %     没有前缀和后缀；姓是一个音节，或用连字符连接的两个音节；名是一个或两个音节，
+  %     或用撇号隔开的两个音节；不区分大小写。音节表照录该文件的 pinyin.table1 至 table3，
+  %     其中含 ü 的 4 个音节在 gbt7714 中永远不会匹配（它只接受 a 至 z），ka 与 sa 因该文件
+  %     table2、table3 首项缺少前导空格也永远不会匹配，为与 gbt7714 输出一致均未列入。
+  %     弯撇号 ’ 先换成 '，与 gbt7714 相同。两种后端的规则须同步维护。
+  \ExplSyntaxOn
+  \str_const:Nn \c__tj_pinyin_syllables_str
+    {
+      ,
+      a,ai,an,ang,ao,
+      ba,bai,ban,bang,bao,bei,ben,beng,bi,bian,biao,bie,bin,bing,bo,bu,
+      ca,cai,can,cang,cao,ce,cen,ceng,cha,chai,chan,chang,chao,che,chen,cheng,chi,chong,chou,
+      chu,chuai,chuan,chuang,chui,chun,chuo,ci,cong,cou,cu,cuan,cui,cun,cuo,
+      da,dai,dan,dang,dao,de,dei,deng,di,dia,dian,diao,die,ding,diu,dong,dou,du,duan,dui,dun,
+      duo,
+      e,ei,en,eng,er,
+      fa,fan,fang,fei,fen,feng,fo,fou,fu,
+      ga,gai,gan,gang,gao,ge,gei,gen,geng,gong,gou,gu,gua,guai,guan,guang,gui,gun,guo,
+      ha,hai,han,hang,hao,he,hei,hen,heng,hong,hou,hu,hua,huai,huan,huang,hui,hun,huo,
+      ji,jia,jian,jiang,jiao,jie,jin,jing,jiong,jiu,ju,juan,jue,jun,
+      kai,kan,kang,kao,ke,ken,keng,kong,kou,ku,kua,kuai,kuan,kuang,kui,kun,kuo,
+      la,lai,lan,lang,lao,le,lei,leng,li,lia,lian,liang,liao,lie,lin,ling,liu,long,lou,lu,luan,
+      lun,luo,lyu,lyue,
+      ma,mai,man,mang,mao,me,mei,men,meng,mi,mian,miao,mie,min,ming,miu,mo,mou,mu,
+      na,nai,nan,nang,nao,ne,nei,nen,neng,ni,nian,niang,niao,nie,nin,ning,niu,nong,nu,nuan,nuo,
+      nyu,nyue,
+      o,ou,
+      pa,pai,pan,pang,pao,pei,pen,peng,pi,pian,piao,pie,pin,ping,po,pou,pu,
+      qi,qia,qian,qiang,qiao,qie,qin,qing,qiong,qiu,qu,quan,que,qun,
+      ran,rang,rao,re,ren,reng,ri,rong,rou,ru,ruan,rui,run,ruo,
+      sai,san,sang,sao,se,sen,seng,sha,shai,shan,shang,shao,she,shei,shen,sheng,shi,shou,shu,
+      shua,shuai,shuan,shuang,shui,shun,shuo,si,song,sou,su,suan,sui,sun,suo,
+      ta,tai,tan,tang,tao,te,teng,ti,tian,tiao,tie,ting,tong,tou,tu,tuan,tui,tun,tuo,
+      wa,wai,wan,wang,wei,wen,weng,wo,wu,
+      xi,xia,xian,xiang,xiao,xie,xin,xing,xiong,xiu,xu,xuan,xue,xun,
+      ya,yan,yang,yao,ye,yi,yin,ying,yong,you,yu,yuan,yue,yun,
+      za,zai,zan,zang,zao,ze,zei,zen,zeng,zha,zhai,zhan,zhang,zhao,zhe,zhei,zhen,zheng,zhi,
+      zhong,zhou,zhu,zhua,zhuai,zhuan,zhuang,zhui,zhun,zhuo,zi,zong,zou,zu,zuan,zui,zun,zuo,
+    }
+  \str_new:N \l__tj_pinyin_family_str
+  \str_new:N \l__tj_pinyin_given_str
+  \seq_new:N \l__tj_pinyin_seq
+  \bool_new:N \l__tj_pinyin_bool
+  \prg_new_protected_conditional:Npnn \__tj_pinyin_if_syllable:n #1 { T, F, TF }
+    {
+      \str_if_in:NnTF \c__tj_pinyin_syllables_str { , #1 , }
+        { \prg_return_true: } { \prg_return_false: }
+    }
+  \prg_generate_conditional_variant:Nnn \__tj_pinyin_if_syllable:n { e } { T, F, TF }
+  % 由 #2 中的分隔符切开的每一段都必须是一个音节，且至多 #3 段
+  \cs_new_protected:Npn \__tj_pinyin_check_parts:nnn #1#2#3
+    {
+      \seq_set_split:Nnn \l__tj_pinyin_seq {#2} {#1}
+      \bool_set_true:N \l__tj_pinyin_bool
+      \int_compare:nNnT { \seq_count:N \l__tj_pinyin_seq } > {#3}
+        { \bool_set_false:N \l__tj_pinyin_bool }
+      \seq_map_inline:Nn \l__tj_pinyin_seq
+        { \__tj_pinyin_if_syllable:nF {##1} { \bool_set_false:N \l__tj_pinyin_bool } }
+    }
+  % 不含撇号的名：一个音节，或能切成两个音节
+  \cs_new_protected:Npn \__tj_pinyin_check_given:n #1
+    {
+      \__tj_pinyin_if_syllable:nTF {#1}
+        { \bool_set_true:N \l__tj_pinyin_bool }
+        {
+          \bool_set_false:N \l__tj_pinyin_bool
+          \int_step_inline:nn { \str_count:n {#1} - 1 }
+            {
+              \bool_if:NF \l__tj_pinyin_bool
+                {
+                  \__tj_pinyin_if_syllable:eT { \str_range:nnn {#1} { 1 } {##1} }
+                    {
+                      \__tj_pinyin_if_syllable:eT { \str_range:nnn {#1} { ##1 + 1 } { -1 } }
+                        { \bool_set_true:N \l__tj_pinyin_bool }
+                    }
+                }
+            }
+        }
+    }
+  % \tj@ifpinyinname{<是拼音>}{<不是拼音>}：在 biblatex 姓名格式内判断当前姓名
+  \cs_new_protected:Npn \tj@ifpinyinname #1#2
+    {
+      \bool_set_false:N \l__tj_pinyin_bool
+      \bool_lazy_and:nnT
+        { \tl_if_empty_p:o { \namepartprefix } }
+        { \tl_if_empty_p:o { \namepartsuffix } }
+        {
+          \str_set:Ne \l__tj_pinyin_family_str { \exp_not:o { \namepartfamily } }
+          \str_set:Ne \l__tj_pinyin_family_str { \str_casefold:V \l__tj_pinyin_family_str }
+          \str_set:Ne \l__tj_pinyin_given_str { \exp_not:o { \namepartgiven } }
+          \str_set:Ne \l__tj_pinyin_given_str { \str_casefold:V \l__tj_pinyin_given_str }
+          \str_replace_all:Nnn \l__tj_pinyin_given_str { ’ } { ' }
+          \__tj_pinyin_check_parts:Vnn \l__tj_pinyin_family_str { - } { 2 }
+          \bool_if:NT \l__tj_pinyin_bool
+            {
+              \str_if_in:NnTF \l__tj_pinyin_given_str { ' }
+                { \__tj_pinyin_check_parts:Vnn \l__tj_pinyin_given_str { ' } { 2 } }
+                { \__tj_pinyin_check_given:V \l__tj_pinyin_given_str }
+            }
+        }
+      \bool_if:NTF \l__tj_pinyin_bool {#1} {#2}
+    }
+  \cs_generate_variant:Nn \__tj_pinyin_check_parts:nnn { V }
+  \cs_generate_variant:Nn \__tj_pinyin_check_given:n { V }
+  \ExplSyntaxOff
+  \letbibmacro{tj@name:gblowercase}{name:gblowercase}
+  \renewbibmacro*{name:gblowercase}[4]{%
+    \tj@ifpinyinname
+      {\usebibmacro{name:gbquanpin}{#1}{\namepartgiven}{#3}{#4}}%
+      {\usebibmacro{tj@name:gblowercase}{#1}{#2}{#3}{#4}}}
 \else
   \RequirePackage[sort&compress, bibpunct=half]{gbt7714}   % 半角标点，与 biblatex 的 gbpunctwidth=half 对齐（撰写规范：参考文献标点统一采用半角）
   \bibliographystyle{gbt7714-2025-numeric}
@@ -890,27 +1056,21 @@
   % h3
   \renewcommand{\cftsubsecaftersnum}{.\hspace*{0.5em}}
   \setlength{\cftsubsecnumwidth}{1.5em}
-  % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
-  \counterwithout{figure}{chapter}
-  \counterwithout{table}{chapter}
-  \counterwithout{equation}{chapter}
-  \counterwithout{algorithm}{chapter}
-  % listing/lstlisting 在 \AtBeginDocument 中绑定；定理类环境在 \newtheorem 后定义，
-  % 均需在 document 开始后解绑，确保顺序正确
+  % 图、表、公式等按章编号（撰写规范：“以章分组编序号”，不分文理）。文科章号用汉字，
+  % 编号中的章号仍用阿拉伯数字，如“图 2.1”“(2.2)”，与规范示例“(2.2) 表示第二章的第二个公式”一致。
+  % 附录中 \appendix 改为按节编号（A.1），会覆盖这里的定义。
+  \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+  \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+  \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+  \renewcommand{\thealgorithm}{\arabic{chapter}.\arabic{algorithm}}
+  % listing/lstlisting 在 \AtBeginDocument 中才建立；定理类环境在 \newtheorem 后定义
   \AtBeginDocument{%
-    \counterwithout{listing}{chapter}%
-    \@ifundefined{c@lstlisting}{}{%
-      \counterwithout{lstlisting}{chapter}%
+    \@for\tj@cnt:=listing,lstlisting,thm,cor,lem,prop,conj,assume,dfn,exmp,rem\do{%
+      \@ifundefined{c@\tj@cnt}{}{%
+        \expandafter\edef\csname the\tj@cnt\endcsname{%
+          \noexpand\arabic{chapter}.\noexpand\arabic{\tj@cnt}}%
+      }%
     }%
-    \counterwithout{thm}{chapter}%
-    \counterwithout{cor}{chapter}%
-    \counterwithout{lem}{chapter}%
-    \counterwithout{prop}{chapter}%
-    \counterwithout{conj}{chapter}%
-    \counterwithout{assume}{chapter}%
-    \counterwithout{dfn}{chapter}%
-    \counterwithout{exmp}{chapter}%
-    \counterwithout{rem}{chapter}%
   }%
 \fi
 
@@ -1010,88 +1170,141 @@
   \newcommand*{\chapref}[1]{第\ref{#1}章}
   \newcommand*{\secref}[1]{第\ref{#1}节}
 \else
-  \newcommand*{\chapref}[1]{第~\ref{#1}~章~}
-  \newcommand*{\secref}[1]{第~\ref{#1}~节~}
+  \newcommand*{\chapref}[1]{第~\ref{#1}~章}
+  \newcommand*{\secref}[1]{第~\ref{#1}~节}
 \fi
-\newcommand*{\algoref}[1]{算法~\ref{#1}~}
-\renewcommand*{\eqref}[1]{式~(\ref{#1})~}
-\newcommand*{\tabref}[1]{\tablename~\ref{#1}~}
-\newcommand*{\figref}[1]{\figurename~\ref{#1}~}
+\newcommand*{\algoref}[1]{算法~\ref{#1}\tj@refpeek}
+\renewcommand*{\eqref}[1]{式~(\ref{#1})}
+\newcommand*{\tabref}[1]{\tablename~\ref{#1}\tj@refpeek}
+\newcommand*{\figref}[1]{\figurename~\ref{#1}\tj@refpeek}
 
 % Cross-reference formats: 名字放进 #2…#3 让 nameinlink 全段可点（图/表/式 等整词都参与超链接）
-\crefformat{listing}{#2代码~#1#3}
-\crefmultiformat{listing}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
-\crefrangeformat{listing}{#3代码~#1#4~至#5代码~#2#6}
-\crefformat{lstlisting}{#2代码~#1#3}
-\crefmultiformat{lstlisting}{#2代码~#1#3}{和#2代码~#1#3}{、#2代码~#1#3}{和#2代码~#1#3}
-\crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6}
-\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
+\crefformat{listing}{#2代码~#1#3\tj@refnum}
+\crefmultiformat{listing}{#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}{、#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}
+\crefrangeformat{listing}{#3代码~#1#4~至#5代码~#2#6\tj@refnum}
+\crefformat{lstlisting}{#2代码~#1#3\tj@refnum}
+\crefmultiformat{lstlisting}{#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}{、#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}
+\crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6\tj@refnum}
+\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}\tj@refpeek}
 
 % Configure references in Chinese
 % “第X章/节” pattern: number is wrapped, needs full multi/range formats
 \iftongjithesis@humanities
-  \crefformat{chapter}{#2第#1章#3}
-  \crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{、#2第#1章#3}{和#2第#1章#3}
-  \crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
-  \crefformat{section}{#2第#1节#3}
-  \crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{、#2第#1节#3}{和#2第#1节#3}
-  \crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+  \crefformat{chapter}{#2第#1章#3\tj@refnotnum}
+  \crefmultiformat{chapter}{#2第#1章#3\tj@refnotnum}{和#2第#1章#3\tj@refnotnum}{、#2第#1章#3\tj@refnotnum}{和#2第#1章#3\tj@refnotnum}
+  \crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6\tj@refnotnum}
+  \crefformat{section}{#2第#1节#3\tj@refnotnum}
+  \crefmultiformat{section}{#2第#1节#3\tj@refnotnum}{和#2第#1节#3\tj@refnotnum}{、#2第#1节#3\tj@refnotnum}{和#2第#1节#3\tj@refnotnum}
+  \crefrangeformat{section}{#3第#1节#4至#5第#2节#6\tj@refnotnum}
 \else
-  \crefformat{chapter}{#2第~#1~章#3}
-  \crefmultiformat{chapter}{#2第~#1~章#3}{和#2第~#1~章#3}{、#2第~#1~章#3}{和#2第~#1~章#3}
-  \crefrangeformat{chapter}{#3第~#1~章#4至#5第~#2~章#6}
-  \crefformat{section}{#2第~#1~节#3}
-  \crefmultiformat{section}{#2第~#1~节#3}{和#2第~#1~节#3}{、#2第~#1~节#3}{和#2第~#1~节#3}
-  \crefrangeformat{section}{#3第~#1~节#4至#5第~#2~节#6}
+  \crefformat{chapter}{#2第~#1~章#3\tj@refnotnum}
+  \crefmultiformat{chapter}{#2第~#1~章#3\tj@refnotnum}{和#2第~#1~章#3\tj@refnotnum}{、#2第~#1~章#3\tj@refnotnum}{和#2第~#1~章#3\tj@refnotnum}
+  \crefrangeformat{chapter}{#3第~#1~章#4至#5第~#2~章#6\tj@refnotnum}
+  \crefformat{section}{#2第~#1~节#3\tj@refnotnum}
+  \crefmultiformat{section}{#2第~#1~节#3\tj@refnotnum}{和#2第~#1~节#3\tj@refnotnum}{、#2第~#1~节#3\tj@refnotnum}{和#2第~#1~节#3\tj@refnotnum}
+  \crefrangeformat{section}{#3第~#1~节#4至#5第~#2~节#6\tj@refnotnum}
 \fi
-\crefformat{subsection}{#2第~#1~小节#3}
-\crefmultiformat{subsection}{#2第~#1~小节#3}{和#2第~#1~小节#3}{、#2第~#1~小节#3}{和#2第~#1~小节#3}
-\crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6}
+\crefformat{subsection}{#2第~#1~小节#3\tj@refnotnum}
+\crefmultiformat{subsection}{#2第~#1~小节#3\tj@refnotnum}{和#2第~#1~小节#3\tj@refnotnum}{、#2第~#1~小节#3\tj@refnotnum}{和#2第~#1~小节#3\tj@refnotnum}
+\crefrangeformat{subsection}{#3第~#1~小节#4至#5第~#2~小节#6\tj@refnotnum}
 % “名称~X” pattern: ~ separates CJK name from digit; whole reference wrapped in hyperlink.
 % --- Common float/equation types ---
-\crefformat{equation}{#2式~(#1)#3}
-\crefmultiformat{equation}{#2式~(#1)#3}{和#2式~(#1)#3}{、#2式~(#1)#3}{和#2式~(#1)#3}
-\crefrangeformat{equation}{#3式~(#1)#4~至#5式~(#2)#6}
-\crefformat{figure}{#2图~#1#3}
-\crefmultiformat{figure}{#2图~#1#3}{和#2图~#1#3}{、#2图~#1#3}{和#2图~#1#3}
-\crefrangeformat{figure}{#3图~#1#4~至#5图~#2#6}
-\crefformat{table}{#2表~#1#3}
-\crefmultiformat{table}{#2表~#1#3}{和#2表~#1#3}{、#2表~#1#3}{和#2表~#1#3}
-\crefrangeformat{table}{#3表~#1#4~至#5表~#2#6}
-\crefformat{algorithm}{#2算法~#1#3}
-\crefmultiformat{algorithm}{#2算法~#1#3}{和#2算法~#1#3}{、#2算法~#1#3}{和#2算法~#1#3}
-\crefrangeformat{algorithm}{#3算法~#1#4~至#5算法~#2#6}
-\crefformat{algocf}{#2算法~#1#3}
-\crefmultiformat{algocf}{#2算法~#1#3}{和#2算法~#1#3}{、#2算法~#1#3}{和#2算法~#1#3}
-\crefrangeformat{algocf}{#3算法~#1#4~至#5算法~#2#6}
-\crefformat{FancyVerbLine}{#2第~#1~行#3}
-\crefmultiformat{FancyVerbLine}{#2第~#1~行#3}{和#2第~#1~行#3}{、#2第~#1~行#3}{和#2第~#1~行#3}
-\crefrangeformat{FancyVerbLine}{#3第~#1~行#4至#5第~#2~行#6}
+\crefformat{equation}{#2式~(#1)#3\tj@refnum}
+\crefmultiformat{equation}{#2式~(#1)#3\tj@refnum}{\tj@numsep 和#2式~(#1)#3\tj@refnum}{、#2式~(#1)#3\tj@refnum}{\tj@numsep 和#2式~(#1)#3\tj@refnum}
+\crefrangeformat{equation}{#3式~(#1)#4~至#5式~(#2)#6\tj@refnum}
+\crefformat{figure}{#2图~#1#3\tj@refnum}
+\crefmultiformat{figure}{#2图~#1#3\tj@refnum}{\tj@numsep 和#2图~#1#3\tj@refnum}{、#2图~#1#3\tj@refnum}{\tj@numsep 和#2图~#1#3\tj@refnum}
+\crefrangeformat{figure}{#3图~#1#4~至#5图~#2#6\tj@refnum}
+\crefformat{table}{#2表~#1#3\tj@refnum}
+\crefmultiformat{table}{#2表~#1#3\tj@refnum}{\tj@numsep 和#2表~#1#3\tj@refnum}{、#2表~#1#3\tj@refnum}{\tj@numsep 和#2表~#1#3\tj@refnum}
+\crefrangeformat{table}{#3表~#1#4~至#5表~#2#6\tj@refnum}
+\crefformat{algorithm}{#2算法~#1#3\tj@refnum}
+\crefmultiformat{algorithm}{#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}{、#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}
+\crefrangeformat{algorithm}{#3算法~#1#4~至#5算法~#2#6\tj@refnum}
+\crefformat{algocf}{#2算法~#1#3\tj@refnum}
+\crefmultiformat{algocf}{#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}{、#2算法~#1#3\tj@refnum}{\tj@numsep 和#2算法~#1#3\tj@refnum}
+\crefrangeformat{algocf}{#3算法~#1#4~至#5算法~#2#6\tj@refnum}
+\crefformat{FancyVerbLine}{#2第~#1~行#3\tj@refnotnum}
+\crefmultiformat{FancyVerbLine}{#2第~#1~行#3\tj@refnotnum}{和#2第~#1~行#3\tj@refnotnum}{、#2第~#1~行#3\tj@refnotnum}{和#2第~#1~行#3\tj@refnotnum}
+\crefrangeformat{FancyVerbLine}{#3第~#1~行#4至#5第~#2~行#6\tj@refnotnum}
 % --- Theorem types (single + multi for consistency) ---
-\crefformat{thm}{#2定理~#1#3}
-\crefmultiformat{thm}{#2定理~#1#3}{和#2定理~#1#3}{、#2定理~#1#3}{和#2定理~#1#3}
-\crefformat{cor}{#2推论~#1#3}
-\crefmultiformat{cor}{#2推论~#1#3}{和#2推论~#1#3}{、#2推论~#1#3}{和#2推论~#1#3}
-\crefformat{lem}{#2引理~#1#3}
-\crefmultiformat{lem}{#2引理~#1#3}{和#2引理~#1#3}{、#2引理~#1#3}{和#2引理~#1#3}
-\crefformat{prop}{#2命题~#1#3}
-\crefmultiformat{prop}{#2命题~#1#3}{和#2命题~#1#3}{、#2命题~#1#3}{和#2命题~#1#3}
-\crefformat{conj}{#2猜想~#1#3}
-\crefformat{assume}{#2假设~#1#3}
-\crefformat{dfn}{#2定义~#1#3}
-\crefformat{exmp}{#2例~#1#3}
-\crefformat{rem}{#2注~#1#3}
-\crefformat{pf}{#2证明~#1#3}
-\crefformat{proof}{#2证明~#1#3}
+\crefformat{thm}{#2定理~#1#3\tj@refnum}
+\crefmultiformat{thm}{#2定理~#1#3\tj@refnum}{\tj@numsep 和#2定理~#1#3\tj@refnum}{、#2定理~#1#3\tj@refnum}{\tj@numsep 和#2定理~#1#3\tj@refnum}
+\crefformat{cor}{#2推论~#1#3\tj@refnum}
+\crefmultiformat{cor}{#2推论~#1#3\tj@refnum}{\tj@numsep 和#2推论~#1#3\tj@refnum}{、#2推论~#1#3\tj@refnum}{\tj@numsep 和#2推论~#1#3\tj@refnum}
+\crefformat{lem}{#2引理~#1#3\tj@refnum}
+\crefmultiformat{lem}{#2引理~#1#3\tj@refnum}{\tj@numsep 和#2引理~#1#3\tj@refnum}{、#2引理~#1#3\tj@refnum}{\tj@numsep 和#2引理~#1#3\tj@refnum}
+\crefformat{prop}{#2命题~#1#3\tj@refnum}
+\crefmultiformat{prop}{#2命题~#1#3\tj@refnum}{\tj@numsep 和#2命题~#1#3\tj@refnum}{、#2命题~#1#3\tj@refnum}{\tj@numsep 和#2命题~#1#3\tj@refnum}
+\crefformat{conj}{#2猜想~#1#3\tj@refnum}
+\crefformat{assume}{#2假设~#1#3\tj@refnum}
+\crefformat{dfn}{#2定义~#1#3\tj@refnum}
+\crefformat{exmp}{#2例~#1#3\tj@refnum}
+\crefformat{rem}{#2注~#1#3\tj@refnum}
+\crefformat{pf}{#2证明~#1#3\tj@refnum}
+\crefformat{proof}{#2证明~#1#3\tj@refnum}
 
 % Configure connecting words
-\newcommand{\crefpairconjunction}{ 和~}
+% 前一项以编号结尾时才在“和”前留间距（\tj@conjsep），“和”之后不留空
+\newcommand{\crefpairconjunction}{\tj@conjsep 和}
 \newcommand{\crefmiddleconjunction}{、}
-\newcommand{\creflastconjunction}{ 和~}
-\newcommand{\crefpairgroupconjunction}{ 和}
+\newcommand{\creflastconjunction}{\tj@conjsep 和}
+\newcommand{\crefpairgroupconjunction}{\tj@conjsep 和}
 \newcommand{\crefmiddlegroupconjunction}{、}
-\newcommand{\creflastgroupconjunction}{ 和}
+\newcommand{\creflastgroupconjunction}{\tj@conjsep 和}
 \newcommand{\crefrangeconjunction}{ 至~}
+
+% 超链接在编号后结束，链接结尾会打断 xeCJK 的中西文自动间距，“如图 1.1所示”缺少空格。
+% 编号结尾的引用格式（图、表、式、算法、代码、定理等）之后若紧跟汉字，补上 xeCJK 的中西文间距
+% \CJKecglue；紧跟标点、空格或命令时什么也不加。章、节、行以汉字结尾，不需要。
+% LuaTeX 下由 luatexja 处理间距，这里不做任何事。
+\ExplSyntaxOn
+\bool_new:N \g__tj_ref_num_bool
+\cs_new_protected:Npn \__tj_ref_cjk_space:
+  {
+    \sys_if_engine_xetex:T
+      {
+        \peek_regex:nT { [\x{3400}-\x{4DBF}\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}] }
+          { \CJKecglue }
+      }
+  }
+% 引用格式以编号结尾：记下这一点，并处理格式内部紧跟的“和”
+\cs_new_protected:cpn { tj@refnum }
+  { \bool_gset_true:N \g__tj_ref_num_bool \__tj_ref_cjk_space: }
+% 同类多项引用中，编号与后一项的“和”之间（XeTeX）
+\cs_new_protected:cpn { tj@numsep }
+  { \sys_if_engine_xetex:T { \CJKecglue } }
+\cs_new_protected:cpn { tj@refnotnum }
+  { \bool_gset_false:N \g__tj_ref_num_bool }
+% 整条引用结束后：最后一项以编号结尾时，按后面的字符补间距
+\cs_new_protected:cpn { tj@refcjkspace }
+  {
+    \bool_if:NT \g__tj_ref_num_bool
+      { \bool_gset_false:N \g__tj_ref_num_bool \__tj_ref_cjk_space: }
+  }
+% \figref 等不经 \cref：直接按后面的字符补间距，不动标记
+\cs_new_eq:cN { tj@refpeek } \__tj_ref_cjk_space:
+% 多项引用的“和”之前：前一项以编号结尾时留间距
+\cs_new_protected:cpn { tj@conjsep }
+  {
+    \bool_if:NT \g__tj_ref_num_bool
+      { \tj@numsep }
+  }
+% 用户自定义以编号结尾的 \crefformat 时，在 #3 之后加 \tjrefnum，在多项格式的“和”前加 \tjrefsep
+\cs_new_eq:NN \tjrefnum \tj@refnum
+\cs_new_eq:NN \tjrefsep \tj@numsep
+\ExplSyntaxOff
+\AtBeginDocument{%
+  \NewCommandCopy\tj@cref@orig\cref
+  \RenewDocumentCommand\cref{sm}{\tj@refnotnum\IfBooleanTF{#1}{\tj@cref@orig*{#2}}{\tj@cref@orig{#2}}\tj@refcjkspace}%
+  \NewCommandCopy\tj@crefrange@orig\crefrange
+  \RenewDocumentCommand\crefrange{smm}{\tj@refnotnum\IfBooleanTF{#1}{\tj@crefrange@orig*{#2}{#3}}{\tj@crefrange@orig{#2}{#3}}\tj@refcjkspace}%
+}
+% PDF 书签中不排版，这些钩子只留一个空格或什么也不输出
+\pdfstringdefDisableCommands{%
+  \def\tj@refnum{ }\def\tj@refpeek{ }\def\tjrefnum{ }\let\tjrefsep\relax%
+  \let\tj@refnotnum\relax\let\tj@refcjkspace\relax\let\tj@conjsep\relax\let\tj@numsep\relax
+}
 
 % ==========================================
 % Logo Commands
@@ -1358,7 +1571,7 @@
         \begin{enumerate}[label=\arabic*.,leftmargin=2em,labelsep=0.5em,itemsep=0.2em,parsep=0pt,topsep=0pt] \tongjiinfomaterials \end{enumerate}
       \fi
     }%
-    （请列出所有提交的支撑材料名称，如：毕业设计--全套图纸、毕业作品、计算书、程序代码、附录等）
+    （请列出所有提交的支撑材料名称，如：毕业设计-全套图纸、毕业作品、计算书、程序代码、附录等）
     }
   \end{titlepage}
   \setstretch{\tjlinespread}
@@ -1426,6 +1639,7 @@
   \vspace{1.6em}
 
   \begin{spacing}{\tjlinespread}
+    \tj@siunitxenglish
     \setlength{\parindent}{2em}
     \tjfontbody #1
     \par
@@ -1433,7 +1647,7 @@
 
   \tjfontbody
   \vspace{\baselineskip}
-  {\noindent\textbf{Key words: }#2}\par
+  {\tj@siunitxenglish\noindent\textbf{Key words: }#2}\par
 }
 
 % ==========================================
@@ -1708,7 +1922,7 @@
 \fi
 
 % 加载用户配置文件
-% cfg is found via TEXINPUTS: locally via .latexmkrc (./style//), or alongside cls on CTAN/texmf.
+% cfg is found via TEXINPUTS: locally via latexmkrc (./style//), or alongside cls on CTAN/texmf.
 \AtEndOfPackage{
   \InputIfFileExists{tongjithesis.cfg}{}{}
 }
