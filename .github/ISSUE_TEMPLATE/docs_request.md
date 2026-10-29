@@ -9,8 +9,8 @@ labels: 'type/docs'
 在对应部分打勾 | Check the relevant area:
 
 - [ ] Overleaf 使用相关 | Overleaf usage
-- [ ] 本地编译相关 | Local compilation (配置、依赖等)
-- [ ] 模板使用教学 | Usage guide (LaTeX 基础、最佳实践等)
+- [ ] 本地编译相关（配置、依赖等）| Local compilation
+- [ ] 模板使用教学（LaTeX 基础、最佳实践等）| Usage guide
 - [ ] 其他 | Other：______
 
 ## 期望内容 | Expected Content

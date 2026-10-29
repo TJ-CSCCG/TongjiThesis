@@ -3,11 +3,11 @@
 ## 仓库结构 | Repository Structure
 
 - **源文件**（`style/`）：`tongjithesis.cls`、`tongjithesis.cfg`、`tongji-circled.def`、`style/font/*.def` 等定义模板本身的文件。
-- **文档文件**（`chapters/`、`main.tex`、`taskbook.tex`/`proposal.tex`/`midterm.tex`）：`.tex` 文件，用于展示模板的使用方法；`taskbook.tex`/`proposal.tex`/`midterm.tex` 是任务书/开题报告/中期报告的独立入口（`doctype=taskbook`/`proposal`/`midterm`），正文由 `chapters/taskbook_body.tex`/`proposal_body.tex`/`midterm_body.tex` 提供；其中 `chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
+- **文档文件**（`chapters/`、`main.tex`、`taskbook.tex`/`proposal.tex`/`midterm.tex`）：展示模板用法的 `.tex` 文件。`taskbook.tex`/`proposal.tex`/`midterm.tex` 分别是任务书、开题报告、中期报告的独立入口（`doctype=taskbook`/`proposal`/`midterm`），正文由 `chapters/taskbook_body.tex`/`proposal_body.tex`/`midterm_body.tex` 提供。`chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
 - **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
-- **构建脚本**（`scripts/`）：`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方“版本发布”。
-- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件），`release.yml` 负责打包与发布。
-- **配置文件**：规范开发与使用的文件（如 `.gitignore`、`.latexmkrc`、`.editorconfig`）。
+- **构建脚本**（`scripts/`）：`build-ctan.sh`（组装并校验 CTAN 包，`release.yml` 与 `test.yaml` 都调用它）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方“版本发布”。
+- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件）；`promote.yml` 把 `master` 快进到 `dev`，开始一次发布；`release-please.yml` 维护 release PR，合并后创建标签与草稿 Release；`release.yml` 在草稿 Release 发布后打包 CTAN 与源码归档并附加到该 Release；`sync-dev.yml` 在 `master` 更新后把 `dev` 快进回 `master`；`jekyll-gh-pages.yml` 部署 GitHub Pages。
+- **配置文件**：用于规范开发与使用的文件（如 `.gitignore`、`latexmkrc`、`.editorconfig`）。
 - **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。
 
 ## 如何贡献 | How to Contribute
@@ -42,10 +42,10 @@
 | 2025.04 | —                                                 | 实现基于键值对的类选项，支持更灵活的配置                                                                                                                                                                 |
 | 2026    | —                                                 | 迁移至 `ctexbook` 基类，全面对齐 2026 版撰写规范；新增 `biblatex`/`bibtex` 双后端、理工/文科双编号体系（`field`）、信息说明页（`\MakeInfoPage`）、跨页代码环境（`longlisting`）；参考文献样式升级至 GB/T 7714-2025（新增 `@preprint` 预印本类型示例）；CI 升级至 TeX Live 2026；新增 `doctype` 选项与任务书/开题报告/中期报告 3 个独立文档（`taskbook.tex`/`proposal.tex`/`midterm.tex`），任务书起讫周数自动换算 |
 
-我们非常感谢以上贡献者的付出。如果您觉得本项目对您的毕业设计或论文有所帮助，希望您可以在致谢部分提及。
+我们非常感谢以上贡献者的付出。如果本项目对你的毕业设计（论文）有所帮助，希望你能在致谢中提及。
 
 ## 版本发布
 
 - 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)（`feat:` / `fix:` / `docs:` 等）；[release-please](https://github.com/googleapis/release-please) 据此自动维护版本号与逐版本更新日志 `CHANGELOG.md`（首次自动发布后生成）。
-- 发布流程：维护者合并 release-please 生成的“release PR”→ 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 CI 打包 CTAN 与示例 PDF 并附加到该 Release。
+- 发布流程：维护者运行 `promote dev to master` 工作流，把 `master` 快进到 `dev` → release-please 随即生成“release PR”，维护者合并 → 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 CI 打包 CTAN 与示例 PDF 并附加到该 Release。
 - 版本号由 release-please 统一更新（`package.json` 及各 `\Provides*` 行），**无需手动修改**（原 `scripts/bump-version.sh` 已移除）。

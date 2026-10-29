@@ -18,7 +18,7 @@
 同济大学本科毕业设计（论文）LaTeX 模板。
 
 > [!NOTE]
-> 完整样例可见 [Release 页](https://github.com/TJ-CSCCG/TongjiThesis/releases) 的 PDF 下载或 [Overleaf 模版 PDF](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn.pdf)。各选项的详细用法见编译后的模板使用指南（第 1 章）。
+> 完整样例 PDF 可在 [Release 页](https://github.com/TJ-CSCCG/TongjiThesis/releases) 下载，或查看 [Overleaf 模板 PDF](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn.pdf)。各选项的详细用法见编译后的模板使用指南（第 1 章）。
 
 ---
 
@@ -31,9 +31,9 @@
 | **GitHub Actions** | Fork 本仓库，push 即可触发自动编译，在 Artifacts 中下载 PDF                                                                                     |
 
 > [!TIP]
-> 本模板的 CI 基于 **TeX Live 2026** 进行测试。如果您在本地编译时遇到难以解释的编译错误，请首先检查并升级您的 TeX Live 至 2026 版本。
+> 本模板的 CI 在 **TeX Live 2026** 上测试。本地编译遇到难以解释的错误时，请先检查 TeX Live 版本，并升级到 2026。
 >
-> 参考文献样式遵循 GB/T 7714-2025。若编译报 `gb7714-2025` 样式或 `gbt7714-2025-numeric.bst` 未找到，说明本地 `biblatex-gb7714-2015` / `gbt7714` 宏包早于 2025 样式，更新即可（需 TeX Live ≥ 2026）：
+> 参考文献样式遵循 GB/T 7714-2025。若编译报 `gb7714-2025` 样式或 `gbt7714-2025-numeric.bst` 未找到，说明本地 `biblatex-gb7714-2015` / `gbt7714` 宏包版本过旧，尚未包含 2025 样式，更新即可（需 TeX Live ≥ 2026）：
 >
 > ```bash
 > tlmgr update --self                         # tlmgr 提示需自更新时先执行
@@ -52,7 +52,7 @@
 > 在使用 Overleaf 模板时，请检查编译器和主入口的设置：
 >
 > - 将 `main.tex` 文件设为主入口文件，而不是项目中的其他文件（如 `tongjithesis.cls`）；
-> - 推荐使用 `XeLaTeX` 和 `LuaLaTeX` 编译器，本模板不支持某些编译器（如 `pdfLaTeX`）。
+> - 推荐使用 `XeLaTeX` 或 `LuaLaTeX` 编译器；本模板不支持 `pdfLaTeX` 等编译器。
 
 #### 在 Overleaf 上导入本仓库
 
@@ -60,7 +60,7 @@
 
 #### 在 GitHub Actions 中编译
 
-Fork 本仓库后 push 即可触发 CI，在 workflow run 的 `Summary | Artifacts` 下载 PDF。首次需在 `Settings | Actions | General` 中启用 Actions。
+Fork 本仓库后，首次需在 `Settings | Actions | General` 中启用 Actions；之后 push 即可触发 CI，在 workflow run 的 `Summary | Artifacts` 下载 PDF。
 
 ### 本地使用
 
@@ -106,7 +106,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 ##### 通过 VS Code 及 LaTeX Workshop 插件
 
-安装 LaTeX Workshop 插件后，**直接打开本项目根目录**（即 `TongjiThesis` 文件夹，否则 `.vscode/settings.json` 无法生效）。项目已预配置编译方案：打开 `main.tex`，在侧栏 TeX 面板中选择 `Recipe: latexmk (xelatex)` 即可编译，保存时也会自动编译。
+安装 LaTeX Workshop 插件后，**直接打开本项目根目录**（即 `TongjiThesis` 文件夹）；打开其他目录时 `.vscode/settings.json` 不会生效。项目已预配置编译方案：打开 `main.tex`，在侧栏 TeX 面板中选择 `Recipe: latexmk (xelatex)` 即可编译，保存时也会自动编译。
 
 ##### 在 Docker 中使用
 
@@ -136,11 +136,11 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 ```
 
 > [!NOTE]
-> 经管类属社科类，26 届为过渡期可选 `field=science`（推荐）或 `field=humanities`；自 27 届起统一使用 `field=science`。
+> 经管类属社科类。26 届为过渡期，可选 `field=science`（推荐）或 `field=humanities`；自 27 届起统一使用 `field=science`。
 
 ### 任务书 / 开题报告 / 中期报告
 
-除正文 `main.tex` 外，模板还提供 3 个独立可编译的官方行政文档，与正文共用 `chapters/metadata.tex` 中的学院/专业/学生/课题信息（指导教师在 3 份表格中均为手写签字位，不预填）：
+除正文 `main.tex` 外，模板还提供 3 份可独立编译的官方表格，与正文共用 `chapters/metadata.tex` 中的学院/专业/学生/课题信息（指导教师在 3 份表格中均为手写签字位，不预填）：
 
 | 文档     | 入口文件        | 构建命令                                |
 | -------- | --------------- | --------------------------------------- |
@@ -154,7 +154,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 - **Windows 用户**：可直接使用 `fontset=windows`（系统自带 SimSun / SimHei / KaiTi / FangSong，覆盖更广）。
 - **macOS 用户**：可直接使用 `fontset=mac`（系统自带 Songti SC / Heiti SC / STFangsong / Kaiti SC，零配置）。
-- **跨平台用户**：推荐默认的 `fontset=fandol`（随 TeX Live 安装，零配置）。如需更广字符覆盖，可从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 `adobe` / `founder` / `windows` 等字体并安装到系统，然后切换 `fontset`。
+- **跨平台用户**：推荐默认的 `fontset=fandol`（随 TeX Live 安装，零配置）。如需更广的字符覆盖，可从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 `adobe`、`founder`、`windows` 等字体集对应的字体并安装到系统，然后切换 `fontset`。
 
 > [!NOTE]
 > 安装新字体后请运行 `fc-cache -fv` 刷新字体缓存。
@@ -173,7 +173,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 ## 贡献与项目历史
 
-详见 [CONTRIBUTING.md](CONTRIBUTING.md)。AI 编码代理的架构说明与开发约定见 [AGENTS.md](AGENTS.md)。
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。面向 AI 编码代理的架构说明与开发约定见 [AGENTS.md](AGENTS.md)。
 
 ## 开源协议
 
