@@ -53,8 +53,8 @@
   \item 中文作者姓名之间使用 \texttt{and} 连接，而非顿号或逗号；
   \item 撰写规范要求参考文献中的标点统一采用半角，样式只能控制它生成的标点；题名等字段里自带的标点请直接写成半角，引号写作 \verb|``…''|，括号写作 \verb|(…)|；
   \item 版本项只写数字，如 \verb|edition = {3}|，由样式排成“3rd ed.”；
-  \item 英文文献的题名与书名按句首大写输出，期刊名保持原样；需要保持原有大小写的专有名词与缩写须用花括号括起，如 \verb|{IEEE}|、\verb|{PyTorch}|；
-  \item 汉语拼音姓名的名按全称输出（如“He Kaiming”），西文姓名的名缩写为首字母（如“Knuth D E”）；拼音名须写成一个词，如 \verb|He, Kaiming|，写成 \verb|Kai-Ming| 或 \verb|Kai Ming| 会被当作西文名缩写；
+  \item 英文文献的题名与书名按句首大写输出，期刊名保持原样；需要保持原有大小写的专有名词与缩写须用花括号括起，如 \verb|{IEEE}|、\verb|{PyTorch}|；网址写在 \texttt{url} 字段，不要写进题名；
+  \item 汉语拼音姓名的名按全称输出（如“He Kaiming”），西文姓名的名缩写为首字母（如“Knuth D E”）；拼音名须写成一个词，如 \verb|He, Kaiming|，两个音节之间可用撇号隔开（\verb|Xi'an|），写成 \verb|Kai-Ming| 或 \verb|Kai Ming| 会被当作西文名缩写；拼音姓不要加花括号；
   \item 建议使用 Zotero、Mendeley 等软件管理参考文献，可自动生成规范的 \texttt{.bib} 文件。
 \end{itemize}
 
@@ -134,17 +134,17 @@
 请参见\cref{chap:intro}。   % 产出：请参见第 1 章。
 \end{Verbatim}
 
-本模板已用 \cs{crefformat} 为章、节、图、表、公式、算法、代码和各定理类环境设置了引用格式，\cs{crefformat} 的设置优先于 \cs{crefname}，所以自定义引用词汇时应在导言区重新声明 \cs{crefformat}，其中 \verb|#1| 为编号，\verb|#2| 与 \verb|#3| 标出超链接的起止；一次引用多个同类对象时使用的格式由 \cs{crefmultiformat} 设置：
+本模板已用 \cs{crefformat} 为章、节、图、表、公式、算法、代码和各定理类环境设置了引用格式，\cs{crefformat} 的设置优先于 \cs{crefname}，所以自定义引用词汇时应在导言区重新声明 \cs{crefformat}，其中 \verb|#1| 为编号，\verb|#2| 与 \verb|#3| 标出超链接的起止；一次引用多个同类对象时使用的格式由 \cs{crefmultiformat} 设置。以编号结尾的格式在 \verb|#3| 之后加 \cs{tjrefnum}，多项格式在“和”之前加 \cs{tjrefsep}，XeLaTeX 才会在编号与后面的汉字之间留出间距：
 
 \begin{Verbatim}
-\crefformat{对象类型}{#2引用词汇~#1#3}
+\crefformat{对象类型}{#2引用词汇~#1#3\tjrefnum}
 \end{Verbatim}
 
 定理类环境的对象类型就是环境名，如定理为 \texttt{thm}、推论为 \texttt{cor}。例如，可以使用以下代码将定理的引用词汇修改为“命题”：
 \begin{Verbatim}
-\crefformat{thm}{#2命题~#1#3}
-\crefmultiformat{thm}{#2命题~#1#3}{和#2命题~#1#3}%
-  {、#2命题~#1#3}{和#2命题~#1#3}
+\crefformat{thm}{#2命题~#1#3\tjrefnum}
+\crefmultiformat{thm}{#2命题~#1#3\tjrefnum}{\tjrefsep 和#2命题~#1#3\tjrefnum}%
+  {、#2命题~#1#3\tjrefnum}{\tjrefsep 和#2命题~#1#3\tjrefnum}
 \end{Verbatim}
 
 需要同时引用几个并列的对象时，可以直接使用 \verb|\cref| 命令，例如：

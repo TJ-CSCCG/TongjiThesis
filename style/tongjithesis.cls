@@ -382,12 +382,17 @@
 \RequirePackage{siunitx}[=v2]
 % 数字列表与数字范围的连接词：siunitx 默认输出英文“and”“to”。撰写规范（十三）要求标点按
 % GB/T 15834—2011《标点符号用法》使用：并列词语用顿号，数值范围用浪纹线“～”（规范正文亦写作“3～5个”）。
+% “和”两侧的 \tj@numsep 在 XeLaTeX 下补上数字与汉字之间的间距（LuaTeX 由 luatexja 处理）。
 \sisetup{
   list-separator       = {、},
-  list-final-separator = {和},
-  list-pair-separator  = {和},
+  list-final-separator = {\tj@numsep 和\tj@numsep},
+  list-pair-separator  = {\tj@numsep 和\tj@numsep},
   range-phrase         = {～},
 }
+% 英文摘要中恢复 siunitx 的英文连接词
+\newcommand*{\tj@siunitxenglish}{%
+  \sisetup{list-separator = {, }, list-final-separator = { and },
+            list-pair-separator = { and }, range-phrase = { to }}}
 \RequirePackage{pgf}
 \RequirePackage{tikz}
 
@@ -395,7 +400,7 @@
 % Bibliography Configuration
 % ==========================================
 % 参考文献样式遵循 GB/T 7714-2025。所需宏包版本（均随 TeX Live 2026+ 分发）：
-%   - biblatex 路径：biblatex-gb7714-2015 >= v1.1w（提供 gb7714-2025 样式）
+%   - biblatex 路径：biblatex-gb7714-2015 >= v1.1x（提供 gb7714-2025 样式；下方的覆盖定义按 v1.1x 编写）
 %   - bibtex   路径：gbt7714 >= v2.2.0（提供 gbt7714-2025-numeric.bst）
 % 版本过旧会报“style/bst not found”错误；升级步骤见 README“快速开始”提示。
 \iftongjithesis@biblatex
@@ -446,15 +451,19 @@
   %     .bib 中需保持原样的专有名词与缩写须用花括号保护，如 {IEEE}、{LaTeX}，两种后端都会照录。
   %     副题名（subtitle、booksubtitle）整体小写，与 gbt7714 的 capitalizesubtitle=false 及示例
   %     “ARA：a flexible pipeline…”一致；\tj@mklowercase 沿用 biblatex 的花括号保护规则。
+  %     含 \url 的题名原样输出：\url 按原文读取参数，无法再经过大小写转换。
   \newcommand*{\tj@mksentencecase}[1]{%
     \iffieldequalstr{userd}{english}
-      {\ifboolexpr{test {\ifcurrentfield{subtitle}} or test {\ifcurrentfield{booksubtitle}}}
-         {\tj@mklowercase{#1}}
-         {\MakeSentenceCase{#1}}}
+      {\tj@ifhasurl{#1}{#1}{%
+         \ifboolexpr{test {\ifcurrentfield{subtitle}} or test {\ifcurrentfield{booksubtitle}}
+                      or test {\ifcurrentfield{booktitleaddon}}}
+           {\tj@mklowercase{#1}}
+           {\MakeSentenceCase{#1}}}}
       {#1}}
   \ExplSyntaxOn
   \cs_new_protected:Npn \tj@mklowercase #1
     { \exp_args:No \text_lowercase:n { \biblatex_text_sentencecase_preprocess:n {#1} } }
+  \cs_new_protected:Npn \tj@ifhasurl #1#2#3 { \tl_if_in:nnTF {#1} { \url } {#2} {#3} }
   \ExplSyntaxOff
   \renewcommand{\mktitlecase}{\tj@mksentencecase}
   \renewcommand{\mkbooktitlecase}{\tj@mksentencecase}
@@ -464,7 +473,9 @@
   %     其余仍按原格式缩写。判定规则照搬 gbt7714（gbt7714-2025-numeric.bst 的 is.name.pinyin）：
   %     没有前缀和后缀；姓是一个音节，或用连字符连接的两个音节；名是一个或两个音节，
   %     或用撇号隔开的两个音节；不区分大小写。音节表照录该文件的 pinyin.table1 至 table3，
-  %     其中含 ü 的 4 个音节在 gbt7714 中永远不会匹配（它只接受 a 至 z），故未列入。
+  %     其中含 ü 的 4 个音节在 gbt7714 中永远不会匹配（它只接受 a 至 z），ka 与 sa 因该文件
+  %     table2、table3 首项缺少前导空格也永远不会匹配，为与 gbt7714 输出一致均未列入。
+  %     弯撇号 ’ 先换成 '，与 gbt7714 相同。两种后端的规则须同步维护。
   \ExplSyntaxOn
   \str_const:Nn \c__tj_pinyin_syllables_str
     {
@@ -480,7 +491,7 @@
       ga,gai,gan,gang,gao,ge,gei,gen,geng,gong,gou,gu,gua,guai,guan,guang,gui,gun,guo,
       ha,hai,han,hang,hao,he,hei,hen,heng,hong,hou,hu,hua,huai,huan,huang,hui,hun,huo,
       ji,jia,jian,jiang,jiao,jie,jin,jing,jiong,jiu,ju,juan,jue,jun,
-      ka,kai,kan,kang,kao,ke,ken,keng,kong,kou,ku,kua,kuai,kuan,kuang,kui,kun,kuo,
+      kai,kan,kang,kao,ke,ken,keng,kong,kou,ku,kua,kuai,kuan,kuang,kui,kun,kuo,
       la,lai,lan,lang,lao,le,lei,leng,li,lia,lian,liang,liao,lie,lin,ling,liu,long,lou,lu,luan,
       lun,luo,lyu,lyue,
       ma,mai,man,mang,mao,me,mei,men,meng,mi,mian,miao,mie,min,ming,miu,mo,mou,mu,
@@ -490,7 +501,7 @@
       pa,pai,pan,pang,pao,pei,pen,peng,pi,pian,piao,pie,pin,ping,po,pou,pu,
       qi,qia,qian,qiang,qiao,qie,qin,qing,qiong,qiu,qu,quan,que,qun,
       ran,rang,rao,re,ren,reng,ri,rong,rou,ru,ruan,rui,run,ruo,
-      sa,sai,san,sang,sao,se,sen,seng,sha,shai,shan,shang,shao,she,shei,shen,sheng,shi,shou,shu,
+      sai,san,sang,sao,se,sen,seng,sha,shai,shan,shang,shao,she,shei,shen,sheng,shi,shou,shu,
       shua,shuai,shuan,shuang,shui,shun,shuo,si,song,sou,su,suan,sui,sun,suo,
       ta,tai,tan,tang,tao,te,teng,ti,tian,tiao,tie,ting,tong,tou,tu,tuan,tui,tun,tuo,
       wa,wai,wan,wang,wei,wen,weng,wo,wu,
@@ -551,6 +562,7 @@
           \str_set:Ne \l__tj_pinyin_family_str { \str_casefold:V \l__tj_pinyin_family_str }
           \str_set:Ne \l__tj_pinyin_given_str { \exp_not:o { \namepartgiven } }
           \str_set:Ne \l__tj_pinyin_given_str { \str_casefold:V \l__tj_pinyin_given_str }
+          \str_replace_all:Nnn \l__tj_pinyin_given_str { ’ } { ' }
           \__tj_pinyin_check_parts:Vnn \l__tj_pinyin_family_str { - } { 2 }
           \bool_if:NT \l__tj_pinyin_bool
             {
@@ -1161,10 +1173,10 @@
   \newcommand*{\chapref}[1]{第~\ref{#1}~章}
   \newcommand*{\secref}[1]{第~\ref{#1}~节}
 \fi
-\newcommand*{\algoref}[1]{算法~\ref{#1}\tj@refnum}
+\newcommand*{\algoref}[1]{算法~\ref{#1}\tj@refpeek}
 \renewcommand*{\eqref}[1]{式~(\ref{#1})}
-\newcommand*{\tabref}[1]{\tablename~\ref{#1}\tj@refnum}
-\newcommand*{\figref}[1]{\figurename~\ref{#1}\tj@refnum}
+\newcommand*{\tabref}[1]{\tablename~\ref{#1}\tj@refpeek}
+\newcommand*{\figref}[1]{\figurename~\ref{#1}\tj@refpeek}
 
 % Cross-reference formats: 名字放进 #2…#3 让 nameinlink 全段可点（图/表/式 等整词都参与超链接）
 \crefformat{listing}{#2代码~#1#3\tj@refnum}
@@ -1173,7 +1185,7 @@
 \crefformat{lstlisting}{#2代码~#1#3\tj@refnum}
 \crefmultiformat{lstlisting}{#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}{、#2代码~#1#3\tj@refnum}{\tj@numsep 和#2代码~#1#3\tj@refnum}
 \crefrangeformat{lstlisting}{#3代码~#1#4~至#5代码~#2#6\tj@refnum}
-\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}~}
+\newcommand*{\listingref}[1]{\lstlistingname~\ref{#1}\tj@refpeek}
 
 % Configure references in Chinese
 % “第X章/节” pattern: number is wrapped, needs full multi/range formats
@@ -1233,12 +1245,13 @@
 \crefformat{proof}{#2证明~#1#3\tj@refnum}
 
 % Configure connecting words
-\newcommand{\crefpairconjunction}{ 和~}
+% 前一项以编号结尾时才在“和”前留间距（\tj@conjsep），“和”之后不留空
+\newcommand{\crefpairconjunction}{\tj@conjsep 和}
 \newcommand{\crefmiddleconjunction}{、}
-\newcommand{\creflastconjunction}{ 和~}
-\newcommand{\crefpairgroupconjunction}{ 和}
+\newcommand{\creflastconjunction}{\tj@conjsep 和}
+\newcommand{\crefpairgroupconjunction}{\tj@conjsep 和}
 \newcommand{\crefmiddlegroupconjunction}{、}
-\newcommand{\creflastgroupconjunction}{ 和}
+\newcommand{\creflastgroupconjunction}{\tj@conjsep 和}
 \newcommand{\crefrangeconjunction}{ 至~}
 
 % 超链接在编号后结束，链接结尾会打断 xeCJK 的中西文自动间距，“如图 1.1所示”缺少空格。
@@ -1269,12 +1282,28 @@
     \bool_if:NT \g__tj_ref_num_bool
       { \bool_gset_false:N \g__tj_ref_num_bool \__tj_ref_cjk_space: }
   }
+% \figref 等不经 \cref：直接按后面的字符补间距，不动标记
+\cs_new_eq:cN { tj@refpeek } \__tj_ref_cjk_space:
+% 多项引用的“和”之前：前一项以编号结尾时留间距
+\cs_new_protected:cpn { tj@conjsep }
+  {
+    \bool_if:NT \g__tj_ref_num_bool
+      { \tj@numsep }
+  }
+% 用户自定义以编号结尾的 \crefformat 时，在 #3 之后加 \tjrefnum，在多项格式的“和”前加 \tjrefsep
+\cs_new_eq:NN \tjrefnum \tj@refnum
+\cs_new_eq:NN \tjrefsep \tj@numsep
 \ExplSyntaxOff
 \AtBeginDocument{%
   \NewCommandCopy\tj@cref@orig\cref
-  \RenewDocumentCommand\cref{sm}{\IfBooleanTF{#1}{\tj@cref@orig*{#2}}{\tj@cref@orig{#2}}\tj@refcjkspace}%
+  \RenewDocumentCommand\cref{sm}{\tj@refnotnum\IfBooleanTF{#1}{\tj@cref@orig*{#2}}{\tj@cref@orig{#2}}\tj@refcjkspace}%
   \NewCommandCopy\tj@crefrange@orig\crefrange
-  \RenewDocumentCommand\crefrange{smm}{\IfBooleanTF{#1}{\tj@crefrange@orig*{#2}{#3}}{\tj@crefrange@orig{#2}{#3}}\tj@refcjkspace}%
+  \RenewDocumentCommand\crefrange{smm}{\tj@refnotnum\IfBooleanTF{#1}{\tj@crefrange@orig*{#2}{#3}}{\tj@crefrange@orig{#2}{#3}}\tj@refcjkspace}%
+}
+% PDF 书签中不排版，这些钩子只留一个空格或什么也不输出
+\pdfstringdefDisableCommands{%
+  \def\tj@refnum{ }\def\tj@refpeek{ }\def\tjrefnum{ }\let\tjrefsep\relax%
+  \let\tj@refnotnum\relax\let\tj@refcjkspace\relax\let\tj@conjsep\relax\let\tj@numsep\relax
 }
 
 % ==========================================
@@ -1610,6 +1639,7 @@
   \vspace{1.6em}
 
   \begin{spacing}{\tjlinespread}
+    \tj@siunitxenglish
     \setlength{\parindent}{2em}
     \tjfontbody #1
     \par
@@ -1617,7 +1647,7 @@
 
   \tjfontbody
   \vspace{\baselineskip}
-  {\noindent\textbf{Key words: }#2}\par
+  {\tj@siunitxenglish\noindent\textbf{Key words: }#2}\par
 }
 
 % ==========================================
