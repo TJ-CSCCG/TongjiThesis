@@ -415,6 +415,152 @@
         \renewcommand*{\makelabel}[1]{##1\hfill}}}
     {\endlist}
     {\item}
+  % 以下四处改写 gb7714-2025 的默认输出，使其与 gbt7714 及 GB/T 7714—2025 的示例一致。
+  % （1）DOI 与 CSTR：§7.8 示例写作“DOI:10.3760/…”，冒号后不留空格；
+  %     样式原定义在冒号后加了 \addthinspace。
+  \DeclareFieldFormat{doi}{%
+    DOI\addcolon
+    \ifhyperref
+      {\href{https://doi.org/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}}
+  \DeclareFieldFormat{cstr}{%
+    CSTR\addcolon
+    \ifhyperref
+      {\href{https://cstr.cn/#1}{\nolinkurl{#1}}}
+      {\nolinkurl{#1}}}
+  % （2）更新或修改日期与引用日期：§7.6 示例写作“（2012-05-03）[2013-11-12]”，两者之间不留空格；
+  %     样式原定义在引用日期前加了 \addthinspace。
+  \renewbibmacro*{urldate}{%
+    \printtext{\gbleftbracket}\printurldate\printtext{\gbrightbracket}}
+  % （3）英文题名：§5.6 要求大小写“符合信息资源本身文种的习惯用法”，标准示例的题名与书名均为
+  %     句首大写（sentence case），期刊名保留原样。与 gbt7714 的默认设置相同：title 与 booktitle
+  %     改为句首大写，journal 不变；只处理英文文献（userd 是样式按题名判定的语种）。
+  %     .bib 中需保持原样的专有名词与缩写须用花括号保护，如 {IEEE}、{LaTeX}，两种后端都会照录。
+  %     副题名（subtitle、booksubtitle）整体小写，与 gbt7714 的 capitalizesubtitle=false 及示例
+  %     “ARA：a flexible pipeline…”一致；\tj@mklowercase 沿用 biblatex 的花括号保护规则。
+  \newcommand*{\tj@mksentencecase}[1]{%
+    \iffieldequalstr{userd}{english}
+      {\ifboolexpr{test {\ifcurrentfield{subtitle}} or test {\ifcurrentfield{booksubtitle}}}
+         {\tj@mklowercase{#1}}
+         {\MakeSentenceCase{#1}}}
+      {#1}}
+  \ExplSyntaxOn
+  \cs_new_protected:Npn \tj@mklowercase #1
+    { \exp_args:No \text_lowercase:n { \biblatex_text_sentencecase_preprocess:n {#1} } }
+  \ExplSyntaxOff
+  \renewcommand{\mktitlecase}{\tj@mksentencecase}
+  \renewcommand{\mkbooktitlecase}{\tj@mksentencecase}
+  % （4）姓名：§7.1.1 规定西文名可缩写为首字母（缩写名后不加点），汉语拼音名“宜用全称”。
+  %     样式默认格式 gbnamefmt=lowercase 一律缩写名；全局改用 gbnamefmt=quanpin 又会把西文名
+  %     也写成全称。因此逐个判断姓名：姓与名都是汉语拼音时改用样式的全拼格式 name:gbquanpin，
+  %     其余仍按原格式缩写。判定规则照搬 gbt7714（gbt7714-2025-numeric.bst 的 is.name.pinyin）：
+  %     没有前缀和后缀；姓是一个音节，或用连字符连接的两个音节；名是一个或两个音节，
+  %     或用撇号隔开的两个音节；不区分大小写。音节表照录该文件的 pinyin.table1 至 table3，
+  %     其中含 ü 的 4 个音节在 gbt7714 中永远不会匹配（它只接受 a 至 z），故未列入。
+  \ExplSyntaxOn
+  \str_const:Nn \c__tj_pinyin_syllables_str
+    {
+      ,
+      a,ai,an,ang,ao,
+      ba,bai,ban,bang,bao,bei,ben,beng,bi,bian,biao,bie,bin,bing,bo,bu,
+      ca,cai,can,cang,cao,ce,cen,ceng,cha,chai,chan,chang,chao,che,chen,cheng,chi,chong,chou,
+      chu,chuai,chuan,chuang,chui,chun,chuo,ci,cong,cou,cu,cuan,cui,cun,cuo,
+      da,dai,dan,dang,dao,de,dei,deng,di,dia,dian,diao,die,ding,diu,dong,dou,du,duan,dui,dun,
+      duo,
+      e,ei,en,eng,er,
+      fa,fan,fang,fei,fen,feng,fo,fou,fu,
+      ga,gai,gan,gang,gao,ge,gei,gen,geng,gong,gou,gu,gua,guai,guan,guang,gui,gun,guo,
+      ha,hai,han,hang,hao,he,hei,hen,heng,hong,hou,hu,hua,huai,huan,huang,hui,hun,huo,
+      ji,jia,jian,jiang,jiao,jie,jin,jing,jiong,jiu,ju,juan,jue,jun,
+      ka,kai,kan,kang,kao,ke,ken,keng,kong,kou,ku,kua,kuai,kuan,kuang,kui,kun,kuo,
+      la,lai,lan,lang,lao,le,lei,leng,li,lia,lian,liang,liao,lie,lin,ling,liu,long,lou,lu,luan,
+      lun,luo,lyu,lyue,
+      ma,mai,man,mang,mao,me,mei,men,meng,mi,mian,miao,mie,min,ming,miu,mo,mou,mu,
+      na,nai,nan,nang,nao,ne,nei,nen,neng,ni,nian,niang,niao,nie,nin,ning,niu,nong,nu,nuan,nuo,
+      nyu,nyue,
+      o,ou,
+      pa,pai,pan,pang,pao,pei,pen,peng,pi,pian,piao,pie,pin,ping,po,pou,pu,
+      qi,qia,qian,qiang,qiao,qie,qin,qing,qiong,qiu,qu,quan,que,qun,
+      ran,rang,rao,re,ren,reng,ri,rong,rou,ru,ruan,rui,run,ruo,
+      sa,sai,san,sang,sao,se,sen,seng,sha,shai,shan,shang,shao,she,shei,shen,sheng,shi,shou,shu,
+      shua,shuai,shuan,shuang,shui,shun,shuo,si,song,sou,su,suan,sui,sun,suo,
+      ta,tai,tan,tang,tao,te,teng,ti,tian,tiao,tie,ting,tong,tou,tu,tuan,tui,tun,tuo,
+      wa,wai,wan,wang,wei,wen,weng,wo,wu,
+      xi,xia,xian,xiang,xiao,xie,xin,xing,xiong,xiu,xu,xuan,xue,xun,
+      ya,yan,yang,yao,ye,yi,yin,ying,yong,you,yu,yuan,yue,yun,
+      za,zai,zan,zang,zao,ze,zei,zen,zeng,zha,zhai,zhan,zhang,zhao,zhe,zhei,zhen,zheng,zhi,
+      zhong,zhou,zhu,zhua,zhuai,zhuan,zhuang,zhui,zhun,zhuo,zi,zong,zou,zu,zuan,zui,zun,zuo,
+    }
+  \str_new:N \l__tj_pinyin_family_str
+  \str_new:N \l__tj_pinyin_given_str
+  \seq_new:N \l__tj_pinyin_seq
+  \bool_new:N \l__tj_pinyin_bool
+  \prg_new_protected_conditional:Npnn \__tj_pinyin_if_syllable:n #1 { T, F, TF }
+    {
+      \str_if_in:NnTF \c__tj_pinyin_syllables_str { , #1 , }
+        { \prg_return_true: } { \prg_return_false: }
+    }
+  \prg_generate_conditional_variant:Nnn \__tj_pinyin_if_syllable:n { e } { T, F, TF }
+  % 由 #2 中的分隔符切开的每一段都必须是一个音节，且至多 #3 段
+  \cs_new_protected:Npn \__tj_pinyin_check_parts:nnn #1#2#3
+    {
+      \seq_set_split:Nnn \l__tj_pinyin_seq {#2} {#1}
+      \bool_set_true:N \l__tj_pinyin_bool
+      \int_compare:nNnT { \seq_count:N \l__tj_pinyin_seq } > {#3}
+        { \bool_set_false:N \l__tj_pinyin_bool }
+      \seq_map_inline:Nn \l__tj_pinyin_seq
+        { \__tj_pinyin_if_syllable:nF {##1} { \bool_set_false:N \l__tj_pinyin_bool } }
+    }
+  % 不含撇号的名：一个音节，或能切成两个音节
+  \cs_new_protected:Npn \__tj_pinyin_check_given:n #1
+    {
+      \__tj_pinyin_if_syllable:nTF {#1}
+        { \bool_set_true:N \l__tj_pinyin_bool }
+        {
+          \bool_set_false:N \l__tj_pinyin_bool
+          \int_step_inline:nn { \str_count:n {#1} - 1 }
+            {
+              \bool_if:NF \l__tj_pinyin_bool
+                {
+                  \__tj_pinyin_if_syllable:eT { \str_range:nnn {#1} { 1 } {##1} }
+                    {
+                      \__tj_pinyin_if_syllable:eT { \str_range:nnn {#1} { ##1 + 1 } { -1 } }
+                        { \bool_set_true:N \l__tj_pinyin_bool }
+                    }
+                }
+            }
+        }
+    }
+  % \tj@ifpinyinname{<是拼音>}{<不是拼音>}：在 biblatex 姓名格式内判断当前姓名
+  \cs_new_protected:Npn \tj@ifpinyinname #1#2
+    {
+      \bool_set_false:N \l__tj_pinyin_bool
+      \bool_lazy_and:nnT
+        { \tl_if_empty_p:o { \namepartprefix } }
+        { \tl_if_empty_p:o { \namepartsuffix } }
+        {
+          \str_set:Ne \l__tj_pinyin_family_str { \exp_not:o { \namepartfamily } }
+          \str_set:Ne \l__tj_pinyin_family_str { \str_casefold:V \l__tj_pinyin_family_str }
+          \str_set:Ne \l__tj_pinyin_given_str { \exp_not:o { \namepartgiven } }
+          \str_set:Ne \l__tj_pinyin_given_str { \str_casefold:V \l__tj_pinyin_given_str }
+          \__tj_pinyin_check_parts:Vnn \l__tj_pinyin_family_str { - } { 2 }
+          \bool_if:NT \l__tj_pinyin_bool
+            {
+              \str_if_in:NnTF \l__tj_pinyin_given_str { ' }
+                { \__tj_pinyin_check_parts:Vnn \l__tj_pinyin_given_str { ' } { 2 } }
+                { \__tj_pinyin_check_given:V \l__tj_pinyin_given_str }
+            }
+        }
+      \bool_if:NTF \l__tj_pinyin_bool {#1} {#2}
+    }
+  \cs_generate_variant:Nn \__tj_pinyin_check_parts:nnn { V }
+  \cs_generate_variant:Nn \__tj_pinyin_check_given:n { V }
+  \ExplSyntaxOff
+  \letbibmacro{tj@name:gblowercase}{name:gblowercase}
+  \renewbibmacro*{name:gblowercase}[4]{%
+    \tj@ifpinyinname
+      {\usebibmacro{name:gbquanpin}{#1}{\namepartgiven}{#3}{#4}}%
+      {\usebibmacro{tj@name:gblowercase}{#1}{#2}{#3}{#4}}}
 \else
   \RequirePackage[sort&compress, bibpunct=half]{gbt7714}   % 半角标点，与 biblatex 的 gbpunctwidth=half 对齐（撰写规范：参考文献标点统一采用半角）
   \bibliographystyle{gbt7714-2025-numeric}
