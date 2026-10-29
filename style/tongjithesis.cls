@@ -45,7 +45,7 @@
 % Define degree option: bachelor (default), master, doctor
 \DeclareStringOption[bachelor]{degree}
 % Define field option: science (default, 理工科), humanities (文科 — 人文/法学/外语/艺术)
-% 经管类属社科：编号要求依理工，撰写依理工模版。26 届为过渡期，可选 science 或
+% 经管类属社科：编号要求依理工，撰写依理工模板。26 届为过渡期，可选 science 或
 % humanities；自 27 届起统一使用 science。
 \DeclareStringOption[science]{field}
 % Define algo option: algpseudocode (default, algorithm + algorithmicx + algpseudocode),

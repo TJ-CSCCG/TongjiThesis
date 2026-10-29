@@ -4,14 +4,14 @@
 
 \section{参考文献引用}
 
-在学术论文或科技报告中，通常需要引用相关文献以支持观点或论证。为了方便读者查阅，我们需要在论文中标注参考文献。在 \LaTeX\ 中，可使用 \verb|\cite| 命令引用参考文献。参考文献的外观应符合国标 GB/T 7714，本模板提供两种方式：
+在 \LaTeX{} 中用 \verb|\cite| 命令引用参考文献。参考文献格式应符合国标 GB/T 7714，本模板提供两种实现方式：
 \begin{enumerate}
     \item 使用 \BibTeX{} 配合 \pkg{gbt7714} 宏包
     \item 使用 \BibLaTeX{} 配合 \pkg{biblatex-gb7714-2015} 样式包（其 \texttt{gb7714-2025} 样式实现 GB/T 7714-2025）
 \end{enumerate}
-其中，\BibLaTeX{} 方案功能更为丰富（支持 \cs{fullcite}、\cs{footfullcite} 等命令），且由 \texttt{biber} 引擎驱动，对 Unicode 和中文文献支持更好，是本模板的\textbf{默认推荐}方案。不过，\texttt{biber} 的编译速度较 \texttt{bibtex} 慢，在文献条目较多时差异尤为明显。\BibTeX{} 方案编译更快，且部分期刊投稿仍要求使用，如对编译速度敏感或有投稿需求，可设置 \texttt{biblatex=false} 切换至 \BibTeX{} 方案。
+其中，\BibLaTeX{} 方案功能更为丰富（支持 \cs{fullcite}、\cs{footfullcite} 等命令），且以 \texttt{biber} 为后端，对 Unicode 和中文文献支持更好，是本模板的\textbf{默认推荐}方案。不过，\texttt{biber} 的编译速度较 \texttt{bibtex} 慢，在文献条目较多时差异尤为明显。\BibTeX{} 方案编译更快，且部分期刊投稿仍要求使用，如对编译速度敏感或有投稿需求，可设置 \texttt{biblatex=false} 切换至 \BibTeX{} 方案。
 
-两种方式都能实现符合国标的参考文献格式。可通过文档类选项 \texttt{biblatex=true}（默认）或 \texttt{biblatex=false} 进行切换。无论选择哪种方式，均使用 \cs{tjbibresource} 命令在导言区指定参考文献数据库文件，使用 \cs{makereferences} 命令在正文中输出参考文献列表：
+无论选择哪种方式，均使用 \cs{tjbibresource} 命令在导言区指定参考文献数据库文件，使用 \cs{makereferences} 命令在正文中输出参考文献列表：
 
 \begin{Verbatim}
 \tjbibresource{bib/note.bib}        % 导言区指定 .bib 文件
@@ -28,9 +28,9 @@
 多文献引用 \cite{book1,online1}。
 \end{Verbatim}
 
-\cs{cite} 命令产生上标数字引用（如“……方法\textsuperscript{[1,2]}”），适合不影响行文流畅性的场景。
+\cs{cite} 命令产生上标数字引用（如“……方法\textsuperscript{[1,2]}”），适合不希望打断行文的场合。
 
-使用 \verb|\cite{key1,key2,key3...}| 命令可在正文中产生上标引用，如\cite{book1,online1,article1}。以下是使用 \verb|\cite| 命令的引用示例：
+多个键可以一次引用，如\cite{book1,online1,article1}。以下按文献类型给出 \verb|\cite| 的引用示例：
 \begin{itemize}
   \item 普通图书\cite{book1,book2}
   \item 论文集、会议录\cite{conf1,conf2}
@@ -48,7 +48,7 @@
 
 在编写 \texttt{.bib} 文件时，需注意以下常见问题：
 \begin{itemize}
-  \item 每个条目的键值（如 \texttt{book1}）在整个 \texttt{.bib} 文件中必须唯一；
+  \item 每个条目的键（如 \texttt{book1}）在整个 \texttt{.bib} 文件中必须唯一；
   \item 常见的条目类型包括 \texttt{@book}（图书）、\texttt{@article}（期刊论文）、\texttt{@inproceedings}（会议论文）、\texttt{@phdthesis}（博士论文）、\texttt{@mastersthesis}（硕士论文）、\texttt{@online}（网络资源）、\texttt{@preprint}（预印本，GB/T 7714-2025 新增）等；
   \item 中文作者姓名之间使用 \texttt{and} 连接，而非顿号或逗号；
   \item 撰写规范要求参考文献中的标点统一采用半角，样式只能控制它生成的标点；题名等字段里自带的标点请直接写成半角，引号写作 \verb|``…''|，括号写作 \verb|(…)|；
@@ -62,11 +62,11 @@
 \ifx\fullcite\undefined\else
 \subsection{\BibLaTeX{}特有的引用命令}
 
-当使用 \pkg{biblatex} 宏包时，有一些额外的引用命令可供使用。
+使用 \pkg{biblatex} 时，还可以使用以下引用命令。
 
 \subsubsection{完整引用}
 
-当我们想在正文（非参考文献章节）中插入对某一参考文献的完整引用时，可以使用 \verb|\fullcite{key1}| 命令。下面是使用 \verb|\fullcite| 命令的引用示例：
+需要在正文中（参考文献章节以外）插入某条文献的完整引用时，可以使用 \verb|\fullcite{key1}| 命令，示例如下：
 
 \begin{itemize}
     \item \fullcite{qin2021}
@@ -74,25 +74,25 @@
 
 \subsubsection{脚注引用}
 
-有时，我们想要用脚注的形式引用某参考文献，那么我们可以使用 \verb|\footfullcite{key1}| 命令\footfullcite{qin2021}.
+以脚注形式引用文献时，可以使用 \verb|\footfullcite{key1}| 命令\footfullcite{qin2021}。
 \fi
 
 
 \section{脚注}
 
-脚注是一种在文本底部添加注释或补充说明的方式。在 \LaTeX\ 中，可以使用 \verb|\footnote| 命令添加脚注。例如，在文本中需要添加脚注时，可以在需要添加脚注的单词或句子后面使用 \verb|\footnote| 命令，如下所示：
+脚注是排在页面底部的注释或补充说明。在 \LaTeX{} 中，在需要加注的词语或句子后面使用 \verb|\footnote| 命令即可，如下所示：
 
 \begin{Verbatim}
-脚注是一种在文本底部添加注释或补充说明的方式\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
+脚注是排在页面底部的注释或补充说明\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
 \end{Verbatim}
 
-其中，花括号中的文本就是脚注的内容。编译文档后，脚注会出现在页面底部，并自动标上数字：脚注是一种在文本底部添加注释或补充说明的方式\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
+其中，花括号中的文本就是脚注的内容。编译文档后，脚注会出现在页面底部，并自动标上数字：脚注是排在页面底部的注释或补充说明\footnote{通常，我们在脚注里也写完整的句子。在文本中使用脚注时，应该遵循学术规范，尽可能引用可信的来源，并注明出处。}。
 
-按 2026 同济模板规范，脚注编号以 \TJCircled{1}、\TJCircled{2}、\TJCircled{3}… 等带圈形式呈现，由模板自动渲染，无需显式切换。
+按 2026 同济模板规范，脚注编号以 \TJCircled{1}、\TJCircled{2}、\TJCircled{3} 等带圈形式呈现，由模板自动生成，无需手动设置。
 
 \section{交叉引用}
 
-在文档中，交叉引用是指引用文档中的某个标签或标记，例如章节、图表、公式或页码等。在 \LaTeX\ 中，可以使用 \verb|\label| 命令为文档中的对象添加标签，使用 \verb|\ref| 命令或 \verb|\pageref| 命令进行引用。
+交叉引用指在文中引用章节、图表、公式或页码等对象。在 \LaTeX{} 中，用 \verb|\label| 命令为对象添加标签，再用 \verb|\ref| 或 \verb|\pageref| 命令引用。
 
 为便于管理，建议为标签采用统一的命名前缀：
 \begin{center}
@@ -126,9 +126,9 @@
 请参见第 \pageref{chap:intro} 页。
 \end{Verbatim}
 
-这样，就可以在文档中产生“请参见第 X 页”的效果，其中 X 为标签所在页码的编号。
+这样，就可以在文档中产生“请参见第 X 页”的效果，其中 X 为标签所在页的页码。
 
-为了免于手动维护“第 X 章 / 图 X / 表 X”等引用词汇，本模板加载了 \pkg{cleveref} 宏包，并提供 \cs{cref} 命令自动根据标签所指对象的类型生成正确的引用词汇：
+为免于手动维护“第 X 章 / 图 X / 表 X”等引用词汇，本模板加载了 \pkg{cleveref} 宏包，其 \cs{cref} 命令会根据标签所指对象的类型自动生成引用词汇：
 
 \begin{Verbatim}
 请参见\cref{chap:intro}。   % 产出：请参见第 1 章。
