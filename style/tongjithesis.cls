@@ -117,7 +117,7 @@
 % ==========================================
 % Formatting Constants (官方规范)
 % ==========================================
-% 依据：同济大学本科生毕业设计（论文）撰写规范（附件2，2026 年 10 月修订）；
+% 依据：《同济大学本科生毕业设计（论文）撰写规范》（2026 年 10 月修订版）；
 % 规范未写明的数值沿用 2026 届官方 Word 模板。
 % Font sizes
 \newcommand{\tjfonttitle}{\zihao{-2}}        % 课题名称：小二号
@@ -1044,27 +1044,21 @@
   % h3
   \renewcommand{\cftsubsecaftersnum}{.\hspace*{0.5em}}
   \setlength{\cftsubsecnumwidth}{1.5em}
-  % 浮动体编号：文科采用全文连续编号（1, 2, 3…），不带章节前缀
-  \counterwithout{figure}{chapter}
-  \counterwithout{table}{chapter}
-  \counterwithout{equation}{chapter}
-  \counterwithout{algorithm}{chapter}
-  % listing/lstlisting 在 \AtBeginDocument 中绑定；定理类环境在 \newtheorem 后定义，
-  % 均需在 document 开始后解绑，确保顺序正确
+  % 图、表、公式等按章编号（撰写规范：“以章分组编序号”，不分文理）。文科章号用汉字，
+  % 编号中的章号仍用阿拉伯数字，如“图 2.1”“(2.2)”，与规范示例“(2.2) 表示第二章的第二个公式”一致。
+  % 附录中 \appendix 改为按节编号（A.1），会覆盖这里的定义。
+  \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+  \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+  \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+  \renewcommand{\thealgorithm}{\arabic{chapter}.\arabic{algorithm}}
+  % listing/lstlisting 在 \AtBeginDocument 中才建立；定理类环境在 \newtheorem 后定义
   \AtBeginDocument{%
-    \counterwithout{listing}{chapter}%
-    \@ifundefined{c@lstlisting}{}{%
-      \counterwithout{lstlisting}{chapter}%
+    \@for\tj@cnt:=listing,lstlisting,thm,cor,lem,prop,conj,assume,dfn,exmp,rem\do{%
+      \@ifundefined{c@\tj@cnt}{}{%
+        \expandafter\edef\csname the\tj@cnt\endcsname{%
+          \noexpand\arabic{chapter}.\noexpand\arabic{\tj@cnt}}%
+      }%
     }%
-    \counterwithout{thm}{chapter}%
-    \counterwithout{cor}{chapter}%
-    \counterwithout{lem}{chapter}%
-    \counterwithout{prop}{chapter}%
-    \counterwithout{conj}{chapter}%
-    \counterwithout{assume}{chapter}%
-    \counterwithout{dfn}{chapter}%
-    \counterwithout{exmp}{chapter}%
-    \counterwithout{rem}{chapter}%
   }%
 \fi
 
