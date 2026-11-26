@@ -104,6 +104,22 @@ if [[ $stage == no-tex ]]; then
   done
   run_make "$root" wordcount
   expect_error "wordcount names the missing texcount" "texcount not found in PATH"
+
+  # Omit just one summary so a successful first count also exercises the total.
+  mkdir "$work/bin"
+  if is_windows; then
+    printf '%s\r\n' '@if not "%4"=="%MISSING_MODE%" echo Words in text: 0' >"$work/bin/texcount.cmd"
+  else
+    printf '%s\n' '#!/bin/sh' 'if [ "$4" != "$MISSING_MODE" ]; then echo "Words in text: 0"; fi' >"$work/bin/texcount"
+    chmod +x "$work/bin/texcount"
+  fi
+  for mode in -ch-only -char-only -chinese; do
+    class='\documentclass{article}'
+    if [[ $mode == -char-only ]]; then class='\documentclass[english]{article}'; fi
+    dir=$(fixture "missing$mode" "$class")
+    PATH="$work/bin:$PATH" MISSING_MODE="$mode" run_make "$dir" wordcount
+    expect_error "wordcount rejects a missing $mode summary" "Error: Could not determine word count[.]"
+  done
 else
   if ! command -v texcount >/dev/null 2>&1; then
     echo "Precondition: texcount is not on PATH. Install it before the texcount stage." >&2

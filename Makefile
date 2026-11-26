@@ -71,7 +71,7 @@ endif
 # Targets
 ###################
 
-.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm
+.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm check-latexmk check-texcount
 
 # Legacy alias
 thesis: all
@@ -101,14 +101,18 @@ view: $(THESIS).pdf
 	$(OPEN) $<
 
 # Word count
+count-text = texcount "$<" -inc -total $(1) | awk -v label='$(2)' '\
+    /^(Words|Letters) in text:/ && NF >= 4 { print label "\t:", $$4; found = 1; exit } \
+    END { if (!found) { print "Error: Could not determine word count." > "/dev/stderr"; exit 1 } }'
+
 wordcount: $(THESIS).tex | check-texcount
 	@echo "Counting words in $(THESIS).tex..."
 	@if grep -v ^% $< | grep -q '\\documentclass\[[^\[]*english'; then \
-		texcount $< -inc -total -char-only | awk '/^(Words|Letters) in text:/ {print "英文字符数 (Latin characters)\t:",$$4}'; \
+		$(call count-text,-char-only,英文字符数 (Latin characters)); \
 	else \
-		texcount $< -inc -total -ch-only   | awk '/^(Words|Letters) in text:/ {print "纯中文字数 (Chinese characters)\t:",$$4}'; \
+		$(call count-text,-ch-only,纯中文字数 (Chinese characters)); \
 	fi
-	@texcount $< -inc -total -chinese | awk '/^(Words|Letters) in text:/ {print "总字数 (Total characters)\t:",$$4}'
+	@$(call count-text,-chinese,总字数 (Total characters))
 
 # Clean auxiliary files
 clean: | check-latexmk
@@ -153,6 +157,5 @@ help:
 # Force remake
 FORCE_MAKE:
 
-.PHONY: check-latexmk check-texcount
 check-latexmk check-texcount:
 	@command -v $(@:check-%=%) >/dev/null || { echo "Error: $(@:check-%=%) not found in PATH" >&2; exit 1; }
