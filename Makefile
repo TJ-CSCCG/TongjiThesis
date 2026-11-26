@@ -16,11 +16,6 @@ FORMS = taskbook proposal midterm
 ENGINES = -xelatex -lualatex
 ENGINE ?= -xelatex  # Default engine to XeLaTeX
 
-# Check for required programs
-REQUIRED_PROGRAMS := latexmk texcount
-$(foreach prog,$(REQUIRED_PROGRAMS),\
-    $(if $(shell which $(prog)),,$(error "$(prog) not found in PATH")))
-
 # Check if engine is valid
 # $(MAKECMDGOALS) is empty for a bare `make`, which still builds the default `all`
 # goal — treat that as a build invocation so ENGINE is validated there too.
@@ -85,7 +80,7 @@ thesis: all
 all: $(THESIS).pdf
 
 # Force remake (pattern rule: also matches taskbook.pdf/proposal.pdf/midterm.pdf below)
-%.pdf: %.tex FORCE_MAKE
+%.pdf: %.tex FORCE_MAKE | check-latexmk
 	@echo "Building $@ with $(ENGINE)..."
 	@latexmk $(LATEXMK_OPT) $<
 
@@ -96,7 +91,7 @@ midterm: midterm.pdf
 forms: $(addsuffix .pdf,$(FORMS))
 
 # Preview continuous mode
-pvc: $(THESIS).tex
+pvc: $(THESIS).tex | check-latexmk
 	@echo "Starting preview continuous mode..."
 	@latexmk $(LATEXMK_OPT_PVC) $(THESIS)
 
@@ -106,7 +101,7 @@ view: $(THESIS).pdf
 	$(OPEN) $<
 
 # Word count
-wordcount: $(THESIS).tex
+wordcount: $(THESIS).tex | check-texcount
 	@echo "Counting words in $(THESIS).tex..."
 	@if grep -v ^% $< | grep -q '\\documentclass\[[^\[]*english'; then \
 		texcount $< -inc -char-only | awk '/total/ {getline; print "英文字符数 (Latin characters)\t:",$$4}'; \
@@ -116,14 +111,14 @@ wordcount: $(THESIS).tex
 	@texcount $< -inc -chinese | awk '/total/ {getline; print "总字数 (Total characters)\t:",$$4}'
 
 # Clean auxiliary files
-clean:
+clean: | check-latexmk
 	@echo "Cleaning auxiliary files..."
 	-@latexmk -c -bibtex -silent $(THESIS).tex 2> /dev/null
 	-@for f in $(FORMS); do latexmk -c -bibtex -silent $$f.tex 2> /dev/null; done
 	@echo "Clean complete."
 
 # Clean all generated files
-cleanall:
+cleanall: | check-latexmk
 	@echo "Cleaning all generated files..."
 	-@latexmk -C -bibtex -silent $(THESIS).tex 2> /dev/null
 	-@for f in $(FORMS); do latexmk -C -bibtex -silent $$f.tex 2> /dev/null; done
@@ -157,3 +152,7 @@ help:
 
 # Force remake
 FORCE_MAKE:
+
+.PHONY: check-latexmk check-texcount
+check-latexmk check-texcount:
+	@command -v $(@:check-%=%) >/dev/null || { echo "Error: $(@:check-%=%) not found in PATH" >&2; exit 1; }

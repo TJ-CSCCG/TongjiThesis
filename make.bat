@@ -34,35 +34,22 @@ set LATEXMK_OPT=-quiet -file-line-error -halt-on-error -interaction=nonstopmode 
 REM LaTeXmk options for preview continuous mode
 set LATEXMK_OPT_PVC=%LATEXMK_OPT% -pvc
 
-REM Check for required programs
-where latexmk >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo Error: latexmk not found in PATH
-    exit /b 1
-)
-
-where texcount >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo Error: texcount not found in PATH
-    exit /b 1
-)
-
-REM Execute the requested target
-if "%TARGET%"=="all" goto :all
-if "%TARGET%"=="pvc" goto :pvc
+REM Only build and cleanup targets need latexmk.
+if "%TARGET%"=="help" goto :help
 if "%TARGET%"=="view" goto :view
 if "%TARGET%"=="wordcount" goto :wordcount
-if "%TARGET%"=="clean" goto :clean
-if "%TARGET%"=="cleanall" goto :cleanall
-if "%TARGET%"=="help" goto :help
-if "%TARGET%"=="thesis" goto :thesis
-if "%TARGET%"=="taskbook" goto :taskbook
-if "%TARGET%"=="proposal" goto :proposal
-if "%TARGET%"=="midterm" goto :midterm
-if "%TARGET%"=="forms" goto :forms
+for %%T in (all thesis pvc taskbook proposal midterm forms clean cleanall) do if "%TARGET%"=="%%T" goto :buildtarget
 
 echo Unknown target: %TARGET%
 goto :help
+
+:buildtarget
+    where latexmk >nul 2>&1
+    if errorlevel 1 (
+        echo Error: latexmk not found in PATH
+        exit /b 1
+    )
+    goto :%TARGET%
 
 :all
     call :thesis
@@ -129,6 +116,11 @@ goto :help
     goto :EOF
 
 :wordcount
+    where texcount >nul 2>&1
+    if errorlevel 1 (
+        echo Error: texcount not found in PATH
+        exit /b 1
+    )
     echo Counting words in %THESIS%.tex...
     set found=0
     setlocal enabledelayedexpansion
@@ -141,7 +133,7 @@ goto :help
     if %errorlevel% equ 0 (
         for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -char-only  2^>nul') do (
             if !found! equ 1 (
-                echo 英文字符数 Latin characters:!%%i!
+                echo 英文字符数 Latin characters: %%i
                 goto :total
             )
             echo %%i | findstr "total" > nul && set found=1
@@ -149,7 +141,7 @@ goto :help
     ) else (
         for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -ch-only  2^>nul') do (
             if !found! equ 1 (
-                echo 纯中文字数 Chinese characters:!%%i!
+                echo 纯中文字数 Chinese characters: %%i
                 goto :total
             )
             echo %%i | findstr "total" > nul && set found=1
@@ -161,7 +153,7 @@ goto :help
     set found=0
     for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -chinese 2^>nul') do (
         if !found! equ 1 (
-            echo 总字数 Total characters:!%%i!
+            echo 总字数 Total characters: %%i
             goto :EOF
         )
         echo %%i | findstr "total" > nul && set found=1
