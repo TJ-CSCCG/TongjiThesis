@@ -28,7 +28,7 @@ LaTeX template for Tongji University undergraduate thesis (design).
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Overleaf**       | Use the [Overleaf template](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn) directly — zero setup |
 | **Local**          | Install [TeX Live 2026+](https://tug.org/texlive/quickinstall.html), clone the repo, run `make`                                                         |
-| **GitHub Actions** | [Build and download the thesis or forms](#compiling-in-github-actions) in your fork |
+| **GitHub Actions** | [Build and download the thesis or forms](#compiling-in-github-actions) in your fork                                                                     |
 
 > [!TIP]
 > This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please check and upgrade your TeX Live to 2026 first.
@@ -73,6 +73,8 @@ Open the run for your commit. Under **Summary → Artifacts**, download and unzi
 | Task book | `document-form-taskbook` | `tongjithesis-taskbook.pdf` |
 | Proposal | `document-form-proposal` | `tongjithesis-proposal.pdf` |
 | Midterm report | `document-form-midterm` | `tongjithesis-midterm.pdf` |
+
+Keep both hyphens in `document-Linux--xelatex`: the first separates the OS name from the compiler flag, and the second belongs to `-xelatex`. The individual archives above are retained for 30 days. To download all document PDFs from the run together, or to retrieve them after those 30 days, choose `all-compiled-documents`, which is retained for 90 days.
 
 The `document-variant-*` artifacts exercise template options, and `document-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 

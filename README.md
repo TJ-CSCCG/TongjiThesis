@@ -28,7 +28,7 @@
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Overleaf**       | 通过 [Overleaf 模板链接](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn) 直接使用，零配置 |
 | **本地编译**       | 安装 [TeX Live 2026+](https://tug.org/texlive/quickinstall.html)，克隆仓库，运行 `make`                                                         |
-| **GitHub Actions** | 在自己的 fork 中[运行工作流并下载正文或表单 PDF](#在-github-actions-中编译) |
+| **GitHub Actions** | 在自己的 fork 中[运行工作流并下载正文或表单 PDF](#在-github-actions-中编译)                                                                     |
 
 > [!TIP]
 > 本模板的 CI 在 **TeX Live 2026** 上测试。本地编译遇到难以解释的错误时，请先检查 TeX Live 版本，并升级到 2026。
@@ -73,6 +73,8 @@
 | 毕业设计任务书 | `document-form-taskbook` | `tongjithesis-taskbook.pdf` |
 | 开题报告 | `document-form-proposal` | `tongjithesis-proposal.pdf` |
 | 中期报告 | `document-form-midterm` | `tongjithesis-midterm.pdf` |
+
+`document-Linux--xelatex` 中的两个连字符都要保留：第一个分隔系统名和编译参数，第二个来自 `-xelatex`。表中的单项压缩包保留 30 天；若要一次下载本次构建生成的所有文档 PDF，或在 30 天后再来下载，可选保留 90 天的 `all-compiled-documents`。
 
 `document-variant-*` 用于测试模板选项，`document-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
