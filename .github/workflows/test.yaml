@@ -398,10 +398,47 @@ jobs:
           path: ctan/tongjithesis/example/example.pdf
           retention-days: 30
 
+  # The build entry points themselves (Makefile; make.bat on Windows), which the
+  # jobs above only run on the success path with every tool installed. Runs
+  # scripts/test-make.sh twice: before TeX is installed (help works, each target
+  # names the tool it lacks), then with TeXcount alone (build targets still refuse,
+  # and wordcount prints what TeXcount itself counts, one-file documents included).
+  entry-points:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Keep the script's LF endings on Windows, where Git would convert them to CRLF.
+      - name: Check out without line-ending conversion
+        run: git config --global core.autocrlf false
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Test the entry points without TeX
+        run: bash scripts/test-make.sh no-tex
+
+      - name: Install TeXcount alone
+        uses: tex-live/setup-texlive-action@v4
+        with:
+          version: 2026
+          packages: texcount
+        env:
+          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
+
+      - name: Test the entry points with TeXcount alone
+        run: bash scripts/test-make.sh texcount
+
   # Summary job to check all builds completed successfully
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build, build-variants, build-forms, build-ctan]
+    needs: [build, build-variants, build-forms, build-ctan, entry-points]
     if: always()
     steps:
       - name: Check all builds succeeded
@@ -410,11 +447,13 @@ jobs:
           echo "Variant build status: ${{ needs.build-variants.result }}"
           echo "Forms build status: ${{ needs.build-forms.result }}"
           echo "CTAN package status: ${{ needs.build-ctan.result }}"
+          echo "Entry points status: ${{ needs.entry-points.result }}"
 
           if [[ "${{ needs.build.result }}" != "success" ||
                 "${{ needs.build-variants.result }}" != "success" ||
                 "${{ needs.build-forms.result }}" != "success" ||
-                "${{ needs.build-ctan.result }}" != "success" ]]; then
+                "${{ needs.build-ctan.result }}" != "success" ||
+                "${{ needs.entry-points.result }}" != "success" ]]; then
             echo "One or more builds failed"
             exit 1
           fi
