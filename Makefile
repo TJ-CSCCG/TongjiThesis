@@ -104,11 +104,11 @@ view: $(THESIS).pdf
 wordcount: $(THESIS).tex | check-texcount
 	@echo "Counting words in $(THESIS).tex..."
 	@if grep -v ^% $< | grep -q '\\documentclass\[[^\[]*english'; then \
-		texcount $< -inc -char-only | awk '/total/ {getline; print "英文字符数 (Latin characters)\t:",$$4}'; \
+		texcount $< -inc -total -char-only | awk '/^(Words|Letters) in text:/ {print "英文字符数 (Latin characters)\t:",$$4}'; \
 	else \
-		texcount $< -inc -ch-only   | awk '/total/ {getline; print "纯中文字数 (Chinese characters)\t:",$$4}'; \
+		texcount $< -inc -total -ch-only   | awk '/^(Words|Letters) in text:/ {print "纯中文字数 (Chinese characters)\t:",$$4}'; \
 	fi
-	@texcount $< -inc -chinese | awk '/total/ {getline; print "总字数 (Total characters)\t:",$$4}'
+	@texcount $< -inc -total -chinese | awk '/^(Words|Letters) in text:/ {print "总字数 (Total characters)\t:",$$4}'
 
 # Clean auxiliary files
 clean: | check-latexmk

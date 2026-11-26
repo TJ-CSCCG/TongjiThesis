@@ -122,46 +122,28 @@ goto :help
         exit /b 1
     )
     echo Counting words in %THESIS%.tex...
-    set found=0
-    setlocal enabledelayedexpansion
     if not exist %THESIS%.tex (
         echo Error: %THESIS%.tex does not exist.
         exit /b 1
     )
 
-    findstr "\\documentclass\[[^\[]*english" %THESIS%.tex > nul
-    if %errorlevel% equ 0 (
-        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -char-only  2^>nul') do (
-            if !found! equ 1 (
-                echo 英文字符数 Latin characters: %%i
-                goto :total
-            )
-            echo %%i | findstr "total" > nul && set found=1
-        )
+    findstr "\\documentclass\[[^\[]*english" %THESIS%.tex >nul
+    if errorlevel 1 (
+        call :count -ch-only "纯中文字数 Chinese characters"
     ) else (
-        for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -ch-only  2^>nul') do (
-            if !found! equ 1 (
-                echo 纯中文字数 Chinese characters: %%i
-                goto :total
-            )
-            echo %%i | findstr "total" > nul && set found=1
-        )
+        call :count -char-only "英文字符数 Latin characters"
     )
-    goto :total
+    if errorlevel 1 exit /b 1
+    call :count -chinese "总字数 Total characters"
+    exit /b %errorlevel%
 
-:total
-    set found=0
-    for /f "delims=" %%i in ('texcount %THESIS%.tex -inc -chinese 2^>nul') do (
-        if !found! equ 1 (
-            echo 总字数 Total characters: %%i
-            goto :EOF
-        )
-        echo %%i | findstr "total" > nul && set found=1
+:count
+    for /f "tokens=4" %%n in ('texcount %THESIS%.tex -inc -total %1 2^>nul ^| findstr /b /c:"Words in text:" /c:"Letters in text:"') do (
+        echo %~2: %%n
+        exit /b 0
     )
-    if !found! neq 1 (
-        echo Warning: Could not determine word count.
-    )
-    goto :EOF
+    echo Error: Could not determine word count.
+    exit /b 1
 
 :clean
     echo Cleaning auxiliary files...
