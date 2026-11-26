@@ -65,18 +65,18 @@ Open **Actions** in your fork and enable workflows if prompted. You can then com
 - Push a change to a thesis source file, such as `chapters/metadata.tex`, on `master` or `dev` to start the `test` workflow automatically.
 - If you keep your thesis on another branch, open **Actions → test → Run workflow**, select your thesis branch, then click **Run workflow**. This also works when you have only changed ignored files such as the README.
 
-Open the run for your commit. Under **Summary → Artifacts**, download and unzip the archive for the document you need. The thesis and the three forms are built separately:
+Open the run for your commit. Under **Summary → Artifacts**, each archive is named after the PDF inside it. The thesis and the three forms are built separately:
 
-| Document | Artifact to download | PDF in the archive |
-| --- | --- | --- |
-| Thesis (`main.tex`, XeLaTeX example) | `document-Linux--xelatex` | `tongjithesis-linux-xelatex.pdf` |
-| Task book | `document-form-taskbook` | `tongjithesis-taskbook.pdf` |
-| Proposal | `document-form-proposal` | `tongjithesis-proposal.pdf` |
-| Midterm report | `document-form-midterm` | `tongjithesis-midterm.pdf` |
+| Document | Artifact |
+| --- | --- |
+| Thesis (`main.tex`, XeLaTeX on Linux) | `tongjithesis-linux-xelatex` |
+| Task book | `tongjithesis-taskbook` |
+| Proposal | `tongjithesis-proposal` |
+| Midterm report | `tongjithesis-midterm` |
 
-Keep both hyphens in `document-Linux--xelatex`: the first separates the OS name from the compiler flag, and the second belongs to `-xelatex`. The individual archives above are retained for 30 days. To download all document PDFs from the run together, or to retrieve them after those 30 days, choose `all-compiled-documents`, which is retained for 90 days.
+These archives are kept for 30 days. `all-compiled-documents` holds every PDF of the run and is kept for 90 days.
 
-The `document-variant-*` artifacts exercise template options, and `document-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
+The `tongjithesis-linux-xelatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 
 ### Local Use
 

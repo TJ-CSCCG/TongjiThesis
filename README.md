@@ -65,18 +65,18 @@
 - 在 `master` 或 `dev` 分支推送论文源文件（例如 `chapters/metadata.tex`）的修改，会自动运行 `test` 工作流。
 - 如果论文写在其他分支，打开 **Actions → test → Run workflow**，选择存放论文的分支，再点 **Run workflow**。仅修改 README 等被忽略的文件时也可以手动运行。
 
-打开与本次提交对应的运行记录，在 **Summary → Artifacts** 下载压缩包并解压。正文和三份表单分别编译：
+打开与本次提交对应的运行记录，在 **Summary → Artifacts** 中，每个压缩包都以其中的 PDF 命名。正文和三份表单分别编译：
 
-| 需要的文件 | 下载哪个 Artifact | 压缩包中的 PDF |
-| --- | --- | --- |
-| 论文正文（`main.tex`，以 XeLaTeX 为例） | `document-Linux--xelatex` | `tongjithesis-linux-xelatex.pdf` |
-| 毕业设计任务书 | `document-form-taskbook` | `tongjithesis-taskbook.pdf` |
-| 开题报告 | `document-form-proposal` | `tongjithesis-proposal.pdf` |
-| 中期报告 | `document-form-midterm` | `tongjithesis-midterm.pdf` |
+| 需要的文件 | Artifact |
+| --- | --- |
+| 论文正文（`main.tex`，Linux 上的 XeLaTeX） | `tongjithesis-linux-xelatex` |
+| 毕业设计任务书 | `tongjithesis-taskbook` |
+| 开题报告 | `tongjithesis-proposal` |
+| 中期报告 | `tongjithesis-midterm` |
 
-`document-Linux--xelatex` 中的两个连字符都要保留：第一个分隔系统名和编译参数，第二个来自 `-xelatex`。表中的单项压缩包保留 30 天；若要一次下载本次构建生成的所有文档 PDF，或在 30 天后再来下载，可选保留 90 天的 `all-compiled-documents`。
+以上压缩包保留 30 天；`all-compiled-documents` 包含本次运行的全部 PDF，保留 90 天。
 
-`document-variant-*` 用于测试模板选项，`document-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
+带后缀的 `tongjithesis-linux-xelatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
 ### 本地使用
 

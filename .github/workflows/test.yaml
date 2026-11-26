@@ -171,20 +171,25 @@ jobs:
         if: failure() && runner.os == 'Windows'
         run: Get-Content main.log
 
+      # Each artifact is named after the PDF it holds, so a writer picks the file
+      # they want straight from the run's artifact list.
       - name: Rename PDF
+        id: rename
         if: success()
         shell: bash
         run: |
           OS=$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')
           COMPILER=$(echo "${{ matrix.compiler }}" | sed 's/^-//')
-          mv main.pdf "tongjithesis-${OS}-${COMPILER}.pdf"
+          NAME="tongjithesis-${OS}-${COMPILER}"
+          mv main.pdf "${NAME}.pdf"
+          echo "name=${NAME}" >> "$GITHUB_OUTPUT"
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: document-${{ runner.os }}-${{ matrix.compiler }}
-          path: tongjithesis-*.pdf
+          name: ${{ steps.rename.outputs.name }}
+          path: ${{ steps.rename.outputs.name }}.pdf
           retention-days: 30
 
   # Option variants: test minted=true, bibtex, and other configurations (Linux-only, xelatex-only)
@@ -309,7 +314,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: document-variant-${{ matrix.variant }}
+          name: tongjithesis-linux-xelatex-${{ matrix.variant }}
           path: tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
           retention-days: 30
 
@@ -352,7 +357,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: document-form-${{ matrix.doc }}
+          name: tongjithesis-${{ matrix.doc }}
           path: tongjithesis-${{ matrix.doc }}.pdf
           retention-days: 30
 
@@ -394,7 +399,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: document-ctan-example
+          name: tongjithesis-ctan-example
           path: ctan/tongjithesis/example/example.pdf
           retention-days: 30
 
@@ -429,7 +434,7 @@ jobs:
       - name: Download all PDF artifacts
         uses: actions/download-artifact@v8
         with:
-          pattern: document-*
+          pattern: tongjithesis-*
           merge-multiple: true
 
       - name: List downloaded files
