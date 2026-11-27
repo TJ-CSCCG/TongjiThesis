@@ -197,7 +197,6 @@ jobs:
             --form-string "home=https://github.com/TJ-CSCCG/TongjiThesis"
             --form-string "repository=https://github.com/TJ-CSCCG/TongjiThesis"
             --form-string "bugtracker=https://github.com/TJ-CSCCG/TongjiThesis/issues"
-            --form-string "topic=dissertation"
             --form-string "topic=class"
             --form-string "topic=chinese"
             -F "file=@${zip}"
