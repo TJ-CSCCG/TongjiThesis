@@ -26,7 +26,8 @@
         { "type": "generic", "path": "style/font/tongji-cjk-font-mac.def" },
         { "type": "generic", "path": "style/font/tongji-cjk-font-windows.def" },
         { "type": "generic", "path": "style/font/tongji-cjk-font-adobe.def" },
-        { "type": "generic", "path": "style/font/tongji-cjk-font-founder.def" }
+        { "type": "generic", "path": "style/font/tongji-cjk-font-founder.def" },
+        { "type": "generic", "path": "style/font/tongji-cjk-font-texlive.def" }
       ]
     }
   }

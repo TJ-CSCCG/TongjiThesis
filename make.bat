@@ -14,10 +14,10 @@ REM Parse command line arguments
 set TARGET=%1
 if "%TARGET%"=="" set TARGET=all
 
-REM Engine handling
+REM Engine handling (the fonts target takes a font set as its second argument instead)
 set ENGINES=-xelatex -lualatex
 set ENGINE=-xelatex
-if not "%~2"=="" (
+if not "%TARGET%"=="fonts" if not "%~2"=="" (
     if "%~2"=="-xelatex" (
         set ENGINE=-xelatex
     ) else if "%~2"=="-lualatex" (
@@ -38,6 +38,7 @@ REM Only build and cleanup targets need latexmk.
 if "%TARGET%"=="help" goto :help
 if "%TARGET%"=="view" goto :view
 if "%TARGET%"=="wordcount" goto :wordcount
+if "%TARGET%"=="fonts" goto :fonts
 for %%T in (all thesis pvc taskbook proposal midterm forms clean cleanall) do if "%TARGET%"=="%%T" goto :buildtarget
 
 echo Unknown target: %TARGET%
@@ -65,22 +66,22 @@ goto :help
 :thesis
     echo Building %THESIS%.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% %THESIS%.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :taskbook
     echo Building taskbook.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% taskbook.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :proposal
     echo Building proposal.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% proposal.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :midterm
     echo Building midterm.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% midterm.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :forms
     call :taskbook
@@ -104,7 +105,7 @@ goto :help
 :pvc
     echo Starting preview continuous mode...
     latexmk %LATEXMK_OPT_PVC% %THESIS%
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :view
     echo Opening %THESIS%.pdf...
@@ -144,6 +145,25 @@ goto :help
     )
     echo Error: Could not determine word count.
     exit /b 1
+
+:fonts
+    REM Download a font set into fonts\, where the class loads it (see the fontdir option).
+    set FONTSET=%~2
+    if "%FONTSET%"=="" set FONTSET=windows
+    set FONTSET_OK=0
+    for %%S in (windows founder adobe fandol) do if "%FONTSET%"=="%%S" set FONTSET_OK=1
+    if "%FONTSET_OK%"=="0" (
+        echo Error: unknown font set %FONTSET% ^(expected windows, founder, adobe or fandol^)
+        exit /b 1
+    )
+    echo Downloading the %FONTSET% font set into fonts\ ...
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $zip = Join-Path $env:TEMP 'tongjithesis-fonts.zip'; try { Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest/download/%FONTSET%.zip' -OutFile $zip; Expand-Archive -Force -Path $zip -DestinationPath 'fonts' } finally { Remove-Item -ErrorAction SilentlyContinue $zip }"
+    if errorlevel 1 (
+        echo Error: could not download the %FONTSET% font set
+        exit /b 1
+    )
+    dir /b fonts
+    goto :EOF
 
 :clean
     echo Cleaning auxiliary files...
@@ -187,6 +207,7 @@ goto :help
     echo   proposal  - Build proposal.pdf (毕业设计（论文）开题报告)
     echo   midterm   - Build midterm.pdf (毕业设计（论文）中期报告)
     echo   forms     - Build taskbook.pdf, proposal.pdf, and midterm.pdf
+    echo   fonts     - Download the Word template's fonts into fonts\ (second parameter: windows, founder, adobe or fandol)
     echo   help      - Show this help message
     echo   thesis    - Legacy alias for 'all'
     echo.

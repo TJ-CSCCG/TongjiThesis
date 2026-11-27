@@ -5,24 +5,17 @@
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
 \ProvidesFile{tongji-cjk-font-windows.def}[v1.5.1 Windows CJK fonts definition (TongjiThesis)] %x-release-please-version
-\setCJKmainfont{SimSun}
-  [ BoldFont = SimHei, ItalicFont = KaiTi ]
-\setCJKsansfont{SimHei}  [ AutoFakeBold = 3 ]
-\setCJKmonofont{FangSong}
-
-\setCJKfamilyfont{zhsong}{SimSun}   [ BoldFont = SimHei, ItalicFont = KaiTi ]
-\setCJKfamilyfont{zhhei}{SimHei}    [ AutoFakeBold = 3 ]
-\setCJKfamilyfont{zhkai}{KaiTi}
-\setCJKfamilyfont{zhfs}{FangSong}
-\setCJKfamilyfont{zhli}{LiSu}
-\setCJKfamilyfont{zhyou}{YouYuan}
-\setCJKfamilyfont{zhyahei}{Microsoft~YaHei} [ BoldFont = *~Bold ]
+% 中易字体（Windows 自带），即 Word 模板所用字体。文件在 fontdir 中时从那里加载。
+\tj@cjkfonts
+  {SimSun}{simsun.ttc}
+  {SimHei}{simhei.ttf}
+  {KaiTi}{simkai.ttf}
+  {FangSong}{simfang.ttf}
+\tj@cjkfamily{zhli}{LiSu}{simli.ttf}
+\tj@cjkfamily{zhyou}{YouYuan}{simyou.ttf}
+\tj@cjkfamily{zhyahei}{Microsoft YaHei}{msyh.ttc}[BoldFont=* Bold][BoldFont=msyhbd.ttc]
 
 % 以下定义体内不要加空格：本文件按普通 catcode 读入，空格会排进正文（标题、目录会因此缩进）。
-\NewDocumentCommand{\songti}   {} {\CJKfamily{zhsong}}
-\NewDocumentCommand{\heiti}    {} {\CJKfamily{zhhei}}
-\NewDocumentCommand{\kaishu}   {} {\CJKfamily{zhkai}}
-\NewDocumentCommand{\fangsong} {} {\CJKfamily{zhfs}}
 \NewDocumentCommand{\lishu}    {} {\CJKfamily{zhli}}
 \NewDocumentCommand{\youyuan}  {} {\CJKfamily{zhyou}}
 \NewDocumentCommand{\yahei}    {} {\CJKfamily{zhyahei}}

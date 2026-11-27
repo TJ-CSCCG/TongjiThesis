@@ -71,7 +71,7 @@ endif
 # Targets
 ###################
 
-.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm check-latexmk check-texcount
+.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm fonts check-latexmk check-texcount
 
 # Legacy alias
 thesis: all
@@ -114,6 +114,11 @@ wordcount: $(THESIS).tex | check-texcount
 	fi
 	@$(call count-text,-chinese,总字数 (Total characters))
 
+# Download a font set into fonts/, where the class loads it (FONTSET=windows|founder|adobe|fandol)
+FONTSET ?= windows
+fonts:
+	@bash scripts/fetch-fonts.sh $(FONTSET) fonts
+
 # Clean auxiliary files
 clean: | check-latexmk
 	@echo "Cleaning auxiliary files..."
@@ -141,6 +146,7 @@ help:
 	@echo "  proposal  - Build proposal.pdf (毕业设计（论文）开题报告)"
 	@echo "  midterm   - Build midterm.pdf (毕业设计（论文）中期报告)"
 	@echo "  forms     - Build taskbook.pdf, proposal.pdf, and midterm.pdf"
+	@echo "  fonts     - Download the Word template's fonts into fonts/ (FONTSET=windows|founder|adobe|fandol)"
 	@echo "  thesis    - Legacy alias for 'all'"
 	@echo "  help      - Show this help message"
 	@echo ""

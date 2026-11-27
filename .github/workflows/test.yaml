@@ -54,6 +54,7 @@ env:
     algorithmicx
     algorithms
     alphalph
+    arphic-ttf  # AR PL KaitiM GB, the texlive fontset's Kai
     biber
     biblatex
     biblatex-gb7714-2015
@@ -93,6 +94,7 @@ env:
     latexmk
     lineno
     listings
+    lxgw-fonts  # the texlive fontset's Song, Hei and Fang
     minted
     multirow
     mwe
@@ -190,7 +192,8 @@ jobs:
           path: ${{ steps.rename.outputs.name }}.pdf
           retention-days: 30
 
-  # Option variants: test minted=true, bibtex, and other configurations (Linux-only, xelatex-only)
+  # Option variants: test minted=true, bibtex, and other configurations (Linux-only; XeLaTeX,
+  # plus LuaLaTeX for the two font legs)
   build-variants:
     strategy:
       fail-fast: false
@@ -210,7 +213,22 @@ jobs:
             pygments: false
           - variant: times-true
             pygments: false
+          # The two font paths also run under LuaLaTeX, which resolves font files
+          # (Path=, .ttc collections, TeX Live file names) through luaotfload.
+          - variant: fontset-texlive
+            pygments: false
+          - variant: fontset-texlive
+            pygments: false
+            engine: -lualatex
+          - variant: fonts-windows
+            pygments: false
+          - variant: fonts-windows
+            pygments: false
+            engine: -lualatex
     runs-on: ubuntu-latest
+    env:
+      ENGINE: ${{ matrix.engine || '-xelatex' }}
+      ENGINE_NAME: ${{ matrix.engine == '-lualatex' && 'lualatex' || 'xelatex' }}
     timeout-minutes: 45
     steps:
       - name: Checkout
@@ -268,6 +286,16 @@ jobs:
         run: |
           sed -i 's/times=false/times=true/' main.tex
 
+      - name: Configure fontset=texlive variant
+        if: matrix.variant == 'fontset-texlive'
+        run: |
+          sed -i 's/fontset=auto/fontset=texlive/' main.tex
+
+      # fontset=auto must choose the windows set from the files `make fonts` puts in fonts/.
+      - name: Configure fonts-windows variant
+        if: matrix.variant == 'fonts-windows'
+        run: make fonts
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -292,10 +320,21 @@ jobs:
           if [ "${{ matrix.variant }}" = "times-true" ]; then
             grep -q 'times=true' main.tex || { echo "ERROR: times=true not set"; exit 1; }
           fi
+          if [ "${{ matrix.variant }}" = "fontset-texlive" ]; then
+            grep -q 'fontset=texlive' main.tex || { echo "ERROR: fontset=texlive not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "fonts-windows" ]; then
+            test -s fonts/simsun.ttc || { echo "ERROR: make fonts did not download fonts/simsun.ttc"; exit 1; }
+          fi
 
       - name: Compile LaTeX document
         run: |
-          make ENGINE=-xelatex all
+          make ENGINE="$ENGINE" all
+
+      - name: Check the chosen fontset
+        if: matrix.variant == 'fonts-windows'
+        run: |
+          grep -q 'fontset=auto chose windows' main.log || { echo "ERROR: fontset=auto did not choose windows from fonts/"; exit 1; }
 
       - name: Show log on failure
         if: failure()
@@ -303,14 +342,14 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv main.pdf tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
+        run: mv main.pdf tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: tongjithesis-linux-xelatex-${{ matrix.variant }}
-          path: tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
+          name: tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}
+          path: tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}.pdf
           retention-days: 30
 
   # Standalone administrative documents: task book, opening report, mid-term

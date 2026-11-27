@@ -76,7 +76,7 @@
 
 以上压缩包保留 30 天；`all-compiled-documents` 包含本次运行的全部 PDF，保留 90 天。
 
-带后缀的 `tongjithesis-linux-xelatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
+带后缀的 `tongjithesis-linux-xelatex-*` 与 `tongjithesis-linux-lualatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
 ### 本地使用
 
@@ -143,7 +143,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
   algo=algpseudocode,   % algpseudocode（默认）：algorithm+algorithmicx；algorithm2e：独立 algorithm2e 宏包
   minted=false,         % true：minted 代码高亮（需 Python+Pygments）；false：listings（默认）
   biblatex=true,        % true：biblatex+biber（默认）；false：bibtex+gbt7714
-  fontset=fandol,       % 字体集，传递给 ctex，默认为 fandol
+  fontset=auto,         % 字体集：auto（默认）选择已安装的、最接近 Word 模板字体的字体集，见下方“字体选择”
   times=false,          % true：使用系统 Times New Roman；false：使用 newtx（默认）
   fullwidthstop=circle, % 句号样式：circle 保留“。”（默认）/ dot 替换为“．”
 ]{tongjithesis}
@@ -168,12 +168,24 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 
 ### 字体选择
 
-- **Windows 用户**：可直接使用 `fontset=windows`（系统自带 SimSun / SimHei / KaiTi / FangSong，覆盖更广）。
-- **macOS 用户**：可直接使用 `fontset=mac`（系统自带 Songti SC / Heiti SC / STFangsong / Kaiti SC，零配置）。
-- **跨平台用户**：推荐默认的 `fontset=fandol`（随 TeX Live 安装，零配置）。如需更广的字符覆盖，可从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 `adobe`、`founder`、`windows` 等字体集对应的字体并安装到系统，然后切换 `fontset`。
+默认的 `fontset=auto` 依次选择已安装的、字形最接近 Word 模板所用中易字体（宋体 SimSun、黑体 SimHei、楷体 KaiTi、仿宋 FangSong）的字体集，并在编译日志中写明所选的字体集：
+
+1. `windows`：中易字体本身（Windows 自带，或放在项目的 `fonts/` 文件夹中）；
+2. `founder`：方正书宋、黑体、楷体、仿宋（可从方正官网免费下载，或放在 `fonts/` 中）；
+3. `fandol`：Fandol 字体（旧版 TeX Live 与 Overleaf 自带；作者已撤回，TeX Live 将移除）；
+4. `texlive`：TeX Live 自带的免费字体（LXGW Neo ZhiSong、LXGW Neo XiHei、AR PL KaitiM GB、LXGW Zhuque Fangsong）。
+
+没有选中 `windows` 时，编译会给出警告。要使用与 Word 模板相同的字体：
+
+- **本地编译**：运行 `make fonts`（Windows：`.\make.bat fonts`），把中易字体下载到项目的 `fonts/` 文件夹。`make fonts FONTSET=founder`（Windows：`.\make.bat fonts founder`）下载方正字体。字体来自 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 的发行版。
+- **Overleaf**：从 [cjk-fonts-for-ctex 的最新发行版](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest) 下载 `windows.zip`，解压后把其中的字体文件上传到项目中名为 `fonts` 的文件夹。
+
+也可以直接指定字体集：`windows`、`founder`、`adobe`、`mac`（macOS 自带的宋体-简等）、`fandol`、`texlive`。字体文件所在的文件夹由 `fontdir` 选项指定（默认 `fonts/`）：`windows`、`founder`、`adobe`、`fandol` 的文件在其中时从这里加载，否则按字体名从系统加载；`mac` 与 `texlive` 总是使用系统或 TeX Live 中的字体。`fontset=auto` 只在一个字体集的四种字体都存在时才选择它。
+
+中文字体没有斜体，模板以楷体代替。宋体与黑体没有真粗体的字体集（`windows`、`founder`、`adobe`、`texlive`）以描边模拟加粗，描边宽度与 Word 相同（字号的 1/35）。
 
 > [!NOTE]
-> 安装新字体后请运行 `fc-cache -fv` 刷新字体缓存。
+> 字体版权归其所有者，请按其许可使用。把字体安装到 Linux 系统后，请运行 `fc-cache -fv` 刷新字体缓存。
 
 ### 代码高亮与算法排版
 

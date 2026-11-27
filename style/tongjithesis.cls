@@ -32,8 +32,15 @@
   setkeys=\kvsetkeys
 }
 
-% Define fontset option (default is fandol)
-\DeclareStringOption[fandol]{fontset}
+% Define fontset option: auto (default) chooses the installed set closest in
+% shape to the Zhongyi fonts of the official Word template: windows, founder,
+% fandol, then texlive (free fonts shipped with TeX Live). Or name a set:
+% windows, founder, adobe, mac, fandol, texlive.
+\DeclareStringOption[auto]{fontset}
+% Define fontdir option: a directory, ending in /, holding font files (default
+% fonts/). A set whose files are there is loaded from it (Overleaf uploads,
+% `make fonts`); otherwise its fonts are looked up by name on the system.
+\DeclareStringOption[fonts/]{fontdir}
 % Define fullwidthstop option: circle（默认，保留 。）或 dot（替换为 ．）
 \DeclareStringOption[circle]{fullwidthstop}
 % Define times option (default is false)
@@ -58,6 +65,14 @@
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
+% fontdir 须以 / 结尾，便于直接拼接文件名；省略时补上。
+\ExplSyntaxOn
+\tl_if_empty:NF \tongjithesis@fontdir
+  {
+    \str_if_eq:eeF { \str_item:Nn \tongjithesis@fontdir { -1 } } { / }
+      { \tl_put_right:Nn \tongjithesis@fontdir { / } }
+  }
+\ExplSyntaxOff
 
 % Validate type option and set boolean flags
 \RequirePackage{etoolbox}
@@ -109,7 +124,87 @@
 % 加载 ctexbook 类
 \LoadClass[UTF8,a4paper,zihao=-4,fontset=none]{ctexbook}  % zihao=-4 must match \tjfontbody (小四号)
 
-% Load our CJK fontset definition (fontspec is now available via ctexbook)
+% ------------------------------------------
+% CJK fonts (fontspec is now available via ctexbook)
+% ------------------------------------------
+% 无真粗体的中文字体以描边模拟加粗。描边宽度取 Word 加粗宋体的值，即字号的 1/35；
+% XeTeX 与 luaotfload 都把 AutoFakeBold 的值当作字号的百分数，故取 2.86。
+\def\tj@fakebold{2.86}
+% \tj@cjkload{<命令>}{<字体>}{<选项>}：先展开字体名与选项中的宏（Path=、描边宽度等），
+% 再调用命令，使 fontspec 解析键值时看到的是实际的键与值。
+\newcommand\tj@cjkload[3]{\edef\tj@next{\unexpanded{#1}{#2}[#3]}\tj@next}
+% 字体集的文件在 fontdir 中时按文件加载，否则按字体名从系统加载。
+\newif\iftj@cjkfiles
+% \tj@cjkfonts{宋体名}{宋体文件}{黑体名}{黑体文件}{楷体名}{楷体文件}{仿宋名}{仿宋文件}
+% 设置四种字体及 \songti、\heiti、\kaishu、\fangsong。宋体与黑体模拟加粗，楷体兼作宋体的斜体。
+\NewDocumentCommand\tj@cjkfonts{mmmmmmmm}{%
+  \IfFileExists{\tongjithesis@fontdir#2}{\tj@cjkfilestrue}{\tj@cjkfilesfalse}%
+  \iftj@cjkfiles
+    \edef\tj@cjkpath{Path=\tongjithesis@fontdir,}%
+    \def\tj@song{#2}\def\tj@hei{#4}\def\tj@kai{#6}\def\tj@fang{#8}%
+  \else
+    \def\tj@cjkpath{}%
+    \def\tj@song{#1}\def\tj@hei{#3}\def\tj@kai{#5}\def\tj@fang{#7}%
+  \fi
+  \tj@cjkload\setCJKmainfont{\tj@song}{\tj@cjkpath AutoFakeBold=\tj@fakebold,ItalicFont=\tj@kai}%
+  \tj@cjkload\setCJKsansfont{\tj@hei}{\tj@cjkpath AutoFakeBold=\tj@fakebold}%
+  \tj@cjkload\setCJKmonofont{\tj@fang}{\tj@cjkpath}%
+  \tj@cjkload{\setCJKfamilyfont{zhsong}}{\tj@song}{\tj@cjkpath AutoFakeBold=\tj@fakebold,ItalicFont=\tj@kai}%
+  \tj@cjkload{\setCJKfamilyfont{zhhei}}{\tj@hei}{\tj@cjkpath AutoFakeBold=\tj@fakebold}%
+  \tj@cjkload{\setCJKfamilyfont{zhkai}}{\tj@kai}{\tj@cjkpath}%
+  \tj@cjkload{\setCJKfamilyfont{zhfs}}{\tj@fang}{\tj@cjkpath}%
+  \NewDocumentCommand{\songti}{}{\CJKfamily{zhsong}}%
+  \NewDocumentCommand{\heiti}{}{\CJKfamily{zhhei}}%
+  \NewDocumentCommand{\kaishu}{}{\CJKfamily{zhkai}}%
+  \NewDocumentCommand{\fangsong}{}{\CJKfamily{zhfs}}%
+}
+% \tj@cjkfamily{<族>}{<字体名>}{<文件>}[<按名选项>][<按文件选项>]：附加字体族，
+% 与同一字体集的 \tj@cjkfonts 采用同一种加载方式。字体不存在时跳过（如英文版 Windows
+% 未安装补充字体时的隶书、幼圆），使用该族的命令才会报错。
+\NewDocumentCommand\tj@cjkfamily{mmmO{}O{}}{%
+  \iftj@cjkfiles
+    \IfFileExists{\tongjithesis@fontdir#3}
+      {\tj@cjkload{\setCJKfamilyfont{#1}}{#3}{\tj@cjkpath #5}}
+      {\ClassInfo{tongjithesis}{#3 not found in \tongjithesis@fontdir; skipping CJK family #1}}%
+  \else
+    \IfFontExistsTF{#2}
+      {\tj@cjkload{\setCJKfamilyfont{#1}}{#2}{#4}}
+      {\ClassInfo{tongjithesis}{Font #2 not found; skipping CJK family #1}}%
+  \fi
+}
+% fontset=auto：依次选择已安装的、形状最接近 Word 模板中易字体的字体集。
+% 一个字体集的四种字体须全部存在（全在 fontdir 中，或全部可按字体名找到）才会被选中。
+% \tj@iffontset{<字体集>}{<文件列表>}{<字体名列表>}{<否则>}
+\newif\iftj@allfound
+\newcommand\tj@checkfile[1]{\IfFileExists{\tongjithesis@fontdir#1}{}{\tj@allfoundfalse}}
+\newcommand\tj@checkfont[1]{\IfFontExistsTF{#1}{}{\tj@allfoundfalse}}
+\newcommand\tj@iffontset[4]{%
+  \tj@allfoundtrue\forcsvlist\tj@checkfile{#2}%
+  \iftj@allfound\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+    {\def\tongjithesis@fontset{#1}}%
+    {\tj@allfoundtrue\forcsvlist\tj@checkfont{#3}%
+     \iftj@allfound\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+       {\def\tongjithesis@fontset{#1}}{#4}}%
+}
+\ifdefstring{\tongjithesis@fontset}{auto}{%
+  \tj@iffontset{windows}
+    {simsun.ttc,simhei.ttf,simkai.ttf,simfang.ttf}
+    {SimSun,SimHei,KaiTi,FangSong}{%
+  \tj@iffontset{founder}
+    {FZSSK.TTF,FZHTK.TTF,FZKTK.TTF,FZFSK.TTF}
+    {FZShuSong-Z01,FZHei-B01,FZKai-Z03,FZFangSong-Z02}{%
+  \tj@iffontset{fandol}
+    {FandolSong-Regular.otf,FandolHei-Regular.otf,FandolKai-Regular.otf,FandolFang-Regular.otf}
+    {FandolSong-Regular.otf,FandolHei-Regular.otf,FandolKai-Regular.otf,FandolFang-Regular.otf}{%
+  \def\tongjithesis@fontset{texlive}}}}%
+  \ifdefstring{\tongjithesis@fontset}{windows}
+    {\ClassInfo{tongjithesis}{fontset=auto chose windows}}
+    {\ClassWarningNoLine{tongjithesis}{fontset=auto chose \tongjithesis@fontset:
+      the Zhongyi fonts of the official Word template\MessageBreak
+      (SimSun, SimHei, KaiTi, FangSong) were not found.\MessageBreak
+      To use them, run `make fonts' locally, or upload\MessageBreak
+      the font files to \tongjithesis@fontdir\space on Overleaf}}%
+}{}
 \IfFileExists{tongji-cjk-font-\tongjithesis@fontset.def}
   {\input{tongji-cjk-font-\tongjithesis@fontset.def}}
   {\ClassError{tongjithesis}{Unknown fontset: \tongjithesis@fontset}{}}
@@ -1495,7 +1590,7 @@
 % 方框尺寸：复选框的 □ 应与正文汉字等宽等高，而 amssymb 的 $\square$
 % 明显小于周围汉字，故按当前字号缩放到 \tj@checkboxsize（相对 em，随字号自适应）
 % 并整体下沉 0.1em，使方框与汉字视觉等高、基线一致。不直接使用 U+25A1 全角字符，
-% 是因为该字形在 fandol/mac/windows/adobe/founder 各 fontset 下的覆盖与宽度并不一致。
+% 是因为该字形在 windows/founder/adobe/mac/fandol/texlive 各 fontset 下的覆盖与宽度并不一致。
 % 勾号与方框分别装入等宽盒子后用 \llap 叠印，使勾号居中于方框（而非左对齐）；
 % 下沉量作用于整组而非仅方框，否则方框下沉而勾号不动，勾号尖端会越出方框上边框。
 % 勾号另按 \tj@checkmarksize（小于方框边长）限高，确保落在方框内部。

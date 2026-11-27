@@ -12,18 +12,14 @@
     ItalicFont     = Kaiti SC Regular,
     BoldItalicFont = Kaiti SC Bold
   ]
-\setCJKsansfont{Heiti SC}
-  [
-    UprightFont  = * Medium,
-    AutoFakeBold = 3
-  ]
+% 黑体-简没有粗体，以描边模拟加粗（\tj@cjkload 先展开描边宽度）。
+\tj@cjkload\setCJKsansfont{Heiti SC}{UprightFont=* Medium,AutoFakeBold=\tj@fakebold}
 \setCJKmonofont{STFangsong}
 
 \setCJKfamilyfont{zhsong}{Songti SC}
   [ UprightFont = * Light, BoldFont = * Bold,
     ItalicFont = Kaiti SC Regular, BoldItalicFont = Kaiti SC Bold ]
-\setCJKfamilyfont{zhhei}{Heiti SC}
-  [ UprightFont = * Medium, AutoFakeBold = 3 ]
+\tj@cjkload{\setCJKfamilyfont{zhhei}}{Heiti SC}{UprightFont=* Medium,AutoFakeBold=\tj@fakebold}
 \setCJKfamilyfont{zhkai}{Kaiti SC}
   [ UprightFont = * Regular, BoldFont = * Bold ]
 \setCJKfamilyfont{zhfs}{STFangsong}

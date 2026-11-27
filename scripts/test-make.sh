@@ -3,8 +3,8 @@
 # The compile jobs in test.yaml only take the success path with every tool
 # installed; this script checks what a writer meets before that:
 #
-#   no-tex    No TeX on PATH. `help` works, and each target names the one
-#             tool it is missing.
+#   no-tex    No TeX on PATH. `help` works, each target names the one
+#             tool it is missing, and `fonts` downloads the windows font set.
 #   texcount  TeXcount on PATH, latexmk still absent. Build targets still
 #             refuse, and `wordcount` prints the counts TeXcount itself gives,
 #             for the multi-file thesis and for one-file documents.
@@ -104,6 +104,16 @@ if [[ $stage == no-tex ]]; then
   done
   run_make "$root" wordcount
   expect_error "wordcount names the missing texcount" "texcount not found in PATH"
+
+  # `fonts` needs no TeX: it downloads the windows set from the font repo's latest release.
+  dir=$(fixture fonts '\documentclass{article}')
+  mkdir -p "$dir/scripts" && cp "$root/scripts/fetch-fonts.sh" "$dir/scripts/"
+  run_make "$dir" fonts
+  if ((status == 0)) && [[ -s "$dir/fonts/simsun.ttc" && -s "$dir/fonts/simhei.ttf" ]]; then
+    pass "fonts downloads the windows set into fonts/"
+  else
+    fail "fonts downloads the windows set into fonts/ (exit $status)"
+  fi
 
   # Omit just one summary so a successful first count also exercises the total.
   mkdir "$work/bin"

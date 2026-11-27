@@ -76,7 +76,7 @@ Open the run for your commit. Under **Summary → Artifacts**, each archive is n
 
 These archives are kept for 30 days. `all-compiled-documents` holds every PDF of the run and is kept for 90 days.
 
-The `tongjithesis-linux-xelatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
+The `tongjithesis-linux-xelatex-*` and `tongjithesis-linux-lualatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 
 ### Local Use
 
@@ -143,7 +143,7 @@ Configure in `main.tex` via `\documentclass`:
   algo=algpseudocode,   % algpseudocode (default): algorithm+algorithmicx; algorithm2e: standalone algorithm2e package
   minted=false,         % true: minted highlighting (needs Python+Pygments); false: listings (default)
   biblatex=true,        % true: biblatex+biber (default); false: bibtex+gbt7714
-  fontset=fandol,       % Font set passed to ctex, default is fandol
+  fontset=auto,         % Font set: auto (default) picks the installed set closest to the Word template's fonts; see "Font Selection" below
   times=false,          % true: system Times New Roman; false: newtx (default)
   fullwidthstop=circle, % Period style: circle keeps "。" (default) / dot replaces with "．"
 ]{tongjithesis}
@@ -168,12 +168,24 @@ Build all 3 at once: `make forms` / `.\make.bat forms`. The task book's duration
 
 ### Font Selection
 
-- **Windows users**: Use `fontset=windows` — SimSun / SimHei / KaiTi / FangSong are included with the OS and provide broader coverage.
-- **macOS users**: Use `fontset=mac` — Songti SC / Heiti SC / STFangsong / Kaiti SC are included with macOS, zero-config.
-- **Cross-platform users**: The default `fontset=fandol` (shipped with TeX Live, zero-config) is recommended. For broader character coverage, download `adobe` / `founder` / `windows` fonts from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex), install them to your system, then switch the `fontset`.
+The default `fontset=auto` picks the installed font set whose glyphs are closest to the Zhongyi fonts the Word template uses (SimSun, SimHei, KaiTi, FangSong), and names the set it chose in the compilation log:
+
+1. `windows`: the Zhongyi fonts themselves (shipped with Windows, or placed in the project's `fonts/` folder);
+2. `founder`: Founder ShuSong, Hei, Kai and FangSong (free to download from Founder, or placed in `fonts/`);
+3. `fandol`: the Fandol fonts (shipped with older TeX Live and with Overleaf; withdrawn by their authors and due to leave TeX Live);
+4. `texlive`: free fonts shipped with TeX Live (LXGW Neo ZhiSong, LXGW Neo XiHei, AR PL KaitiM GB, LXGW Zhuque Fangsong).
+
+The compilation warns when it does not pick `windows`. To use the same fonts as the Word template:
+
+- **Local compilation**: run `make fonts` (Windows: `.\make.bat fonts`) to download the Zhongyi fonts into the project's `fonts/` folder. `make fonts FONTSET=founder` (Windows: `.\make.bat fonts founder`) downloads the Founder fonts. The fonts come from the releases of [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex).
+- **Overleaf**: download `windows.zip` from the [latest cjk-fonts-for-ctex release](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest), unzip it, and upload the font files into a folder named `fonts` in your project.
+
+You can also name a set directly: `windows`, `founder`, `adobe`, `mac` (Songti SC and the other macOS fonts), `fandol` or `texlive`. The `fontdir` option sets the folder holding font files (default `fonts/`): `windows`, `founder`, `adobe` and `fandol` load their files from it when they are there, otherwise their fonts are looked up by name on the system; `mac` and `texlive` always use the system's or TeX Live's fonts. `fontset=auto` chooses a set only when all four of its fonts are present.
+
+Chinese fonts have no italics, so the template uses Kai instead. The sets without a real bold Song and Hei (`windows`, `founder`, `adobe`, `texlive`) fake bold by stroking the outlines, with the same stroke width as Word (1/35 of the font size).
 
 > [!NOTE]
-> Run `fc-cache -fv` after installing new fonts to refresh the font cache.
+> The fonts' copyright belongs to their owners; use them under their licences. After installing fonts on Linux, run `fc-cache -fv` to refresh the font cache.
 
 ### Code Highlighting & Algorithm Typesetting
 

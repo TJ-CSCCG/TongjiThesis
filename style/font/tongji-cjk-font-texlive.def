@@ -1,0 +1,16 @@
+%%
+%% tongji-cjk-font-texlive.def — Free CJK fonts shipped with TeX Live
+%%
+%% Copyright (C) TJ-CSCCG
+%% This work may be distributed under the LPPL 1.3c or later.
+%%
+\ProvidesFile{tongji-cjk-font-texlive.def}[v1.5.1 TeX Live CJK fonts definition (TongjiThesis)] %x-release-please-version
+% 随 TeX Live 安装的免费字体（lxgw-fonts、arphic-ttf 宏包），其中形状最接近中易字体的四种：
+% 宋体 LXGW Neo ZhiSong、黑体 LXGW Neo XiHei、楷体 AR PL KaitiM GB、仿宋 LXGW Zhuque Fangsong。
+% 字体名与文件名相同：TeX 按文件名在 TeX Live 目录树中查找。
+\tj@cjkfonts
+  {LXGWNeoZhiSong.ttf}{LXGWNeoZhiSong.ttf}
+  {LXGWNeoXiHei.ttf}{LXGWNeoXiHei.ttf}
+  {gkai00mp.ttf}{gkai00mp.ttf}
+  {LXGWZhuqueFangsong-Regular.ttf}{LXGWZhuqueFangsong-Regular.ttf}
+\endinput

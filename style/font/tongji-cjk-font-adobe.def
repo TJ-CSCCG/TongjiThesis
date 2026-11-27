@@ -5,20 +5,10 @@
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
 \ProvidesFile{tongji-cjk-font-adobe.def}[v1.5.1 Adobe CJK fonts definition (TongjiThesis)] %x-release-please-version
-\setCJKmainfont{AdobeSongStd-Light}
-  [ BoldFont = AdobeHeitiStd-Regular, ItalicFont = AdobeKaitiStd-Regular ]
-\setCJKsansfont{AdobeHeitiStd-Regular}  [ AutoFakeBold = 3 ]
-\setCJKmonofont{AdobeFangsongStd-Regular}
-
-\setCJKfamilyfont{zhsong}{AdobeSongStd-Light}
-  [ BoldFont = AdobeHeitiStd-Regular, ItalicFont = AdobeKaitiStd-Regular ]
-\setCJKfamilyfont{zhhei}{AdobeHeitiStd-Regular}  [ AutoFakeBold = 3 ]
-\setCJKfamilyfont{zhkai}{AdobeKaitiStd-Regular}
-\setCJKfamilyfont{zhfs}{AdobeFangsongStd-Regular}
-
-% 以下定义体内不要加空格：本文件按普通 catcode 读入，空格会排进正文（标题、目录会因此缩进）。
-\NewDocumentCommand{\songti}   {} {\CJKfamily{zhsong}}
-\NewDocumentCommand{\heiti}    {} {\CJKfamily{zhhei}}
-\NewDocumentCommand{\kaishu}   {} {\CJKfamily{zhkai}}
-\NewDocumentCommand{\fangsong} {} {\CJKfamily{zhfs}}
+% Adobe 宋体、黑体、楷体、仿宋 Std（随旧版 Adobe Reader 安装）。文件在 fontdir 中时从那里加载。
+\tj@cjkfonts
+  {AdobeSongStd-Light}{AdobeSongStd-Light.otf}
+  {AdobeHeitiStd-Regular}{AdobeHeitiStd-Regular.otf}
+  {AdobeKaitiStd-Regular}{AdobeKaitiStd-Regular.otf}
+  {AdobeFangsongStd-Regular}{AdobeFangsongStd-Regular.otf}
 \endinput
