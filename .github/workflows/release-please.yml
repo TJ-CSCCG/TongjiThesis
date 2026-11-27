@@ -1,9 +1,10 @@
-name: release-please
+name: Release PR
 
 # Maintains a release PR from Conventional Commits on master: bumps the version
 # across package.json + the LaTeX \Provides* lines, regenerates CHANGELOG.md, and
 # on merge creates the tag + a DRAFT GitHub Release. A maintainer publishes the
-# draft, which fires test.yaml / release.yml to attach the CTAN + PDF assets.
+# draft, which starts publish.yml (Publish) to build and attach the CTAN package
+# and the release PDFs and send the package to CTAN.
 #
 # Auth: a GitHub App token (secrets APP_ID + APP_PRIVATE_KEY) — required so that
 # the release/tag it creates can trigger other workflows (the default GITHUB_TOKEN

@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/ci.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis?label=Release" alt="Release"></a>
   <a href="https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
@@ -62,8 +62,8 @@ Download this repository via `Code | Download ZIP` and drag-and-drop the ZIP fil
 
 Open **Actions** in your fork and enable workflows if prompted. You can then compile in either of these ways:
 
-- Push a change to a thesis source file, such as `chapters/metadata.tex`, on `master` or `dev` to start the `test` workflow automatically.
-- If you keep your thesis on another branch, open **Actions → test → Run workflow**, select your thesis branch, then click **Run workflow**. This also works when you have only changed ignored files such as the README.
+- Push a change to a thesis source file, such as `chapters/metadata.tex`, on `master` or `dev` to start the `CI` workflow automatically.
+- If you keep your thesis on another branch, open **Actions → CI → Run workflow**, select your thesis branch, then click **Run workflow**. This also works when you have only changed ignored files such as the README.
 
 Open the run for your commit. Under **Summary → Artifacts**, each archive is named after the PDF inside it. The thesis and the three forms are built separately:
 
@@ -76,7 +76,7 @@ Open the run for your commit. Under **Summary → Artifacts**, each archive is n
 
 These archives are kept for 30 days. `all-compiled-documents` holds every PDF of the run and is kept for 90 days.
 
-The `tongjithesis-linux-xelatex-*` and `tongjithesis-linux-lualatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
+The `tongjithesis-linux-xelatex-*` and `tongjithesis-linux-lualatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/ci.yml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 
 ### Local Use
 

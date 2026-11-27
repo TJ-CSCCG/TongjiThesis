@@ -5,8 +5,8 @@
 - **源文件**（`style/`）：`tongjithesis.cls`、`tongjithesis.cfg`、`tongji-circled.def`、`style/font/*.def` 等定义模板本身的文件。
 - **文档文件**（`chapters/`、`main.tex`、`taskbook.tex`/`proposal.tex`/`midterm.tex`）：展示模板用法的 `.tex` 文件。`taskbook.tex`/`proposal.tex`/`midterm.tex` 分别是任务书、开题报告、中期报告的独立入口（`doctype=taskbook`/`proposal`/`midterm`），正文由 `chapters/taskbook_body.tex`/`proposal_body.tex`/`midterm_body.tex` 提供。`chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
 - **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
-- **构建脚本**（`scripts/`）：`build-ctan.sh`（组装并校验 CTAN 包，`release.yml` 与 `test.yaml` 都调用它）、`ci-proven-tree.sh`（`test.yaml` 的 `scope` 任务：若此前已有测试运行在只差 release-please 版本行的提交上通过，则跳过构建任务）、`fetch-fonts.sh`（从 TJ-CSCCG/cjk-fonts-for-ctex 的最新发行版把一套字体下载到 `fonts/`，供 `make fonts` 与 CI 使用）、`test-make.sh`（测试 `Makefile` 与 `make.bat`：未安装 TeX 时的帮助与缺少工具的报错，以及字数统计与 TeXcount 自身结果一致，由 `test.yaml` 的 `entry-points` 任务在三个系统上运行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方“版本发布”。
-- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件）；`promote.yml` 把 `master` 快进到 `dev`，开始一次发布；`release-please.yml` 维护 release PR，合并后创建标签与草稿 Release；`release.yml` 在草稿 Release 发布后打包 CTAN 与源码归档并附加到该 Release，再通过 CTAN 的上传接口提交 CTAN 包（先校验后上传，CTAN 管理员人工审核后收录）；`sync-dev.yml` 在 `master` 更新后把 `dev` 快进回 `master`；`jekyll-gh-pages.yml` 部署 GitHub Pages。
+- **构建脚本**（`scripts/`）：`build-ctan.sh`（组装并校验 CTAN 包，`publish.yml` 与 `ci.yml` 都调用它）、`ci-proven-tree.sh`（`ci.yml` 的 `scope` 任务：若此前已有测试运行在只差 release-please 版本行的提交上通过，则跳过构建任务）、`fetch-fonts.sh`（从 TJ-CSCCG/cjk-fonts-for-ctex 的最新发行版把一套字体下载到 `fonts/`，供 `make fonts` 与 CI 使用）、`test-make.sh`（测试 `Makefile` 与 `make.bat`：未安装 TeX 时的帮助与缺少工具的报错，以及字数统计与 TeXcount 自身结果一致，由 `ci.yml` 的 `entry-points` 任务在三个系统上运行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方“版本发布”。
+- **CI 工作流**（`.github/workflows/`，组织内各仓库统一命名）：`ci.yml`（CI）为构建矩阵，即本项目的测试套件；`promote.yml`（Promote）把 `master` 快进到 `dev`，开始一次发布；`release-please.yml`（Release PR）维护 release PR，合并后创建标签与草稿 Release；`publish.yml`（Publish）在草稿 Release 发布后构建 CTAN 包与两份发布 PDF 并附加到该 Release，再通过 CTAN 的上传接口提交 CTAN 包（先校验后上传，CTAN 管理员人工审核后收录）；`sync-dev.yml`（Sync dev）在 `master` 更新后把 `dev` 快进回 `master`；`pages.yml`（Pages）部署 GitHub Pages。CI 与 Publish 安装的 TeX Live 包列表见 `.github/tl-packages.txt`。
 - **配置文件**：用于规范开发与使用的文件（如 `.gitignore`、`latexmkrc`、`.editorconfig`）。
 - **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。
 
@@ -47,5 +47,5 @@
 ## 版本发布
 
 - 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)（`feat:` / `fix:` / `docs:` 等）；[release-please](https://github.com/googleapis/release-please) 据此自动维护版本号与逐版本更新日志 `CHANGELOG.md`（首次自动发布后生成）。
-- 发布流程：维护者运行 `promote dev to master` 工作流，把 `master` 快进到 `dev` → release-please 随即生成“release PR”，维护者合并 → 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 CI 打包 CTAN 与示例 PDF 并附加到该 Release。
+- 发布流程：维护者运行 Promote 工作流（`promote.yml`），把 `master` 快进到 `dev` → release-please 随即生成“release PR”，维护者合并 → 自动创建带更新日志的**草稿 Release** → 核对后手动 **Publish**，随即触发 Publish 工作流构建 CTAN 包与发布 PDF、附加到该 Release 并提交到 CTAN。
 - 版本号由 release-please 统一更新（`package.json` 及各 `\Provides*` 行），**无需手动修改**（原 `scripts/bump-version.sh` 已移除）。

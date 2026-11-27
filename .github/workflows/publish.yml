@@ -1,0 +1,225 @@
+name: Publish
+
+# Runs when the draft release that release-please.yml (Release PR) created is
+# published. It builds the CTAN package and the release PDFs, attaches them to
+# the release, moves the floating vX.Y tag, and sends the package to CTAN.
+# A manual run builds the CTAN package from the ref it runs on and validates or
+# uploads it (input ctan).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      ctan:
+        description: "Send the CTAN package to CTAN: none, validate (a dry run CTAN checks and stores nothing) or upload"
+        type: choice
+        options: [none, validate, upload]
+        default: validate
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  # The CTAN package, built by scripts/build-ctan.sh as ci.yml's build-ctan job
+  # builds and compiles it on every push and pull request.
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Read the package version
+        id: metadata
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "PACKAGE_AUTHOR=$(jq -r '.author // "TJ-CSCCG"' package.json)" >> "$GITHUB_ENV"
+
+      - name: Build and validate the CTAN package
+        run: scripts/build-ctan.sh
+
+      - name: Create the CTAN archives
+        run: |
+          cd ctan
+          tar -czf "tongjithesis-ctan-v${PACKAGE_VERSION}.tar.gz" tongjithesis/
+          zip -q -r "tongjithesis-ctan-v${PACKAGE_VERSION}.zip" tongjithesis/
+          ls -la tongjithesis-ctan-v"${PACKAGE_VERSION}".*
+
+      - name: Upload the CTAN package
+        uses: actions/upload-artifact@v7
+        with:
+          name: ctan-package
+          path: |
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.tar.gz
+            ctan/tongjithesis-ctan-v${{ env.PACKAGE_VERSION }}.zip
+          retention-days: 90
+
+  # The release PDFs: the thesis with field=science and field=humanities.
+  pdfs:
+    if: github.event_name == 'release'
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        field: [science, humanities]
+    env:
+      PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install TeX Live
+        uses: zauguin/install-texlive@v4
+        with:
+          texlive_version: 2026
+          package_file: .github/tl-packages.txt
+
+      - name: Configure field
+        if: matrix.field == 'humanities'
+        run: sed -i 's/field=science/field=humanities/' main.tex
+
+      - name: Compile the thesis
+        run: make ENGINE=-xelatex all
+
+      - name: Show log on failure
+        if: failure()
+        run: cat main.log
+
+      - name: Rename the PDF
+        run: mv main.pdf "TongjiThesis-v${PACKAGE_VERSION}-${{ matrix.field }}.pdf"
+
+      - name: Upload the PDF
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-pdf-${{ matrix.field }}
+          path: TongjiThesis-v*.pdf
+          retention-days: 90
+
+  # Attach everything to the published release and move the floating vX.Y tag.
+  # release-please wrote the release's title and notes; this job only uploads.
+  attach:
+    if: github.event_name == 'release'
+    needs: [package, pdfs]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download the release files
+        uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Attach the release files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la dist
+          gh release upload "$RELEASE_TAG" dist/* --clobber
+
+      - name: Move the floating vX.Y tag to the release
+        run: |
+          SHORT="${RELEASE_TAG%.*}"
+          git tag -f "$SHORT" "$RELEASE_TAG"
+          git push -f origin "$SHORT"
+
+  # Send the CTAN package to CTAN's upload API (https://ctan.org/help/submit).
+  # A published release uploads; a manual run validates or uploads on request.
+  # Every request is validated first, and CTAN's upload managers still review
+  # each upload by hand before it is installed. CTAN accepts later updates only
+  # from the uploader address it knows (https://ctan.org/help/become-author), so
+  # the address lives in the CTAN_UPLOADER_EMAIL secret and the name in the
+  # CTAN_UPLOADER variable; CTAN_UPDATE is "true" once the package exists on CTAN.
+  ctan:
+    needs: package
+    if: |
+      needs.package.result == 'success' && (
+        github.event_name == 'release' ||
+        (github.event_name == 'workflow_dispatch' && inputs.ctan != 'none')
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+      MODE: ${{ github.event_name == 'release' && 'upload' || inputs.ctan }}
+      UPDATE: ${{ vars.CTAN_UPDATE == 'true' && 'true' || 'false' }}
+      UPLOADER: ${{ vars.CTAN_UPLOADER }}
+      EMAIL: ${{ secrets.CTAN_UPLOADER_EMAIL }}
+      ANNOUNCEMENT: ${{ github.event.release.body }}
+    steps:
+      - name: Download the CTAN package
+        uses: actions/download-artifact@v8
+        with:
+          name: ctan-package
+          path: ctan
+
+      - name: Send to CTAN
+        run: |
+          if [ -z "$UPLOADER" ] || [ -z "$EMAIL" ]; then
+            echo "::error::Set the CTAN_UPLOADER variable and the CTAN_UPLOADER_EMAIL secret before sending to CTAN."
+            exit 1
+          fi
+          zip="ctan/tongjithesis-ctan-v${PACKAGE_VERSION}.zip"
+          fields=(
+            --form-string "pkg=tongjithesis"
+            --form-string "version=${PACKAGE_VERSION}"
+            --form-string "author=TJ-CSCCG"
+            --form-string "uploader=${UPLOADER}"
+            --form-string "email=${EMAIL}"
+            --form-string "update=${UPDATE}"
+            --form-string "ctanPath=/macros/latex/contrib/tongjithesis"
+            --form-string "license=lppl1.3c"
+            --form-string "summary=LaTeX thesis template for Tongji University"
+            --form-string "description=tongjithesis is a LaTeX document class for undergraduate theses (毕业设计/论文) at Tongji University, Shanghai, following the university's formatting requirements. It also typesets the task book, opening report and mid-term report forms. It builds on ctex and supports XeLaTeX and LuaLaTeX."
+            --form-string "home=https://github.com/TJ-CSCCG/TongjiThesis"
+            --form-string "repository=https://github.com/TJ-CSCCG/TongjiThesis"
+            --form-string "bugtracker=https://github.com/TJ-CSCCG/TongjiThesis/issues"
+            --form-string "topic=dissertation"
+            --form-string "topic=class"
+            --form-string "topic=chinese"
+            -F "file=@${zip}"
+          )
+          if [ "$UPDATE" = "false" ]; then
+            fields+=(--form-string "note=First upload of the Tongji University thesis class, maintained by the TJ-CSCCG student community on GitHub.")
+          fi
+          if [ -n "$ANNOUNCEMENT" ]; then
+            fields+=(--form-string "announcement=${ANNOUNCEMENT:0:8000}")
+          fi
+
+          # CTAN answers with a JSON list of ["ERROR"|"WARNING"|"INFO", ...] entries.
+          send() {
+            curl -sS --fail-with-body "https://www.ctan.org/submit/$1" "${fields[@]}" | tee "ctan-$1.json"
+            echo
+            if jq -e 'map(select(.[0] == "ERROR")) | length > 0' "ctan-$1.json" > /dev/null; then
+              echo "::error::CTAN $1 reported errors (see above)."
+              exit 1
+            fi
+          }
+          send validate
+          if [ "$MODE" = "upload" ]; then
+            send upload
+            echo "Sent to CTAN. Its upload managers confirm by email to the uploader address."
+          fi

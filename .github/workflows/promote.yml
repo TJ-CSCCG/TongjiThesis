@@ -1,7 +1,7 @@
-name: promote dev to master
+name: Promote
 
 # Fast-forwards master to dev, which is what starts a release: the push to
-# master is what release-please.yml reacts to.
+# master is what release-please.yml (Release PR) reacts to.
 #
 # Deliberately workflow_dispatch only. Cutting a release is a decision, not
 # something a push should trigger — this button just removes the fiddly local

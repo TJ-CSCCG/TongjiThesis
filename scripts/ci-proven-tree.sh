@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Decides whether test.yaml may skip its build jobs for the commit under test.
+# Decides whether ci.yml may skip its build jobs for the commit under test.
 # They skip when the commit differs from a tree an earlier test run already
 # passed on only in what a release-please release commit writes: CHANGELOG.md,
 # .release-please-manifest.json, the "version" line of package.json, and the
@@ -24,7 +24,7 @@ run_everything() {
 # Trees that passed: the head commits of successful runs that tested their own
 # head commit (push, release, manual run). A pull_request run tests a merge
 # commit whose tree its head_sha does not carry, so those runs are left out.
-runs=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/test.yaml/runs?status=success&per_page=100" \
+runs=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?status=success&per_page=100" \
   --jq '.workflow_runs[] | select(.event != "pull_request") | "\(.head_sha) \(.html_url)"') ||
   run_everything "the list of passed runs could not be read"
 

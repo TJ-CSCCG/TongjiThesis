@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tests the build entry points themselves: the Makefile, or make.bat on Windows.
-# The compile jobs in test.yaml only take the success path with every tool
+# The compile jobs in ci.yml only take the success path with every tool
 # installed; this script checks what a writer meets before that:
 #
 #   no-tex    No TeX on PATH. `help` works, each target names the one

@@ -1,0 +1,87 @@
+# TeX Live package names (not CTAN or .sty names) the thesis, the forms and the
+# CTAN example need. Read by .github/workflows/ci.yml and publish.yml through
+# zauguin/install-texlive's package_file, which fails the job when a package is
+# not in the repository; TJ-CSCCG/TongjiThesis-env's Dockerfile mirrors it.
+adjustbox
+algorithm2e
+algorithmicx
+algorithms
+alphalph
+arphic-ttf  # AR PL KaitiM GB, the texlive fontset's Kai
+biber
+biblatex
+biblatex-gb7714-2015
+bibtex
+booktabs
+caption
+carlisle
+cases
+catchfile
+chinese-jfm
+chngcntr
+circledsteps
+cleveref
+collectbox
+ctex
+dvips
+emptypage
+enumitem
+environ
+extarrows
+eso-pic
+fancyhdr
+fancyvrb
+fandol  # the default fontset; ctex no longer depends on it (#143)
+float
+fontaxes
+framed
+fvextra
+gbt7714
+gsftopk
+helvetic
+haranoaji
+hologo
+ifplatform
+ifoddpage
+lastpage
+latexmk
+lineno
+listings
+lxgw-fonts  # the texlive fontset's Song, Hei and Fang
+minted
+multirow
+mwe
+natbib
+needspace
+newtx
+nth
+oberdiek
+pdftexcmds
+pgf
+pict2e
+picture
+realscripts
+relsize
+rsfs
+setspace
+siunitx
+tcolorbox
+tex-gyre
+texcount
+texliveonfly
+threeparttable
+threeparttablex
+times
+titling
+tocloft
+tools  # tabularx and xspace; TeX Live has no packages by those names
+trimspaces
+txfonts
+ucs
+upquote
+was
+xcolor
+xecjk
+xpatch
+xstring
+zhnumber

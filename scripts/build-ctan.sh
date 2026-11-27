@@ -3,12 +3,12 @@
 #
 # Single source of truth for the CTAN file set, shared by two workflows so the
 # two can never drift apart:
-#   - .github/workflows/release.yml  packages ctan/ into the release archives
-#   - .github/workflows/test.yaml    runs this, then compiles the packaged
+#   - .github/workflows/publish.yml  packages ctan/ into the release archives
+#   - .github/workflows/ci.yml       runs this, then compiles the packaged
 #                                    example to prove the package is usable
 #
-# Run from the repository root. Requires: CURRENT_YEAR, PACKAGE_AUTHOR
-# (release.yml exports both; defaults below keep local runs working).
+# Run from the repository root. Optional: CURRENT_YEAR, PACKAGE_AUTHOR
+# (publish.yml exports PACKAGE_AUTHOR; the defaults below cover the rest).
 set -euo pipefail
 
 CURRENT_YEAR="${CURRENT_YEAR:-$(date +%Y)}"
