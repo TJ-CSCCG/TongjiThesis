@@ -416,12 +416,10 @@ jobs:
         run: bash scripts/test-make.sh no-tex
 
       - name: Install TeXcount alone
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: texcount
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Test the entry points with TeXcount alone
         run: bash scripts/test-make.sh texcount
