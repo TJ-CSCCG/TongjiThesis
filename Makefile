@@ -16,11 +16,6 @@ FORMS = taskbook proposal midterm
 ENGINES = -xelatex -lualatex
 ENGINE ?= -xelatex  # Default engine to XeLaTeX
 
-# Check for required programs
-REQUIRED_PROGRAMS := latexmk texcount
-$(foreach prog,$(REQUIRED_PROGRAMS),\
-    $(if $(shell which $(prog)),,$(error "$(prog) not found in PATH")))
-
 # Check if engine is valid
 # $(MAKECMDGOALS) is empty for a bare `make`, which still builds the default `all`
 # goal — treat that as a build invocation so ENGINE is validated there too.
@@ -76,7 +71,7 @@ endif
 # Targets
 ###################
 
-.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm
+.PHONY: all thesis pvc view wordcount clean cleanall help FORCE_MAKE forms taskbook proposal midterm check-latexmk check-texcount
 
 # Legacy alias
 thesis: all
@@ -85,7 +80,7 @@ thesis: all
 all: $(THESIS).pdf
 
 # Force remake (pattern rule: also matches taskbook.pdf/proposal.pdf/midterm.pdf below)
-%.pdf: %.tex FORCE_MAKE
+%.pdf: %.tex FORCE_MAKE | check-latexmk
 	@echo "Building $@ with $(ENGINE)..."
 	@latexmk $(LATEXMK_OPT) $<
 
@@ -96,7 +91,7 @@ midterm: midterm.pdf
 forms: $(addsuffix .pdf,$(FORMS))
 
 # Preview continuous mode
-pvc: $(THESIS).tex
+pvc: $(THESIS).tex | check-latexmk
 	@echo "Starting preview continuous mode..."
 	@latexmk $(LATEXMK_OPT_PVC) $(THESIS)
 
@@ -106,24 +101,28 @@ view: $(THESIS).pdf
 	$(OPEN) $<
 
 # Word count
-wordcount: $(THESIS).tex
+count-text = texcount "$<" -inc -total $(1) | awk -v label='$(2)' '\
+    /^(Words|Letters) in text:/ && NF >= 4 { print label "\t:", $$4; found = 1; exit } \
+    END { if (!found) { print "Error: Could not determine word count." > "/dev/stderr"; exit 1 } }'
+
+wordcount: $(THESIS).tex | check-texcount
 	@echo "Counting words in $(THESIS).tex..."
 	@if grep -v ^% $< | grep -q '\\documentclass\[[^\[]*english'; then \
-		texcount $< -inc -char-only | awk '/total/ {getline; print "英文字符数 (Latin characters)\t:",$$4}'; \
+		$(call count-text,-char-only,英文字符数 (Latin characters)); \
 	else \
-		texcount $< -inc -ch-only   | awk '/total/ {getline; print "纯中文字数 (Chinese characters)\t:",$$4}'; \
+		$(call count-text,-ch-only,纯中文字数 (Chinese characters)); \
 	fi
-	@texcount $< -inc -chinese | awk '/total/ {getline; print "总字数 (Total characters)\t:",$$4}'
+	@$(call count-text,-chinese,总字数 (Total characters))
 
 # Clean auxiliary files
-clean:
+clean: | check-latexmk
 	@echo "Cleaning auxiliary files..."
 	-@latexmk -c -bibtex -silent $(THESIS).tex 2> /dev/null
 	-@for f in $(FORMS); do latexmk -c -bibtex -silent $$f.tex 2> /dev/null; done
 	@echo "Clean complete."
 
 # Clean all generated files
-cleanall:
+cleanall: | check-latexmk
 	@echo "Cleaning all generated files..."
 	-@latexmk -C -bibtex -silent $(THESIS).tex 2> /dev/null
 	-@for f in $(FORMS); do latexmk -C -bibtex -silent $$f.tex 2> /dev/null; done
@@ -157,3 +156,6 @@ help:
 
 # Force remake
 FORCE_MAKE:
+
+check-latexmk check-texcount:
+	@command -v $(@:check-%=%) >/dev/null || { echo "Error: $(@:check-%=%) not found in PATH" >&2; exit 1; }
