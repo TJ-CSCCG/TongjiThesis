@@ -6,7 +6,7 @@
 - **文档文件**（`chapters/`、`main.tex`、`taskbook.tex`/`proposal.tex`/`midterm.tex`）：展示模板用法的 `.tex` 文件。`taskbook.tex`/`proposal.tex`/`midterm.tex` 分别是任务书、开题报告、中期报告的独立入口（`doctype=taskbook`/`proposal`/`midterm`），正文由 `chapters/taskbook_body.tex`/`proposal_body.tex`/`midterm_body.tex` 提供。`chapters/01_guide.tex`（模板使用指南）编译进最终 PDF，是权威的使用文档，`README` 不重复其内容。
 - **参考文献与图片**（`bib/`、`figures/`）：示例文献库与封面/页眉等图片资源。
 - **构建脚本**（`scripts/`）：`build-ctan.sh`（组装并校验 CTAN 包，`release.yml` 与 `test.yaml` 都调用它）、`fetch-fonts.sh`（从 TJ-CSCCG/cjk-fonts-for-ctex 的最新发行版把一套字体下载到 `fonts/`，供 `make fonts` 与 CI 使用）、`test-make.sh`（测试 `Makefile` 与 `make.bat`：未安装 TeX 时的帮助与缺少工具的报错，以及字数统计与 TeXcount 自身结果一致，由 `test.yaml` 的 `entry-points` 任务在三个系统上运行）、`update-preview.sh`（生成预览图并推送至 `TJ-CSCCG/TJCS-Images`）；版本号升级已由 release-please 自动化，见下方“版本发布”。
-- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件）；`promote.yml` 把 `master` 快进到 `dev`，开始一次发布；`release-please.yml` 维护 release PR，合并后创建标签与草稿 Release；`release.yml` 在草稿 Release 发布后打包 CTAN 与源码归档并附加到该 Release；`sync-dev.yml` 在 `master` 更新后把 `dev` 快进回 `master`；`jekyll-gh-pages.yml` 部署 GitHub Pages。
+- **CI 工作流**（`.github/workflows/`）：`test.yaml` 为构建矩阵（即本项目的测试套件）；`promote.yml` 把 `master` 快进到 `dev`，开始一次发布；`release-please.yml` 维护 release PR，合并后创建标签与草稿 Release；`release.yml` 在草稿 Release 发布后打包 CTAN 与源码归档并附加到该 Release，再通过 CTAN 的上传接口提交 CTAN 包（先校验后上传，CTAN 管理员人工审核后收录）；`sync-dev.yml` 在 `master` 更新后把 `dev` 快进回 `master`；`jekyll-gh-pages.yml` 部署 GitHub Pages。
 - **配置文件**：用于规范开发与使用的文件（如 `.gitignore`、`latexmkrc`、`.editorconfig`）。
 - **AI 编码代理约定**：详见 [`AGENTS.md`](AGENTS.md)（架构说明、命令速查、行为规范）。
 
