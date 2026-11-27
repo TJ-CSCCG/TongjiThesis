@@ -4,7 +4,7 @@
 %% Copyright (C) TJ-CSCCG
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
-\ProvidesFile{tongji-cjk-font-founder.def}[v1.5.1 Founder CJK fonts definition (TongjiThesis)] %x-release-please-version
+\ProvidesFile{tongji-cjk-font-founder.def}[v1.6.0 Founder CJK fonts definition (TongjiThesis)] %x-release-please-version
 % 方正书宋、黑体、楷体、仿宋（方正网站可免费下载，供“发布使用”）。文件在 fontdir 中时从那里加载。
 \tj@cjkfonts
   {FZShuSong-Z01}{FZSSK.TTF}

@@ -4,6 +4,25 @@
 
 Maintained automatically from [Conventional Commits](https://www.conventionalcommits.org/) by [release-please](https://github.com/googleapis/release-please) starting with v1.5.0. Do not edit by hand — both the version numbers and the entries are written when the release PR on `master` is merged.
 
+## [1.6.0](https://github.com/TJ-CSCCG/TongjiThesis/compare/v1.5.1...v1.6.0) (2026-11-27)
+
+
+### 新增 | New Features
+
+* **fonts:** choose the font set closest to the Word template's fonts ([#146](https://github.com/TJ-CSCCG/TongjiThesis/issues/146)) ([cfd6a12](https://github.com/TJ-CSCCG/TongjiThesis/commit/cfd6a12f220f909609c37e856d5b1a52c77ab499)), closes [#143](https://github.com/TJ-CSCCG/TongjiThesis/issues/143)
+
+
+### 修正 | Fixes
+
+* **build:** 按目标检查 TeX 工具，让帮助命令可以独立运行 ([#141](https://github.com/TJ-CSCCG/TongjiThesis/issues/141)) ([5152e87](https://github.com/TJ-CSCCG/TongjiThesis/commit/5152e87a464568cac5ba188a57f386c8c41e467a))
+
+
+### 文档与维护 | Docs & Maintenance
+
+* install fandol by name and switch to zauguin/install-texlive ([#144](https://github.com/TJ-CSCCG/TongjiThesis/issues/144)) ([84ad22d](https://github.com/TJ-CSCCG/TongjiThesis/commit/84ad22db1f6ca70faf799155695d9c76fbd70cd2))
+* send the CTAN package to CTAN when a release is published ([#145](https://github.com/TJ-CSCCG/TongjiThesis/issues/145)) ([50f55ea](https://github.com/TJ-CSCCG/TongjiThesis/commit/50f55ea38bb6f0fea807642a8adb7e974d3dc069))
+* 说明如何在 GitHub Actions 中编译并下载正文和表单 ([#142](https://github.com/TJ-CSCCG/TongjiThesis/issues/142)) ([683b4e4](https://github.com/TJ-CSCCG/TongjiThesis/commit/683b4e487cf8aee8b209c4d7721f78829fae2940))
+
 ## [1.5.1](https://github.com/TJ-CSCCG/TongjiThesis/compare/v1.5.0...v1.5.1) (2026-10-30)
 
 
