@@ -136,8 +136,35 @@ env:
     zhnumber
 
 jobs:
+  # Whether this commit needs the build jobs at all: they skip when a test run
+  # already passed on a tree that differs from this one only in release-please's
+  # version lines (a release commit, or the same commit pushed to another branch).
+  # See scripts/ci-proven-tree.sh.
+  scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      skip: ${{ steps.proven.outputs.skip }}
+      proven_by: ${{ steps.proven.outputs.proven_by }}
+    steps:
+      - name: Checkout with history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Find a passed tree this commit only versions
+        id: proven
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/ci-proven-tree.sh
+
   # Cross-platform build: default options (minted=false, biblatex=true)
   build:
+    needs: scope
+    if: needs.scope.outputs.skip != 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -197,6 +224,8 @@ jobs:
   # Option variants: test minted=true, bibtex, and other configurations (Linux-only; XeLaTeX,
   # plus LuaLaTeX for the two font legs)
   build-variants:
+    needs: scope
+    if: needs.scope.outputs.skip != 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -359,6 +388,8 @@ jobs:
   # its own tongjithesis document (doctype=taskbook|proposal|midterm), sharing
   # chapters/metadata.tex but otherwise independent of the main thesis build.
   build-forms:
+    needs: scope
+    if: needs.scope.outputs.skip != 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -401,6 +432,8 @@ jobs:
   # runtime file is unusable — this job is what proves the shipped package compiles
   # instead of discovering it after a release goes out.
   build-ctan:
+    needs: scope
+    if: needs.scope.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -441,6 +474,8 @@ jobs:
   # names the tool it lacks), then with TeXcount alone (build targets still refuse,
   # and wordcount prints what TeXcount itself counts, one-file documents included).
   entry-points:
+    needs: scope
+    if: needs.scope.outputs.skip != 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -473,11 +508,16 @@ jobs:
   # Summary job to check all builds completed successfully
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build, build-variants, build-forms, build-ctan, entry-points]
+    needs: [scope, build, build-variants, build-forms, build-ctan, entry-points]
     if: always()
     steps:
       - name: Check all builds succeeded
         run: |
+          if [[ "${{ needs.scope.result }}" == "success" && "${{ needs.scope.outputs.skip }}" == "true" ]]; then
+            echo "Builds skipped: a test run already passed on this tree apart from version lines (${{ needs.scope.outputs.proven_by }})"
+            exit 0
+          fi
+          echo "Scope status: ${{ needs.scope.result }}"
           echo "Cross-platform build status: ${{ needs.build.result }}"
           echo "Variant build status: ${{ needs.build-variants.result }}"
           echo "Forms build status: ${{ needs.build-forms.result }}"
@@ -497,8 +537,8 @@ jobs:
   # Collect all compiled PDFs into a single artifact
   collect-pdfs:
     runs-on: ubuntu-latest
-    needs: [build, build-variants, build-forms, build-ctan]
-    if: always() && !cancelled()
+    needs: [scope, build, build-variants, build-forms, build-ctan]
+    if: always() && !cancelled() && needs.scope.outputs.skip != 'true'
     steps:
       - name: Download all PDF artifacts
         uses: actions/download-artifact@v8
