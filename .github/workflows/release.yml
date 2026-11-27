@@ -29,6 +29,12 @@ on:
   release:
     types: [published]   # release-please draft published → attach CTAN/PDF assets
   workflow_dispatch: # Allow manual triggering
+    inputs:
+      ctan:
+        description: "Send the CTAN package to CTAN: none, validate (a dry run CTAN checks and stores nothing) or upload"
+        type: choice
+        options: [none, validate, upload]
+        default: none
 
 jobs:
   # Build CTAN package and source archives (runs on every trigger)
@@ -185,3 +191,82 @@ jobs:
           SHORT="${RELEASE_TAG%.*}"
           git tag -f "$SHORT" "$RELEASE_TAG"
           git push -f origin "$SHORT"
+
+  # Send the CTAN package to CTAN's upload API (https://ctan.org/help/submit).
+  # A published release uploads; a manual run validates or uploads on request.
+  # Every request is validated first, and CTAN's upload managers still review
+  # each upload by hand before it is installed. CTAN accepts later updates only
+  # from the uploader address it knows (https://ctan.org/help/become-author), so
+  # the address lives in the CTAN_UPLOADER_EMAIL secret and the name in the
+  # CTAN_UPLOADER variable; CTAN_UPDATE is "true" once the package exists on CTAN.
+  ctan:
+    needs: package
+    if: |
+      needs.package.result == 'success' && (
+        (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')) ||
+        (github.event_name == 'workflow_dispatch' && inputs.ctan != 'none')
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+      MODE: ${{ github.event_name == 'release' && 'upload' || inputs.ctan }}
+      UPDATE: ${{ vars.CTAN_UPDATE == 'true' && 'true' || 'false' }}
+      UPLOADER: ${{ vars.CTAN_UPLOADER }}
+      EMAIL: ${{ secrets.CTAN_UPLOADER_EMAIL }}
+      ANNOUNCEMENT: ${{ github.event.release.body }}
+    steps:
+      - name: Download package artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: release-packages-v${{ env.PACKAGE_VERSION }}
+
+      - name: Send to CTAN
+        run: |
+          if [ -z "$UPLOADER" ] || [ -z "$EMAIL" ]; then
+            echo "::error::Set the CTAN_UPLOADER variable and the CTAN_UPLOADER_EMAIL secret before sending to CTAN."
+            exit 1
+          fi
+          zip="ctan/tongjithesis-ctan-v${PACKAGE_VERSION}.zip"
+          fields=(
+            --form-string "pkg=tongjithesis"
+            --form-string "version=${PACKAGE_VERSION}"
+            --form-string "author=TJ-CSCCG"
+            --form-string "uploader=${UPLOADER}"
+            --form-string "email=${EMAIL}"
+            --form-string "update=${UPDATE}"
+            --form-string "ctanPath=/macros/latex/contrib/tongjithesis"
+            --form-string "license=lppl1.3c"
+            --form-string "summary=LaTeX thesis template for Tongji University"
+            --form-string "description=tongjithesis is a LaTeX document class for undergraduate theses (毕业设计/论文) at Tongji University, Shanghai, following the university's formatting requirements. It also typesets the task book, opening report and mid-term report forms. It builds on ctex and supports XeLaTeX and LuaLaTeX."
+            --form-string "home=https://github.com/TJ-CSCCG/TongjiThesis"
+            --form-string "repository=https://github.com/TJ-CSCCG/TongjiThesis"
+            --form-string "bugtracker=https://github.com/TJ-CSCCG/TongjiThesis/issues"
+            --form-string "topic=dissertation"
+            --form-string "topic=class"
+            --form-string "topic=chinese"
+            -F "file=@${zip}"
+          )
+          if [ "$UPDATE" = "false" ]; then
+            fields+=(--form-string "note=First upload of the Tongji University thesis class, maintained by the TJ-CSCCG student community on GitHub.")
+          fi
+          if [ -n "$ANNOUNCEMENT" ]; then
+            fields+=(--form-string "announcement=${ANNOUNCEMENT:0:8000}")
+          fi
+
+          # CTAN answers with a JSON list of ["ERROR"|"WARNING"|"INFO", ...] entries.
+          send() {
+            curl -sS --fail-with-body "https://www.ctan.org/submit/$1" "${fields[@]}" | tee "ctan-$1.json"
+            echo
+            if jq -e 'map(select(.[0] == "ERROR")) | length > 0' "ctan-$1.json" > /dev/null; then
+              echo "::error::CTAN $1 reported errors (see above)."
+              exit 1
+            fi
+          }
+          send validate
+          if [ "$MODE" = "upload" ]; then
+            send upload
+            echo "Sent to CTAN. Its upload managers confirm by email to the uploader address."
+          fi
