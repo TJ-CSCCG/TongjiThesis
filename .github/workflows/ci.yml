@@ -1,6 +1,10 @@
+name: CI
+
+# Every check of the template: the compile matrix, option variants, forms, the
+# CTAN package and the build entry points. Releases are made by release-please.yml
+# (Release PR) and published by publish.yml (Publish), which builds the release
+# files; a release tag is the master commit a push run here already tested.
 on:
-  # No tag trigger: a release tag is the master commit the push run just tested,
-  # and the release event below builds and attaches the release PDFs.
   push:
     branches:
       - master
@@ -12,10 +16,11 @@ on:
       - 'docs/**'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
-      - '.github/workflows/release.yml'
+      - '.github/workflows/publish.yml'
       - '.github/workflows/release-please.yml'
       - '.github/workflows/promote.yml'
       - '.github/workflows/sync-dev.yml'
+      - '.github/workflows/pages.yml'
       - 'scripts/update-preview.sh'
   pull_request:
     paths-ignore:
@@ -25,115 +30,25 @@ on:
       - 'docs/**'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
-      - '.github/workflows/release.yml'
+      - '.github/workflows/publish.yml'
       - '.github/workflows/release-please.yml'
       - '.github/workflows/promote.yml'
       - '.github/workflows/sync-dev.yml'
+      - '.github/workflows/pages.yml'
       - 'scripts/update-preview.sh'
-  release:
-    types: [published]   # build release PDFs when a release-please draft is published
   workflow_dispatch:
-
-name: test
 
 permissions:
   contents: read
 
 # A new commit on a pull request supersedes its in-flight run. ONLY pull_request
 # runs share a group (keyed on the PR number); every other event gets its own
-# group (github.run_id), so a later push to master or dev, or the release event,
-# never cancels the run of an earlier commit and leaves it marked cancelled.
+# group (github.run_id), so a later push to master or dev never cancels the run
+# of an earlier commit and leaves it marked cancelled.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-env:
-  # TeX Live package names (not CTAN or .sty names) needed for the thesis compilation;
-  # zauguin/install-texlive fails the job when one of them is not in the repository.
-  TL_PACKAGES: |
-    adjustbox
-    algorithm2e
-    algorithmicx
-    algorithms
-    alphalph
-    arphic-ttf  # AR PL KaitiM GB, the texlive fontset's Kai
-    biber
-    biblatex
-    biblatex-gb7714-2015
-    bibtex
-    booktabs
-    caption
-    carlisle
-    cases
-    catchfile
-    chinese-jfm
-    chngcntr
-    circledsteps
-    cleveref
-    collectbox
-    ctex
-    dvips
-    emptypage
-    enumitem
-    environ
-    extarrows
-    eso-pic
-    fancyhdr
-    fancyvrb
-    fandol  # the default fontset; ctex no longer depends on it (#143)
-    float
-    fontaxes
-    framed
-    fvextra
-    gbt7714
-    gsftopk
-    helvetic
-    haranoaji
-    hologo
-    ifplatform
-    ifoddpage
-    lastpage
-    latexmk
-    lineno
-    listings
-    lxgw-fonts  # the texlive fontset's Song, Hei and Fang
-    minted
-    multirow
-    mwe
-    natbib
-    needspace
-    newtx
-    nth
-    oberdiek
-    pdftexcmds
-    pgf
-    pict2e
-    picture
-    realscripts
-    relsize
-    rsfs
-    setspace
-    siunitx
-    tcolorbox
-    tex-gyre
-    texcount
-    texliveonfly
-    threeparttable
-    threeparttablex
-    times
-    titling
-    tocloft
-    tools  # tabularx and xspace; TeX Live has no packages by those names
-    trimspaces
-    txfonts
-    ucs
-    upquote
-    was
-    xcolor
-    xecjk
-    xpatch
-    xstring
-    zhnumber
 
 jobs:
   # Whether this commit needs the build jobs at all: they skip when a test run
@@ -180,7 +95,7 @@ jobs:
         uses: zauguin/install-texlive@v4
         with:
           texlive_version: 2026
-          packages: ${{ env.TL_PACKAGES }}
+          package_file: .github/tl-packages.txt
 
       - name: Compile LaTeX document (Unix)
         if: runner.os != 'Windows'
@@ -279,7 +194,7 @@ jobs:
         uses: zauguin/install-texlive@v4
         with:
           texlive_version: 2026
-          packages: ${{ env.TL_PACKAGES }}
+          package_file: .github/tl-packages.txt
 
       - name: Configure minted=true variant
         if: matrix.variant == 'minted-true'
@@ -404,7 +319,7 @@ jobs:
         uses: zauguin/install-texlive@v4
         with:
           texlive_version: 2026
-          packages: ${{ env.TL_PACKAGES }}
+          package_file: .github/tl-packages.txt
 
       - name: Compile LaTeX document
         run: |
@@ -426,7 +341,7 @@ jobs:
           path: tongjithesis-${{ matrix.doc }}.pdf
           retention-days: 30
 
-  # The CTAN distribution package: build it with the same script release.yml uses,
+  # The CTAN distribution package: build it with the same script publish.yml uses,
   # then compile the example it ships. The class \input's tongji-circled.def and a
   # tongji-cjk-font-*.def and \ClassError's without them, so a package missing any
   # runtime file is unusable — this job is what proves the shipped package compiles
@@ -444,7 +359,7 @@ jobs:
         uses: zauguin/install-texlive@v4
         with:
           texlive_version: 2026
-          packages: ${{ env.TL_PACKAGES }}
+          package_file: .github/tl-packages.txt
 
       - name: Build and validate CTAN package
         run: scripts/build-ctan.sh
@@ -557,61 +472,3 @@ jobs:
           name: all-compiled-documents
           path: "*.pdf"
           retention-days: 90
-
-  # Build the release PDFs when a release is published (science + humanities, Linux xelatex-only)
-  build-release-pdfs:
-    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: write   # attach the built PDF directly to the published release
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - field: science
-          - field: humanities
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Install TeX Live
-        uses: zauguin/install-texlive@v4
-        with:
-          texlive_version: 2026
-          packages: ${{ env.TL_PACKAGES }}
-
-      - name: Configure field
-        if: matrix.field == 'humanities'
-        run: |
-          sed -i 's/field=science/field=humanities/' main.tex
-
-      - name: Compile LaTeX document
-        run: |
-          make ENGINE=-xelatex all
-
-      - name: Rename PDF
-        if: success()
-        run: |
-          VERSION="${{ github.ref_name }}"
-          VERSION="${VERSION#v}"
-          mv main.pdf "TongjiThesis-v${VERSION}-${{ matrix.field }}.pdf"
-
-      - name: Upload PDF
-        if: success()
-        uses: actions/upload-artifact@v7
-        with:
-          name: release-pdf-${{ matrix.field }}
-          path: TongjiThesis-v*.pdf
-          retention-days: 90
-
-      # When a release-please draft is published, attach the just-built PDF straight
-      # to that release — the build job owns its own artifact, so there is no
-      # cross-workflow "latest run" race with release.yml.
-      - name: Attach PDF to the release
-        if: success() && github.event_name == 'release'
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: TongjiThesis-v*.pdf
-          fail_on_unmatched_files: true

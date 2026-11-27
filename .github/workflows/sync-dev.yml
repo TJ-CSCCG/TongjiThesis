@@ -1,4 +1,4 @@
-name: back-sync master to dev
+name: Sync dev
 
 # Keeps master an ancestor of dev, the invariant the whole branching model rests
 # on (AGENTS.md § Branching and versioning).

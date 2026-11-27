@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/test.yaml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/ci.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis?label=Release" alt="Release"></a>
   <a href="https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn"><img src="https://img.shields.io/badge/Overleaf-Template-138A07" alt="Overleaf"></a>
   <a href="https://www.latex-project.org/lppl/lppl-1-3c/"><img src="https://img.shields.io/badge/License-LPPL--1.3c-blue" alt="License"></a>
@@ -62,8 +62,8 @@
 
 在自己的 fork 中打开 **Actions**，按页面提示启用工作流。之后可以用以下任一方式编译：
 
-- 在 `master` 或 `dev` 分支推送论文源文件（例如 `chapters/metadata.tex`）的修改，会自动运行 `test` 工作流。
-- 如果论文写在其他分支，打开 **Actions → test → Run workflow**，选择存放论文的分支，再点 **Run workflow**。仅修改 README 等被忽略的文件时也可以手动运行。
+- 在 `master` 或 `dev` 分支推送论文源文件（例如 `chapters/metadata.tex`）的修改，会自动运行 `CI` 工作流。
+- 如果论文写在其他分支，打开 **Actions → CI → Run workflow**，选择存放论文的分支，再点 **Run workflow**。仅修改 README 等被忽略的文件时也可以手动运行。
 
 打开与本次提交对应的运行记录，在 **Summary → Artifacts** 中，每个压缩包都以其中的 PDF 命名。正文和三份表单分别编译：
 
@@ -76,7 +76,7 @@
 
 以上压缩包保留 30 天；`all-compiled-documents` 包含本次运行的全部 PDF，保留 90 天。
 
-带后缀的 `tongjithesis-linux-xelatex-*` 与 `tongjithesis-linux-lualatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
+带后缀的 `tongjithesis-linux-xelatex-*` 与 `tongjithesis-linux-lualatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/ci.yml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
 ### 本地使用
 
