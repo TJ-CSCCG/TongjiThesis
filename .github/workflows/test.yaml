@@ -54,6 +54,7 @@ env:
     algorithmicx
     algorithms
     alphalph
+    arphic-ttf  # AR PL KaitiM GB, the texlive fontset's Kai
     biber
     biblatex
     biblatex-gb7714-2015
@@ -93,6 +94,7 @@ env:
     latexmk
     lineno
     listings
+    lxgw-fonts  # the texlive fontset's Song, Hei and Fang
     minted
     multirow
     mwe
@@ -210,6 +212,10 @@ jobs:
             pygments: false
           - variant: times-true
             pygments: false
+          - variant: fontset-texlive
+            pygments: false
+          - variant: fonts-windows
+            pygments: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -268,6 +274,16 @@ jobs:
         run: |
           sed -i 's/times=false/times=true/' main.tex
 
+      - name: Configure fontset=texlive variant
+        if: matrix.variant == 'fontset-texlive'
+        run: |
+          sed -i 's/fontset=auto/fontset=texlive/' main.tex
+
+      # fontset=auto must choose the windows set from the files `make fonts` puts in fonts/.
+      - name: Configure fonts-windows variant
+        if: matrix.variant == 'fonts-windows'
+        run: make fonts
+
       - name: Verify variant configuration
         run: |
           git diff main.tex
@@ -292,10 +308,21 @@ jobs:
           if [ "${{ matrix.variant }}" = "times-true" ]; then
             grep -q 'times=true' main.tex || { echo "ERROR: times=true not set"; exit 1; }
           fi
+          if [ "${{ matrix.variant }}" = "fontset-texlive" ]; then
+            grep -q 'fontset=texlive' main.tex || { echo "ERROR: fontset=texlive not set"; exit 1; }
+          fi
+          if [ "${{ matrix.variant }}" = "fonts-windows" ]; then
+            test -s fonts/simsun.ttc || { echo "ERROR: make fonts did not download fonts/simsun.ttc"; exit 1; }
+          fi
 
       - name: Compile LaTeX document
         run: |
           make ENGINE=-xelatex all
+
+      - name: Check the chosen fontset
+        if: matrix.variant == 'fonts-windows'
+        run: |
+          grep -q 'fontset=auto chose windows' main.log || { echo "ERROR: fontset=auto did not choose windows from fonts/"; exit 1; }
 
       - name: Show log on failure
         if: failure()

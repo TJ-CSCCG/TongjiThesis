@@ -15,7 +15,7 @@
 \setCJKsansfont{Heiti SC}
   [
     UprightFont  = * Medium,
-    AutoFakeBold = 3
+    AutoFakeBold = \tj@fakebold
   ]
 \setCJKmonofont{STFangsong}
 
@@ -23,7 +23,7 @@
   [ UprightFont = * Light, BoldFont = * Bold,
     ItalicFont = Kaiti SC Regular, BoldItalicFont = Kaiti SC Bold ]
 \setCJKfamilyfont{zhhei}{Heiti SC}
-  [ UprightFont = * Medium, AutoFakeBold = 3 ]
+  [ UprightFont = * Medium, AutoFakeBold = \tj@fakebold ]
 \setCJKfamilyfont{zhkai}{Kaiti SC}
   [ UprightFont = * Regular, BoldFont = * Bold ]
 \setCJKfamilyfont{zhfs}{STFangsong}

@@ -17,7 +17,7 @@
     Extension   = .otf,
     UprightFont = *-Regular,
     BoldFont    = *-Bold,
-    AutoFakeBold = 3
+    AutoFakeBold = \tj@fakebold
   ]
 \setCJKmonofont{FandolFang}
   [ Extension = .otf, UprightFont = *-Regular ]

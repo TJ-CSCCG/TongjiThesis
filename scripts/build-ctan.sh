@@ -24,6 +24,7 @@ for f in style/tongjithesis.cls style/tongjithesis.cfg \
          style/font/tongji-cjk-font-windows.def \
          style/font/tongji-cjk-font-adobe.def \
          style/font/tongji-cjk-font-founder.def \
+         style/font/tongji-cjk-font-texlive.def \
          figures/tongji.pdf figures/tongji-header.pdf; do
   [ -f "$f" ] || { echo "Error: $f not found"; exit 1; }
 done
@@ -167,6 +168,7 @@ tongji-cjk-font-mac.def       # CJK fonts: macOS   (fontset=mac)
 tongji-cjk-font-windows.def   # CJK fonts: Windows (fontset=windows)
 tongji-cjk-font-adobe.def     # CJK fonts: Adobe   (fontset=adobe)
 tongji-cjk-font-founder.def   # CJK fonts: Founder (fontset=founder)
+tongji-cjk-font-texlive.def   # CJK fonts: free fonts shipped with TeX Live (fontset=texlive)
 example/                      # Example directory
   example.tex                 # Example thesis document
   bib/                        # Bibliography directory
@@ -185,7 +187,7 @@ cat > ctan/tongjithesis/example/example.tex << 'HEREDOC'
   oneside,
   degree=bachelor,
   fullwidthstop=false,
-  fontset=fandol,
+  fontset=auto,
   times=false,
   minted=false,
   biblatex=true,
@@ -307,6 +309,7 @@ required_files=(
   "ctan/tongjithesis/tongji-cjk-font-windows.def"
   "ctan/tongjithesis/tongji-cjk-font-adobe.def"
   "ctan/tongjithesis/tongji-cjk-font-founder.def"
+  "ctan/tongjithesis/tongji-cjk-font-texlive.def"
   "ctan/tongjithesis/LICENSE"
   "ctan/tongjithesis/README.md"
   "ctan/tongjithesis/MANIFEST"
