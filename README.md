@@ -76,7 +76,7 @@
 
 以上压缩包保留 30 天；`all-compiled-documents` 包含本次运行的全部 PDF，保留 90 天。
 
-带后缀的 `tongjithesis-linux-xelatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
+带后缀的 `tongjithesis-linux-xelatex-*` 与 `tongjithesis-linux-lualatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
 ### 本地使用
 
@@ -180,7 +180,7 @@ make forms              # compile taskbook.pdf, proposal.pdf, and midterm.pdf
 - **本地编译**：运行 `make fonts`（Windows：`.\make.bat fonts`），把中易字体下载到项目的 `fonts/` 文件夹。`make fonts FONTSET=founder`（Windows：`.\make.bat fonts founder`）下载方正字体。字体来自 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 的发行版。
 - **Overleaf**：从 [cjk-fonts-for-ctex 的最新发行版](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest) 下载 `windows.zip`，解压后把其中的字体文件上传到项目中名为 `fonts` 的文件夹。
 
-也可以直接指定字体集：`windows`、`founder`、`adobe`、`mac`（macOS 自带的宋体-简等）、`fandol`、`texlive`。字体文件所在的文件夹由 `fontdir` 选项指定（默认 `fonts/`，须以 `/` 结尾）：字体集的文件在其中时从这里加载，否则按字体名从系统加载。
+也可以直接指定字体集：`windows`、`founder`、`adobe`、`mac`（macOS 自带的宋体-简等）、`fandol`、`texlive`。字体文件所在的文件夹由 `fontdir` 选项指定（默认 `fonts/`）：`windows`、`founder`、`adobe`、`fandol` 的文件在其中时从这里加载，否则按字体名从系统加载；`mac` 与 `texlive` 总是使用系统或 TeX Live 中的字体。`fontset=auto` 只在一个字体集的四种字体都存在时才选择它。
 
 中文字体没有斜体，模板以楷体代替。宋体与黑体没有真粗体的字体集（`windows`、`founder`、`adobe`、`texlive`）以描边模拟加粗，描边宽度与 Word 相同（字号的 1/35）。
 

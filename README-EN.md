@@ -76,7 +76,7 @@ Open the run for your commit. Under **Summary → Artifacts**, each archive is n
 
 These archives are kept for 30 days. `all-compiled-documents` holds every PDF of the run and is kept for 90 days.
 
-The `tongjithesis-linux-xelatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
+The `tongjithesis-linux-xelatex-*` and `tongjithesis-linux-lualatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 
 ### Local Use
 
@@ -180,7 +180,7 @@ The compilation warns when it does not pick `windows`. To use the same fonts as 
 - **Local compilation**: run `make fonts` (Windows: `.\make.bat fonts`) to download the Zhongyi fonts into the project's `fonts/` folder. `make fonts FONTSET=founder` (Windows: `.\make.bat fonts founder`) downloads the Founder fonts. The fonts come from the releases of [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex).
 - **Overleaf**: download `windows.zip` from the [latest cjk-fonts-for-ctex release](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest), unzip it, and upload the font files into a folder named `fonts` in your project.
 
-You can also name a set directly: `windows`, `founder`, `adobe`, `mac` (Songti SC and the other macOS fonts), `fandol` or `texlive`. The `fontdir` option sets the folder holding font files (default `fonts/`, ending in `/`): a set whose files are there is loaded from it, otherwise its fonts are looked up by name on the system.
+You can also name a set directly: `windows`, `founder`, `adobe`, `mac` (Songti SC and the other macOS fonts), `fandol` or `texlive`. The `fontdir` option sets the folder holding font files (default `fonts/`): `windows`, `founder`, `adobe` and `fandol` load their files from it when they are there, otherwise their fonts are looked up by name on the system; `mac` and `texlive` always use the system's or TeX Live's fonts. `fontset=auto` chooses a set only when all four of its fonts are present.
 
 Chinese fonts have no italics, so the template uses Kai instead. The sets without a real bold Song and Hei (`windows`, `founder`, `adobe`, `texlive`) fake bold by stroking the outlines, with the same stroke width as Word (1/35 of the font size).
 

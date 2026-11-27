@@ -192,7 +192,8 @@ jobs:
           path: ${{ steps.rename.outputs.name }}.pdf
           retention-days: 30
 
-  # Option variants: test minted=true, bibtex, and other configurations (Linux-only, xelatex-only)
+  # Option variants: test minted=true, bibtex, and other configurations (Linux-only; XeLaTeX,
+  # plus LuaLaTeX for the two font legs)
   build-variants:
     strategy:
       fail-fast: false
@@ -212,11 +213,22 @@ jobs:
             pygments: false
           - variant: times-true
             pygments: false
+          # The two font paths also run under LuaLaTeX, which resolves font files
+          # (Path=, .ttc collections, TeX Live file names) through luaotfload.
           - variant: fontset-texlive
+            pygments: false
+          - variant: fontset-texlive
+            pygments: false
+            engine: -lualatex
+          - variant: fonts-windows
             pygments: false
           - variant: fonts-windows
             pygments: false
+            engine: -lualatex
     runs-on: ubuntu-latest
+    env:
+      ENGINE: ${{ matrix.engine || '-xelatex' }}
+      ENGINE_NAME: ${{ matrix.engine == '-lualatex' && 'lualatex' || 'xelatex' }}
     timeout-minutes: 45
     steps:
       - name: Checkout
@@ -317,7 +329,7 @@ jobs:
 
       - name: Compile LaTeX document
         run: |
-          make ENGINE=-xelatex all
+          make ENGINE="$ENGINE" all
 
       - name: Check the chosen fontset
         if: matrix.variant == 'fonts-windows'
@@ -330,14 +342,14 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv main.pdf tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
+        run: mv main.pdf tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: tongjithesis-linux-xelatex-${{ matrix.variant }}
-          path: tongjithesis-linux-xelatex-${{ matrix.variant }}.pdf
+          name: tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}
+          path: tongjithesis-linux-${{ env.ENGINE_NAME }}-${{ matrix.variant }}.pdf
           retention-days: 30
 
   # Standalone administrative documents: task book, opening report, mid-term

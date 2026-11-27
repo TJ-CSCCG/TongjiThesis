@@ -65,6 +65,14 @@
 
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
+% fontdir 须以 / 结尾，便于直接拼接文件名；省略时补上。
+\ExplSyntaxOn
+\tl_if_empty:NF \tongjithesis@fontdir
+  {
+    \str_if_eq:eeF { \str_item:Nn \tongjithesis@fontdir { -1 } } { / }
+      { \tl_put_right:Nn \tongjithesis@fontdir { / } }
+  }
+\ExplSyntaxOff
 
 % Validate type option and set boolean flags
 \RequirePackage{etoolbox}
@@ -122,8 +130,8 @@
 % 无真粗体的中文字体以描边模拟加粗。描边宽度取 Word 加粗宋体的值，即字号的 1/35；
 % XeTeX 与 luaotfload 都把 AutoFakeBold 的值当作字号的百分数，故取 2.86。
 \def\tj@fakebold{2.86}
-% \tj@cjkload{<命令>}{<字体>}{<选项>}：先展开字体与选项中的宏再调用命令，
-% 因为 fontspec 不展开选项列表中的宏。
+% \tj@cjkload{<命令>}{<字体>}{<选项>}：先展开字体名与选项中的宏（Path=、描边宽度等），
+% 再调用命令，使 fontspec 解析键值时看到的是实际的键与值。
 \newcommand\tj@cjkload[3]{\edef\tj@next{\unexpanded{#1}{#2}[#3]}\tj@next}
 % 字体集的文件在 fontdir 中时按文件加载，否则按字体名从系统加载。
 \newif\iftj@cjkfiles
@@ -151,34 +159,51 @@
   \NewDocumentCommand{\fangsong}{}{\CJKfamily{zhfs}}%
 }
 % \tj@cjkfamily{<族>}{<字体名>}{<文件>}[<按名选项>][<按文件选项>]：附加字体族，
-% 与同一字体集的 \tj@cjkfonts 采用同一种加载方式。
+% 与同一字体集的 \tj@cjkfonts 采用同一种加载方式。字体不存在时跳过（如英文版 Windows
+% 未安装补充字体时的隶书、幼圆），使用该族的命令才会报错。
 \NewDocumentCommand\tj@cjkfamily{mmmO{}O{}}{%
   \iftj@cjkfiles
-    \tj@cjkload{\setCJKfamilyfont{#1}}{#3}{\tj@cjkpath #5}%
+    \IfFileExists{\tongjithesis@fontdir#3}
+      {\tj@cjkload{\setCJKfamilyfont{#1}}{#3}{\tj@cjkpath #5}}
+      {\ClassInfo{tongjithesis}{#3 not found in \tongjithesis@fontdir; skipping CJK family #1}}%
   \else
-    \tj@cjkload{\setCJKfamilyfont{#1}}{#2}{#4}%
+    \IfFontExistsTF{#2}
+      {\tj@cjkload{\setCJKfamilyfont{#1}}{#2}{#4}}
+      {\ClassInfo{tongjithesis}{Font #2 not found; skipping CJK family #1}}%
   \fi
 }
 % fontset=auto：依次选择已安装的、形状最接近 Word 模板中易字体的字体集。
-% \tj@iffontset{<宋体文件>}{<宋体名>}{<字体集>}{<否则>}
+% 一个字体集的四种字体须全部存在（全在 fontdir 中，或全部可按字体名找到）才会被选中。
+% \tj@iffontset{<字体集>}{<文件列表>}{<字体名列表>}{<否则>}
+\newif\iftj@allfound
+\newcommand\tj@checkfile[1]{\IfFileExists{\tongjithesis@fontdir#1}{}{\tj@allfoundfalse}}
+\newcommand\tj@checkfont[1]{\IfFontExistsTF{#1}{}{\tj@allfoundfalse}}
 \newcommand\tj@iffontset[4]{%
-  \IfFileExists{\tongjithesis@fontdir#1}
-    {\def\tongjithesis@fontset{#3}}
-    {\IfFontExistsTF{#2}{\def\tongjithesis@fontset{#3}}{#4}}%
+  \tj@allfoundtrue\forcsvlist\tj@checkfile{#2}%
+  \iftj@allfound\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+    {\def\tongjithesis@fontset{#1}}%
+    {\tj@allfoundtrue\forcsvlist\tj@checkfont{#3}%
+     \iftj@allfound\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+       {\def\tongjithesis@fontset{#1}}{#4}}%
 }
 \ifdefstring{\tongjithesis@fontset}{auto}{%
-  \tj@iffontset{simsun.ttc}{SimSun}{windows}{%
-    \tj@iffontset{FZSSK.TTF}{FZShuSong-Z01}{founder}{%
-      \IfFontExistsTF{FandolSong-Regular.otf}
-        {\def\tongjithesis@fontset{fandol}}
-        {\def\tongjithesis@fontset{texlive}}}}%
+  \tj@iffontset{windows}
+    {simsun.ttc,simhei.ttf,simkai.ttf,simfang.ttf}
+    {SimSun,SimHei,KaiTi,FangSong}{%
+  \tj@iffontset{founder}
+    {FZSSK.TTF,FZHTK.TTF,FZKTK.TTF,FZFSK.TTF}
+    {FZShuSong-Z01,FZHei-B01,FZKai-Z03,FZFangSong-Z02}{%
+  \tj@iffontset{fandol}
+    {FandolSong-Regular.otf,FandolHei-Regular.otf,FandolKai-Regular.otf,FandolFang-Regular.otf}
+    {FandolSong-Regular.otf,FandolHei-Regular.otf,FandolKai-Regular.otf,FandolFang-Regular.otf}{%
+  \def\tongjithesis@fontset{texlive}}}}%
   \ifdefstring{\tongjithesis@fontset}{windows}
     {\ClassInfo{tongjithesis}{fontset=auto chose windows}}
     {\ClassWarningNoLine{tongjithesis}{fontset=auto chose \tongjithesis@fontset:
       the Zhongyi fonts of the official Word template\MessageBreak
       (SimSun, SimHei, KaiTi, FangSong) were not found.\MessageBreak
-      Install them, or run `make fonts' to download them\MessageBreak
-      into \tongjithesis@fontdir}}%
+      To use them, run `make fonts' locally, or upload\MessageBreak
+      the font files to \tongjithesis@fontdir\space on Overleaf}}%
 }{}
 \IfFileExists{tongji-cjk-font-\tongjithesis@fontset.def}
   {\input{tongji-cjk-font-\tongjithesis@fontset.def}}

@@ -66,22 +66,22 @@ goto :help
 :thesis
     echo Building %THESIS%.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% %THESIS%.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :taskbook
     echo Building taskbook.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% taskbook.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :proposal
     echo Building proposal.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% proposal.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :midterm
     echo Building midterm.pdf with %ENGINE%...
     latexmk %LATEXMK_OPT% midterm.tex
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :forms
     call :taskbook
@@ -105,7 +105,7 @@ goto :help
 :pvc
     echo Starting preview continuous mode...
     latexmk %LATEXMK_OPT_PVC% %THESIS%
-    goto :EOF
+    exit /b %ERRORLEVEL%
 
 :view
     echo Opening %THESIS%.pdf...
@@ -157,7 +157,7 @@ goto :help
         exit /b 1
     )
     echo Downloading the %FONTSET% font set into fonts\ ...
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = 'Stop'; $zip = Join-Path $env:TEMP 'tongjithesis-fonts.zip'; Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest/download/%FONTSET%.zip' -OutFile $zip; Expand-Archive -Force -Path $zip -DestinationPath 'fonts'; Remove-Item $zip"
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $zip = Join-Path $env:TEMP 'tongjithesis-fonts.zip'; try { Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest/download/%FONTSET%.zip' -OutFile $zip; Expand-Archive -Force -Path $zip -DestinationPath 'fonts' } finally { Remove-Item -ErrorAction SilentlyContinue $zip }"
     if errorlevel 1 (
         echo Error: could not download the %FONTSET% font set
         exit /b 1
