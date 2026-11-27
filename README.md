@@ -28,7 +28,7 @@
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Overleaf**       | 通过 [Overleaf 模板链接](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn) 直接使用，零配置 |
 | **本地编译**       | 安装 [TeX Live 2026+](https://tug.org/texlive/quickinstall.html)，克隆仓库，运行 `make`                                                         |
-| **GitHub Actions** | Fork 本仓库，push 即可触发自动编译，在 Artifacts 中下载 PDF                                                                                     |
+| **GitHub Actions** | 在自己的 fork 中[运行工作流并下载正文或表单 PDF](#在-github-actions-中编译)                                                                     |
 
 > [!TIP]
 > 本模板的 CI 在 **TeX Live 2026** 上测试。本地编译遇到难以解释的错误时，请先检查 TeX Live 版本，并升级到 2026。
@@ -60,7 +60,23 @@
 
 #### 在 GitHub Actions 中编译
 
-Fork 本仓库后，首次需在 `Settings | Actions | General` 中启用 Actions；之后 push 即可触发 CI，在 workflow run 的 `Summary | Artifacts` 下载 PDF。
+在自己的 fork 中打开 **Actions**，按页面提示启用工作流。之后可以用以下任一方式编译：
+
+- 在 `master` 或 `dev` 分支推送论文源文件（例如 `chapters/metadata.tex`）的修改，会自动运行 `test` 工作流。
+- 如果论文写在其他分支，打开 **Actions → test → Run workflow**，选择存放论文的分支，再点 **Run workflow**。仅修改 README 等被忽略的文件时也可以手动运行。
+
+打开与本次提交对应的运行记录，在 **Summary → Artifacts** 中，每个压缩包都以其中的 PDF 命名。正文和三份表单分别编译：
+
+| 需要的文件 | Artifact |
+| --- | --- |
+| 论文正文（`main.tex`，Linux 上的 XeLaTeX） | `tongjithesis-linux-xelatex` |
+| 毕业设计任务书 | `tongjithesis-taskbook` |
+| 开题报告 | `tongjithesis-proposal` |
+| 中期报告 | `tongjithesis-midterm` |
+
+以上压缩包保留 30 天；`all-compiled-documents` 包含本次运行的全部 PDF，保留 90 天。
+
+带后缀的 `tongjithesis-linux-xelatex-*` 用于测试模板选项，`tongjithesis-ctan-example` 是发行包示例。若没有运行记录，先核对分支和[工作流的触发条件](.github/workflows/test.yaml)；若已有记录但缺少目标 PDF，打开对应的 `build` 或 `build-forms` 任务查看编译日志。
 
 ### 本地使用
 

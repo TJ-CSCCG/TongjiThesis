@@ -28,7 +28,7 @@ LaTeX template for Tongji University undergraduate thesis (design).
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Overleaf**       | Use the [Overleaf template](https://www.overleaf.com/latex/templates/tongjithesis-tongji-university-thesis-template/tfvdvyggqybn) directly — zero setup |
 | **Local**          | Install [TeX Live 2026+](https://tug.org/texlive/quickinstall.html), clone the repo, run `make`                                                         |
-| **GitHub Actions** | Fork this repo, push to trigger CI, download PDFs from Artifacts                                                                                        |
+| **GitHub Actions** | [Build and download the thesis or forms](#compiling-in-github-actions) in your fork                                                                     |
 
 > [!TIP]
 > This template is tested against **TeX Live 2026** in CI. If you encounter unexplained compilation errors locally, please check and upgrade your TeX Live to 2026 first.
@@ -60,7 +60,23 @@ Download this repository via `Code | Download ZIP` and drag-and-drop the ZIP fil
 
 #### Compiling in GitHub Actions
 
-Fork this repo and push to trigger CI. Download PDFs from the `Summary | Artifacts` section of the workflow run. Enable Actions first via `Settings | Actions | General`.
+Open **Actions** in your fork and enable workflows if prompted. You can then compile in either of these ways:
+
+- Push a change to a thesis source file, such as `chapters/metadata.tex`, on `master` or `dev` to start the `test` workflow automatically.
+- If you keep your thesis on another branch, open **Actions → test → Run workflow**, select your thesis branch, then click **Run workflow**. This also works when you have only changed ignored files such as the README.
+
+Open the run for your commit. Under **Summary → Artifacts**, each archive is named after the PDF inside it. The thesis and the three forms are built separately:
+
+| Document | Artifact |
+| --- | --- |
+| Thesis (`main.tex`, XeLaTeX on Linux) | `tongjithesis-linux-xelatex` |
+| Task book | `tongjithesis-taskbook` |
+| Proposal | `tongjithesis-proposal` |
+| Midterm report | `tongjithesis-midterm` |
+
+These archives are kept for 30 days. `all-compiled-documents` holds every PDF of the run and is kept for 90 days.
+
+The `tongjithesis-linux-xelatex-*` artifacts with a suffix exercise template options, and `tongjithesis-ctan-example` contains the distribution example. If no run appears, check the branch and the [workflow triggers](.github/workflows/test.yaml). If a run exists but your PDF is missing, open the corresponding `build` or `build-forms` job and check its compilation log.
 
 ### Local Use
 
