@@ -1,10 +1,10 @@
 on:
+  # No tag trigger: a release tag is the master commit the push run just tested,
+  # and the release event below builds and attaches the release PDFs.
   push:
     branches:
       - master
       - dev
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
     paths-ignore:
       - '*.md'
       - 'LICENSE'
@@ -39,11 +39,13 @@ name: test
 permissions:
   contents: read
 
-# On push use the branch ref; on PR use the PR number.
-# This avoids duplicate runs: a push to a PR branch cancels the push-triggered run.
+# A new commit on a pull request supersedes its in-flight run. ONLY pull_request
+# runs share a group (keyed on the PR number); every other event gets its own
+# group (github.run_id), so a later push to master or dev, or the release event,
+# never cancels the run of an earlier commit and leaves it marked cancelled.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   # TeX Live package names (not CTAN or .sty names) needed for the thesis compilation;
@@ -516,9 +518,9 @@ jobs:
           path: "*.pdf"
           retention-days: 90
 
-  # Build release PDFs on version tags (science + humanities, Linux xelatex-only)
+  # Build the release PDFs when a release is published (science + humanities, Linux xelatex-only)
   build-release-pdfs:
-    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v'))
+    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
