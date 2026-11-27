@@ -46,7 +46,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Packages needed for the thesis compilation
+  # TeX Live package names (not CTAN or .sty names) needed for the thesis compilation;
+  # zauguin/install-texlive fails the job when one of them is not in the repository.
   TL_PACKAGES: |
     adjustbox
     algorithm2e
@@ -115,10 +116,10 @@ env:
     texliveonfly
     threeparttable
     threeparttablex
-    tabularx
     times
     titling
     tocloft
+    tools  # tabularx and xspace; TeX Live has no packages by those names
     trimspaces
     txfonts
     ucs
@@ -127,7 +128,6 @@ env:
     xcolor
     xecjk
     xpatch
-    xspace
     xstring
     zhnumber
 
@@ -146,13 +146,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install TeX Live
-        id: setup-tl
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: ${{ env.TL_PACKAGES }}
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Compile LaTeX document (Unix)
         if: runner.os != 'Windows'
@@ -225,13 +222,10 @@ jobs:
         run: pip install Pygments
 
       - name: Install TeX Live
-        id: setup-tl
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: ${{ env.TL_PACKAGES }}
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Configure minted=true variant
         if: matrix.variant == 'minted-true'
@@ -330,12 +324,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install TeX Live
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: ${{ env.TL_PACKAGES }}
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Compile LaTeX document
         run: |
@@ -370,12 +362,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install TeX Live
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: ${{ env.TL_PACKAGES }}
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Build and validate CTAN package
         run: scripts/build-ctan.sh
@@ -463,12 +453,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install TeX Live
-        uses: tex-live/setup-texlive-action@v4
+        uses: zauguin/install-texlive@v4
         with:
-          version: 2026
+          texlive_version: 2026
           packages: ${{ env.TL_PACKAGES }}
-        env:
-          SETUP_TEXLIVE_ACTION_NO_CACHE_ON_FAILURE: 1
 
       - name: Configure field
         if: matrix.field == 'humanities'
