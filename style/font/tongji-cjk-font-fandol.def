@@ -4,7 +4,7 @@
 %% Copyright (C) TJ-CSCCG
 %% This work may be distributed under the LPPL 1.3c or later.
 %%
-\ProvidesFile{tongji-cjk-font-fandol.def}[v1.5.1 Fandol CJK fonts definition (TongjiThesis)] %x-release-please-version
+\ProvidesFile{tongji-cjk-font-fandol.def}[v1.6.0 Fandol CJK fonts definition (TongjiThesis)] %x-release-please-version
 % Fandol 宋体、黑体、楷体、仿宋，宋体与黑体有真粗体。随旧版 TeX Live 与 Overleaf 安装（作者已撤回）；
 % 文件在 fontdir 中时从那里加载。
 \IfFileExists{\tongjithesis@fontdir FandolSong-Regular.otf}
