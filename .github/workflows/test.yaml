@@ -76,6 +76,7 @@ env:
     eso-pic
     fancyhdr
     fancyvrb
+    fandol  # the default fontset; ctex no longer depends on it (#143)
     float
     fontaxes
     framed
